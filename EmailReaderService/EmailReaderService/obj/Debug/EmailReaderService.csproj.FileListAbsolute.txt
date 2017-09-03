@@ -1,0 +1,14 @@
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\OppertunityReaderService.exe.config
+D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\OppertunityReaderService.exe
+D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\OppertunityReaderService.pdb
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\OppertunityReaderService.exe
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\OppertunityReaderService.pdb
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.dll
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\Oracle.DataAccess.dll
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.pdb
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.xml
+D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache
+D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csproj.GenerateResource.Cache
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\EAGetMail40.dll
+D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\MySql.Data.dll

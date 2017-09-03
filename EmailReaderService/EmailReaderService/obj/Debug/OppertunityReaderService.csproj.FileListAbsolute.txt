@@ -1,0 +1,38 @@
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe.config
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.pdb
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csprojResolveAssemblyReference.cache
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csproj.GenerateResource.Cache
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.exe
+D:\Projects\Service\WinServ-VisioConverter\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.pdb
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe.config
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.pdb
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csprojResolveAssemblyReference.cache
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csproj.GenerateResource.Cache
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.exe
+D:\Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.pdb
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe.config
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.exe
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.pdb
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.pdb
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csprojResolveAssemblyReference.cache
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+D:\SVN Projects\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csproj.GenerateResource.Cache
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe.config
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.pdb
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\HtmlAgilityPack.dll
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\HtmlAgilityPack.pdb
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\bin\Debug\HtmlAgilityPack.xml
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csproj.GenerateResource.Cache
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.exe
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.pdb
+D:\Share\Service\OppertunityReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.csprojResolveAssemblyReference.cache
+D:\Basic IT\EmailReaderService\WinServ-VisioConverter\bin\Debug\OppertunityReaderService.exe.config
+D:\Basic IT\EmailReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.exe
+D:\Basic IT\EmailReaderService\WinServ-VisioConverter\obj\Debug\OppertunityReaderService.pdb
