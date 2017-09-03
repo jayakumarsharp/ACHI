@@ -114,14 +114,10 @@
                                         <a href="#" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="@Url.Action("Logout", "Home")" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
-                        </li>
-                        <!-- Control Sidebar Toggle Button -->
-                        <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -146,37 +142,37 @@
                 <ul class="sidebar-menu" data-widget="tree">
 
                     <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                        <a href="Index">
+                        <a href="Index"><i class="fa fa-circle-o"></i> 
                             Dashboard
                             <span class="arrow"></span>
                         </a>
                     </li>
                     <li class='@Html.IsActive("Main", "Strategy")'>
                         <a href="Strategy">
-                            Strategy
+                            <i class="fa fa-circle-o"></i>    Strategy
                             <span class="arrow"></span>
                         </a>
                     </li>
 
                     <li class='@Html.IsActive("Main", "Tasks")'>
-                        <a href="Tasks">
+                        <a href="Tasks"><i class="fa fa-circle-o"></i> 
                             Tasks
                             <span class="arrow"></span>
                         </a>
                     </li>
 
                     <li class='@Html.IsActive("Main", "MapTask")'>
-                        <a href="MapTask">
+                        <a href="MapTask"><i class="fa fa-circle-o"></i> 
                             Map Task
                             <span class="arrow"></span>
                         </a>
                     </li>
-                    <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
+                    @*<li class='@Html.IsActive("Main", "OnBoardingTasks")'>
                         <a href="OnBoardingTasks">
                             OnBoarding Tasks
                             <span class="arrow"></span>
                         </a>
-                    </li>
+                    </li>*@
                     <li class='@Html.IsActive("Main", "Emails")'>
                         <a href="Emails">
                             Emails
