@@ -147,7 +147,7 @@ namespace CRMManagement.Controllers
             string errordesc = "";
             int errorcode = 0;
             if (strategy.Count > 0)
-                _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+                _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 

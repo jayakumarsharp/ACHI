@@ -205,22 +205,26 @@
                 $scope.listB_Estimation[0].RefNumber = model.RefNumber;
                 $scope.listB_Estimation[0].Version = model.Version;
 
-                var temp = $scope.Availableusers;
-
-                for (var j = 0; j < $scope.listB_Estimation.length; j++) {
-                    var delId = arrayObjectEstimationProductIndexOf($scope.Availableusers, $scope.listB_Estimation[i].Approver);
-                    if (delId > 0)
-                        temp.splice(delId, 1);
-                }
-
+                
                 StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
 
                 });
+
+                var temp = [];
+
+                for (var j = 0; j < $scope.Availableusers.length; j++) {
+                    var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
+                    if (delId < 0)
+                        temp.push($scope.Availableusers[i])
+                }
+
+
                 if (temp.length > 0) {
                     StrategyService.DeleteStrategyApprover(temp).success(function (data) {
 
                     });
                 }
+
                 $scope.editMode = false;
                 $('#currencyModel').modal('hide');
                 $scope.getallcurrencyconversions()

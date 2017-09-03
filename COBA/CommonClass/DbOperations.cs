@@ -92,7 +92,7 @@ public class DbOperations
     #region Strategy
 
 
-    public void InsertStrategyApprover(List<StrategyApprover> lst, string RefNumber, out int errorcode, out string errordesc)
+    public void InsertStrategyApprover(List<StrategyApprover> lst, string RefNumber,string version, out int errorcode, out string errordesc)
     {
         try
         {
@@ -104,8 +104,8 @@ public class DbOperations
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                    cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
+                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
+                    cmd.Parameters.Add(new MySqlParameter("i_Version", version));
                     cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
 
                     if (this.OpenConnection() == true)
@@ -161,6 +161,7 @@ public class DbOperations
                 foreach (StrategyApprover s in lst)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
                     cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
                     cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
                     cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
