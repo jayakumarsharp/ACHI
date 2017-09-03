@@ -200,6 +200,9 @@
     $scope.UpdateStrategy = function (model) {
         StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
+
+                $scope.listB_Estimation[0].RefNumber = model.RefNumber;
+                $scope.listB_Estimation[0].Version = model.Version;
                 StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
 
                 });
