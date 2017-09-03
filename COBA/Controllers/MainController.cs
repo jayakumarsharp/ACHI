@@ -151,7 +151,22 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult  UpdateStrategy(Strategy Strategy)
+        public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
+        {
+            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
+            //{
+            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //}
+            string errordesc = "";
+            int errorcode = 0;
+            if (strategy != null && strategy.Count > 0)
+                _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult UpdateStrategy(Strategy Strategy)
         {
             string errordesc = "";
             int errorcode = 0;

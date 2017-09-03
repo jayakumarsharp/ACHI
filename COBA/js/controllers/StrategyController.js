@@ -216,11 +216,11 @@
                 StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
 
                 });
+                if (temp.length > 0) {
+                    StrategyService.DeleteStrategyApprover(temp).success(function (data) {
 
-                StrategyService.DeleteStrategyApprover(temp).success(function (data) {
-
-                });
-
+                    });
+                }
                 $scope.editMode = false;
                 $('#currencyModel').modal('hide');
                 $scope.getallcurrencyconversions()

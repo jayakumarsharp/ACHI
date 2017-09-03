@@ -100,18 +100,20 @@ public class DbOperations
             errordesc = "success";
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_strategy_Approval", connection))
             {
-                foreach(StrategyApprover s in lst) { 
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
-                cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
-
-                if (this.OpenConnection() == true)
+                foreach (StrategyApprover s in lst)
                 {
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
+                    cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
+                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+
+                    if (this.OpenConnection() == true)
+                    {
+                        //Execute command
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
 
                 }
                 //StringBuilder sCommand = new StringBuilder("INSERT INTO tbl_StrategyApproval (RefNumber, Version,Approver) VALUES ");
@@ -130,6 +132,47 @@ public class DbOperations
                 //    myCmd.ExecuteNonQuery();
                 //    this.CloseConnection();
                 //}
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void DeleteStrategyApprover(List<StrategyApprover> lst, string RefNumber, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_delete_strategy_Approval", connection))
+            {
+                foreach (StrategyApprover s in lst)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
+                    cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
+                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+
+                    if (this.OpenConnection() == true)
+                    {
+                        //Execute command
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+
+                }
             }
         }
         catch (MySqlException e)
