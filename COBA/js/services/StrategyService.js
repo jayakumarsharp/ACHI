@@ -36,6 +36,9 @@ ReportApp.factory('StrategyService', function ($http) {
         return $http.post('UpdateStrategy', currencysheet);
     }
     
+    StrategyServiceFactory.DeleteStrategyApprover = function (currencysheet) {
+        return $http.post('DeleteStrategyApprover', currencysheet);
+    }
 
     StrategyServiceFactory.UpdatecurrencyConversion = function (currencysheet) {
         return $http.post(StrategyServiceURI + 'currency/ModifyCurrencyConversion', currencysheet);

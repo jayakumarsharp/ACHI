@@ -18,7 +18,6 @@
     };
 
     $scope.getallcurrencyconversions = function () {
-
         StrategyService.GetAllCurrencyConversion().success(function (data) {
             console.log(data);
             $scope.CurrencyGrid.data = data;
@@ -107,7 +106,7 @@
 
                     });
 
-                    
+
                     $('#currencyModel').modal('hide');
                 }
                 else
@@ -119,6 +118,7 @@
     };
     $scope.notificationExist = false;
     $scope.notificationdata = [];
+    $scope.Availableusers = [];
     $scope.GetCurrencyConversionForId = function (id, Version) {
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.editMode = true;
@@ -154,11 +154,12 @@
 
 
         StrategyService.GetStrategyApprovalById(id, Version).success(function (data) {
-            console.log(data);
 
+            $scope.Availableusers = data;
             for (var i = 0; i < data.length; i++) {
                 data[i].Id = i;
             }
+
             var adata = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
             $scope.aEstimationProduct = adata;
 
@@ -203,7 +204,20 @@
 
                 $scope.listB_Estimation[0].RefNumber = model.RefNumber;
                 $scope.listB_Estimation[0].Version = model.Version;
+
+                var temp = $scope.Availableusers;
+
+                for (var j = 0; j < $scope.listB_Estimation.length; j++) {
+                    var delId = arrayObjectEstimationProductIndexOf($scope.Availableusers, $scope.listB_Estimation[i].Approver);
+                    if (delId > 0)
+                        temp.splice(delId, 1);
+                }
+
                 StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+
+                });
+
+                StrategyService.DeleteStrategyApprover(temp).success(function (data) {
 
                 });
 
