@@ -1,0 +1,2 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeFile="LoginStatus.ascx.cs" Inherits="LoginStatus" %>
+Logged in as: <strong><asp:Literal runat="server" ID="LoggedInAsLiteral" /></strong>&nbsp;<asp:LinkButton runat="server" ID="logOutButton" Text="Log out" Visible="false" OnClick="logoutButton_Click" CausesValidation="false" /><asp:LinkButton runat="server" ID="logInButton" Text="Log in" Visible="false" OnClick="LogInButton_Click" CausesValidation="false" />

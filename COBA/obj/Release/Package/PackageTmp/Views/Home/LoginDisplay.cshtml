@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "LoginDisplay";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<div id="login1">
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { data_async = "", data_target = "#rating-modal", align = "center" }))
+    {
+        Html.AntiForgeryToken();
+            
+        <div id="login">
+            <input type="text" class="user newuser" name="userName" id="input-username" placeholder="Empcode">
+            <input type="password" class="user newpwd" name="password" id="input-password" maxlength="100" placeholder="Password">
+            <button data-loading-text="Loading..." type="submit" class="btn1 btn-primary" id="loginSubmitbtn">Login</button>
+            <p class="validation bg-danger" id="login_vaildation_msg"></p>
+        </div>
+    }
+</div>
+
+
+<style type="text/css">
+    .newuser {
+        background: url('../CRMUserManagement/img/user.jpg') no-repeat scroll 0 0 / 28px 31px #f1f1f1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+        padding: 2px 10px 4px 12%;
+    }
+
+    .newpwd {
+        background: url('../CRMUserManagement/img/password.jpg') no-repeat scroll 0 0 / 28px 30px #f1f1f1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 1px 1px #ccc inset, 0 1px 0 #fff;
+        padding: 2px 10px 4px 12%;
+    }
+</style>

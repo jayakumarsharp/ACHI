@@ -1,0 +1,36 @@
+﻿<div ng-show="notificationExist">
+    <div class="col-md-12">
+        <div class="box-body">
+            <div class="form-group">
+                <h2>Approval Request</h2>
+            </div>
+            <div class="form-group">
+                <label>Comments</label>
+                <textarea class="form-control" type="text" numberdotonly maxlength="4000" ng-model="currency.Comments" required> </textarea>
+            </div>
+
+            @*<div class="form-group">
+                    <label>Status</label>
+                    <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Status" required />
+                </div>*@
+            <div class="form-group">
+                <div class="col-md-3"><label>Status</label></div>
+                <div class="col-md-2">
+                    <input class="btn btn-block btn-success btn-sm" type="button" value="Approve" numberdotonly maxlength="8" />
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-block btn-danger btn-sm" type="button" value="Decline" numberdotonly maxlength="8" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3"><label>Current Status</label></div>
+                <div class="col-md-2">
+                    <input class="btn btn-block btn-success btn-sm" type="button" value="Decline" numberdotonly maxlength="8" />
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

@@ -1,0 +1,122 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-controller="StrategyController" class="whitebg">
+    <section class="content-header" style="padding-bottom:10px;">
+        <h1>            Application Detail Management        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <div class="actions">
+                    <button data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+                </div>
+            </li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%">
+            <div class="modal-content">
+                <div class="modal-header content-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+
+                        <div class="row">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div ng-include="'ShowApplicationDetails'"></div>
+                                    <div ng-include="'ShowApprovalDetails'"></div>
+
+                                    <div class="form-group col-lg-12">
+                                        <div class="col-sm-offset-4 col-sm-10">
+
+                                            <span data-ng-hide="editMode">
+                                                <input type="button" value="Add" ng-click="InsertStrategy(currency)" class="btn btn-outline-info" />
+                                            </span>
+                                            <span data-ng-show="editMode">
+                                                <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-outline-info" />
+                                            </span>
+                                            <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%">
+            <div class="modal-content">
+                <div class="modal-header content-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        @*content*@
+                        <div class="row">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>RefNumber</th>
+                                                <th>Approver</th>
+                                                <th>Status</th>
+                                                <th>Comments</th>
+                                                <th>ApprovedDate </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="right in ViewData">
+                                                <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
+                                                <td>{{right.Approver}}</td>
+                                                <td><span class="label label-success">{{right.Status}}</span></td>
+                                                <td>
+                                                    {{right.Comments}}
+                                                </td>
+                                                <td>
+                                                    {{right.ApprovedDate}}
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+</div>
+<style>
+    .box-body {
+        padding: 4px;
+    }
+</style>

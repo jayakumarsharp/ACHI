@@ -1,0 +1,22 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="ContentPage.master.cs" Inherits="ContentPage" MasterPageFile="~/MasterPage.master" %>
+<%@ Register Src="LoginStatus.ascx" TagName="LoginStatus" TagPrefix="uc1" %>
+
+<asp:Content runat="server" ContentPlaceHolderID="TitlePlaceHolder">
+    <asp:contentplaceholder runat="server" ID="TitlePlaceHolder" />
+</asp:Content>
+
+<asp:Content runat="server" ContentPlaceHolderID="BodyPlaceHolder">
+    <table width="100%"><tr>
+    <td style="text-align:left">
+        <a runat="server" href="~/Default.aspx">Home</a> |
+        <a runat="server" href="~/Protected.aspx">Protected Page</a> |
+        <a runat="server" href="~/CreateUser.aspx">Create a User</a> |
+        <a href="http://www.ldapservices.com">Built by LDAP Services</a>
+    </td>
+    <td style="text-align:right">
+        <uc1:LoginStatus ID="LoginStatus1" runat="server" />
+    </td>
+    </tr></table>
+    <hr />
+    <asp:contentplaceholder id="ContentPlaceHolder" runat="server" />
+</asp:Content>
