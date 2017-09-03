@@ -32,6 +32,10 @@ ReportApp.factory('StrategyService', function ($http) {
     StrategyServiceFactory.InsertStrategy = function (currencysheet) {
         return $http.post('InsertStrategy', currencysheet);
     }
+    StrategyServiceFactory.UpdateStrategy = function (currencysheet) {
+        return $http.post('UpdateStrategy', currencysheet);
+    }
+    
 
     StrategyServiceFactory.UpdatecurrencyConversion = function (currencysheet) {
         return $http.post(StrategyServiceURI + 'currency/ModifyCurrencyConversion', currencysheet);

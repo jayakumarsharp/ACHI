@@ -41,9 +41,9 @@
                                                 <input type="button" value="Add" ng-click="InsertStrategy(currency)" class="btn btn-outline-info" />
                                             </span>
                                             <span data-ng-show="editMode">
-                                                <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-outline-info" />
+                                                <input type="button" value="Update" ng-click="UpdateStrategy(ecurrency)" class="btn btn-outline-info" />
                                             </span>
-                                            <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                                            <input type="button" value="Cancel" ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
                                         </div>
                                     </div>
 
@@ -71,7 +71,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="">
-                        @*content*@
                         <div class="row">
                             <div class="box-body">
                                 <div class="table-responsive">
@@ -102,18 +101,12 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
     </div>
-
-
 </div>
 <style>
     .box-body {

@@ -1,5 +1,4 @@
 ﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout) {
-
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -59,9 +58,7 @@
                    field: 'Approvals', width: 70
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Ver)" ><i class="fa fa-eye" ></i></a ></div>'
 
-               }
-        ],
-
+               }],
     };
 
     $scope.showadd = function () {
@@ -110,7 +107,7 @@
 
                     });
 
-                    $scope.GetAllCurrency();
+                    
                     $('#currencyModel').modal('hide');
                 }
                 else
@@ -147,10 +144,10 @@
             for (var i = 0; i < data.length; i++) {
                 if (data[i].RefNumber == id && data[i].Version == Version) {
                     $scope.notificationdata = data[i];
-                    $scope.notificationExist =true;
+                    $scope.notificationExist = true;
                 }
             }
-            
+
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -199,26 +196,15 @@
     };
 
 
-    $scope.delete = function () {
-        var crc = { Id: $scope.Id };
-        StrategyService.DeletecurrencyConversion(crc).success(function (data) {
-            $scope.editMode = false;
-            $scope.getallcurrencyconversions();
-            $('#confirmModal').modal('hide');
-            toaster.pop('success', "Success", "Currency rate deleted successfully", null);
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-    };
 
-
-
-    $scope.UpdatecurrencyConversion = function (model) {
-        model.UpdatedBy = $rootScope.UserInfo.user.userId;
-        StrategyService.UpdatecurrencyConversion(model).success(function (data) {
+    $scope.UpdateStrategy = function (model) {
+        StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
+                StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+
+                });
+
                 $scope.editMode = false;
-                //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
                 $scope.getallcurrencyconversions()
             }
@@ -345,8 +331,8 @@
         var items = JSON.parse(JSON.stringify($scope.EstimationProduct));
         console.log('a to b');
         for (var i = 0; i < $scope.selectedA_Estimation.length; i++) {
-            var moveId = arrayObjectEstimationProductIndexOf($scope.EstimationProduct, $scope.selectedA_Estimation[i]);
-            $scope.listB_Estimation.push({ 'Approver': $scope.EstimationProduct[moveId].Approver, 'Id': $scope.EstimationProduct[moveId].Id });
+            var moveId = arrayObjectEstimationProductIndexOf($scope.listA_Estimation, $scope.selectedA_Estimation[i]);
+            $scope.listB_Estimation.push({ 'Approver': $scope.listA_Estimation[moveId].Approver, 'Id': $scope.listA_Estimation[moveId].Id });
             var delId = arrayObjectEstimationProductIndexOf($scope.listA_Estimation, $scope.selectedA_Estimation[i]);
             $scope.listA_Estimation.splice(delId, 1);
             console.log('list A count after: ' + $scope.listA_Estimation.length);
@@ -389,7 +375,6 @@
             $scope.selectedA_Estimation.splice(delId, 1);
         }
     }
-
 
 
 });

@@ -151,9 +151,12 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateStrategy(Strategy Strategy)
+        public JsonResult  UpdateStrategy(Strategy Strategy)
         {
-
+            string errordesc = "";
+            int errorcode = 0;
+            _dbOperations.UpdateStrategydata(Strategy, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Strategy
