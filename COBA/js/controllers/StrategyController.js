@@ -33,7 +33,6 @@
         }, 1000);
     });
 
-
     $scope.CurrencyGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
