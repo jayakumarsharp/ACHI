@@ -163,12 +163,11 @@
                             Map Strategy
                         </a>
                     </li>
-                    @*<li class='@Html.IsActive("Main", "OnBoardingTasks")'>
-                        <a href="OnBoardingTasks">
-                            OnBoarding Tasks
-                            <span class="arrow"></span>
+                    <li class='@Html.IsActive("Main", "Approvals")'>
+                        <a href="Approvals"><i class="fa fa-circle-o"></i>
+                            Approvals
                         </a>
-                    </li>*@
+                    </li>
                     <li class='@Html.IsActive("Main", "Emails")'>
                         <a href="Emails">
                             <i class="fa fa-circle-o"></i> 
@@ -230,7 +229,9 @@
     <script src="../js/ReportApp.js"></script>
     @*<script src="../js/UserApp.js"></script>
         <script src="../js/RoleApp.js"></script>*@
+    
     <script src="../js/HomeApp.js"></script>
+    <script src="~/js/controllers/ApprovalsController.js"></script>
     <script src="~/js/controllers/StrategyController.js"></script>
     <script src="../js/controllers/TaskController.js"></script>
     <script src="~/js/controllers/OnboardingTaskController.js"></script>
@@ -243,13 +244,7 @@
     <script src="~/js/services/MapTaskService.js"></script>
 
     <style>
-        .form-control {
-            font-weight: 500;
-        }
-
-        body {
-            font-size: 13px;
-        }
+        
 
         .whitebg {
             background: #fff;
@@ -298,6 +293,9 @@
             font-size: 15px;
             margin-left: 25%;
             color: #3c8dbc;
+        }
+        .table{
+            font-size:14px !important;
         }
 
         /*.navbar-nav > li > a {

@@ -152,20 +152,15 @@
                                 <div class="row">
                                     <div ng-include="'ShowApplicationDetails'"></div>
                                     <div ng-include="'ShowApprovalDetails'"></div>
-
                                     <div class="form-group col-lg-12">
                                         <div class="col-sm-offset-4 col-sm-10">
-
-                                            <span data-ng-hide="editMode">
-                                                <input type="button" value="Update" ng-click="InsertStrategy(currency)" class="btn btn-outline-info" />
-                                            </span>
-                                            <span data-ng-hide="editMode">
-                                                <input type="button" value="Add New Version" ng-click="InsertStrategy(currency)" class="btn btn-outline-info" />
-                                            </span>
-                                            <span data-ng-show="editMode">
-                                                <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-outline-info" />
-                                            </span>
-                                            <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                                            <span>
+                                                <input type="button" value="Update" ng-click="UpdateChange(currency)" class="btn btn-outline-info" />
+                                            </span>&nbsp;
+                                            <span>
+                                                <input type="button" value="Add New Version" ng-click="SaveNewversionStrategy(currency)" class="btn btn-outline-info" />
+                                            </span>&nbsp;
+                                            <input type="button" value="Cancel" data-ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
                                         </div>
                                     </div>
 

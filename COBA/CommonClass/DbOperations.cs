@@ -250,9 +250,7 @@ public class DbOperations
                     IEnumerable<DataRow> sequence = dt.AsEnumerable();
                     if (dt != null && dt.Rows.Count > 0)
                     {
-                        Version = Convert.ToInt32(dt.Rows[0]);
-
-
+                        Version = Convert.ToInt32(dt.Rows[0]["Version"]);
                     }
                 }
                 //Execute command
@@ -386,48 +384,10 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   App10ApprovedDate = Convert.ToString(row["App10ApprovedDate"]),
-                                   App10Comments = Convert.ToString(row["App10Comments"]),
-                                   App10Status = Convert.ToString(row["App10Status"]),
-                                   App1ApprovedDate = Convert.ToString(row["App1ApprovedDate"]),
-                                   App1Comments = Convert.ToString(row["App1Comments"]),
-                                   App1Status = Convert.ToString(row["App1Status"]),
-                                   App2ApprovedDate = Convert.ToString(row["App2ApprovedDate"]),
-                                   App2Comments = Convert.ToString(row["App2Comments"]),
-                                   App2Status = Convert.ToString(row["App2Status"]),
-                                   App3ApprovedDate = Convert.ToString(row["App3ApprovedDate"]),
-                                   App3Comments = Convert.ToString(row["App3Comments"]),
-                                   App3Status = Convert.ToString(row["App3Status"]),
-                                   App4ApprovedDate = Convert.ToString(row["App4ApprovedDate"]),
-                                   App4Comments = Convert.ToString(row["App4Comments"]),
-                                   App4Status = Convert.ToString(row["App4Status"]),
-                                   App5ApprovedDate = Convert.ToString(row["App5ApprovedDate"]),
-                                   App5Comments = Convert.ToString(row["App5Comments"]),
-                                   App5Status = Convert.ToString(row["App5Status"]),
-                                   App6ApprovedDate = Convert.ToString(row["App6ApprovedDate"]),
-                                   App6Comments = Convert.ToString(row["App6Comments"]),
-                                   App6Status = Convert.ToString(row["App6Status"]),
-                                   App7ApprovedDate = Convert.ToString(row["App7ApprovedDate"]),
-                                   App7Comments = Convert.ToString(row["App7Comments"]),
-                                   App7Status = Convert.ToString(row["App7Status"]),
-                                   App8ApprovedDate = Convert.ToString(row["App8ApprovedDate"]),
-                                   App8Comments = Convert.ToString(row["App8Comments"]),
-                                   App8Status = Convert.ToString(row["App8Status"]),
-                                   App9ApprovedDate = Convert.ToString(row["App9ApprovedDate"]),
-                                   App9Comments = Convert.ToString(row["App9Comments"]),
-                                   App9Status = Convert.ToString(row["App9Status"]),
+
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
                                    ApplicationName = Convert.ToString(row["ApplicationName"]),
-                                   Approver1 = Convert.ToString(row["Approver1"]),
-                                   Approver10 = Convert.ToString(row["Approver10"]),
-                                   Approver2 = Convert.ToString(row["Approver2"]),
-                                   Approver3 = Convert.ToString(row["Approver3"]),
-                                   Approver4 = Convert.ToString(row["Approver4"]),
-                                   Approver5 = Convert.ToString(row["Approver5"]),
-                                   Approver6 = Convert.ToString(row["Approver6"]),
-                                   Approver7 = Convert.ToString(row["Approver7"]),
-                                   Approver8 = Convert.ToString(row["Approver8"]),
-                                   Approver9 = Convert.ToString(row["Approver9"]),
+
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
@@ -513,48 +473,10 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   App10ApprovedDate = Convert.ToString(row["App10ApprovedDate"]),
-                                   App10Comments = Convert.ToString(row["App10Comments"]),
-                                   App10Status = Convert.ToString(row["App10Status"]),
-                                   App1ApprovedDate = Convert.ToString(row["App1ApprovedDate"]),
-                                   App1Comments = Convert.ToString(row["App1Comments"]),
-                                   App1Status = Convert.ToString(row["App1Status"]),
-                                   App2ApprovedDate = Convert.ToString(row["App2ApprovedDate"]),
-                                   App2Comments = Convert.ToString(row["App2Comments"]),
-                                   App2Status = Convert.ToString(row["App2Status"]),
-                                   App3ApprovedDate = Convert.ToString(row["App3ApprovedDate"]),
-                                   App3Comments = Convert.ToString(row["App3Comments"]),
-                                   App3Status = Convert.ToString(row["App3Status"]),
-                                   App4ApprovedDate = Convert.ToString(row["App4ApprovedDate"]),
-                                   App4Comments = Convert.ToString(row["App4Comments"]),
-                                   App4Status = Convert.ToString(row["App4Status"]),
-                                   App5ApprovedDate = Convert.ToString(row["App5ApprovedDate"]),
-                                   App5Comments = Convert.ToString(row["App5Comments"]),
-                                   App5Status = Convert.ToString(row["App5Status"]),
-                                   App6ApprovedDate = Convert.ToString(row["App6ApprovedDate"]),
-                                   App6Comments = Convert.ToString(row["App6Comments"]),
-                                   App6Status = Convert.ToString(row["App6Status"]),
-                                   App7ApprovedDate = Convert.ToString(row["App7ApprovedDate"]),
-                                   App7Comments = Convert.ToString(row["App7Comments"]),
-                                   App7Status = Convert.ToString(row["App7Status"]),
-                                   App8ApprovedDate = Convert.ToString(row["App8ApprovedDate"]),
-                                   App8Comments = Convert.ToString(row["App8Comments"]),
-                                   App8Status = Convert.ToString(row["App8Status"]),
-                                   App9ApprovedDate = Convert.ToString(row["App9ApprovedDate"]),
-                                   App9Comments = Convert.ToString(row["App9Comments"]),
-                                   App9Status = Convert.ToString(row["App9Status"]),
+
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
                                    ApplicationName = Convert.ToString(row["ApplicationName"]),
-                                   Approver1 = Convert.ToString(row["Approver1"]),
-                                   Approver10 = Convert.ToString(row["Approver10"]),
-                                   Approver2 = Convert.ToString(row["Approver2"]),
-                                   Approver3 = Convert.ToString(row["Approver3"]),
-                                   Approver4 = Convert.ToString(row["Approver4"]),
-                                   Approver5 = Convert.ToString(row["Approver5"]),
-                                   Approver6 = Convert.ToString(row["Approver6"]),
-                                   Approver7 = Convert.ToString(row["Approver7"]),
-                                   Approver8 = Convert.ToString(row["Approver8"]),
-                                   Approver9 = Convert.ToString(row["Approver9"]),
+
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
@@ -639,48 +561,8 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   App10ApprovedDate = Convert.ToString(row["App10ApprovedDate"]),
-                                   App10Comments = Convert.ToString(row["App10Comments"]),
-                                   App10Status = Convert.ToString(row["App10Status"]),
-                                   App1ApprovedDate = Convert.ToString(row["App1ApprovedDate"]),
-                                   App1Comments = Convert.ToString(row["App1Comments"]),
-                                   App1Status = Convert.ToString(row["App1Status"]),
-                                   App2ApprovedDate = Convert.ToString(row["App2ApprovedDate"]),
-                                   App2Comments = Convert.ToString(row["App2Comments"]),
-                                   App2Status = Convert.ToString(row["App2Status"]),
-                                   App3ApprovedDate = Convert.ToString(row["App3ApprovedDate"]),
-                                   App3Comments = Convert.ToString(row["App3Comments"]),
-                                   App3Status = Convert.ToString(row["App3Status"]),
-                                   App4ApprovedDate = Convert.ToString(row["App4ApprovedDate"]),
-                                   App4Comments = Convert.ToString(row["App4Comments"]),
-                                   App4Status = Convert.ToString(row["App4Status"]),
-                                   App5ApprovedDate = Convert.ToString(row["App5ApprovedDate"]),
-                                   App5Comments = Convert.ToString(row["App5Comments"]),
-                                   App5Status = Convert.ToString(row["App5Status"]),
-                                   App6ApprovedDate = Convert.ToString(row["App6ApprovedDate"]),
-                                   App6Comments = Convert.ToString(row["App6Comments"]),
-                                   App6Status = Convert.ToString(row["App6Status"]),
-                                   App7ApprovedDate = Convert.ToString(row["App7ApprovedDate"]),
-                                   App7Comments = Convert.ToString(row["App7Comments"]),
-                                   App7Status = Convert.ToString(row["App7Status"]),
-                                   App8ApprovedDate = Convert.ToString(row["App8ApprovedDate"]),
-                                   App8Comments = Convert.ToString(row["App8Comments"]),
-                                   App8Status = Convert.ToString(row["App8Status"]),
-                                   App9ApprovedDate = Convert.ToString(row["App9ApprovedDate"]),
-                                   App9Comments = Convert.ToString(row["App9Comments"]),
-                                   App9Status = Convert.ToString(row["App9Status"]),
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
                                    ApplicationName = Convert.ToString(row["ApplicationName"]),
-                                   Approver1 = Convert.ToString(row["Approver1"]),
-                                   Approver10 = Convert.ToString(row["Approver10"]),
-                                   Approver2 = Convert.ToString(row["Approver2"]),
-                                   Approver3 = Convert.ToString(row["Approver3"]),
-                                   Approver4 = Convert.ToString(row["Approver4"]),
-                                   Approver5 = Convert.ToString(row["Approver5"]),
-                                   Approver6 = Convert.ToString(row["Approver6"]),
-                                   Approver7 = Convert.ToString(row["Approver7"]),
-                                   Approver8 = Convert.ToString(row["Approver8"]),
-                                   Approver9 = Convert.ToString(row["Approver9"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
@@ -765,48 +647,8 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   App10ApprovedDate = Convert.ToString(row["App10ApprovedDate"]),
-                                   App10Comments = Convert.ToString(row["App10Comments"]),
-                                   App10Status = Convert.ToString(row["App10Status"]),
-                                   App1ApprovedDate = Convert.ToString(row["App1ApprovedDate"]),
-                                   App1Comments = Convert.ToString(row["App1Comments"]),
-                                   App1Status = Convert.ToString(row["App1Status"]),
-                                   App2ApprovedDate = Convert.ToString(row["App2ApprovedDate"]),
-                                   App2Comments = Convert.ToString(row["App2Comments"]),
-                                   App2Status = Convert.ToString(row["App2Status"]),
-                                   App3ApprovedDate = Convert.ToString(row["App3ApprovedDate"]),
-                                   App3Comments = Convert.ToString(row["App3Comments"]),
-                                   App3Status = Convert.ToString(row["App3Status"]),
-                                   App4ApprovedDate = Convert.ToString(row["App4ApprovedDate"]),
-                                   App4Comments = Convert.ToString(row["App4Comments"]),
-                                   App4Status = Convert.ToString(row["App4Status"]),
-                                   App5ApprovedDate = Convert.ToString(row["App5ApprovedDate"]),
-                                   App5Comments = Convert.ToString(row["App5Comments"]),
-                                   App5Status = Convert.ToString(row["App5Status"]),
-                                   App6ApprovedDate = Convert.ToString(row["App6ApprovedDate"]),
-                                   App6Comments = Convert.ToString(row["App6Comments"]),
-                                   App6Status = Convert.ToString(row["App6Status"]),
-                                   App7ApprovedDate = Convert.ToString(row["App7ApprovedDate"]),
-                                   App7Comments = Convert.ToString(row["App7Comments"]),
-                                   App7Status = Convert.ToString(row["App7Status"]),
-                                   App8ApprovedDate = Convert.ToString(row["App8ApprovedDate"]),
-                                   App8Comments = Convert.ToString(row["App8Comments"]),
-                                   App8Status = Convert.ToString(row["App8Status"]),
-                                   App9ApprovedDate = Convert.ToString(row["App9ApprovedDate"]),
-                                   App9Comments = Convert.ToString(row["App9Comments"]),
-                                   App9Status = Convert.ToString(row["App9Status"]),
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
                                    ApplicationName = Convert.ToString(row["ApplicationName"]),
-                                   Approver1 = Convert.ToString(row["Approver1"]),
-                                   Approver10 = Convert.ToString(row["Approver10"]),
-                                   Approver2 = Convert.ToString(row["Approver2"]),
-                                   Approver3 = Convert.ToString(row["Approver3"]),
-                                   Approver4 = Convert.ToString(row["Approver4"]),
-                                   Approver5 = Convert.ToString(row["Approver5"]),
-                                   Approver6 = Convert.ToString(row["Approver6"]),
-                                   Approver7 = Convert.ToString(row["Approver7"]),
-                                   Approver8 = Convert.ToString(row["Approver8"]),
-                                   Approver9 = Convert.ToString(row["Approver9"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
@@ -857,8 +699,6 @@ public class DbOperations
     {
         try
         {
-
-
             errorcode = 0;
             errordesc = "success";
             //create command and assign the query and connection from the constructor
@@ -966,6 +806,12 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
+                cmd.Parameters.Add(new MySqlParameter("i_Page", _StrategyInfo.Page));
+                cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
                 cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
                 cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
@@ -999,13 +845,12 @@ public class DbOperations
     {
         try
         {
-
-            int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber);
+            int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber) + 1;
             //Get_StrategyLatestversionById
             errorcode = 0;
             errordesc = "success";
             //create command and assign the query and connection from the constructor
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy_Version", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
@@ -1039,7 +884,6 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_Version", version));
 
                 // cmd.Parameters.Add(new MySqlParameter("i_DateChangeImplemented", _StrategyInfo.DateChangeImplemented));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
@@ -1047,7 +891,7 @@ public class DbOperations
 
                 //Date change Initiated
                 //Date change implemented
-
+                cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
                 cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
                 cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
@@ -1057,6 +901,7 @@ public class DbOperations
                     //Execute command
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
+                    errordesc = "success|" + Convert.ToString(version);
                 }
                 //close connection
             }

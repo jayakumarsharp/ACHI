@@ -33,8 +33,8 @@
             $scope.StrategyVersiondata = data;
             $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
             for (var i = 0; i < data.length; i++) {
-                data[i].Ver = data[i].Version;
-                data[i].Version = "Version - " + data[i].Version;
+                data[i].Ver = "Version - " + data[i].Version;
+                data[i].Version = data[i].Version;
             }
             $scope.CurrencyGrid.data = data;
         })
@@ -118,7 +118,7 @@
     });
 
     var columnDefs = [{ name: 'RefNumber' },
-        { name: 'Version' },
+        { name: 'Ver' },
 
         //{ headerName: 'Description', name: 'Description', width: 440 },
         //{
@@ -136,11 +136,11 @@
 
         {
             name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetVersionDataview(row.entity.RefNumber,row.entity.Ver)" ><i class="fa fa-edit" ></i></a ></div>'
+            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetVersionDataview(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>'
 
         },
         {
-            field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Ver)" ><i class="fa fa-eye" ></i></a ></div>'
+            field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
 
         }
     ];
@@ -223,33 +223,81 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
-
-
-    $scope.UpdatecurrencyConversion = function (model) {
-        //model.UpdatedBy = $rootScope.UserInfo.user.userId;
-        if ($scope.TaskActive)
-            model.IsActive = "Y";
+    
+    $scope.SaveNewversionStrategy = function (currency) {
+        if ($scope.StrategyActive)
+            currency.IsActive = "Y";
         else
-            model.IsActive = "N";
+            currency.IsActive = "N";
 
         if ($scope.IsSignOff)
-            model.IsSignOff = "Y";
+            currency.IsSignOff = "Y";
         else
-            model.IsSignOff = "N";
-        TaskService.UpdateTask(model).success(function (data) {
+            currency.IsSignOff = "N";
+
+
+        if (currency != null) {
+            StrategyService.SaveNewversionStrategy(currency).success(function (data) {
+                var split = [];
+                if (data != null && data != '') {
+                    split = data.split('|');
+                }
+                if (split[0] == "success") {
+                    $scope.listB_Estimation[0].RefNumber = currency.RefNumber;
+                    $scope.listB_Estimation[0].Version = split[1];
+                    StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+
+                    });
+
+
+                    $('#currencyModel').modal('hide');
+                }
+                else
+                    $scope.errorinfo = data;
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
+            });
+        }
+    };
+    $scope.UpdateChange = function (model) {
+        model.Page = "C";
+        StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
+
+                $scope.listB_Estimation[0].RefNumber = model.RefNumber;
+                $scope.listB_Estimation[0].Version = model.Version;
+
+
+                StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+
+                });
+
+                var temp = [];
+
+                for (var j = 0; j < $scope.Availableusers.length; j++) {
+                    var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
+                    if (delId < 0)
+                        temp.push($scope.Availableusers[i])
+                }
+
+
+                if (temp.length > 0) {
+                    StrategyService.DeleteStrategyApprover(temp).success(function (data) {
+
+                    });
+                }
+
                 $scope.editMode = false;
-                //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
                 $scope.getallcurrencyconversions()
             }
             else
                 $scope.errorinfo = data;
-
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
+
 
     var formatDate = function (indate) {
         if (indate != null) {
@@ -367,8 +415,8 @@
         var items = JSON.parse(JSON.stringify($scope.EstimationProduct));
         console.log('a to b');
         for (var i = 0; i < $scope.selectedA_Estimation.length; i++) {
-            var moveId = arrayObjectEstimationProductIndexOf($scope.EstimationProduct, $scope.selectedA_Estimation[i]);
-            $scope.listB_Estimation.push({ 'Approver': $scope.EstimationProduct[moveId].Approver, 'Id': $scope.EstimationProduct[moveId].Id });
+            var moveId = arrayObjectEstimationProductIndexOf($scope.listA_Estimation, $scope.selectedA_Estimation[i]);
+            $scope.listB_Estimation.push({ 'Approver': $scope.listA_Estimation[moveId].Approver, 'Id': $scope.listA_Estimation[moveId].Id });
             var delId = arrayObjectEstimationProductIndexOf($scope.listA_Estimation, $scope.selectedA_Estimation[i]);
             $scope.listA_Estimation.splice(delId, 1);
             console.log('list A count after: ' + $scope.listA_Estimation.length);

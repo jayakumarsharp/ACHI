@@ -6771,6 +6771,7 @@
     <Content Include="img\tree.png" />
     <Content Include="img\user.jpg" />
     <Content Include="js\Config.js" />
+    <Content Include="js\controllers\ApprovalsController.js" />
     <Content Include="js\controllers\EmailsController.js" />
     <Content Include="js\controllers\MapTaskController.js" />
     <Content Include="js\controllers\TaskController.js" />
@@ -8263,6 +8264,7 @@
     <Content Include="Views\Main\ProductType.cshtml" />
     <Content Include="Views\Main\ShowApplicationDetails.cshtml" />
     <Content Include="Views\Main\ShowApprovalDetails.cshtml" />
+    <Content Include="Views\Main\Approvals.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -128,20 +128,24 @@ namespace CRMManagement.Controllers
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalById(Strategynumber, Version);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult InsertStrategy(Strategy strategy)
         {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-
-
             string errordesc = "";
             int errorcode = 0;
             _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult SaveNewversionStrategy(Strategy strategy)
+        {
+            string errordesc = "";
+            int errorcode = 0;
+            _dbOperations.UpdateStrategyVersiondata(strategy, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+        
 
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
         {
@@ -180,10 +184,10 @@ namespace CRMManagement.Controllers
             //}
             string errordesc = "";
             int errorcode = 0;
-                _dbOperations.UpdateStrategyApprover(strategy, out errorcode, out errordesc);
+            _dbOperations.UpdateStrategyApprover(strategy, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
-        
+
 
         public JsonResult UpdateStrategy(Strategy Strategy)
         {
@@ -365,7 +369,7 @@ public static class Utilities
         var returnActive = control == routeControl &&
                            action == routeAction;
 
-        return returnActive ? "menu - dropdown classic - menu - dropdown active" : "menu - dropdown classic - menu - dropdown";
+        return returnActive ? "active" : "";
     }
 }
 
@@ -524,46 +528,7 @@ public class Strategy
     public string Attribute4 { get; set; }
     public string NoOfApprover { get; set; }
     public string Version { get; set; }
-    public string Approver1 { get; set; }
-    public string App1Status { get; set; }
-    public string App1Comments { get; set; }
-    public string App1ApprovedDate { get; set; }
-    public string Approver2 { get; set; }
-    public string App2Status { get; set; }
-    public string App2Comments { get; set; }
-    public string App2ApprovedDate { get; set; }
-    public string Approver3 { get; set; }
-    public string App3Status { get; set; }
-    public string App3Comments { get; set; }
-    public string App3ApprovedDate { get; set; }
-    public string Approver4 { get; set; }
-    public string App4Status { get; set; }
-    public string App4Comments { get; set; }
-    public string App4ApprovedDate { get; set; }
-    public string Approver5 { get; set; }
-    public string App5Status { get; set; }
-    public string App5Comments { get; set; }
-    public string App5ApprovedDate { get; set; }
-    public string Approver6 { get; set; }
-    public string App6Status { get; set; }
-    public string App6Comments { get; set; }
-    public string App6ApprovedDate { get; set; }
-    public string Approver7 { get; set; }
-    public string App7Status { get; set; }
-    public string App7Comments { get; set; }
-    public string App7ApprovedDate { get; set; }
-    public string Approver8 { get; set; }
-    public string App8Status { get; set; }
-    public string App8Comments { get; set; }
-    public string App8ApprovedDate { get; set; }
-    public string Approver9 { get; set; }
-    public string App9Status { get; set; }
-    public string App9Comments { get; set; }
-    public string App9ApprovedDate { get; set; }
-    public string Approver10 { get; set; }
-    public string App10Status { get; set; }
-    public string App10Comments { get; set; }
-    public string App10ApprovedDate { get; set; }
+
     public string FinalSignOff { get; set; }
     public string SignOffDate { get; set; }
     public string SignoffBy { get; set; }
@@ -572,5 +537,5 @@ public class Strategy
     public string CreatedBy { get; set; }
     public string LastModifiedDate { get; set; }
     public string LastModifiedBy { get; set; }
-
+    public string Page { get; set; }
 }

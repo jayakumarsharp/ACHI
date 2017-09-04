@@ -55,7 +55,7 @@
         },
                {
                    field: 'Approvals', width: 70
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Ver)" ><i class="fa fa-eye" ></i></a ></div>'
+            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
 
                }],
     };
@@ -199,6 +199,7 @@
 
 
     $scope.UpdateStrategy = function (model) {
+        model.Page = "S";
         StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
 
