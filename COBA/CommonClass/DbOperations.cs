@@ -88,11 +88,9 @@ public class DbOperations
 
     #endregion
 
-
     #region Strategy
 
-
-    public void InsertStrategyApprover(List<StrategyApprover> lst, string RefNumber,string version, out int errorcode, out string errordesc)
+    public void InsertStrategyApprover(List<StrategyApprover> lst, string RefNumber, string version, out int errorcode, out string errordesc)
     {
         try
         {
@@ -193,7 +191,7 @@ public class DbOperations
     }
 
 
-    public void UpdateStrategyApprover(List<StrategyApprover> lst, string RefNumber, out int errorcode, out string errordesc)
+    public void UpdateStrategyApprover(StrategyApprover s, out int errorcode, out string errordesc)
     {
         try
         {
@@ -201,23 +199,20 @@ public class DbOperations
             errordesc = "success";
             using (MySqlCommand cmd = new MySqlCommand("Sp_update_strategy_approval", connection))
             {
-                foreach (StrategyApprover s in lst)
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
+                cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+                cmd.Parameters.Add(new MySqlParameter("i_Comments", s.Comments));
+                cmd.Parameters.Add(new MySqlParameter("i_Status", s.Status));
+                //cmd.Parameters.Add(new MySqlParameter("i_Approver", s.ApprovedDate));
+                if (this.OpenConnection() == true)
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                    cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
-                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
-                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Comments));
-                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Status));
-                    //cmd.Parameters.Add(new MySqlParameter("i_Approver", s.ApprovedDate));
-                    if (this.OpenConnection() == true)
-                    {
-                        //Execute command
-                        cmd.ExecuteNonQuery();
-                        this.CloseConnection();
-                    }
-
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
                 }
+
             }
         }
         catch (MySqlException e)
@@ -236,7 +231,40 @@ public class DbOperations
         }
     }
 
+    public int GetStrategyLatestVersionIDbyId(string RefNumber)
+    {
+        int Version = 0;
+        string query = "Get_StrategyLatestversionById";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        Version = Convert.ToInt32(dt.Rows[0]);
 
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return Version;
+
+    }
 
     public List<StrategyApprover> Get_StrategyApprovalByuser(string userid)
     {
@@ -829,6 +857,8 @@ public class DbOperations
     {
         try
         {
+
+
             errorcode = 0;
             errordesc = "success";
             //create command and assign the query and connection from the constructor
@@ -863,6 +893,11 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
+
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
+                cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
                 //cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
 
                 if (this.OpenConnection() == true)
@@ -964,6 +999,9 @@ public class DbOperations
     {
         try
         {
+
+            int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber);
+            //Get_StrategyLatestversionById
             errorcode = 0;
             errordesc = "success";
             //create command and assign the query and connection from the constructor
@@ -998,6 +1036,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", version));
 
                 // cmd.Parameters.Add(new MySqlParameter("i_DateChangeImplemented", _StrategyInfo.DateChangeImplemented));
                 cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));

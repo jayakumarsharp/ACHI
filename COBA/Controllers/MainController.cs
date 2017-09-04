@@ -82,6 +82,12 @@ namespace CRMManagement.Controllers
             return View();
         }
 
+        public ActionResult Approvals()
+        {
+            return View();
+        }
+
+
 
         public ActionResult Logout()
         {
@@ -165,6 +171,19 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdateStrategyApprover(StrategyApprover strategy)
+        {
+            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
+            //{
+            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //}
+            string errordesc = "";
+            int errorcode = 0;
+                _dbOperations.UpdateStrategyApprover(strategy, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+        
 
         public JsonResult UpdateStrategy(Strategy Strategy)
         {
