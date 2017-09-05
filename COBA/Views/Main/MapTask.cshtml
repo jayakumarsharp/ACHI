@@ -22,9 +22,14 @@
                         <div class="form-group" style="padding-top:10px">
                             <label class="col-sm-3 control-label">Strategy</label>
                             <div class="col-sm-8">
-                                <select class="form-control" ng-model="ecurrency.RefNumber" ng-options="item.RefNumber for item in Strategydata" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                @*<select class="form-control" ng-model="ecurrency." ng-options="item.RefNumber for item in Strategydata" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
                                     <option value="">- Select Task-</option>
-                                </select>
+                                </select>*@
+                                <select class="form-control" ng-model="ecurrency.RefNumber" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                    <option value="">- Select Version-</option>
+                                    <option ng-repeat="x in Strategydata" value="{{x.RefNumber}}">{{x.RefNumber}}</option>
+                                </select>                            
+
                                 @*<select ng-model="ecurrency.RefNumber" ng-change="GetVersions(ecurrency.RefNumber)"   class="form-control" style="height:33px" required name="TaskId">
                                         <option value="">- Select Task-</option>
                                         <option ng-repeat="item for item in Strategydata" value="{{x.Id}}">{{x.RefNumber}}</option>

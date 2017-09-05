@@ -1126,7 +1126,7 @@ public class DbOperations
                                select new OnboardingTasks
                                {
                                    Id = Convert.ToInt32(row["Id"]),
-                                   TaskName = Convert.ToString(row["Name"]),
+                                   Version = Convert.ToString(row["Version"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
@@ -1142,7 +1142,6 @@ public class DbOperations
                                    TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
                                    TaskAttachement = Convert.ToString(row["TaskAttachement"]),
                                    TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
 
@@ -1411,7 +1410,6 @@ public class DbOperations
                                select new MapTasks
                                {
                                    Id = Convert.ToInt32(row["Id"]),
-                                   TaskName = Convert.ToString(row["Name"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
@@ -1427,7 +1425,7 @@ public class DbOperations
                                    TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
                                    TaskAttachement = Convert.ToString(row["TaskAttachement"]),
                                    TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
+                                   Version = Convert.ToString(row["Version"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
 
@@ -1473,7 +1471,7 @@ public class DbOperations
                                {
                                    Id = Convert.ToInt32(row["Id"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
-                                   TaskName = Convert.ToString(row["Name"]),
+                                   Version = Convert.ToString(row["Version"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    EmailAttachment = Convert.ToString(row["EmailAttachment"]),
@@ -1488,7 +1486,6 @@ public class DbOperations
                                    TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
                                    TaskAttachement = Convert.ToString(row["TaskAttachement"]),
                                    TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
 
@@ -1533,7 +1530,7 @@ public class DbOperations
                                {
                                    Id = Convert.ToInt32(row["Id"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
-                                   TaskName = Convert.ToString(row["Name"]),
+                                   Version= Convert.ToString(row["Version"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    EmailAttachment = Convert.ToString(row["EmailAttachment"]),
@@ -1548,7 +1545,6 @@ public class DbOperations
                                    TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
                                    TaskAttachement = Convert.ToString(row["TaskAttachement"]),
                                    TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
 
@@ -1579,7 +1575,8 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add(new MySqlParameter("i_Id", objMaptask.Id));
-                cmd.Parameters.Add(new MySqlParameter("i_TaskId", objMaptask.TaskId));
+                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", objMaptask.RefNumber));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", objMaptask.Version));
                 cmd.Parameters.Add(new MySqlParameter("i_IsMappedToTask", objMaptask.IsMappedToTask));
                 if (this.OpenConnection() == true)
                 {

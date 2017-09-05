@@ -41,7 +41,7 @@
 
     $scope.GetVersions = function (data) {
         if (data != "" && data != undefined) {
-            StrategyService.GetStrategyDatabyStrategyId(data.RefNumber).success(function (data) {
+            StrategyService.GetStrategyDatabyStrategyId(data).success(function (data) {
                 $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
                 for (var i = 0; i < data.length; i++) {
                     data[i].Ver = "Version - " + data[i].Version;
@@ -92,8 +92,10 @@
 
     var columnDefs = [{ name: 'Id' },
     { name: 'RefNumber' },
+    { name: 'Version' },
     { name: 'EmailSubject' },
     { name: 'EmailId' },
+    
    {
        name: 'IsMappedToTask',
        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'

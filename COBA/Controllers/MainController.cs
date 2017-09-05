@@ -424,6 +424,7 @@ public class MapTasks
     public string UniqueEmailId { get; set; }
     public string EmailId { get; set; }
     public string RefNumber { get; set; }
+    public string Version { get; set; }
     public string EmailSubject { get; set; }
     public string EmailContent { get; set; }
     public string EmailAttachment { get; set; }
@@ -455,6 +456,7 @@ public class OnboardingTasks
     public string UniqueEmailId { get; set; }
     public string EmailId { get; set; }
     public string RefNumber { get; set; }
+    public string Version { get; set; }
     public string EmailSubject { get; set; }
     public string EmailContent { get; set; }
     public string EmailAttachment { get; set; }
