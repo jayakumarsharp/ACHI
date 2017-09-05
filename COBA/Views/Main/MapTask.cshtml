@@ -18,78 +18,38 @@
                                 <input data-ng-show="editMode" class="form-control" style="height:33px" numberdotonly type="text" maxlength="8" ng-model="ecurrency.EmailSubject" />
                             </div>
                         </div>
+
                         <div class="form-group" style="padding-top:10px">
                             <label class="col-sm-3 control-label">Strategy</label>
                             <div class="col-sm-8">
-                                <select ng-model="ecurrency.TaskId" class="form-control" style="height:33px" required name="TaskId">
+                                <select class="form-control" ng-model="ecurrency.RefNumber" ng-options="item.RefNumber for item in Strategydata" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
                                     <option value="">- Select Task-</option>
-                                    <option ng-repeat="x in EstimationProduct" value="{{x.Id}}">{{x.Name}}</option>
                                 </select>
+                                @*<select ng-model="ecurrency.RefNumber" ng-change="GetVersions(ecurrency.RefNumber)"   class="form-control" style="height:33px" required name="TaskId">
+                                        <option value="">- Select Task-</option>
+                                        <option ng-repeat="item for item in Strategydata" value="{{x.Id}}">{{x.RefNumber}}</option>
+                                    </select>*@
                             </div>
                         </div>
                         <div class="form-group" style="padding-top:10px">
                             <label class="col-sm-3 control-label">Strategy Version</label>
                             <div class="col-sm-8">
-                                <select ng-model="ecurrency.TaskId" class="form-control" style="height:33px" required name="TaskId">
-                                    <option value="">- Select Task-</option>
-                                    <option ng-repeat="x in EstimationProduct" value="{{x.Id}}">{{x.Name}}</option>
-                                </select>
+                                <select class="form-control" ng-model="ecurrency.Version"  title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                    <option value="">- Select Version-</option>
+                                    <option ng-repeat="x in StrategyVersiondata" value="{{x.Version}}">{{x.Ver}}</option>
+                                </select>                            
                             </div>
                         </div>
 
-
-                        @*<div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-5" style="margin-left:15px;">
-                                        <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
-                                            <a href="javascript:;" class="list-group-item active grouppadding">
-                                                Available Tasks
-
-                                            </a>
-                                            <span ng-repeat="right in listA_Estimation | orderBy:'right.productname'">
-                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                                    {{right.Name}}
-                                                    <input id="{{right.Name}}" ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Name)" name="selectedA_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 v-center text-center">
-                                        <br />
-                                        <br />
-                                        <br />
-                                        <div class="btn-group-vertical">
-                                            <button class="btn btn-outline-info" ng-click="AlltoA_Estimation()" id="btnAllA_Estimation"><i class="fa fa-angle-double-left"></i></button>
-                                            <button class="btn btn-outline-info" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
-                                            <button class="btn btn-outline-info" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
-                                            <button class="btn btn-outline-info" ng-click="AlltoB_Estimation()" id="btnAllB_Estimation"><i class="fa fa-angle-double-right"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
-                                            <a href="javascript:;" class="list-group-item active grouppadding">
-                                                Selected Task(s)
-
-                                            </a>
-                                            <span ng-repeat="right in listB_Estimation | orderBy:'right.productname'">
-                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                                    {{right.Name}}
-                                                    <input id="{{right.Name}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Name)" name="selectedB_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-10">
                                 <span data-ng-hide="editMode">
-                                    <input type="button" value="Add" ng-click="add(currency)" class="btn btn-circle blue" />
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn  btn-circle btn-default btn-outline-info" />
                                 </span>
                                 <span data-ng-show="editMode">
-                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-circle blue" />
+                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn  btn-circle btn-default btn-outline-info" />
                                 </span>
-                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-circle btn-default" />
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -175,7 +135,8 @@
         height: 68px;
         width: 68px;
     }
-    .info-box{
+
+    .info-box {
         min-height: 68px;
     }
 </style>

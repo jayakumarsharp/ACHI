@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout) {
+﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, StrategyService, TaskService, $timeout, $filter) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -11,6 +11,8 @@
     $scope.LockedPriceSheet = [];
     $scope.Mappedtask = 0;
     $scope.UnMappedtask = 0;
+    $scope.Strategydata = [];
+    $scope.StrategyVersiondata = [];
 
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
@@ -30,7 +32,27 @@
                 $scope.totaltask = 0;
             $scope.CurrencyGrid.data = data;;
         })
+
+        StrategyService.GetAllCurrencyConversion().success(function (data) {
+            $scope.Strategydata = data;
+        })
     };
+
+
+    $scope.GetVersions = function (data) {
+        if (data != "" && data != undefined) {
+            StrategyService.GetStrategyDatabyStrategyId(data.RefNumber).success(function (data) {
+                $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
+                for (var i = 0; i < data.length; i++) {
+                    data[i].Ver = "Version - " + data[i].Version;
+                    data[i].Version = data[i].Version;
+                }
+
+                $scope.StrategyVersiondata = data;
+            })
+        }
+    };
+
 
 
 
@@ -69,11 +91,9 @@
     });
 
     var columnDefs = [{ name: 'Id' },
-    { name: 'StrategyNumber' },
-    { name: 'TaskName' },
+    { name: 'RefNumber' },
     { name: 'EmailSubject' },
     { name: 'EmailId' },
-
    {
        name: 'IsMappedToTask',
        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'
@@ -112,6 +132,7 @@
         }).error(function (error) {
             $scope.Error = error;
         });
+
     };
 
 
@@ -222,122 +243,6 @@
     };
 
     $scope.GetRightsList();
-
-
-
-    $scope.selectedA_Estimation = [];
-    $scope.selectedB_Estimation = [];
-
-    $scope.listA_Estimation = [];
-    $scope.listB_Estimation = [];
-
-    $scope.checkedA_Estimation = false;
-    $scope.checkedB_Estimation = false;
-
-    $scope.AvailableUser_Estimation = [];
-
-    $scope.gettask = function () {
-
-        TaskService.GetAllTask().success(function (data) {
-            console.log(data);
-            $scope.EstimationProduct = data;
-
-            $scope.listA_Estimation = [];
-            $scope.listB_Estimation = [];
-            var temp = JSON.parse(JSON.stringify($scope.EstimationProduct));
-
-            for (i = 0; i < $scope.AvailableUser_Estimation.length; i++) {
-                $scope.listB_Estimation.push({ 'Name': $scope.AvailableUser_Estimation[i].Name, 'Id': $scope.AvailableUser_Estimation[i].Id });
-                var delId = arrayObjectEstimationProductIndexOf(temp, $scope.AvailableUser_Estimation[i].Name);
-                temp.splice(delId, 1);
-            }
-            //alert('ss1s :' + JSON.stringify(temp));
-            $scope.listA_Estimation = temp;
-
-        })
-    };
-
-    $scope.gettask();
-
-    $scope.AlltoA_Estimation = function () {
-        $scope.selectedB_Estimation = [];
-        angular.forEach($scope.listB_Estimation, function (value, key) {
-            $scope.selectedB_Estimation.push(value.Name);
-        })
-        $scope.bToA_Estimation();
-    }
-    $scope.AlltoB_Estimation = function () {
-        $scope.selectedA_Estimation = [];
-        angular.forEach($scope.listA_Estimation, function (value, key) {
-            $scope.selectedA_Estimation.push(value.Name);
-        })
-        $scope.aToB_Estimation();
-    }
-
-    function arrayObjectEstimationProductIndexOf(myArray, searchTerm) {
-        //debugger;
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i].Name == searchTerm) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
-    $scope.aToB_Estimation = function () {
-        var items = JSON.parse(JSON.stringify($scope.EstimationProduct));
-        console.log('a to b');
-        for (var i = 0; i < $scope.selectedA_Estimation.length; i++) {
-            var moveId = arrayObjectEstimationProductIndexOf($scope.EstimationProduct, $scope.selectedA_Estimation[i]);
-            $scope.listB_Estimation.push({ 'Name': $scope.EstimationProduct[moveId].Name, 'Id': $scope.EstimationProduct[moveId].Id });
-            var delId = arrayObjectEstimationProductIndexOf($scope.listA_Estimation, $scope.selectedA_Estimation[i]);
-            $scope.listA_Estimation.splice(delId, 1);
-            console.log('list A count after: ' + $scope.listA_Estimation.length);
-            console.log('list B count after: ' + $scope.listB_Estimation.length);
-        }
-        $scope.selectedA_Estimation = [];
-    };
-
-    $scope.bToA_Estimation = function () {
-        console.log('b to a');
-        for (var i = 0; i < $scope.selectedB_Estimation.length; i++) {
-            var moveId = arrayObjectEstimationProductIndexOf($scope.EstimationProduct, $scope.selectedB_Estimation[i]);
-            if (moveId != -1) {
-                $scope.listA_Estimation.push($scope.EstimationProduct[moveId]);
-            }
-            var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.selectedB_Estimation[i]);
-            $scope.listB_Estimation.splice(delId, 1);
-            console.log('list B count after: ' + $scope.listB_Estimation.length);
-            console.log('list A count after: ' + $scope.listA_Estimation.length);
-        }
-
-        $scope.selectedB_Estimation = [];
-    };
-
-    $scope.stateBChanged_Estimation = function (isChecked, rightID) {
-        if (isChecked == true) {
-            $scope.selectedB_Estimation.push(rightID);
-        }
-        else {
-            var delId = arrayObjectEstimationProductIndexOf($scope.selectedB_Estimation, rightID);
-            $scope.selectedB_Estimation.splice(delId, 1);
-        }
-    }
-    $scope.stateAChanged_Estimation = function (isChecked, rightID) {
-        if (isChecked == true) {
-            $scope.selectedA_Estimation.push(rightID);
-        }
-        else {
-            var delId = arrayObjectEstimationProductIndexOf($scope.selectedA_Estimation, rightID);
-            $scope.selectedA_Estimation.splice(delId, 1);
-        }
-    }
-
-    function reset_Estimation() {
-        $scope.toggle = 0;
-    }
-
 
 
 });
