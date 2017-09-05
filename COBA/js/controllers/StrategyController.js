@@ -216,7 +216,7 @@
                 for (var j = 0; j < $scope.Availableusers.length; j++) {
                     var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
                     if (delId < 0)
-                        temp.push($scope.Availableusers[i])
+                        temp.push($scope.Availableusers[j])
                 }
 
 

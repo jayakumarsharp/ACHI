@@ -61,6 +61,7 @@
         $('#currencyModel').modal('show');
         StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
             console.log(data);
+            $scope.Availableusers = data;
 
             for (var i = 0; i < data.length; i++) {
                 data[i].Id = i;
@@ -259,6 +260,7 @@
             });
         }
     };
+    $scope.Availableusers = [];
     $scope.UpdateChange = function (model) {
         model.Page = "C";
         StrategyService.UpdateStrategy(model).success(function (data) {
@@ -277,7 +279,7 @@
                 for (var j = 0; j < $scope.Availableusers.length; j++) {
                     var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
                     if (delId < 0)
-                        temp.push($scope.Availableusers[i])
+                        temp.push($scope.Availableusers[j])
                 }
 
 

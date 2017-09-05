@@ -110,23 +110,29 @@ namespace CRUserManagement.Controllers
                 else
                 {
                     //   _dbOperations.CheckUserLogin(userName, passWord, out  errorCode, out errorDesc);
-                    errorCode = 0;
-                    if (errorCode == 0)
+
+                    if (userName == "Daniel" || userName == "Oliver" || userName == "Sivakumar" || userName == "John" || userName == "George")
                     {
-                        FormsAuthentication.SetAuthCookie(userName, false);
-                        Session["UserName"] = userName;
-                        return "Logged in successfully";
-                    }
-                    else if (errorCode == 1)
-                    {
-                        log.Info("Login failed for the user " + userName);
-                        return "You account has been blocked. Please contact the Admin";
+                        errorCode = 0;
+                        if (errorCode == 0)
+                        {
+                            FormsAuthentication.SetAuthCookie(userName, false);
+                            Session["UserName"] = userName;
+                            return "Logged in successfully";
+                        }
+                        else if (errorCode == 1)
+                        {
+                            log.Info("Login failed for the user " + userName);
+                            return "You account has been blocked. Please contact the Admin";
+                        }
+                        else
+                        {
+                            log.Info("Login failed for the user " + userName + " error code " + errorCode);
+                            return "Login failed please check the credentials you entered";
+                        }
                     }
                     else
-                    {
-                        log.Info("Login failed for the user " + userName + " error code " + errorCode);
-                        return "Login failed please check the credentials you entered";
-                    }
+                        return "Invalid Login";
 
                 }
 
