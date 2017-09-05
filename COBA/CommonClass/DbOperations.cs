@@ -290,6 +290,10 @@ public class DbOperations
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status= Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
+
                                }).ToList();
 
                     }
@@ -332,6 +336,9 @@ public class DbOperations
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
                                }).ToList();
 
                     }

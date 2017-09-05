@@ -20,26 +20,22 @@
     $scope.Strategydata = [];
     $scope.StrategyVersiondata = [];
     $scope.Selcurrentversion = 0;
-    $scope.GetAllStrategy = function () {
-        StrategyService.GetAllCurrencyConversion().success(function (data) {
-            $scope.Strategydata = data;
-        })
+
+    $scope.GetCurrencyConversionForId = function (id, Version, Comments, ApprovedDate, Status) {
+        $('#LayoutModel1').modal('show');
+        $scope.notificationExist = true;
+        $scope.currency = { 'Comments': Comments };
+        //StrategyService.GetStrategyApprovalByuser().success(function (data) {
+        //    for (var i = 0; i < data.length; i++) {
+        //        //if (data[i].RefNumber == id && data[i].Version == Version) {
+
+        //        //}
+        //    }
+        //}).error(function (error) {
+        //    $scope.Error = error;
+        //});
     };
 
-    $scope.GetAllStrategy();
-
-    $scope.GetVersions = function (data) {
-        StrategyService.GetStrategyDatabyStrategyId(data.RefNumber).success(function (data) {
-            $scope.StrategyVersiondata = data;
-            $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
-            for (var i = 0; i < data.length; i++) {
-                data[i].Ver = data[i].Version;
-                data[i].Version = "Version - " + data[i].Version;
-            }
-            $scope.CurrencyGrid.data = data;
-        })
-
-    };
 
 
     $scope.notificationExist = false;
@@ -101,15 +97,16 @@
 
     }
 
-
-    $scope.getallcurrencyconversions = function () {
-
-        TaskService.GetAllTask().success(function (data) {
-            $scope.CurrencyGrid.data = data;;
-        })
+    $scope.GetAlldata = function () {
+        StrategyService.GetStrategyApprovalByuser().success(function (data) {
+            console.log(data);
+            $scope.CurrencyGrid.data = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        });
     };
+    $scope.GetAlldata();
 
-    $scope.getallcurrencyconversions();
 
     $rootScope.$on("toggle", function () {
         $timeout(function () {
@@ -136,7 +133,7 @@
 
         {
             name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetVersionDataview(row.entity.RefNumber,row.entity.Ver)" ><i class="fa fa-edit" ></i></a ></div>'
+            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Version,row.entity.Comments,row.entity.ApprovedDate,row.entity.Status)" ><i class="fa fa-edit" ></i></a ></div>'
 
         },
         {
@@ -201,30 +198,6 @@
         }
     };
 
-    $scope.GetCurrencyConversionForId = function (id) {
-        TaskService.GetAllTaskById(id).success(function (data) {
-            $scope.editMode = true;
-
-            if (data[0].IsActive == "Y")
-                $scope.TaskActive = true;
-            else
-                $scope.TaskActive = false;
-
-            if (data[0].IsSignOff == "Y")
-                $scope.IsSignOff = true;
-            else
-                $scope.IsSignOff = false;
-
-
-            data[0].IsSignOff = (data[0].IsSignOff == "Y" ? "checked" : 'unchecked');
-            $scope.ecurrency = data[0];
-            $('#currencyModel').modal('show');
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-    };
-
-
     $scope.UpdatecurrencyConversion = function (model) {
         //model.UpdatedBy = $rootScope.UserInfo.user.userId;
         if ($scope.TaskActive)
@@ -271,7 +244,7 @@
     $scope.cancel = function () {
         $scope.currency = {};
         $scope.ecurrency = {};
-        $('#currencyModel').modal('hide');
+        $('#LayoutModel1').modal('hide');
     };
 
     $scope.updatecancel = function (data) {
