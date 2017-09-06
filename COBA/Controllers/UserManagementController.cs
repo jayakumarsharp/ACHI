@@ -6,15 +6,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
-using WebMatrix.WebData;
 using System.Text.RegularExpressions;
-using CRUserManagement.Filters;
-using CRUserManagement.Models;
+using ACHI.Filters;
+using ACHI.Models;
 using System.Configuration;
-using CRUserManagement.CommonClass;
+using ACHI.CommonClass;
 using MvcPaging;
 
-namespace CRUserManagement.Controllers
+namespace ACHI.Controllers
 {
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class UserManagementController : Controller

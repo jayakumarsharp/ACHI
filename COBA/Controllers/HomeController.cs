@@ -1,4 +1,4 @@
-﻿using CRUserManagement.Filters;
+﻿using ACHI.Filters;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -7,12 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using log4net;
-using CRUserManagement.CommonClass;
-using CRUserManagement.Models;
+using ACHI.CommonClass;
+using ACHI.Models;
 using System.Data.SqlClient;
-using WebMatrix.WebData;
 
-namespace CRUserManagement.Controllers
+namespace ACHI.Controllers
 {
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class HomeController : Controller

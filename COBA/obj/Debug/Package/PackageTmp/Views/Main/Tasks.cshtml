@@ -1,0 +1,200 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div  ng-controller="TaskController" class="whitebg">
+
+    <section class="content-header" style="padding-bottom:10px;">
+        <h1>Change  Management</h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <label>Strategy RefNumber</label>
+                <select class="form-control" ng-model="Selcurrentversion" ng-options="item.RefNumber for item in Strategydata" ng-change="GetVersions(Selcurrentversion)" title="Select Role" style="width:100%;font-size: 0.8em" required></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+        </div>
+    </section>
+
+
+    <div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%">
+            <div class="modal-content">
+                <div class="modal-header content-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        @*content*@
+                        <div class="row">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>RefNumber</th>
+                                                <th>Approver</th>
+                                                <th>Status</th>
+                                                <th>Comments</th>
+                                                <th>ApprovedDate </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="right in ViewData">
+                                                <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
+                                                <td>{{right.Approver}}</td>
+                                                <td><span class="label label-success">{{right.Status}}</span></td>
+                                                <td>
+                                                    {{right.Comments}}
+                                                </td>
+                                                <td>
+                                                    {{right.ApprovedDate}}
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%">
+            <div class="modal-content">
+                <div class="modal-header content-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        @*content*@
+                        <div class="row">
+
+
+                            <div class="box-body">
+
+                                <div class="col-md-6">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Details of changes performed</label>
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.DetailsOfChanges" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Date change Initiated</label>
+
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.DateChangeInitiated" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Attribute 1</label>
+
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Attribute1" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Attribute 3</label>
+
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Attribute3" required />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Business Impact</label>
+                                            <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.ClientNumber" />
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.BusinessImpact" required />
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Date change implemented</label>
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.DateChangeImplemented" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Attribute 2</label>
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Attribute2" required />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Attribute 4</label>
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Attribute4" required />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Supporting documents</label>
+
+                                            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="8" ng-model="currency.Ranking" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div ng-include="'ShowApplicationDetails'"></div>
+                                    <div ng-include="'ShowApprovalDetails'"></div>
+                                    <div class="form-group col-lg-12">
+                                        <div class="col-sm-offset-4 col-sm-10">
+                                            <span>
+                                                <input type="button" value="Update" ng-click="UpdateChange(currency)" class="btn btn-outline-info" />
+                                            </span>&nbsp;
+                                            <span>
+                                                <input type="button" value="Add New Version" ng-click="SaveNewversionStrategy(currency)" class="btn btn-outline-info" />
+                                            </span>&nbsp;
+                                            <input type="button" value="Cancel" data-ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

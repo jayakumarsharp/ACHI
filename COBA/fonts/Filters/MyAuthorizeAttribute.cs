@@ -6,12 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using WebMatrix.WebData;
 using System.Web.Script.Serialization;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace CRUserManagement.Filters
+namespace ACHI.Filters
 {
     public class MyAuthorizeAttribute : AuthorizeAttribute
     {

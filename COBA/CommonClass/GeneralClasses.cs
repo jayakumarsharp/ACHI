@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CRUserManagement.Models;
+using ACHI.Models;
 
 
-namespace CRUserManagement.CommonClass
+namespace ACHI.CommonClass
 {
     public class GeneralClasses
     {
