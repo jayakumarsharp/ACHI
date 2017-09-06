@@ -17,10 +17,9 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
     $scope.GetAllNofitications();
     
 
-    $scope.GetCurrencyConversionForId = function (id, Version,Comments,ApprovedDate,Status) {
+    $scope.GetCurrencyConversionForId = function (id, Version) {
         $('#LayoutModel').modal('show');
         $scope.notificationExist = true;
-        $scope.currency = { 'Comments': Comments };
         //StrategyService.GetStrategyApprovalByuser().success(function (data) {
         //    for (var i = 0; i < data.length; i++) {
         //        //if (data[i].RefNumber == id && data[i].Version == Version) {
@@ -31,12 +30,6 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
         //    $scope.Error = error;
         //});
     };
-
-    $scope.layoutcancel = function () {
-        $scope.currency = {};
-        $('#LayoutModel').modal('hide');
-    };
-
 
 });
 
