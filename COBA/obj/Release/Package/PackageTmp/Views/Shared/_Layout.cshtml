@@ -1,0 +1,81 @@
+﻿@using System.Web.Optimization;
+@System.Web.Optimization.Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/customscripts")
+@RenderSection("scripts", required: false)
+
+
+<div class="col-lg-12 col-md-12">
+    <div class="col-lg-2">
+        <img src="@Url.Content("~/Content/images/Rcomlogo.jpg")"  style="float:left;width:224px;height:60px;" alt="Alternate Text" />
+    </div>
+
+    <div class="col-lg-2   col-lg-offset-7  col-mg-offset-7  col-md-2">
+        @Html.ActionLink("Change Password", "ChangePasswordDisplay", "Home")
+    </div>
+
+    <div class="col-lg-1">
+        <a href="#myModal" role="button" id="logout" class="CancelBtn" data-toggle="modal">Logout</a>
+    </div>
+</div>
+<div class="container">
+    @RenderBody()
+</div>
+@*<footer class="navbarbottom">
+    <p style="text-align: center;">Copyright&copy;2015 Servion Global. All rights reserved.</p>
+</footer>*@
+@*@Html.Partial("_ChangePassword")*@
+
+@Html.Hidden("RedirectToRoles", Url.Action("Index", "RoleManagement", new { Page = @Request.QueryString["Page"] }))
+@Html.Hidden("RedirectToUserManagement", Url.Action("Index", "UserManagement", new { Page = @Request.QueryString["Page"] }))
+
+<div id="myModal" class="modal fade ">
+    <div class="modal-dialog dlogout">
+        <div class="modal-content clogout">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <img src="~/img/Close.png" /></button>
+
+                <h4 class="modal-title">Confirmation </h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center !important; margin: 12px !important">Are you sure want to Logout?</p>
+            </div>
+            <div class="modal-footer">
+
+                @Html.ActionLink("Ok", "Logout", "Home", null, new { @class = "log-out btn btn-large btn-Success" })
+
+
+                <button type="button" class="btn btn-default btn-Danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ajaxComplete(function (event, xhr, ajaxOptions) {
+
+        if (xhr.status == 401) {
+            // the AJAX request failed because either the user was not
+            // authenticated or his session expired. So here you could
+            // do whatever you want. For example you could redirect him
+            // to the loginUrl defined in your web.config file:
+
+            window.location.href = '@FormsAuthentication.LoginUrl';
+
+            // you also have the possibility to show this logon form
+            // inside a popup or render it inline inside the page,
+            // by sending an AJAX request to this action and retrieving the
+            // corresponding partial
+        }
+    });
+</script>
+
+
+
+<style>
+    #pager_center {
+        width: 320px !important;
+    }
+</style>

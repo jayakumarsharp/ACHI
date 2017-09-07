@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace ACHI.Controllers
+namespace CRMManagement.Controllers
 {
     public class MainController : Controller
     {

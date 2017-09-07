@@ -9,7 +9,7 @@
     </div>*@
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
-
+@Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }))
 <div class="login-box">
     <div class="login-logo">
         <a href="../../index2.html"><b>COBA</b></a>
@@ -49,11 +49,11 @@
         <a href="#">I forgot my password</a><br>
     </div>
 </div>
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../../plugins/iCheck/icheck.min.js"></script>
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/plugins/iCheck/icheck.min.js"></script>
 <script src="~/js/custom.js"></script>
-<script>
+@*<script>
     $(function () {
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
@@ -61,7 +61,7 @@
             increaseArea: '20%' // optional
         });
     });
-</script>
+</script>*@
 
 
 <style>

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace ACHI.Models
+namespace CRUserManagement.Models
 {
 
     public class UserDetails

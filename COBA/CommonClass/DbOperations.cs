@@ -4,11 +4,11 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using log4net;
-using ACHI.Models;
+using CRUserManagement.Models;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-using ACHI.CommonClass;
+using CRUserManagement.CommonClass;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -290,6 +290,10 @@ public class DbOperations
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status= Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
+
                                }).ToList();
 
                     }
@@ -332,6 +336,9 @@ public class DbOperations
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
                                }).ToList();
 
                     }

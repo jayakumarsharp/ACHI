@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <sitemanifest>
-  <IisApp path="C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\obj\Debug\Package\PackageTmp" managedRuntimeVersion="v4.0" />
-  <setAcl path="C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
-  <setAcl path="C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+  <IisApp path="C:\Users\jayakumar.t\Downloads\ACHI-1f20b710736f3b71e8643e391f530d240392b7e9\COBA\obj\Debug\Package\PackageTmp" managedRuntimeVersion="v4.0" />
+  <setAcl path="C:\Users\jayakumar.t\Downloads\ACHI-1f20b710736f3b71e8643e391f530d240392b7e9\COBA\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\jayakumar.t\Downloads\ACHI-1f20b710736f3b71e8643e391f530d240392b7e9\COBA\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
 </sitemanifest>

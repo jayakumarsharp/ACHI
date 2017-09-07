@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Optimization;
 
-namespace ACHI.App_Start
+namespace CRUserManagement.App_Start
 {
     public class BundleConfig
     {
