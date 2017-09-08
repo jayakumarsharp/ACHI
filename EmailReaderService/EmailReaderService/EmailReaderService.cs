@@ -44,18 +44,12 @@ namespace EmailReaderService
         System.Threading.Thread thread;
         public OppertunityReaderService()
         {
-            server = "localhost";
-            database = "coba";
-            uid = "root";
-            password = "Servion@123";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
+            connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
+            connection = new MySqlConnection(connString);
 
             log.Info("Begin Constructor");
             InitializeComponent();
-            mailbox = @"D:/EMail/inbox";
+            mailbox = @"C:/EMail/inbox";
             log.Info("End Constructor");
             OnStart(null);
         }

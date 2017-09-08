@@ -248,7 +248,7 @@ namespace CRMManagement.Controllers
 
         public JsonResult UpdateOnboardingTask(string Id, string TaskComments, string StrategyNumber, string ExisitingFiles)
         {
-            string mailbox = @"D:/EMail/inbox";
+            string mailbox = @"C:/EMail/inbox";
             string filepath = mailbox + "/" + StrategyNumber + "/";
 
             bool exists = System.IO.Directory.Exists(@filepath);

@@ -23,12 +23,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `Get_Mapped_Mail_Task`(
 
 
 
+
 )
 BEGIN
 
 select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
-ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
- ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.TaskId=t.Id 
+ot.IsActive, ot.IsProcessed, ot.RefNumber,t.Version, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
+ ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.RefNumber=t.RefNumber and ot.Version=t.Version 
 where ot.IsMappedToTask =i_tasktype;
 
 END//
@@ -53,6 +54,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `Get_StrategyApprovalByUser`(
 BEGIN
 Select * from tbl_strategyapproval where approver=i_user;
 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.Get_StrategyLatestversionById
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Get_StrategyLatestversionById`(
+	IN `i_RefNumber` VARCHAR(50)
+
+
+)
+BEGIN
+Select Version from tbl_strategy where RefNumber=i_RefNumber  order by Version Desc LIMIT 1;
 END//
 DELIMITER ;
 
@@ -83,8 +96,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetMapTask`()
 BEGIN
 select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
-ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
- ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.TaskId=t.Id ;
+ot.IsActive, ot.IsProcessed, ot.RefNumber,t.Version, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
+ ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.RefNumber=t.RefNumber and ot.Version =t.Version ;
 
 
 END//
@@ -97,11 +110,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetMapTaskbyId`(
 
 
 
+
 )
 BEGIN
-	select ot.Id,t.RefNumBer, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
-ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
- ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_Strategy t on ot.TaskId=t.Id 
+select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
+ot.IsActive, ot.IsProcessed, ot.RefNumber,t.Version, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
+ ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.RefNumber=t.RefNumber and ot.Version =t.Version
 where ot.Id=i_id;
 
 END//
@@ -112,8 +126,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetOnboardingTask`()
 BEGIN
 select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
-ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
- ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.TaskId=t.Id;
+ot.IsActive, ot.IsProcessed,t.Version, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
+ ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.RefNumber=t.RefNumber;
 
 END//
 DELIMITER ;
@@ -124,12 +138,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetOnboardingTaskbyId`(
 	IN `i_Id` INT
 
 
+
+
 )
 BEGIN
 
-select ot.Id, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
+select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.EmailSubject, ot.EmailContent, ot.EmailAttachment, ot.IsMappedToTask, 
 ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
- ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_task t on ot.TaskId=t.Id 
+ ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.TaskId=t.Id 
 Where ot.Id=i_Id;
 END//
 DELIMITER ;
@@ -139,7 +155,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetStrategy`()
 BEGIN
 
-SELECT Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version, Approver1, App1Status, App1Comments, App1ApprovedDate, Approver2, App2Status, App2Comments, App2ApprovedDate, Approver3, App3Status, App3Comments, App3ApprovedDate, Approver4, App4Status, App4Comments, App4ApprovedDate, Approver5, App5Status, App5Comments, App5ApprovedDate, Approver6, App6Status, App6Comments, App6ApprovedDate, Approver7, App7Status, App7Comments, App7ApprovedDate, Approver8, App8Status, App8Comments, App8ApprovedDate, Approver9, App9Status, App9Comments, App9ApprovedDate, Approver10, App10Status, App10Comments, App10ApprovedDate, FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy FROM (SELECT * FROM tbl_strategy ORDER BY Version DESC) AS t GROUP BY RefNumber;
+SELECT Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version,FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy FROM (SELECT * FROM tbl_strategy ORDER BY Version DESC) AS t GROUP BY RefNumber;
 
 END//
 DELIMITER ;
@@ -150,9 +166,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetStrategyById`(
 	IN `i_RefNumber` VARCHAR(250)
 
 
+
 )
 BEGIN
-select Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version, Approver1, App1Status, App1Comments, App1ApprovedDate, Approver2, App2Status, App2Comments, App2ApprovedDate, Approver3, App3Status, App3Comments, App3ApprovedDate, Approver4, App4Status, App4Comments, App4ApprovedDate, Approver5, App5Status, App5Comments, App5ApprovedDate, Approver6, App6Status, App6Comments, App6ApprovedDate, Approver7, App7Status, App7Comments, App7ApprovedDate, Approver8, App8Status, App8Comments, App8ApprovedDate, Approver9, App9Status, App9Comments, App9ApprovedDate, Approver10, App10Status, App10Comments, App10ApprovedDate, FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy
+select Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version,FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy
 from tbl_strategy WHERE RefNumber=i_RefNumber;
 END//
 DELIMITER ;
@@ -161,9 +178,10 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetStrategyByRefnumber`(
 	IN `i_RefNumber` VARCHAR(50)
+
 )
 BEGIN
-select Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version, Approver1, App1Status, App1Comments, App1ApprovedDate, Approver2, App2Status, App2Comments, App2ApprovedDate, Approver3, App3Status, App3Comments, App3ApprovedDate, Approver4, App4Status, App4Comments, App4ApprovedDate, Approver5, App5Status, App5Comments, App5ApprovedDate, Approver6, App6Status, App6Comments, App6ApprovedDate, Approver7, App7Status, App7Comments, App7ApprovedDate, Approver8, App8Status, App8Comments, App8ApprovedDate, Approver9, App9Status, App9Comments, App9ApprovedDate, Approver10, App10Status, App10Comments, App10ApprovedDate, FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy
+select Id, RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails, DetailsOfChanges, ChangesBusinessImpact, SupportingDocument, DateChangeInitiated, DateChangeImplemented, ChangesCompletionStatus, AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13, Attribute1, Attribute2, Attribute3, Attribute4, NoOfApprover, Version,FinalSignOff, SignOffDate, SignoffBy, IsActive, CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy
 from tbl_strategy WHERE RefNumber=i_RefNumber;
 END//
 DELIMITER ;
@@ -224,6 +242,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_Strategy`(
 	IN `i_AdditionalParam11` VARCHAR(50),
 	IN `i_AdditionalParam12` VARCHAR(50),
 	IN `i_AdditionalParam13` VARCHAR(50)
+,
+	IN `i_Attribute1` VARCHAR(50)
+,
+	IN `i_Attribute2` VARCHAR(50)
+,
+	IN `i_Attribute3` VARCHAR(50)
+,
+	IN `i_Attribute4` VARCHAR(50)
+
 )
 BEGIN
 insert into tbl_strategy	 (RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails,AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13,IsActive,Version) 
@@ -238,6 +265,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_strategy_Approval`(
 	IN `i_Version` VARCHAR(50),
 	IN `i_Approver` VARCHAR(50)
 
+
 )
 BEGIN
  IF (SELECT count(*) FROM tbl_StrategyApproval  WHERE RefNumber=i_RefNumber and  Version=i_Version and Approver=i_Approver)<=0 THEN
@@ -245,6 +273,9 @@ BEGIN
 INSERT INTO tbl_StrategyApproval (RefNumber, Version,Approver) VALUES (i_RefNumber, i_Version,i_Approver);
 END;
 END IF;
+
+
+
 END//
 DELIMITER ;
 
@@ -279,10 +310,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_Strategy_Version`(
 	IN `i_AdditionalParam11` VARCHAR(50),
 	IN `i_AdditionalParam12` VARCHAR(50),
 	IN `i_AdditionalParam13` VARCHAR(50)
+,
+	IN `i_Attribute1` VARCHAR(50)
+,
+	IN `i_Attribute2` VARCHAR(50)
+,
+	IN `i_Attribute3` VARCHAR(50)
+,
+	IN `i_Attribute4` VARCHAR(50)
+
+,
+	IN `i_Version` INT
 )
 BEGIN
-insert into tbl_strategy	 (RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails,AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13,IsActive,Version) 
-values(i_RefNumber, i_Name, i_Type, i_ApplicationName, i_ApplicationId,i_BusinessSector, i_Country, i_Region, i_ProductType, i_Ranking, i_Objective, i_Description, i_RiskRating, i_BusinessImpact, i_ExchangeDetails, i_AdditionalParam1, i_AdditionalParam2, i_AdditionalParam3, i_AdditionalParam4, i_AdditionalParam5, i_AdditionalParam6, i_AdditionalParam7, i_AdditionalParam8, i_AdditionalParam9, i_AdditionalParam10, i_AdditionalParam11, i_AdditionalParam12, i_AdditionalParam13, 'Y',1);
+insert into tbl_strategy(RefNumber, Name, Type, ApplicationName, ApplicationId, BusinessSector, Country, Region, ProductType, Ranking, Objective, Description, RiskRating, BusinessImpact, ExchangeDetails,AdditionalParam1, AdditionalParam2, AdditionalParam3, AdditionalParam4, AdditionalParam5, AdditionalParam6, AdditionalParam7, AdditionalParam8, AdditionalParam9, AdditionalParam10, AdditionalParam11, AdditionalParam12, AdditionalParam13,Attribute1,Attribute2,Attribute3,Attribute4,IsActive,Version) 
+values(i_RefNumber, i_Name, i_Type, i_ApplicationName, i_ApplicationId,i_BusinessSector, i_Country, i_Region, i_ProductType, i_Ranking, i_Objective, i_Description, i_RiskRating, i_BusinessImpact, i_ExchangeDetails, i_AdditionalParam1, i_AdditionalParam2, i_AdditionalParam3, i_AdditionalParam4, i_AdditionalParam5, i_AdditionalParam6, i_AdditionalParam7, i_AdditionalParam8, i_AdditionalParam9, i_AdditionalParam10, i_AdditionalParam11, i_AdditionalParam12, i_AdditionalParam13,i_Attribute1,i_Attribute2,i_Attribute3,i_Attribute4, 'Y',i_Version);
 END//
 DELIMITER ;
 
@@ -308,12 +350,15 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_map_task`(
 	IN `i_id` INT,
-	IN `i_taskid` VARCHAR(50),
+	IN `i_RefNumber` VARCHAR(50),
+	IN `i_Version` INT,
 	IN `i_IsMappedToTask` VARCHAR(50)
+
+
 )
 BEGIN
 	
-	update tbl_onboarding_task set TaskId=i_taskid,IsMappedToTask=i_IsMappedToTask where Id=i_id;
+	update tbl_onboarding_task set RefNumber=i_RefNumber,Version =i_Version,IsMappedToTask=i_IsMappedToTask where Id=i_id;
 	
 END//
 DELIMITER ;
@@ -366,9 +411,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_Strategy`(
 	IN `i_AdditionalParam13` VARCHAR(50)
 ,
 	IN `i_Id` INT
+,
+	IN `i_Page` VARCHAR(50)
+,
+	IN `i_Attribute1` VARCHAR(50)
+,
+	IN `i_Attribute2` VARCHAR(50)
+,
+	IN `i_Attribute3` VARCHAR(50)
+,
+	IN `i_Attribute4` VARCHAR(50)
+,
+	IN `i_DetailsOfChanges` VARCHAR(50)
 )
 BEGIN
+if i_Page = 'C' THEN
+update tbl_strategy set RefNumber=i_RefNumber, Name =i_Name,  Type=i_Type, ApplicationName = i_ApplicationName, ApplicationId= i_ApplicationId,BusinessSector=i_BusinessSector, Country=   i_Country, Region=i_Region,  ProductType=i_ProductType,  Ranking=i_Ranking, Objective= i_Objective,Description=i_Description, RiskRating=   i_RiskRating, BusinessImpact=   i_BusinessImpact,ExchangeDetails=i_ExchangeDetails,AdditionalParam1= i_AdditionalParam1,AdditionalParam2=i_AdditionalParam2, AdditionalParam3=    i_AdditionalParam3, AdditionalParam4=i_AdditionalParam4, AdditionalParam5=  i_AdditionalParam5,AdditionalParam6=i_AdditionalParam6, AdditionalParam7=i_AdditionalParam7,  AdditionalParam8=i_AdditionalParam8,  AdditionalParam9=i_AdditionalParam9, AdditionalParam10=i_AdditionalParam10,  AdditionalParam11=i_AdditionalParam11,   AdditionalParam12=i_AdditionalParam12, AdditionalParam13= i_AdditionalParam13,Attribute1=i_Attribute1,Attribute2=i_Attribute2,Attribute3=i_Attribute3,Attribute4=i_Attribute4,DetailsOfChanges=i_DetailsOfChanges where Id=i_id; 
+else
 update tbl_strategy set RefNumber=i_RefNumber, Name =i_Name,  Type=i_Type, ApplicationName = i_ApplicationName, ApplicationId= i_ApplicationId,BusinessSector=i_BusinessSector, Country=   i_Country, Region=i_Region,  ProductType=i_ProductType,  Ranking=i_Ranking, Objective= i_Objective,Description=i_Description, RiskRating=   i_RiskRating, BusinessImpact=   i_BusinessImpact,ExchangeDetails=i_ExchangeDetails,AdditionalParam1= i_AdditionalParam1,AdditionalParam2=i_AdditionalParam2, AdditionalParam3=    i_AdditionalParam3, AdditionalParam4=i_AdditionalParam4, AdditionalParam5=  i_AdditionalParam5,AdditionalParam6=i_AdditionalParam6, AdditionalParam7=i_AdditionalParam7,  AdditionalParam8=i_AdditionalParam8,  AdditionalParam9=i_AdditionalParam9, AdditionalParam10=i_AdditionalParam10,  AdditionalParam11=i_AdditionalParam11,   AdditionalParam12=i_AdditionalParam12, AdditionalParam13= i_AdditionalParam13 where Id=i_id; 
+END IF;
+
+
 END//
 DELIMITER ;
 
@@ -645,7 +708,8 @@ CREATE TABLE IF NOT EXISTS `tbl_onboarding_task` (
   `IsMappedToTask` varchar(1) NOT NULL,
   `IsActive` varchar(1) NOT NULL,
   `IsProcessed` varchar(1) NOT NULL,
-  `TaskId` varchar(30) DEFAULT NULL,
+  `RefNumber` varchar(30) DEFAULT NULL,
+  `Version` varchar(50) DEFAULT NULL,
   `TaskAttachement` text,
   `TaskComments` text,
   `CreatedDate` datetime NOT NULL,
@@ -671,17 +735,17 @@ CREATE TABLE IF NOT EXISTS `tbl_onboarding_task` (
 -- Dumping data for table achi.tbl_onboarding_task: ~10 rows (approximately)
 DELETE FROM `tbl_onboarding_task`;
 /*!40000 ALTER TABLE `tbl_onboarding_task` DISABLE KEYS */;
-INSERT INTO `tbl_onboarding_task` (`Id`, `UniqueEmailId`, `EmailId`, `ClientNumber`, `EmailSubject`, `EmailContent`, `EmailAttachment`, `IsMappedToTask`, `IsActive`, `IsProcessed`, `TaskId`, `TaskAttachement`, `TaskComments`, `CreatedDate`, `CreatedBy`, `TaskAssignedBy`, `TaskAssignedDate`, `LastModifiedDate`, `LastModifiedBy`, `Res1`, `Res2`, `Res3`, `Res4`, `Res5`, `Res6`, `Res7`, `Res8`, `Res9`, `Res10`) VALUES
-	(23, '<PN1PR01MB01754671E3073D11DDE971C1C48B0@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', '<PN1PR01MB01754671E3073D11DDE971C1C48B0@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', '12453', 'Fw: Test 12453 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Sunday, August 6, 2017 3:27 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Test </font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>testing subjecce</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'new doc 2017-06-06 17.34.40_20170606173456.pdf,', 'Y', 'Y', 'N', '8', 'test desjk.txt', NULL, '2017-08-09 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-10 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(24, '<PN1PR01MB017552B43CF87F60003D9972C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '34121', 'Fw: Test 34121 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p>testing</p>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'new doc 2017-06-06 17.34.40_20170606173456.pdf,', 'Y', 'Y', 'N', '2', NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(26, '<PN1PR01MB01759455E412C6E3B29C926EC4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '1234567', '1234567 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p>jay test</p>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'Custom Report Pending point Status till 8 Aug_Customer care Inbound.xlsx,', 'N', 'Y', 'N', NULL, NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(27, '<PN1PR01MB017575A87BFFDEC39D2A5F71C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '1234567', 'Fw: 1234567 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'Y', 'Y', 'N', '3', NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(28, '<PN1PR01MB017551FBE17EF2BAF90E8B46C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '12345678', 'Fw: 12345678 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:28 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'N', 'Y', 'N', NULL, NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(29, '<PN1PR01MB0175C619E763F9EBC54815C7C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '123456789', 'Fw: 123456789 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:36 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 12345678</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:28 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'N', 'Y', 'N', NULL, NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(30, '<CAKzhRk1=T=3ds-A8KLm3xfF814VfqVUHD_qq0auBp9j7cVyKQg@mail.gmail.com>', 'sthirupathikumar@gmail.com', '12131415', '12131415 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr">This is test mail<br clear="all"><div><br></div>-- <br><div class="gmail_signature" data-smartmail="gmail_signature">Regards,<br>Thirupathi<br></div>\r\n</div>\r\n\r\n', 'wr1.doc,', 'N', 'Y', 'N', NULL, NULL, NULL, '2017-08-15 00:00:00', 'sthirupathikumar@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(31, '<CAE_CuUj7w2h7PNxzOo7xYrqs=6UiZFk1y4vkUONvBJpJABCA6Q@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:46 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail.pptx,', 'N', 'Y', 'N', NULL, NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(32, '<CAE_CuUiD53MgG40dqChegQgcU-ue56irYQUR_bwFcErCTEwKOw@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:58 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail_new.pptx,', 'Y', 'Y', 'N', '12', NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(33, '<CAE_CuUi6iNDkHPbd-p4ctE7EYNfvu115b7MYNQeXMgxaxXQDEQ@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:46 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail.pptx,', 'Y', 'Y', 'N', '5', NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_onboarding_task` (`Id`, `UniqueEmailId`, `EmailId`, `ClientNumber`, `EmailSubject`, `EmailContent`, `EmailAttachment`, `IsMappedToTask`, `IsActive`, `IsProcessed`, `RefNumber`, `Version`, `TaskAttachement`, `TaskComments`, `CreatedDate`, `CreatedBy`, `TaskAssignedBy`, `TaskAssignedDate`, `LastModifiedDate`, `LastModifiedBy`, `Res1`, `Res2`, `Res3`, `Res4`, `Res5`, `Res6`, `Res7`, `Res8`, `Res9`, `Res10`) VALUES
+	(23, '<PN1PR01MB01754671E3073D11DDE971C1C48B0@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', '<PN1PR01MB01754671E3073D11DDE971C1C48B0@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', '12453', 'Fw: Test 12453 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Sunday, August 6, 2017 3:27 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Test </font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>testing subjecce</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'new doc 2017-06-06 17.34.40_20170606173456.pdf,', 'Y', 'Y', 'N', '1', '1', 'test desjk.txt', NULL, '2017-08-09 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-10 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(24, '<PN1PR01MB017552B43CF87F60003D9972C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '34121', 'Fw: Test 34121 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p>testing</p>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'new doc 2017-06-06 17.34.40_20170606173456.pdf,', 'Y', 'Y', 'N', '1', '2', NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(26, '<PN1PR01MB01759455E412C6E3B29C926EC4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '1234567', '1234567 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p>jay test</p>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'Custom Report Pending point Status till 8 Aug_Customer care Inbound.xlsx,', 'Y', 'Y', 'N', '1', '1', NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(27, '<PN1PR01MB017575A87BFFDEC39D2A5F71C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '1234567', 'Fw: 1234567 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'Y', 'Y', 'N', '1', '2', NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(28, '<PN1PR01MB017551FBE17EF2BAF90E8B46C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '12345678', 'Fw: 12345678 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:28 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'N', 'Y', 'N', NULL, NULL, NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(29, '<PN1PR01MB0175C619E763F9EBC54815C7C4890@PN1PR01MB0175.INDPRD01.PROD.OUTLOOK.COM>', 'savvyjayakumar@outlook.com', '123456789', 'Fw: 123456789 (Trial Version)', '<html><head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">\r\n<style type="text/css" style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>\r\n</head>\r\n<body dir="ltr">\r\n<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;font-family:Calibri,Helvetica,sans-serif;" dir="ltr">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color: rgb(0, 0, 0);">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:36 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 12345678</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:28 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> Fw: 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p><br>\r\n</p>\r\n<br>\r\n<br>\r\n<div style="color:rgb(0,0,0)">\r\n<hr tabindex="-1" style="display:inline-block; width:98%">\r\n<div id="divRplyFwdMsg" dir="ltr"><font face="Calibri, sans-serif" color="#000000" style="font-size:11pt"><b>From:</b> jayakumar T &lt;savvyjayakumar@outlook.com&gt;<br>\r\n<b>Sent:</b> Friday, August 11, 2017 8:24 PM<br>\r\n<b>To:</b> jayakumar T<br>\r\n<b>Subject:</b> 1234567</font>\r\n<div></div>\r\n</div>\r\n<div>\r\n<div id="divtagdefaultwrapper" dir="ltr" style="font-size:12pt; color:#000000; font-family:Calibri,Helvetica,sans-serif">\r\n<p>jay test</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</body>\r\n</html>\r\n\r\n', 'cobasclientschema.sql,', 'N', 'Y', 'N', NULL, NULL, NULL, NULL, '2017-08-11 00:00:00', 'savvyjayakumar@outlook.com', NULL, '2017-08-11 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(30, '<CAKzhRk1=T=3ds-A8KLm3xfF814VfqVUHD_qq0auBp9j7cVyKQg@mail.gmail.com>', 'sthirupathikumar@gmail.com', '12131415', '12131415 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr">This is test mail<br clear="all"><div><br></div>-- <br><div class="gmail_signature" data-smartmail="gmail_signature">Regards,<br>Thirupathi<br></div>\r\n</div>\r\n\r\n', 'wr1.doc,', 'N', 'Y', 'N', NULL, NULL, NULL, NULL, '2017-08-15 00:00:00', 'sthirupathikumar@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(31, '<CAE_CuUj7w2h7PNxzOo7xYrqs=6UiZFk1y4vkUONvBJpJABCA6Q@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:46 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail.pptx,', 'N', 'Y', 'N', NULL, NULL, NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(32, '<CAE_CuUiD53MgG40dqChegQgcU-ue56irYQUR_bwFcErCTEwKOw@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:58 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail_new.pptx,', 'Y', 'Y', 'N', '12', NULL, NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(33, '<CAE_CuUi6iNDkHPbd-p4ctE7EYNfvu115b7MYNQeXMgxaxXQDEQ@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:46 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail.pptx,', 'Y', 'Y', 'N', '5', NULL, NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_onboarding_task` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_region_master
@@ -786,46 +850,6 @@ CREATE TABLE IF NOT EXISTS `tbl_strategy` (
   `Attribute4` varchar(100) DEFAULT NULL,
   `NoOfApprover` int(3) DEFAULT NULL,
   `Version` int(3) NOT NULL,
-  `Approver1` varchar(250) DEFAULT NULL,
-  `App1Status` int(3) DEFAULT NULL,
-  `App1Comments` varchar(300) DEFAULT NULL,
-  `App1ApprovedDate` datetime DEFAULT NULL,
-  `Approver2` varchar(250) DEFAULT NULL,
-  `App2Status` int(3) DEFAULT NULL,
-  `App2Comments` varchar(300) DEFAULT NULL,
-  `App2ApprovedDate` datetime DEFAULT NULL,
-  `Approver3` varchar(250) DEFAULT NULL,
-  `App3Status` int(3) DEFAULT NULL,
-  `App3Comments` varchar(300) DEFAULT NULL,
-  `App3ApprovedDate` datetime DEFAULT NULL,
-  `Approver4` varchar(250) DEFAULT NULL,
-  `App4Status` int(3) DEFAULT NULL,
-  `App4Comments` varchar(300) DEFAULT NULL,
-  `App4ApprovedDate` datetime DEFAULT NULL,
-  `Approver5` varchar(250) DEFAULT NULL,
-  `App5Status` int(3) DEFAULT NULL,
-  `App5Comments` varchar(300) DEFAULT NULL,
-  `App5ApprovedDate` datetime DEFAULT NULL,
-  `Approver6` varchar(250) DEFAULT NULL,
-  `App6Status` int(3) DEFAULT NULL,
-  `App6Comments` varchar(300) DEFAULT NULL,
-  `App6ApprovedDate` datetime DEFAULT NULL,
-  `Approver7` varchar(250) DEFAULT NULL,
-  `App7Status` int(3) DEFAULT NULL,
-  `App7Comments` varchar(300) DEFAULT NULL,
-  `App7ApprovedDate` datetime DEFAULT NULL,
-  `Approver8` varchar(250) DEFAULT NULL,
-  `App8Status` int(3) DEFAULT NULL,
-  `App8Comments` varchar(300) DEFAULT NULL,
-  `App8ApprovedDate` datetime DEFAULT NULL,
-  `Approver9` varchar(250) DEFAULT NULL,
-  `App9Status` int(3) DEFAULT NULL,
-  `App9Comments` varchar(300) DEFAULT NULL,
-  `App9ApprovedDate` datetime DEFAULT NULL,
-  `Approver10` varchar(250) DEFAULT NULL,
-  `App10Status` int(3) DEFAULT NULL,
-  `App10Comments` varchar(300) DEFAULT NULL,
-  `App10ApprovedDate` datetime DEFAULT NULL,
   `FinalSignOff` varchar(1) DEFAULT NULL,
   `SignOffDate` datetime DEFAULT NULL,
   `SignoffBy` varchar(100) DEFAULT NULL,
@@ -845,20 +869,14 @@ CREATE TABLE IF NOT EXISTS `tbl_strategy` (
   `Res9` varchar(250) DEFAULT NULL,
   `Res10` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`Id`,`RefNumber`,`Version`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_strategy: ~8 rows (approximately)
+-- Dumping data for table achi.tbl_strategy: ~2 rows (approximately)
 DELETE FROM `tbl_strategy`;
 /*!40000 ALTER TABLE `tbl_strategy` DISABLE KEYS */;
-INSERT INTO `tbl_strategy` (`Id`, `RefNumber`, `Name`, `Type`, `ApplicationName`, `ApplicationId`, `BusinessSector`, `Country`, `Region`, `ProductType`, `Ranking`, `Objective`, `Description`, `RiskRating`, `BusinessImpact`, `ExchangeDetails`, `DetailsOfChanges`, `ChangesBusinessImpact`, `SupportingDocument`, `DateChangeInitiated`, `DateChangeImplemented`, `ChangesCompletionStatus`, `AdditionalParam1`, `AdditionalParam2`, `AdditionalParam3`, `AdditionalParam4`, `AdditionalParam5`, `AdditionalParam6`, `AdditionalParam7`, `AdditionalParam8`, `AdditionalParam9`, `AdditionalParam10`, `AdditionalParam11`, `AdditionalParam12`, `AdditionalParam13`, `Attribute1`, `Attribute2`, `Attribute3`, `Attribute4`, `NoOfApprover`, `Version`, `Approver1`, `App1Status`, `App1Comments`, `App1ApprovedDate`, `Approver2`, `App2Status`, `App2Comments`, `App2ApprovedDate`, `Approver3`, `App3Status`, `App3Comments`, `App3ApprovedDate`, `Approver4`, `App4Status`, `App4Comments`, `App4ApprovedDate`, `Approver5`, `App5Status`, `App5Comments`, `App5ApprovedDate`, `Approver6`, `App6Status`, `App6Comments`, `App6ApprovedDate`, `Approver7`, `App7Status`, `App7Comments`, `App7ApprovedDate`, `Approver8`, `App8Status`, `App8Comments`, `App8ApprovedDate`, `Approver9`, `App9Status`, `App9Comments`, `App9ApprovedDate`, `Approver10`, `App10Status`, `App10Comments`, `App10ApprovedDate`, `FinalSignOff`, `SignOffDate`, `SignoffBy`, `IsActive`, `CreatedDate`, `CreatedBy`, `LastModifiedDate`, `LastModifiedBy`, `Res1`, `Res2`, `Res3`, `Res4`, `Res5`, `Res6`, `Res7`, `Res8`, `Res9`, `Res10`) VALUES
-	(1, '1', '1', 1, '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', NULL, '2017-08-30 12:15:04', '2017-08-30 12:15:05', 1, '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', NULL, NULL, NULL, 1, 1, '1', 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2017-08-30 12:16:16', 'ds', '2017-08-30 12:16:23', 'd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(2, '1', '2', 2, '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, NULL, '1', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(3, '2', '4', 2, '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, NULL, '1', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(4, '2', '5', 2, '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, NULL, '1', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(5, '122', '1', 1, '11', '1', '1', '1', '1', '1', '1', '1', '11', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', '11', '1', '1', '11', '11', '1', '1', '1', '1', '11', '1', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(6, '3212', '4', 2, '4', '3', '44', '3', '5', '33', '4', '4', '4', '44', '4', '45', NULL, NULL, NULL, NULL, NULL, NULL, '44', '54', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '44', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(7, '8978', 'a', 1, 'dfs', 'test', 'ad', 'nw', 'dxas', 'asd', 'dads', 'sa', 'qsas', 'sdf', 'll', 'qdd', NULL, NULL, NULL, NULL, NULL, NULL, 'l', 'sdf', 'll', 'qjjjk', 'jjjk', 'kjkj', 'k', 'kjkk', 'kl', 'llj', 'kjlk', 'l', 'jlkj', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(8, 'test', '123a', 12, '12323', 'appid', 'sfdl', '231421', 'ksdfjl', '23', 'sldfl', 'asdf', 'sdf', 'sadf', 'EJ', 'sfddop', NULL, NULL, NULL, NULL, NULL, NULL, 'OJ', 'oijfoao', 'OEJO', 'jofjo', 'JQEO', 'joafjO', 'JEO', 'JOJFAOJ', 'JO', 'OJDO', 'J', 'JFO', 'EQ', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_strategy` (`Id`, `RefNumber`, `Name`, `Type`, `ApplicationName`, `ApplicationId`, `BusinessSector`, `Country`, `Region`, `ProductType`, `Ranking`, `Objective`, `Description`, `RiskRating`, `BusinessImpact`, `ExchangeDetails`, `DetailsOfChanges`, `ChangesBusinessImpact`, `SupportingDocument`, `DateChangeInitiated`, `DateChangeImplemented`, `ChangesCompletionStatus`, `AdditionalParam1`, `AdditionalParam2`, `AdditionalParam3`, `AdditionalParam4`, `AdditionalParam5`, `AdditionalParam6`, `AdditionalParam7`, `AdditionalParam8`, `AdditionalParam9`, `AdditionalParam10`, `AdditionalParam11`, `AdditionalParam12`, `AdditionalParam13`, `Attribute1`, `Attribute2`, `Attribute3`, `Attribute4`, `NoOfApprover`, `Version`, `FinalSignOff`, `SignOffDate`, `SignoffBy`, `IsActive`, `CreatedDate`, `CreatedBy`, `LastModifiedDate`, `LastModifiedBy`, `Res1`, `Res2`, `Res3`, `Res4`, `Res5`, `Res6`, `Res7`, `Res8`, `Res9`, `Res10`) VALUES
+	(10, '1', 'name', 1, 'app', 'Appid', 'bs', 'country', 'region', 'product', 'sr', 'obj', 'des', 'rr', '11', 'ed', 'detail', NULL, NULL, NULL, NULL, NULL, '1', 'ap1', '1', '1', '1', '1', '11', '11', '1', '11', '1', '1', '1', '1', '3', '2', '4', NULL, 1, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(11, '1', 'name', 1, 'app', 'Appid', 'bs', 'country', 'region', 'product', 'sr', 'obj', 'des', 'rr', '11', 'ed', NULL, NULL, NULL, NULL, NULL, NULL, '1', 'ap1', '1', '1', '1', '1', '11', '11', '1', '11', '1', '1', '1', '1', '3', '2', '4', NULL, 2, NULL, NULL, NULL, 'Y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_strategy` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_strategyapproval
@@ -872,21 +890,21 @@ CREATE TABLE IF NOT EXISTS `tbl_strategyapproval` (
   `Status` varchar(50) DEFAULT '0',
   `Reserve1` varchar(50) DEFAULT '0',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table achi.tbl_strategyapproval: ~9 rows (approximately)
 DELETE FROM `tbl_strategyapproval`;
 /*!40000 ALTER TABLE `tbl_strategyapproval` DISABLE KEYS */;
 INSERT INTO `tbl_strategyapproval` (`Id`, `RefNumber`, `Version`, `Approver`, `Comments`, `ApprovedDate`, `Status`, `Reserve1`) VALUES
-	(1, '3212', '1', 'Daniel', '0', '0', '0', '0'),
-	(2, '3212', '1', 'George', '0', '0', '0', '0'),
-	(3, '3212', '1', 'John', '0', '0', '0', '0'),
-	(4, '3212', '1', 'Sivakumar', '0', '0', '0', '0'),
-	(5, '3212', '1', 'Oliver', '0', '0', '0', '0'),
-	(29, 'test', '1', 'Oliver', '0', '0', '0', '0'),
-	(30, 'test', '1', 'Daniel', '0', '0', '0', '0'),
-	(31, 'test', '1', 'George', '0', '0', '0', '0'),
-	(32, 'test', '1', 'John', '0', '0', '0', '0');
+	(49, '1', '1', 'George', 'Test', '0', 'Y', '0'),
+	(50, '1', '1', 'John', '0', '0', '0', '0'),
+	(51, '1', '1', 'Sivakumar', '0', '0', '0', '0'),
+	(52, '1', '1', 'Oliver', '0', '0', '0', '0'),
+	(54, '1', '2', 'George', '0', '0', '0', '0'),
+	(56, '1', '2', 'Sivakumar', '0', '0', '0', '0'),
+	(57, '1', '2', 'Oliver', '0', '0', '0', '0'),
+	(58, '1', '2', 'Daniel', '0', '0', '0', '0'),
+	(59, '1', '1', 'Daniel', '0', '0', '0', '0');
 /*!40000 ALTER TABLE `tbl_strategyapproval` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_task

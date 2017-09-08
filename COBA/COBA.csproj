@@ -6758,6 +6758,7 @@
     <Content Include="Global.asax" />
     <Content Include="img\CSV_icon.png" />
     <Content Include="img\dashboard.png" />
+    <Content Include="img\Email.png" />
     <Content Include="img\EmailMap.png" />
     <Content Include="img\EmailNotmap.png" />
     <Content Include="img\PDF_icon.png" />
