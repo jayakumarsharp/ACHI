@@ -29,16 +29,17 @@
     $scope.GetAllStrategy();
 
     $scope.GetVersions = function (data) {
-        StrategyService.GetStrategyDatabyStrategyId(data.RefNumber).success(function (data) {
-            $scope.StrategyVersiondata = data;
-            $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
-            for (var i = 0; i < data.length; i++) {
-                data[i].Ver = "Version - " + data[i].Version;
-                data[i].Version = data[i].Version;
-            }
-            $scope.CurrencyGrid.data = data;
-        })
-
+        if (data != undefined) {
+            StrategyService.GetStrategyDatabyStrategyId(data).success(function (data) {
+                $scope.StrategyVersiondata = data;
+                $scope.currency = $filter('orderBy')($scope.StrategyVersiondata, '-Version')[0];
+                for (var i = 0; i < data.length; i++) {
+                    data[i].Ver = "Version - " + data[i].Version;
+                    data[i].Version = data[i].Version;
+                }
+                $scope.CurrencyGrid.data = data;
+            })
+        }
     };
 
 
@@ -224,7 +225,7 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
-    
+
     $scope.SaveNewversionStrategy = function (currency) {
         if ($scope.StrategyActive)
             currency.IsActive = "Y";
@@ -265,23 +266,21 @@
         model.Page = "C";
         StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
+                if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
+                    $scope.listB_Estimation[0].RefNumber = model.RefNumber;
+                    $scope.listB_Estimation[0].Version = model.Version;
 
-                $scope.listB_Estimation[0].RefNumber = model.RefNumber;
-                $scope.listB_Estimation[0].Version = model.Version;
+                    StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
 
-
-                StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
-
-                });
+                    });
+                }
 
                 var temp = [];
-
                 for (var j = 0; j < $scope.Availableusers.length; j++) {
                     var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
                     if (delId < 0)
                         temp.push($scope.Availableusers[j])
                 }
-
 
                 if (temp.length > 0) {
                     StrategyService.DeleteStrategyApprover(temp).success(function (data) {

@@ -12,14 +12,18 @@ ReportApp.factory('TaskService', function ($http) {
         var result = $http.get('GetTaskbyId?Id=' + Id);
         return result;
     }
-    TaskServiceFactory.AddTask = function (BaseSkill) {
-        return $http.post('InsertTask', BaseSkill);
+    TaskServiceFactory.AddTask = function (inputdata) {
+        return $http.post('InsertTask', inputdata);
     }
 
-    TaskServiceFactory.UpdateTask = function (BaseSkill) {
-        return $http.post('UpdateTask', BaseSkill);
+    TaskServiceFactory.UpdateTask = function (inputdata) {
+        return $http.post('UpdateTask', inputdata);
     }
 
+    TaskServiceFactory.UpdateStrategyApprover = function (inputdata) {
+        return $http.post('UpdateStrategyApprover', inputdata);
+    }
+    
     return TaskServiceFactory;
 });
 

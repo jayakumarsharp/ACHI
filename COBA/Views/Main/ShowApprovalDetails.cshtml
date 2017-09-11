@@ -14,20 +14,22 @@
                     <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.Status" required />
                 </div>*@
             <div class="form-group">
-                <div class="col-md-3"><label>Status</label></div>
-                <div class="col-md-2">
-                    <input class="btn btn-block btn-success btn-sm" type="button" value="Approve" numberdotonly maxlength="50" />
-                </div>
-                <div class="col-md-2">
-                    <input class="btn btn-block btn-danger btn-sm" type="button" value="Decline" numberdotonly maxlength="50" />
+                <label for="SBU" class="col-sm-3 control-label"></label>
+                <div class="col-sm-8" style="margin-top:6px">
+                    <label class="mt-checkbox mt-checkbox-outline">
+                        Approved Status<input type="checkbox"  ng-change="changestatus(Status)" ng-model="Status" /> 
+                        <span></span>
+                    </label>
                 </div>
             </div>
-            <div class="form-group">
+
+            @*<div class="form-group">
                 <div class="col-md-3"><label>Current Status</label></div>
                 <div class="col-md-2">
-                    <input class="btn btn-block btn-success btn-sm" type="button" value="Decline" numberdotonly maxlength="50" />
+                    <a ng-show={{ OStatus == true }}><i class="fa fa-check"></i></a>
+                    <a ng-show={{ OStatus == false }}><i class="fa fa-close"></i></a>
                 </div>
-            </div>
+            </div>*@
         </div>
 
 

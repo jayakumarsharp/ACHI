@@ -95,7 +95,7 @@
     { name: 'Version' },
     { name: 'EmailSubject' },
     { name: 'EmailId' },
-    
+
    {
        name: 'IsMappedToTask',
        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'
@@ -154,9 +154,12 @@
     $scope.GetCurrencyConversionForId = function (id) {
         MapTaskService.GetAllTaskById(id).success(function (data) {
             $scope.editMode = true;
+            $scope.GetVersions(data[0].RefNumber)
             data[0].IsSignOff = (data[0].IsSignOff == "Y" ? "checked" : 'unchecked');
-            $scope.ecurrency = data[0];
-            $('#currencyModel').modal('show');
+            $timeout(function () {
+                $scope.ecurrency = data[0];
+                $('#currencyModel').modal('show');
+            },1000)
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });

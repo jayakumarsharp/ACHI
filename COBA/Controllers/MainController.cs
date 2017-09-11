@@ -19,6 +19,11 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
+        public ActionResult ViewApprovals()
+        {
+            return PartialView();
+        }
+        
 
         public ActionResult ShowApprovalDetails()
         {

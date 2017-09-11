@@ -170,8 +170,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Assert\angular-pdf.js" />
+    <Content Include="Assert\angular.js" />
+    <Content Include="Assert\bootstrap.min.js" />
+    <Content Include="Assert\Jquery-1.11.0.min.js" />
     <Content Include="Assert\pdf.js" />
     <Content Include="Assert\pdf.worker.js" />
+    <Content Include="Assert\ui-bootstrap-tpls-0.12.1.min.js" />
+    <Content Include="Assert\ui-grid.js" />
+    <Content Include="Assert\ui-grid.min.css" />
     <Content Include="Assert\viewer.html" />
     <Content Include="bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css" />
     <Content Include="bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.min.css" />
@@ -7663,6 +7669,7 @@
     <Content Include="Views\Main\ShowApplicationDetails.cshtml" />
     <Content Include="Views\Main\ShowApprovalDetails.cshtml" />
     <Content Include="Views\Main\Approvals.cshtml" />
+    <Content Include="Views\Main\ViewApprovals.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
