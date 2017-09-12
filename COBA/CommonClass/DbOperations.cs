@@ -68,16 +68,7 @@ public class DbOperations
         try
         {
             connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
-            server = "localhost";
-            database = "achi";
-            uid = "root";
-            password = "Servion@123";
-            string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            connection = new MySqlConnection(connectionString);
-
-
+            connection = new MySqlConnection(connString);
         }
         catch (Exception ex)
         {

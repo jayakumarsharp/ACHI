@@ -1,0 +1,147 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-controller="MapTaskController" class="whitebg">
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%;margin-top:10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Map Tasks</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Map Strategy</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form novalidate class="form-horizontal" role="form" name="addcurrencyform">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email Subject</label>
+                            <div class="col-sm-8">
+                                <input data-ng-show="editMode" class="form-control" style="height:33px" numberdotonly type="text" maxlength="50" ng-model="ecurrency.EmailSubject" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding-top:10px">
+                            <label class="col-sm-3 control-label">Strategy</label>
+                            <div class="col-sm-8">
+                                @*<select class="form-control" ng-model="ecurrency." ng-options="item.RefNumber for item in Strategydata" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                    <option value="">- Select Task-</option>
+                                </select>*@
+                                <select class="form-control" ng-model="ecurrency.RefNumber" ng-change="GetVersions(ecurrency.RefNumber)" title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                    <option value="">- Select Version-</option>
+                                    <option ng-repeat="x in Strategydata" value="{{x.RefNumber}}">{{x.RefNumber}}</option>
+                                </select>                            
+
+                                @*<select ng-model="ecurrency.RefNumber" ng-change="GetVersions(ecurrency.RefNumber)"   class="form-control" style="height:33px" required name="TaskId">
+                                        <option value="">- Select Task-</option>
+                                        <option ng-repeat="item for item in Strategydata" value="{{x.Id}}">{{x.RefNumber}}</option>
+                                    </select>*@
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding-top:10px">
+                            <label class="col-sm-3 control-label">Strategy Version</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" ng-model="ecurrency.Version"  title="Select Role" style="width:100%;font-size: 0.8em" required>
+                                    <option value="">- Select Version-</option>
+                                    <option ng-repeat="x in StrategyVersiondata" value="{{x.Version}}">{{x.Ver}}</option>
+                                </select>                            
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-10">
+                                <span data-ng-hide="editMode">
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn  btn-circle btn-default btn-outline-info" />
+                                </span>
+                                <span data-ng-show="editMode">
+                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn  btn-circle btn-default btn-outline-info" />
+                                </span>
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="content-header row">
+        <h3 class="col-lg-2">Map Strategy</h3>
+        <div class="col-lg-10">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="getallcurrencyconversions()">
+                    <img class="info-box-icon bg-aqua" src="~/img/Email.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-text">All Emails</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{totaltask}}">{{totaltask}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="GetMappingTask(true)">
+                    <img class="info-box-icon bg-aqua" src="~/img/EmailMap.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-tex">Mapped Emails</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{Mappedtask}}">{{Mappedtask}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="GetUnMappingTask(true)">
+                    <img class="info-box-icon bg-aqua" src="~/img/EmailNotmap.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-tex">UnMapped Emails</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{UnMappedtask}}">{{UnMappedtask}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="content">
+        <div class="row">
+
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+
+        </div>
+    </section>
+</div>
+
+<style type="text/css">
+    .grouppadding {
+        padding: 5px 5px !important;
+        font-size: 11px !important;
+    }
+
+    .info-box-icon {
+        height: 68px;
+        width: 68px;
+    }
+
+    .info-box {
+        min-height: 68px;
+    }
+</style>

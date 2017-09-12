@@ -1,0 +1,47 @@
+﻿<div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog" style="width:75%">
+        <div class="modal-content">
+            <div class="modal-header content-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    @*content*@
+                    <div class="row">
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>RefNumber</th>
+                                            <th>Approver</th>
+                                            <th>Status</th>
+                                            <th>Comments</th>
+                                            <th>ApprovedDate </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="right in ViewData">
+                                            <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
+                                            <td>{{right.Approver}}</td>
+                                            <td><span class="label label-success">{{right.Status}}</span></td>
+                                            <td>
+                                                {{right.Comments}}
+                                            </td>
+                                            <td>
+                                                {{right.ApprovedDate}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
