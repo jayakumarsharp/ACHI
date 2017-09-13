@@ -282,7 +282,7 @@ public class DbOperations
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
                                    Comments = Convert.ToString(row["Comments"]),
-                                   Status= Convert.ToString(row["Status"]),
+                                   Status = Convert.ToString(row["Status"]),
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"])
 
                                }).ToList();
@@ -1528,7 +1528,7 @@ public class DbOperations
                                {
                                    Id = Convert.ToInt32(row["Id"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Version= Convert.ToString(row["Version"]),
+                                   Version = Convert.ToString(row["Version"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    EmailAttachment = Convert.ToString(row["EmailAttachment"]),
@@ -1602,6 +1602,15 @@ public class DbOperations
     }
 
     #endregion MapTask
+
+
+    #region Role
+
+    #endregion Role
+
+    #region User    
+    
+    #endregion User    
 
     public void AddRightsForRoles(string roleName, string menuRights, out int errorCode, out string errorDesc)
     {

@@ -3,12 +3,9 @@
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
-    $scope.LockedPriceSheet = [];
     $scope.Mappedtask = 0;
     $scope.UnMappedtask = 0;
     $scope.Strategydata = [];
@@ -38,7 +35,6 @@
         })
     };
 
-
     $scope.GetVersions = function (data) {
         if (data != "" && data != undefined) {
             StrategyService.GetStrategyDatabyStrategyId(data).success(function (data) {
@@ -47,17 +43,12 @@
                     data[i].Ver = "Version - " + data[i].Version;
                     data[i].Version = data[i].Version;
                 }
-
                 $scope.StrategyVersiondata = data;
             })
         }
     };
 
-
-
-
     $scope.GetMappingTask = function (page) {
-
         MapTaskService.Get_Mapped_Mail_Task("Y").success(function (data) {
             console.log(data)
             if (data != null && data.length > 0)
@@ -67,8 +58,8 @@
             if (page)
                 $scope.CurrencyGrid.data = data;;
         })
-
     }
+
     $scope.GetUnMappingTask = function (page) {
 
         MapTaskService.Get_Mapped_Mail_Task("N").success(function (data) {
@@ -159,7 +150,7 @@
             $timeout(function () {
                 $scope.ecurrency = data[0];
                 $('#currencyModel').modal('show');
-            },1000)
+            }, 1000)
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });

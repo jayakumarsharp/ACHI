@@ -1,4 +1,4 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout) {
+﻿ReportApp.controller('CountryController', function ($scope, $rootScope, StrategyService, $timeout) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;

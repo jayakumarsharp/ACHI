@@ -1,25 +1,25 @@
-﻿var RoleApp = angular.module('roleApp', ['ngRoute']);
-RoleApp.config(['$routeProvider', '$locationProvider',
-    function ($routeProvider, $locationProvider) {
+﻿//var RoleApp = angular.module('roleApp', ['ngRoute']);
+//RoleApp.config(['$routeProvider', '$locationProvider',
+//    function ($routeProvider, $locationProvider) {
 
-        var UserInfo = window.sessionStorage.getItem('userAuth');
+//        var UserInfo = window.sessionStorage.getItem('userAuth');
 
-        if (UserInfo != undefined || UserInfo != null) {
+//        if (UserInfo != undefined || UserInfo != null) {
 
-            $routeProvider
-                .when('/Users/ViewRole', {
-                    controller: 'RoleController', templateUrl: 'js/views/Users/ViewRole.html'
-                })
-                .when('/Users/AddRole', {
-                    controller: 'RoleController', templateUrl: 'js/views/Users/AddEditRole.html'
-                })
-                .otherwise({ redirectTo: '/Roles' });
-       }
+//            $routeProvider
+//                .when('/Users/ViewRole', {
+//                    controller: 'RoleController', templateUrl: 'js/views/Users/ViewRole.html'
+//                })
+//                .when('/Users/AddRole', {
+//                    controller: 'RoleController', templateUrl: 'js/views/Users/AddEditRole.html'
+//                })
+//                .otherwise({ redirectTo: '/Roles' });
+//       }
 
-       $locationProvider.html5Mode(true).hashPrefix('*');
-    }]);
+//       $locationProvider.html5Mode(true).hashPrefix('*');
+//    }]);
 
-RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, toaster) {
+ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory) {
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -407,7 +407,7 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     $scope.IsPageReadOnly();
 });
 
-RoleApp.factory('RoleFactory', function ($http) {
+ReportApp.factory('RoleFactory', function ($http) {
     var RoleUrl = BaseURL + 'Roles';
     var Userurl = BaseURL + 'users';
     var RoleFactory = {

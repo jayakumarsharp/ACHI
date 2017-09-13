@@ -110,8 +110,7 @@ namespace CRUserManagement.Controllers
                 else
                 {
                     //   _dbOperations.CheckUserLogin(userName, passWord, out  errorCode, out errorDesc);
-
-                    if (userName == "Daniel" || userName == "Oliver" || userName == "Sivakumar" || userName == "John" || userName == "George")
+                    if ((userName == "Daniel" || userName == "Oliver" || userName == "Sivakumar" || userName == "John" || userName == "George") && passWord == "welcome@17")
                     {
                         errorCode = 0;
                         if (errorCode == 0)

@@ -6771,9 +6771,13 @@
     <Content Include="img\RoleManagement_icon.png" />
     <Content Include="img\search-icon.jpg" />
     <Content Include="js\Config.js" />
+    <Content Include="js\controllers\ApplicationMasterController.js" />
     <Content Include="js\controllers\ApprovalsController.js" />
+    <Content Include="js\controllers\CountryMasterController.js" />
     <Content Include="js\controllers\EmailsController.js" />
     <Content Include="js\controllers\MapTaskController.js" />
+    <Content Include="js\controllers\ProductTypeMasterController.js" />
+    <Content Include="js\controllers\RegionMasterController.js" />
     <Content Include="js\controllers\TaskController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
@@ -7670,6 +7674,8 @@
     <Content Include="Views\Main\ShowApprovalDetails.cshtml" />
     <Content Include="Views\Main\Approvals.cshtml" />
     <Content Include="Views\Main\ViewApprovals.cshtml" />
+    <Content Include="Views\Main\UserManagement.cshtml" />
+    <Content Include="Views\Main\RoleManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

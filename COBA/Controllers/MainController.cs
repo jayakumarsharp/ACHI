@@ -41,6 +41,19 @@ namespace CRMManagement.Controllers
             return View();
         }
 
+
+        public ActionResult RoleManagement()
+        {
+            return View();
+        }
+
+        public ActionResult UserManagement()
+        {
+            return View();
+        }
+
+
+
         public ActionResult Region()
         {
             return View();

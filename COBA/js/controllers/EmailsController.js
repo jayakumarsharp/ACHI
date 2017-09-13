@@ -1,16 +1,12 @@
 ﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout) {
     $scope.errorinfo = '';
     $scope.checked = true;
-    $scope.test = { item: 'true' };
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
-    $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
         $scope.item = 'true';
         angular.forEach($rootScope.RightList, function (value, key) {
@@ -76,12 +72,10 @@
             $scope.EmailActive = false;
         }, 100);
 
-        //$scope.checked = 'true';
         $scope.editMode = false;
         $scope.currency = {};
         $scope.ecurrency.CurrencyDescrition = '';
         $('#currencyModel').modal('show');
-
     };
 
     $scope.GetAllCurrency = function () {
@@ -119,8 +113,6 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
-
-
 
     $scope.UpdatecurrencyConversion = function (model) {
         model.UpdatedBy = $rootScope.UserInfo.user.userId;
@@ -162,7 +154,6 @@
             $scope.editMode = true;
             $scope.ecurrency = data[0];
             $('#currencyModel').modal('show');
-
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
