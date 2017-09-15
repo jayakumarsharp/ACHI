@@ -1609,7 +1609,7 @@ public class DbOperations
     #endregion Role
 
     #region User    
-    
+
     #endregion User    
 
     public void AddRightsForRoles(string roleName, string menuRights, out int errorCode, out string errorDesc)
@@ -1692,6 +1692,918 @@ public class DbOperations
     }
 
 
+
+    #region Roles
+
+    public void GetRoles(string roleId)
+    {
+        try
+        {
+            if (roleId != null)
+            {
+                //models.Role.findAll({ where: { id: roleId } })
+                //   .then(function(roles) { deferred.resolve(roles); })
+                //   .catch (function (err) { deferred.reject(err) });
+            }
+            else
+            {
+                //console.log('Inside get all roles');
+                //models.Role.findAll().then(function(roles) {
+                //    deferred.resolve(roles);
+                //}).catch (function (err) {
+                //console.log('Error' + err);
+                //deferred.reject(err)
+                //});
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetUserRoles(string roleId)
+    {
+
+        try
+        {
+            //models.User.findAll({ where: { RoleId: roleId } })
+            //   .then(function(userroles) { deferred.resolve(userroles); })
+            //   .catch (function (err) { deferred.reject(err) });
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetRights(string roleId)
+    {
+        try
+        {
+            if (roleId != null && roleId != "")
+            {
+                //models.Right.findAll({ where: { RightID: roleId } })
+                // .then(function(right) { deferred.resolve(right); })
+                // .catch (function (err) { deferred.reject(err) });
+            }
+            else
+            {
+                //models.Right.findAll().then(function(rights) {
+                //    deferred.resolve(rights);
+                //}).catch (function (err) { deferred.reject(err) });
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void AddRole(string role)
+    {
+        try
+        {
+
+            //models.Role.create({
+            //    RoleName: role.selectedRole
+            //}).then(function(role) {
+            //    console.log('Added role to master table')
+            //    deferred.resolve(role);
+            //})
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void ModifyRoleRight(string roleright)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //    console.log(JSON.stringify(roleright));
+            //    models.RoleRight.destroy({ where: { RoleID: roleright.id }, truncate: false })
+            //                   .then(function() {
+            //        for (var i = 0; i < roleright.Rights.length; i++)
+            //        {
+            //            console.log('Mapping Right ' + roleright.Rights[i].RightID + ' to Role ' + roleright.id);
+            //            models.RoleRight.create({
+            //                RoleID: roleright.id,
+            //                               RightID: roleright.Rights[i].RightID
+            //                           }).then(function(role) {
+            //            console.log('Added role-right to mapping table')
+            //                               deferred.resolve(role);
+            //        }).catch (function (err) {
+            //    console.log('Error: ' + err); deferred.reject(err);
+            //})
+
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    public void AddRoleRightMapping(string roleright)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //    for (var i = 0; i < roleright.Rights.length; i++)
+            //    {
+            //        console.log('Mapping Right ' + roleright.Rights[i].RightID + ' to Role ' + roleright.RoleID);
+            //        models.RoleRight.create({
+            //            RoleID: roleright.RoleID,
+            //            RightID: roleright.Rights[i].RightID
+            //            }).then(function(role) {
+            //        console.log('Added role-right to mapping table')
+            //            deferred.resolve(role);
+            //    })
+            //                        .catch (function (err) {
+            //    console.log('Error: ' + err); deferred.reject(err);
+            //})
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void DeleteRole(string roleright)
+    {
+        try
+        {
+            //    console.log('Deleting role-right mapping');
+            //    models.RoleRight.destroy({ where: { RoleID: roleright.id }, truncate: false })
+            //                       .then(function() {
+            //        console.log('Deleting Role from Role master');
+            //        models.Role.destroy({ where: { id: roleright.id }, truncate: false });
+            //    }).then(function(data) {
+            //        console.log('Deleted role and role-right map successfully');
+            //        deferred.resolve(data);
+            //    }).catch (function (error) {
+            //    console.log('Error occurred when deleting role');
+            //    deferred.reject(data);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+        return deferred.promise;
+    }
+    public void GetRoleRightMapping(string roleId)
+    {
+        try
+        {
+            //    if (roleId != null && roleId != undefined)
+            //    {
+            //        console.log('Inside get GetRoleRightMapping for Role ' + roleId);
+            //        models.RoleRight.findAll({ where: { RoleID: roleId } })
+            //        .then(function(roleright) { deferred.resolve(roleright); })
+            //        .catch (function (err) { console.log('GetRoleRightMapping: ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    console.log('Inside get all GetRoleRightMapping');
+            //    models.RoleRight.findAll().then(function(rolerights) {
+            //        deferred.resolve(rolerights);
+            //    }).catch (function (err) { deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    #endregion Roles
+
+
+    #region Users
+
+
+    public void GetAllEmail()
+    {
+        try
+        {
+            //sequelize.query('Select EmailId from TBL_USER_MASTER',
+            //    {
+            //    type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('success');
+            //    logger.info('response: ' + JSON.stringify(response));
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('failure: ' + err);
+            //    deferred.reject(err)
+            //    });
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    public void GetUserProfile(string userId)
+    {
+        var deferred = q.defer();
+        try
+        {
+            //logger.info('Inside get User profile');
+            //models.ADUser.findOne({ where: { userId: userId } })
+            //    .then(function(aduser) { deferred.resolve(aduser); })
+            //    .catch (function (err) { deferred.reject(err) });
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetAllSBU()
+    {
+
+        try
+        {
+            //logger.info('Inside get all SBUs');
+            //models.SBU.findAll({
+            //    where: { 'SBU': { $ne: 'All' } },
+            //    order: [
+            //        ['SBU', 'ASC']]
+            //}).then(function(sbus) {
+            //    sbus.push({ 'id': 6, 'SBU': 'All' });
+            //    logger.info(JSON.stringify(sbus));
+            //    deferred.resolve(sbus);
+            //}).catch (function (err) { deferred.reject(err) });
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetUserSBU(string userId)
+    {
+
+        try
+        {
+
+            //    if (userId != null && userId != undefined)
+            //    {
+            //        logger.info('Inside get user SBU for user:  ' + userId);
+            //        models.UserSBU.findAll({ where: { UserID: userId } })
+            //            .then(function(sbus) { deferred.resolve(sbus); })
+            //            .catch (function (err) { logger.info('GetUserSBU ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    logger.info('Inside get all users');
+            //    models.UserSBU.findAll().then(function(users) {
+            //        deferred.resolve(users);
+            //    }).catch (function (err) { deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetUserBillingSBU(string userId)
+    {
+        try
+        {
+
+            //    if (userId != null && userId != undefined)
+            //    {
+            //        logger.info('Inside get user Billing SBU for user:  ' + userId);
+            //        models.UserBillingSBU.findAll({ where: { UserID: userId } })
+            //            .then(function(sbus) { deferred.resolve(sbus); })
+            //            .catch (function (err) { logger.info('GetUserBillingSBU ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    logger.info('Inside get all user sbu billings');
+            //    models.UserBillingSBU.findAll().then(function(users) {
+            //        deferred.resolve(users);
+            //    }).catch (function (err) { deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetUser(string userId)
+    {
+        try
+        {
+            //    if (userId != null && userId != undefined)
+            //    {
+            //        logger.info('Inside get all users ' + userId);
+            //        models.User.findOne({ where: { userId: userId } })
+            //            .then(function(user) { deferred.resolve(user); })
+            //            .catch (function (err) { logger.info('GetUser ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    logger.info('Inside get all users');
+            //    models.User.findAll().then(function(users) {
+            //        deferred.resolve(users);
+            //    }).catch (function (err) { deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetUsersByTypes(string typeids)
+    {
+        try
+        {
+            //var typearray = '';
+
+            //for (var i = 0; i < typeids.length; i++)
+            //{
+            //    typearray = typearray + typeids[i].TypeId;
+            //    if (i != typeids.length - 1)
+            //    {
+            //        typearray = typearray + ',';
+            //    }
+            //}
+
+            //sequelize.query('select Userid as userId, UserName,EmailId,BillingId,LastWorkingDate, FirstWorkingDate, LocationId from TBL_USER_MASTER where TypeId in (' + typearray + ') and Userid != \'OTHER\'',
+
+            //    {
+            //    type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('Retrieved users successfully');
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('Failed to retrieve users: ' + err);
+            //    deferred.reject(err);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void CreateTempUser(string user)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            ////var hash_parts = Utility.UtilityModel.create_password(user.password);
+            ////var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
+            //var encryptedPwd = Utility.UtilityModel.encryptStringWithRsaPublicKey(user.password);
+            //models.sequelize.transaction().then(function(t) {
+            //    if (t != null && t != undefined)
+            //    {
+            //        var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //        var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //        var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+            //        logger.info('Type: ' + JSON.stringify(user.selectedType));
+            //        logger.info('Role: ' + JSON.stringify(user.Role));
+            //        logger.info('Creating temp user: \nUserId: ' + user.userId + '\nUserType: ' + user.selectedType.TypeID + '\nUserRole:' + user.Role.id);
+            //        models.User.create({
+            //            userId: user.userId, UserName: user.userId, TypeId: user.selectedType.TypeID, RoleId: user.Role.id, Password: encryptedPwd, EmailId: user.emailId,
+            //            CustomData: 'NA', Status: 'Active', UserExpiryDate: userExpiryDate, IsADUser: 'No',
+            //            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
+            //            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
+            //            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
+            //            CheckerComment: ''
+            //        }, { transaction: t })
+            //            .then(function(usercreate) {
+            //            models.UserPasswordHistory.create({
+            //                SessionTokenId: uuid.v1(), UserId: user.userId,
+            //                    Password: encryptedPwd, CreatedDate: createdDate
+            //                })
+            //                    .then(function(usercreated) {
+            //                logger.info('temp user created successfully');
+            //                logger.info('SBUs:\n' + JSON.stringify(user.SBU));
+
+            //                var tempArr = [];
+            //                for (var i = 0; i < user.SBU.length; i++)
+            //                {
+            //                    tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i] });
+            //            }
+            //            models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
+            //                logger.info('Added SBUs');
+            //                models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                                .then(function(usersbus) {
+            //                    var tempArr2 = [];
+            //                    for (var i = 0; i < user.BillingSBU.length; i++)
+            //                    {
+            //                        tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i].id });
+            //                }
+            //                logger.info('SBUs:\n' + JSON.stringify(user.SBU));
+            //                models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
+            //                    logger.info('Added Billing SBUs');
+            //                    t.commit();
+            //                    deferred.resolve(billsbu);
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void CreateUser(string user)
+    {
+        try
+        {
+            //    var dbdate = new Date();
+            //    var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //    var hash_parts = Utility.UtilityModel.create_password(user.password);
+            //    var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
+            //    this.GetUser(user.userId)
+            //        .then(function(userdtl) {
+            //        models.sequelize.transaction().then(function(t) {
+            //            if (t != null && t != undefined)
+            //            {
+            //                var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //                var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //                var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+
+            //                var fwd = moment.utc(user.FirstWorkingDate).toDate();
+            //                user.FirstWorkingDate = moment(fwd).format('YYYY-MM-DD HH:mm:ss');
+
+            //                if (user.LastWorkingDate != null)
+            //                {
+            //                    var lwd = moment.utc(user.LastWorkingDate).toDate();
+            //                    user.LastWorkingDate = moment(lwd).format('YYYY-MM-DD HH:mm:ss');
+            //                }
+            //                logger.info('Creating user: \nUserId: ' + user.userId + '\nUserName: ' + user.UserName + '\nUserType: ' + user.selectedType + '\nUSerSBU: ' + user.SBU + '\nUserRole:' + user.Role +
+            //                    '\nBillingId: ' + (user.Billing == undefined ? null : user.Billing) + '\nBaseSkillId: ' + (user.BaseSkill == undefined ? null : user.BaseSkill) + '\nLocationId: ' + (user.Location == undefined ? null : user.Location) + '\nFWD: ' + user.FirstWorkingDate + '\nLastWorkingDate: ' + user.LastWorkingDate);
+            //                models.User.create({
+            //                    userId: user.userId, UserName: user.UserName, TypeId: user.selectedType, RoleId: user.Role, Password: hashedpwd, EmailId: user.EmailId,
+            //                            BillingId: (user.Billing == undefined ? null : user.Billing), BaseSkillId: (user.BaseSkill == undefined ? null : user.BaseSkill), LocationId: (user.Location == undefined ? null : user.Location), FirstWorkingDate: user.FirstWorkingDate, LastWorkingDate: user.LastWorkingDate,
+            //                            MobileNumber: user.mobileNumber, CustomData: 'NA', Status: 'Active', UserExpiryDate: userExpiryDate, IsADUser: 'Yes',
+            //                            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
+            //                            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
+            //                            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
+            //                            CheckerComment: ''
+            //                        }, { transaction: t })
+            //                            .then(function(usercreate) {
+            //                    models.UserPasswordHistory.create({
+            //                        SessionTokenId: uuid.v1(), UserId: user.userId,
+            //                                    Password: hashedpwd, CreatedDate: createdDate
+            //                                })
+            //                                    .then(function(usercreated) {
+            //                        logger.info('user created successfully');
+
+            //                        var tempArr = [];
+            //                        for (var i = 0; i < user.SBU.length; i++)
+            //                        {
+            //                            tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i].id });
+            //                    }
+            //                    logger.info('SBUs:\n' + JSON.stringify(user.SBU));
+            //                    models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
+            //                        logger.info('Added SBUs');
+            //                        if (user.BillingSBU != undefined)
+            //                        {
+            //                            models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                                                    .then(function(usersbus) {
+            //                                var tempArr2 = [];
+            //                                for (var i = 0; i < user.BillingSBU.length; i++)
+            //                                {
+            //                                    tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i].id });
+            //                            }
+            //                            logger.info('Billing SBUs:\n' + JSON.stringify(user.BillingSBU));
+            //                            models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
+            //                                logger.info('Added Billing SBUs');
+            //                                t.commit();
+            //                                deferred.resolve(billsbu);
+            //                            }).catch (function (temperr) {
+            //    logger.info('Billing SBU Error: ' + temperr); t.rollback(); deferred.reject(temperr);
+            //})
+            //                                                    }).catch (function (usersbuEDestroy) { logger.info(usersbuEDestroy); t.rollback(); deferred.reject(usersbuEDestroy); })
+            //                                            }
+            //                                            else {
+            //    t.commit();
+            //    logger.info('No Billing SBUs');
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void ModifyUser(string user)
+    {
+        try
+        {
+            //    var dbdate = new Date();
+            //    //var hash_parts = Utility.UtilityModel.create_password(user.password);
+            //    //var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
+            //    var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //    this.GetUser(user.userId)
+            //        .then(function(userdtl) {
+            //        models.sequelize.transaction().then(function(t) {
+            //            if (t != null && t != undefined)
+            //            {
+            //                var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //                var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //                var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+            //                //logger.info(JSON.stringify(user));
+            //                var fwd = moment.utc(user.FirstWorkingDate).toDate();
+            //                user.FirstWorkingDate = moment(fwd).format('YYYY-MM-DD HH:mm:ss');
+
+            //                if (user.LastWorkingDate != null)
+            //                {
+            //                    var lwd = moment.utc(user.LastWorkingDate).toDate();
+            //                    user.LastWorkingDate = moment(lwd).format('YYYY-MM-DD HH:mm:ss');
+            //                }
+            //                logger.info('Modifying user: \n' + user.userId + '\n' + user.userName + '\n' + user.selectedType.TypeID + '\n' + user.SBU + '\nStatus: ' + user.selectedStatus +
+            //                    '\nBillingId: ' + (user.selectedBilling == undefined ? null : user.selectedBilling.Id) +
+            //                    '\nBaseSkillId: ' + (user.selectedBaseSkill == undefined ? null : user.selectedBaseSkill.Id) +
+            //                    '\nLocationId: ' + (user.selectedLocation == undefined ? null : user.selectedLocation.Id) + '\nFWD: ' + user.FirstWorkingDate + '\nLastWorkingDate: ' + user.LastWorkingDate);
+
+            //                models.User.update({
+            //                    UserName: user.userName, TypeId: user.selectedType.TypeID, RoleId: user.Role.id, EmailId: user.emailId,
+            //                            BillingId: (user.selectedBilling == undefined ? null : user.selectedBilling.Id), BaseSkillId: (user.selectedBaseSkill == undefined ? null : user.selectedBaseSkill.Id), LocationId: (user.selectedLocation == undefined ? null : user.selectedLocation.Id), FirstWorkingDate: user.FirstWorkingDate, LastWorkingDate: user.LastWorkingDate,
+            //                            MobileNumber: user.mobileNumber, CustomData: 'NA', Status: user.selectedStatus, UserExpiryDate: userExpiryDate,
+            //                            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
+            //                            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
+            //                            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
+            //                            CheckerComment: ''
+            //                        }, { where: { userId: user.userId } }, { transaction: t })
+            //                            .then(function(user) {
+            //                    deferred.resolve(user);
+            //                })
+            //                            .then(function(userdtl) {
+            //                    models.UserSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                                    .then(function(usersbus) {
+            //                        var tempArr = [];
+            //                        for (var i = 0; i < user.SBU.length; i++)
+            //                        {
+            //                            tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i] });
+            //                    }
+            //                    logger.info('SBUs:\n' + JSON.stringify(user.SBU));
+            //                    models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
+            //                        logger.info('Added SBUs');
+            //                        if (user.BillingSBU != undefined)
+            //                        {
+            //                            models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                                                    .then(function(usersbus) {
+            //                                var tempArr2 = [];
+            //                                for (var i = 0; i < user.BillingSBU.length; i++)
+            //                                {
+            //                                    tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i] });
+            //                            }
+            //                            logger.info('Billing SBUs:\n' + JSON.stringify(user.BillingSBU));
+            //                            models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
+            //                                logger.info('Added Billing SBUs');
+            //                                t.commit();
+            //                                deferred.resolve(billsbu);
+            //                            }).catch (function (temperr) {
+            //    logger.info('Billing SBU Error: ' + temperr); t.rollback(); deferred.reject(temperr);
+            //})
+            //                                                    }).catch (function (usersbuEDestroy) { logger.info(usersbuEDestroy); t.rollback(); deferred.reject(usersbuEDestroy); })
+            //                                            }
+            //                                            else {
+            //    logger.info('No Billing SBUs');
+            //    deferred.resolve(sbu);
+            //}
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void DeleteUser(string user)
+    {
+        try
+        {
+            //    logger.info('Deleting user ' + user.userId);
+            //    this.GetUser(user.userId)
+            //        .then(function(userdtl) {
+            //        models.sequelize.transaction().then(function(t) {
+            //            if (t != null && t != undefined)
+            //            {
+            //                // models.UserRoles.destroy({ where: { userId: user.userId }, truncate: false },{transaction:t})
+            //                //    .then(function(userrole){
+            //                logger.info('Deleting user 123');
+            //                models.User.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                            .then(function(user) {
+            //                    t.commit(); deferred.resolve(user);
+            //                })
+            //                            .catch (function (destroyError) {
+            //    logger.info('destroy ' + destroyError)
+            //                                 t.rollback(); deferred.reject(destroyError);
+            //})
+            //                        // })
+            //                        // .catch(function(userRoleError){
+            //                        // logger.info('userRoleError ' + userRoleError)
+            //                        // t.rollback(); deferred.reject(userRoleError);
+            //                        // });            
+            //                    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void ChangePassword(string user)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //var hash_parts = Utility.UtilityModel.create_password(user.newpassword);
+            //var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
+
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    var currenthashedpwd = userdtl.Password;
+
+            //    var checkStatus = Utility.UtilityModel.check_password(currenthashedpwd, user.oldPassword);
+            //    if (checkStatus.status === true)
+            //    {
+            //        logger.info('password matched for user ' + user.userId);
+            //        models.UserPasswordHistory.findAll({ where: { userId: user.userId }, limit: 5, order: 'CreatedDate DESC' })
+            //                .then(function(userPasswords) {
+            //            logger.info(userPasswords);
+            //            for (var i = 0; i > userPasswords.length; i++)
+            //            {
+            //                var verifyPassword = Utility.UtilityModel.check_password(userPasswords[i].Password, user.newpassword);
+            //                if (verifyPassword.status === true)
+            //                {
+            //                    deferred.reject({ error: 1001, errorMsg: 'last 5 Password can not be used' });
+            //        }
+            //    }
+
+            //    models.sequelize.transaction().then(function(t) {
+            //        if (t != null && t != undefined)
+            //        {
+            //            var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //            var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //            var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+
+            //            models.User.update({
+            //                Password: hashedpwd, UserExpiryDate: userExpiryDate,
+            //                                PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
+            //                                ModifiedDate: createdDate, ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '',
+            //                                MakerComment: '', CheckerComment: ''
+            //                                }, { where: { userId: user.userId } }, { transaction: t })
+            //                                .then(function(userupdatedtl) {
+            //                models.UserPasswordHistory.create({
+            //                    SessionTokenId: user.sessionId, UserId: user.userId,
+            //                                        Password: hashedpwd, CreatedDate: createdDate
+            //                                        }, { transaction: t })
+            //                                        .then(function(pass) { t.commit(); deferred.resolve(userdtl); })
+            //                                        .catch (function (passError) {
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void UserLogin(string user)
+    {
+        try
+        {
+
+            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
+            //var createdDate = moment.utc(curentdate).toDate();
+            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
+            //// var dbdate = new Date();
+            //// var createdDate = moment(dbdate).format('L LT');
+
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    if (userdtl != null && userdtl != undefined)
+            //    {
+            //        if (userdtl.Status != 'Inactive')
+            //        {
+            //            var currenthashedpwd = userdtl.Password;
+            //            // var verifyPwd = Utility.UtilityModel.check_password(currenthashedpwd,user.password);
+            //            Utility.UtilityModel.Authenticate(user.userId, user.password).then(function(data) {
+            //                logger.info('check ' + data);
+            //                if (data === true)
+            //                {
+            //                    logger.info('password matched for user ' + user.userId);
+            //                    var expireAt = moment().add(90000, 'seconds').format('L LT');
+            //                    var token = Utility.UtilityModel.generateToken(user, 90000);
+            //                    logger.info(token.length);
+            //                    models.sequelize.transaction().then(function(t) {
+            //                        if (t != null && t != undefined)
+            //                        {
+            //                            models.UserSession.create({
+            //                                SessionTokenId: token, UserId: user.userId, Tokendetail: token,
+            //                                    CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
+            //                                    }, { transaction: t })
+            //                                    .then(function(userSession) {
+            //                                models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                            .then(function(userupdate) {
+            //                                    t.commit();
+            //                                    deferred.resolve({
+            //                                        token: token, expires: expireAt, user:
+            //                                        {
+            //                                            userId: userdtl.userId,
+            //                                                        UserName: userdtl.UserName, EmailId: userdtl.EmailId, MobileNumber: userdtl.MobileNumber,
+            //                                                        CustomData: userdtl.CustomData, Status: userdtl.Status, UserExpiryDate: userdtl.UserExpiryDate,
+            //                                                        PasswordExpiryDate: userdtl.PasswordExpiryDate, UserBlockDate: userdtl.UserBlockDate,
+            //                                                        AttemptedTries: userdtl.AttemptedTries, LastUsedDate: userdtl.LastUsedDate,
+            //                                                        CreatedDate: userdtl.CreatedDate, CreatedBy: userdtl.CreatedBy,
+            //                                                        ModifiedDate: userdtl.ModifiedDate, ModifiedBy: userdtl.ModifiedBy, ApprovedDate: userdtl.ModifiedBy,
+            //                                                        Approvedby: userdtl.Approvedby, MakerComment: userdtl.MakerComment,
+            //                                                        CheckerComment: userdtl.CheckerComment
+            //                                                        }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void UserLogout(string user)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'day').format('L LT');
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    models.sequelize.transaction().then(function(t) {
+            //        if (t != null && t != undefined)
+            //        {
+            //            models.UserSession.update({ LogoutDate: createdDate },
+            //                        { where: { userId: user.userId, SessionTokenId: user.token, LogoutDate: null } }, { transaction: t })
+            //                        .then(function(userSession) {
+            //                models.User.update({ LastUsedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                .then(function(userupdate) {
+            //                    t.commit();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void GetMenuList(string userId)
+    {
+        try
+        {
+            //sequelize.query('select distinct MenuName, Path, RM.RightID, RM.ShowMenu, RM.Icon from TBL_RIGHT_MASTER RM inner join TBL_ROLERIGHT_MAPPING RR on RM.RightID=RR.RightID inner join TBL_USER_MASTER UM on RR.RoleID=UM.RoleId where UM.Userid = :UserId order by RM.RightID',
+            //        {
+            //    replacements: { UserId: userId },
+            //        type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('success');
+            //    logger.info('response: ' + response);
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('failure: ' + err);
+            //    deferred.reject(err);
+            //});
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void GetRightsList(string userId)
+    {
+        try
+        {
+            //logger.info('query' + userId);
+            //sequelize.query('select distinct RightName, Path from TBL_RIGHT_MASTER RM inner join TBL_ROLERIGHT_MAPPING RR on RM.RightID=RR.RightID inner join TBL_USER_MASTER UM on RR.RoleID=UM.RoleId where UM.Userid = :UserId',
+            //        {
+            //    replacements: { UserId: userId },
+            //        type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('success');
+            //    logger.info('response: ' + response);
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('failure: ' + err);
+            //    deferred.reject(err);
+            //});
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void GetUserSessionInfo(string createdDate)
+    {
+        try
+        {
+            //sequelize.query('Select UserId, CreatedDate from TBL_USER_SESSION where CONVERT(date, CreatedDate) = :CreatedOn',
+            //        {
+            //    replacements: { CreatedOn: createdDate },
+            //        type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('success');
+            //    logger.info('response: ' + response);
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('failure: ' + err);
+            //    deferred.reject(err);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+
+    public void GetBillingOptions(string userId)
+    {
+        try
+        {
+            //    if (userId != null && userId != undefined)
+            //    {
+            //        logger.info('Inside get billing for user ' + userId);
+            //        models.Billing.findOne({ where: { Id: userId } })
+            //            .then(function(bill) { deferred.resolve(bill); })
+            //            .catch (function (err) { logger.info('GetBillingOptions error: ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    logger.info('Inside get all billing');
+            //    models.Billing.findAll().then(function(bill) {
+            //        deferred.resolve(bill);
+            //    }).catch (function (err) { logger.info('GetAllBillingOptions error: ' + err); deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void GetLocation(string userId)
+    {
+        try
+        {
+            //    if (userId != null && userId != undefined)
+            //    {
+            //        logger.info('Inside get Location for user ' + userId);
+            //        models.Location.findOne({ where: { Id: userId } })
+            //            .then(function(loc) { deferred.resolve(loc); })
+            //            .catch (function (err) { logger.info('GetLocation error: ' + err); deferred.reject(err) });
+            //}
+            //    else {
+            //    logger.info('Inside get all billing');
+            //    models.Location.findAll().then(function(locs) {
+            //        deferred.resolve(locs);
+            //    }).catch (function (err) { logger.info('GetAllLocations error: ' + err); deferred.reject(err) });
+            //    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void GetInactiveUsers()
+    {
+        try
+        {
+            //models.User.findAll({ where: { Status: 'Inactive' } }).then(function(users) {
+            //    deferred.resolve(users);
+            //}).catch (function (err) { logger.info('GetInactiveUsers error: ' + err); deferred.reject(err) });
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    public void ADFSUserLogin(string email)
+    {
+        try
+        {
+
+            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
+            //var createdDate = moment.utc(curentdate).toDate();
+            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
+            //// var dbdate = new Date();
+            //// var createdDate = moment(dbdate).format('L LT');
+
+            //models.User.findOne({ where: { EmailId: email } })
+            //    .then(function(user) {
+            //    if (user != null && user != undefined)
+            //    {
+            //        if (user.Status != 'Inactive')
+            //        {
+
+            //            var expireAt = moment().add(90000, 'seconds').format('L LT');
+            //            var token = Utility.UtilityModel.generateToken(user, 90000);
+            //            logger.info(token.length);
+            //            models.sequelize.transaction().then(function(t) {
+            //                if (t != null && t != undefined)
+            //                {
+            //                    models.UserSession.create({
+            //                        SessionTokenId: token, UserId: user.userId, Tokendetail: token,
+            //                            CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
+            //                            }, { transaction: t })
+            //                            .then(function(userSession) {
+            //                        models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                    .then(function(userupdate) {
+            //                            t.commit();
+            //                            deferred.resolve({
+            //                                token: token, expires: expireAt, user:
+            //                                {
+            //                                    userId: user.userId,
+            //                                                UserName: user.UserName, EmailId: user.EmailId, MobileNumber: user.MobileNumber,
+            //                                                CustomData: user.CustomData, Status: user.Status, UserExpiryDate: user.UserExpiryDate,
+            //                                                PasswordExpiryDate: user.PasswordExpiryDate, UserBlockDate: user.UserBlockDate,
+            //                                                AttemptedTries: user.AttemptedTries, LastUsedDate: user.LastUsedDate,
+            //                                                CreatedDate: user.CreatedDate, CreatedBy: user.CreatedBy,
+            //                                                ModifiedDate: user.ModifiedDate, ModifiedBy: user.ModifiedBy, ApprovedDate: user.ModifiedBy,
+            //                                                Approvedby: user.Approvedby, MakerComment: user.MakerComment,
+            //                                                CheckerComment: user.CheckerComment
+            //                                                }
+            //                            });
+            //                        })
+            //                                    .catch (function (userupdateerror) {
+            //t.rollback();
+            //logger.info(userupdateerror);
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+
+    #endregion Users
 
 
 }

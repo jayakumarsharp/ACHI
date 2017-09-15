@@ -730,15 +730,15 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     };
 
     //$scope.GetADUsers();
-    $scope.GetAllTypes();
-    $scope.GetAllSBU();
-    $scope.GetAllRoles();
-    $scope.GetAllBillingOptions();
-    $scope.GetAllBaseSkillOptions();
-    $scope.GetAllLocations();
-    $scope.GetAllUsers();
-    $scope.IsUserSCHead();
-    $scope.IsPageReadOnly();
+    //$scope.GetAllTypes();
+    //$scope.GetAllSBU();
+    //$scope.GetAllRoles();
+    //$scope.GetAllBillingOptions();
+    //$scope.GetAllBaseSkillOptions();
+    //$scope.GetAllLocations();
+    //$scope.GetAllUsers();
+    //$scope.IsUserSCHead();
+    //$scope.IsPageReadOnly();
 });
 
 ReportApp.factory('UserFactory', function ($http) {

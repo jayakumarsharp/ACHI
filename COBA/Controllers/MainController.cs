@@ -23,7 +23,7 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
-        
+
 
         public ActionResult ShowApprovalDetails()
         {
@@ -163,7 +163,7 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        
+
 
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
         {
@@ -370,192 +370,290 @@ namespace CRMManagement.Controllers
         #endregion Email
 
 
-    }
-}
+        #region Roles
+
+
+        public void GetUserRoles(int roleId)
+        {
+
+            models.RoleModel.GetUserRoles(userrole.roleId).then(function(userroles) {
+                res.status(200).json(userroles);
+            })
+  }
+            router.get('/GetRoleRightMappings', function(req, res) {
+                var roleright = req.query;
+                models.RoleModel.GetRoleRightMapping().then(function(rolerights) {
+                    res.status(200).json(rolerights);
+                })
+  .catch (function (err) {
+                    res.status(500).json(err);
+                })
+});
+                router.get('/GetRoleRightMapping', function(req, res) {
+                    console.log(req.query);
+                    var query = req.query;
+                    console.log('Getting role-right map for role: ' + query.roleId);
+                    models.RoleModel.GetRoleRightMapping(query.roleId).then(function(rolerights) {
+                        console.log(JSON.stringify(rolerights));
+                        res.status(200).json(rolerights);
+                    })
+  .catch (function (err) {
+                        console.log('Error: ' + err);
+                        res.status(500).json(err);
+                    })
+});
+                    router.get('/roles', function(req, res) {
+                        var role = req.query;
+                        models.RoleModel.GetRoles().then(function(roles) {
+                            res.status(200).json(roles);
+                        })
+  .catch (function(err){
+                            res.status(500).json(err);
+                        })
+});
+                        router.get('/', function(req, res) {
+                            var right = req.query;
+                            console.log(right);
+                            models.RoleModel.GetRights(right.rightId).then(function(rights) {
+                                res.status(200).json(rights);
+                            })
+  .catch (function (err) {
+                                res.status(500).json(err);
+                            })
+});
+
+                            router.post('/AddRole', function(req, res) {
+                                console.log('adding role');
+                                var role = req.body;
+                                //console.log(req);      
+                                models.RoleModel.AddRole(role).then(function(role) {
+                                    res.status(200).json(role);
+                                })
+ .catch (function(err){
+                                    res.status(500).json(err);
+                                })  
+});
+                                router.post('/AddRoleRightMapping', function(req, res) {
+                                    console.log('adding role-menu map');
+                                    var rolemenu = req.body;
+                                    //console.log(req);
+                                    models.RoleModel.AddRoleRightMapping(rolemenu).then(function(rolemenu) {
+                                        res.status(200).json(rolemenu);
+                                    })
+ .catch (function (err) {
+                                        res.status(500).json(err);
+                                    })
+});
+                                    router.post('/ModifyRoleRight', function(req, res) {
+                                        console.log('modifying role-right mapping');
+                                        var roleright = req.body;
+                                        models.RoleModel.ModifyRoleRight(roleright).then(function(roleright) {
+                                            res.status(200).json(roleright);
+                                        })
+  .catch (function (err) {
+                                            res.status(500).json(err);
+                                        })
+
+});
+                                        router.post('/DeleteRole', function(req, res){
+                                            var role = req.body;
+                                            console.log(role);
+                                            models.RoleModel.DeleteRole(role).then(function(roles) {
+                                                res.status(200).json(roles);
+                                            })
+  .catch (function(err){
+                                                res.status(500).json(err);
+                                            })
+});
+
+                                            #endregion Roles
+
+                                        }
+                                    }
 public static class Utilities
-{
-    public static string IsActive(this HtmlHelper html,
-                                  string control,
-                                  string action)
-    {
-        var routeData = html.ViewContext.RouteData;
+        {
+            public static string IsActive(this HtmlHelper html,
+                                          string control,
+                                          string action)
+            {
+                var routeData = html.ViewContext.RouteData;
 
-        var routeAction = (string)routeData.Values["action"];
-        var routeControl = (string)routeData.Values["controller"];
+                var routeAction = (string)routeData.Values["action"];
+                var routeControl = (string)routeData.Values["controller"];
 
-        // both must match
-        var returnActive = control == routeControl &&
-                           action == routeAction;
+                // both must match
+                var returnActive = control == routeControl &&
+                                   action == routeAction;
 
-        return returnActive ? "active" : "";
-    }
-}
-
-
-public class StrategyDetails
-{
-    public Strategy Strategy { get; set; }
-    public List<StrategyApprover> lst { get; set; }
-}
-public class Emails
-{
-    public string IsMappedToTask { get; set; }
-    public string IsActive { get; set; }
-    public string IsProcessed { get; set; }
-    public string TaskId { get; set; }
-    public string TaskAttachement { get; set; }
-    public string TaskComments { get; set; }
-    public string CreatedDate { get; set; }
-    public string CreatedBy { get; set; }
-    public string TaskAssignedBy { get; set; }
-    public string TaskAssignedDate { get; set; }
-    public string LastModifiedDate { get; set; }
-    public string LastModifiedBy { get; set; }
-    public int Id { get; set; }
-    public string UniqueEmailId { get; set; }
-    public string EmailId { get; set; }
-    public string StrategyNumber { get; set; }
-    public string EmailSubject { get; set; }
-    public string EmailContent { get; set; }
-    public string EmailAttachment { get; set; }
-
-}
+                return returnActive ? "active" : "";
+            }
+        }
 
 
+        public class StrategyDetails
+        {
+            public Strategy Strategy { get; set; }
+            public List<StrategyApprover> lst { get; set; }
+        }
+        public class Emails
+        {
+            public string IsMappedToTask { get; set; }
+            public string IsActive { get; set; }
+            public string IsProcessed { get; set; }
+            public string TaskId { get; set; }
+            public string TaskAttachement { get; set; }
+            public string TaskComments { get; set; }
+            public string CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
+            public string TaskAssignedBy { get; set; }
+            public string TaskAssignedDate { get; set; }
+            public string LastModifiedDate { get; set; }
+            public string LastModifiedBy { get; set; }
+            public int Id { get; set; }
+            public string UniqueEmailId { get; set; }
+            public string EmailId { get; set; }
+            public string StrategyNumber { get; set; }
+            public string EmailSubject { get; set; }
+            public string EmailContent { get; set; }
+            public string EmailAttachment { get; set; }
 
-public class MapTasks
-{
-    public string IsMappedToTask { get; set; }
-    public string IsActive { get; set; }
-    public string IsProcessed { get; set; }
-    public string TaskId { get; set; }
-    public string TaskName { get; set; }
-    public string TaskAttachement { get; set; }
-    public string TaskComments { get; set; }
-    public string CreatedDate { get; set; }
-    public string CreatedBy { get; set; }
-    public string TaskAssignedBy { get; set; }
-    public string TaskAssignedDate { get; set; }
-    public string LastModifiedDate { get; set; }
-    public string LastModifiedBy { get; set; }
-    public int Id { get; set; }
-    public string UniqueEmailId { get; set; }
-    public string EmailId { get; set; }
-    public string RefNumber { get; set; }
-    public string Version { get; set; }
-    public string EmailSubject { get; set; }
-    public string EmailContent { get; set; }
-    public string EmailAttachment { get; set; }
-
-}
+        }
 
 
 
+        public class MapTasks
+        {
+            public string IsMappedToTask { get; set; }
+            public string IsActive { get; set; }
+            public string IsProcessed { get; set; }
+            public string TaskId { get; set; }
+            public string TaskName { get; set; }
+            public string TaskAttachement { get; set; }
+            public string TaskComments { get; set; }
+            public string CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
+            public string TaskAssignedBy { get; set; }
+            public string TaskAssignedDate { get; set; }
+            public string LastModifiedDate { get; set; }
+            public string LastModifiedBy { get; set; }
+            public int Id { get; set; }
+            public string UniqueEmailId { get; set; }
+            public string EmailId { get; set; }
+            public string RefNumber { get; set; }
+            public string Version { get; set; }
+            public string EmailSubject { get; set; }
+            public string EmailContent { get; set; }
+            public string EmailAttachment { get; set; }
+
+        }
 
 
-public class OnboardingTasks
-{
-
-    public string filename { get; set; }
-    public string IsMappedToTask { get; set; }
-    public string IsActive { get; set; }
-    public string IsProcessed { get; set; }
-    public string TaskId { get; set; }
-    public string TaskName { get; set; }
-    public string TaskAttachement { get; set; }
-    public string TaskComments { get; set; }
-    public string CreatedDate { get; set; }
-    public string CreatedBy { get; set; }
-    public string TaskAssignedBy { get; set; }
-    public string TaskAssignedDate { get; set; }
-    public string LastModifiedDate { get; set; }
-    public string LastModifiedBy { get; set; }
-    public int Id { get; set; }
-    public string UniqueEmailId { get; set; }
-    public string EmailId { get; set; }
-    public string RefNumber { get; set; }
-    public string Version { get; set; }
-    public string EmailSubject { get; set; }
-    public string EmailContent { get; set; }
-    public string EmailAttachment { get; set; }
-
-    public HttpPostedFileBase Attachment { get; set; }
-}
 
 
-public class Tasks
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string IsSignOff { get; set; }
-    public string SignOffDate { get; set; }
-    public string SignoffBy { get; set; }
-    public string IsActive { get; set; }
 
-}
+        public class OnboardingTasks
+        {
 
-public class StrategyApprover
-{
-    public string RefNumber { get; set; }
-    public string Version { get; set; }
-    public string Approver { get; set; }
-    public string Comments { get; set; }
-    public string ApprovedDate { get; set; }
-    public string Status { get; set; }
-}
+            public string filename { get; set; }
+            public string IsMappedToTask { get; set; }
+            public string IsActive { get; set; }
+            public string IsProcessed { get; set; }
+            public string TaskId { get; set; }
+            public string TaskName { get; set; }
+            public string TaskAttachement { get; set; }
+            public string TaskComments { get; set; }
+            public string CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
+            public string TaskAssignedBy { get; set; }
+            public string TaskAssignedDate { get; set; }
+            public string LastModifiedDate { get; set; }
+            public string LastModifiedBy { get; set; }
+            public int Id { get; set; }
+            public string UniqueEmailId { get; set; }
+            public string EmailId { get; set; }
+            public string RefNumber { get; set; }
+            public string Version { get; set; }
+            public string EmailSubject { get; set; }
+            public string EmailContent { get; set; }
+            public string EmailAttachment { get; set; }
 
-public class Strategy
-{
-    public int Id { get; set; }
-    public string RefNumber { get; set; }
-    public string Name { get; set; }
-    public string Type { get; set; }
-    public string ApplicationName { get; set; }
-    public string ApplicationId { get; set; }
-    public string BusinessSector { get; set; }
-    public string Country { get; set; }
-    public string Region { get; set; }
-    public string ProductType { get; set; }
-    public string Ranking { get; set; }
-    public string Objective { get; set; }
-    public string Description { get; set; }
-    public string RiskRating { get; set; }
-    public string BusinessImpact { get; set; }
-    public string ExchangeDetails { get; set; }
-    public string DetailsOfChanges { get; set; }
-    public string ChangesBusinessImpact { get; set; }
-    public string SupportingDocument { get; set; }
-    public string DateChangeInitiated { get; set; }
-    public string DateChangeImplemented { get; set; }
-    public string ChangesCompletionStatus { get; set; }
-    public string AdditionalParam1 { get; set; }
-    public string AdditionalParam2 { get; set; }
-    public string AdditionalParam3 { get; set; }
-    public string AdditionalParam4 { get; set; }
-    public string AdditionalParam5 { get; set; }
-    public string AdditionalParam6 { get; set; }
-    public string AdditionalParam7 { get; set; }
-    public string AdditionalParam8 { get; set; }
-    public string AdditionalParam9 { get; set; }
-    public string AdditionalParam10 { get; set; }
-    public string AdditionalParam11 { get; set; }
-    public string AdditionalParam12 { get; set; }
-    public string AdditionalParam13 { get; set; }
-    public string Attribute1 { get; set; }
-    public string Attribute2 { get; set; }
-    public string Attribute3 { get; set; }
-    public string Attribute4 { get; set; }
-    public string NoOfApprover { get; set; }
-    public string Version { get; set; }
+            public HttpPostedFileBase Attachment { get; set; }
+        }
 
-    public string FinalSignOff { get; set; }
-    public string SignOffDate { get; set; }
-    public string SignoffBy { get; set; }
-    public string IsActive { get; set; }
-    public string CreatedDate { get; set; }
-    public string CreatedBy { get; set; }
-    public string LastModifiedDate { get; set; }
-    public string LastModifiedBy { get; set; }
-    public string Page { get; set; }
-}
+
+        public class Tasks
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public string IsSignOff { get; set; }
+            public string SignOffDate { get; set; }
+            public string SignoffBy { get; set; }
+            public string IsActive { get; set; }
+
+        }
+
+        public class StrategyApprover
+        {
+            public string RefNumber { get; set; }
+            public string Version { get; set; }
+            public string Approver { get; set; }
+            public string Comments { get; set; }
+            public string ApprovedDate { get; set; }
+            public string Status { get; set; }
+        }
+
+        public class Strategy
+        {
+            public int Id { get; set; }
+            public string RefNumber { get; set; }
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public string ApplicationName { get; set; }
+            public string ApplicationId { get; set; }
+            public string BusinessSector { get; set; }
+            public string Country { get; set; }
+            public string Region { get; set; }
+            public string ProductType { get; set; }
+            public string Ranking { get; set; }
+            public string Objective { get; set; }
+            public string Description { get; set; }
+            public string RiskRating { get; set; }
+            public string BusinessImpact { get; set; }
+            public string ExchangeDetails { get; set; }
+            public string DetailsOfChanges { get; set; }
+            public string ChangesBusinessImpact { get; set; }
+            public string SupportingDocument { get; set; }
+            public string DateChangeInitiated { get; set; }
+            public string DateChangeImplemented { get; set; }
+            public string ChangesCompletionStatus { get; set; }
+            public string AdditionalParam1 { get; set; }
+            public string AdditionalParam2 { get; set; }
+            public string AdditionalParam3 { get; set; }
+            public string AdditionalParam4 { get; set; }
+            public string AdditionalParam5 { get; set; }
+            public string AdditionalParam6 { get; set; }
+            public string AdditionalParam7 { get; set; }
+            public string AdditionalParam8 { get; set; }
+            public string AdditionalParam9 { get; set; }
+            public string AdditionalParam10 { get; set; }
+            public string AdditionalParam11 { get; set; }
+            public string AdditionalParam12 { get; set; }
+            public string AdditionalParam13 { get; set; }
+            public string Attribute1 { get; set; }
+            public string Attribute2 { get; set; }
+            public string Attribute3 { get; set; }
+            public string Attribute4 { get; set; }
+            public string NoOfApprover { get; set; }
+            public string Version { get; set; }
+
+            public string FinalSignOff { get; set; }
+            public string SignOffDate { get; set; }
+            public string SignoffBy { get; set; }
+            public string IsActive { get; set; }
+            public string CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
+            public string LastModifiedDate { get; set; }
+            public string LastModifiedBy { get; set; }
+            public string Page { get; set; }
+        }

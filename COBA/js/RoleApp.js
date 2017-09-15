@@ -1,25 +1,4 @@
-﻿//var RoleApp = angular.module('roleApp', ['ngRoute']);
-//RoleApp.config(['$routeProvider', '$locationProvider',
-//    function ($routeProvider, $locationProvider) {
-
-//        var UserInfo = window.sessionStorage.getItem('userAuth');
-
-//        if (UserInfo != undefined || UserInfo != null) {
-
-//            $routeProvider
-//                .when('/Users/ViewRole', {
-//                    controller: 'RoleController', templateUrl: 'js/views/Users/ViewRole.html'
-//                })
-//                .when('/Users/AddRole', {
-//                    controller: 'RoleController', templateUrl: 'js/views/Users/AddEditRole.html'
-//                })
-//                .otherwise({ redirectTo: '/Roles' });
-//       }
-
-//       $locationProvider.html5Mode(true).hashPrefix('*');
-//    }]);
-
-ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory) {
+﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory) {
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -447,4 +426,27 @@ ReportApp.factory('RoleFactory', function ($http) {
 
     };
     return RoleFactory;
+});
+
+
+
+ReportApp.factory('reportFactory', function ($http, $q) {
+    var authurl = BaseURL + 'auth';
+    var userurl = BaseURL + 'users';
+    var Tokenurl = '/OAuth2/auth';
+    var AuthFactory = {
+        Logout: function (userId) {
+            return $http.post(authurl + '/Logout/', { userId: userId });
+        },
+        GetMenuList: function (userId) {
+            return $http.get(authurl + '/?userId=' + userId);
+        },
+        GetRightsList: function (userId) {
+            return $http.get(authurl + '/rights/?userId=' + userId);
+        },
+        GetUser: function (userId) {
+            return $http.get(userurl + '/?userId=' + userId);
+        }
+    };
+    return AuthFactory;
 });
