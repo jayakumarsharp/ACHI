@@ -1848,7 +1848,6 @@ public class DbOperations
         catch (Exception e)
         {
         }
-        return deferred.promise;
     }
     public void GetRoleRightMapping(string roleId)
     {
@@ -1901,7 +1900,6 @@ public class DbOperations
     }
     public void GetUserProfile(string userId)
     {
-        var deferred = q.defer();
         try
         {
             //logger.info('Inside get User profile');
