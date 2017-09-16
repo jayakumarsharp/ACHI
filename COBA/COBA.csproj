@@ -6782,6 +6782,8 @@
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
     <Content Include="js\controllers\CountryController.js" />
+    <Content Include="js\controllers\TransferController.js" />
+    <Content Include="js\controllers\TransferSettingsController.js" />
     <Content Include="js\custom.js" />
     <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
@@ -7678,6 +7680,7 @@
     <Content Include="Views\Main\ViewApprovals.cshtml" />
     <Content Include="Views\Main\UserManagement.cshtml" />
     <Content Include="Views\Main\RoleManagement.cshtml" />
+    <Content Include="Views\Main\TransferSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

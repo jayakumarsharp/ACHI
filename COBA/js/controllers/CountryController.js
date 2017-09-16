@@ -1,4 +1,4 @@
-﻿ReportApp.controller('CountryController', function ($scope, $rootScope, CountryService, toaster, $timeout) {
+﻿ReportApp.controller('CountryController', function ($scope, $rootScope, CountryService, $timeout) {
     $scope.CountryList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;

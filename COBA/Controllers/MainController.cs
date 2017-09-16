@@ -23,15 +23,16 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
-
-
         public ActionResult ShowApprovalDetails()
         {
             return PartialView();
         }
-
-
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult TransferSettings()
         {
             return View();
         }
@@ -40,8 +41,6 @@ namespace CRMManagement.Controllers
         {
             return View();
         }
-
-
         public ActionResult RoleManagement()
         {
             return View();
@@ -111,6 +110,44 @@ namespace CRMManagement.Controllers
         {
             return RedirectToAction("LoginDisplay", "Home");
         }
+
+
+        #region TransferSetting
+
+        public JsonResult GetTransferSettingByuser()
+        {
+            List<TransferSetting> lst = _dbOperations.GetTransfersettingIDbyuser(Convert.ToString(Session["UserName"]));
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult InsertTransferSetting(TransferSetting strategy)
+        {
+            string errordesc = "";
+            int errorcode = 0;
+            if (Convert.ToString(Session["UserName"]) != "")
+            {
+                strategy.OwnerUser = Convert.ToString(Session["UserName"]);
+                _dbOperations.InsertTransferSetting(strategy, out errorcode, out errordesc);
+            }
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult DeleteStrategyApprover()
+        {
+            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
+            //{
+            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //}
+            string errordesc = "";
+            int errorcode = 0;
+
+            _dbOperations.DeleteTransferSetting(Convert.ToString(Session["UserName"]), out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion TransferSetting
+
+
+
 
         #region Strategy
 
@@ -582,6 +619,18 @@ public static class Utilities
 }
 
 
+
+public class TransferSetting
+{
+    public string Id { get; set; }
+    public string OwnerUser { get; set; }
+    public string Transferuser { get; set; }
+    public string TransferFrom { get; set; }
+    public string TransferTo { get; set; }
+    public string IsActive { get; set; }
+}
+
+
 public class StrategyDetails
 {
     public Strategy Strategy { get; set; }
@@ -694,6 +743,8 @@ public class StrategyApprover
     public string ApprovedDate { get; set; }
     public string Status { get; set; }
 }
+
+
 
 public class Strategy
 {

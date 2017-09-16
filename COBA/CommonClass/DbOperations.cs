@@ -79,6 +79,134 @@ public class DbOperations
 
     #endregion
 
+
+    #region TransferSetting
+
+    public void InsertTransferSetting(TransferSetting objTransferSetting, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_transfersetting", connection))
+            {
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
+                cmd.Parameters.Add(new MySqlParameter("i_TransferTo", objTransferSetting.Transferuser));
+                cmd.Parameters.Add(new MySqlParameter("i_DurationFrom", objTransferSetting.TransferFrom));
+                cmd.Parameters.Add(new MySqlParameter("i_DurationTo", objTransferSetting.TransferTo));
+
+                if (this.OpenConnection() == true)
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void DeleteTransferSetting(string OwnerUser, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_delete_transfersetting", connection))
+            {
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_owner", OwnerUser));
+                if (this.OpenConnection() == true)
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public List<TransferSetting> GetTransfersettingIDbyuser(string username)
+    {
+        List<TransferSetting> lst = new List<TransferSetting>();
+        string query = "sp_gettransfersettingbyuser";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Owner", username));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new TransferSetting
+                               {
+                                   TransferFrom = Convert.ToString(row["DurationFrom"]),
+                                   TransferTo = Convert.ToString(row["DurationFrom"]),
+                                   OwnerUser = Convert.ToString(row["Owneruser"]),
+                                   Transferuser = Convert.ToString(row["TransferTo"]),
+                                   IsActive = Convert.ToString(row["IsActive"]),
+                                   Id = Convert.ToString(row["Id"])
+
+                               }).ToList();
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+    
+
+    #endregion TransferSetting
+
     #region Strategy
 
     public void InsertStrategyApprover(List<StrategyApprover> lst, string RefNumber, string version, out int errorcode, out string errordesc)
@@ -922,6 +1050,9 @@ public class DbOperations
 
     #endregion Strategy
 
+
+
+
     #region Task
 
     public List<Tasks> GetTaskData()
@@ -1215,7 +1346,6 @@ public class DbOperations
         return lst;
 
     }
-
 
 
     public void UpdateOnboardingTaskdata(string Id, string emailattachment, string comments, out int errorcode, out string errordesc)
