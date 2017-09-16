@@ -6781,6 +6781,7 @@
     <Content Include="js\controllers\TaskController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
+    <Content Include="js\controllers\CountryController.js" />
     <Content Include="js\custom.js" />
     <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
@@ -6791,6 +6792,7 @@
     <Content Include="js\services\OnboardingTaskService.js" />
     <Content Include="js\services\TaskService.js" />
     <Content Include="js\services\StrategyService.js" />
+    <Content Include="js\services\CountryService.js" />
     <Content Include="js\UserApp.js" />
     <Content Include="plugins\bootstrap-datetimepicker.js" />
     <Content Include="plugins\bootstrap-datetimepicker.min.css" />

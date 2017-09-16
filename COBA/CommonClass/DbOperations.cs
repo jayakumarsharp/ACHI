@@ -2604,6 +2604,101 @@ public class DbOperations
     #endregion Users
 
 
+    #region Country
+
+    public void GetCountryList(string TaskTypeId)
+    {
+        try
+        {
+            if (TaskTypeId != null && TaskTypeId != "")
+            {
+                //    models.TaskType.findAll({ where: { TaskTypeId: TaskTypeId} }).then(function(roles){
+                //        deferred.resolve(roles);
+                //    }).catch (function(err){
+                //console.log('Error' + err);
+                //deferred.reject(err)
+                //     });
+            }
+            else
+            {
+                //models.TaskType.findAll().then(function(roles){
+                //    deferred.resolve(roles);
+                //}).catch (function(err){
+                //    console.log('Error' + err);
+                //    deferred.reject(err)
+                //    });
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void AddCountry(string opp)
+    {
+        try
+        {
+            //    models.TaskType.findAndCountAll({ where: { TaskName: opp.TaskName} }).then(function(result){
+            //        if (result.count > 0)
+            //        {
+            //            var data = { Error:''};
+            //        data.Error = "TaskType already exists";
+            //        deferred.reject(data);
+            //    }
+            //        else{
+            //        models.TaskType.create({
+            //            TaskName: opp.TaskName
+            //            }).then(function(user){
+            //            deferred.resolve(user);
+            //        }).catch (function(err){
+            //    console.log('AddTaskType' + err);
+            //    deferred.reject(err);
+            //});
+        }
+
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void ModifyCountry(string Opp)
+    {
+        try
+        {
+            //models.TaskType.update({ TaskName: Opp.TaskName},{ where: { TaskTypeId: Opp.TaskTypeId} }).then(function(user){
+            //    console.log('Update success TaskTypeList')
+            //        deferred.resolve(user);
+
+            //}).catch (function(err){
+            //console.log('Modify TaskType' + err);
+            //deferred.reject(err);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void DeleteCountry(string TaskTypeId)
+    {
+        try
+        {
+            //    console.log("Deleting TaskType");
+            //    models.TaskType.destroy({ where: { TaskTypeId: TaskTypeId},truncate: false}).then(function(user){
+            //        deferred.resolve(user);
+            //        console.log("deleting TaskType success");
+            //    }).catch (function(Error){
+            //    console.log("Error occured when deleting the tasktype");
+            //    deferred.reject(Error);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    #endregion Country
+
 }
 
 

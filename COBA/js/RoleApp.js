@@ -279,9 +279,9 @@
             RoleFactory.GetRoleRightMapping($scope.role.id).success(function (data) {
                 for (i = 0; i < data.length; i++) {
                     var rightName = $scope.GetRightName(data[i].RightID);
-                    for(var j = 0; j < $scope.listB.length; j++){
-                        if(data[j].RightID == $scope.listB[j].RightID){
-                            $scope.listB.splice(j,1);
+                    for (var j = 0; j < $scope.listB.length; j++) {
+                        if (data[j].RightID == $scope.listB[j].RightID) {
+                            $scope.listB.splice(j, 1);
                         }
                     }
                     $scope.listB.push({ 'RightID': data[i].RightID, 'RightName': rightName });
@@ -387,41 +387,40 @@
 });
 
 ReportApp.factory('RoleFactory', function ($http) {
-    var RoleUrl = BaseURL + 'Roles';
-    var Userurl = BaseURL + 'users';
     var RoleFactory = {
         GetRoles: function () {
-            return $http.get(RoleUrl + '/roles');
+            return $http.get('roles?roleId=');
         },
         GetRole: function (roleId) {
-            return $http.get(RoleUrl + '/?roleId=' + roleId);
+            return $http.get('roles?roleId=' + roleId);
         },
         GetUserRoles: function (roleId) {
-            return $http.get(RoleUrl + '/GetUserRoles/?roleId=' + roleId);
+            return $http.get('GetUserRoles?roleId=' + roleId);
         },
         GetRights: function () {
-            return $http.get(RoleUrl + '/right');
+            return $http.get('GetRights?right=');
         },
         GetUser: function (userid) {
-            return $http.get(Userurl + '/?userId=' + userid);
-        },
-        AddRole: function (role) {
-            return $http.post(RoleUrl + '/AddRole', role);
-        },
-        AddRoleRightMapping: function (roleright) {
-            return $http.post(RoleUrl + '/AddRoleRightMapping', roleright);
-        },
-        ModifyRoleRight: function (roleright) {
-            return $http.post(RoleUrl + '/ModifyRoleRight', roleright);
-        },
-        DeleteRole: function (roleright) {
-            return $http.post(RoleUrl + '/DeleteRole', roleright);
+            return $http.get('getusers?userId=' + userid);
         },
         GetRoleRightMappings: function () {
-            return $http.get(RoleUrl + '/GetRoleRightMappings');
+            return $http.get('GetRoleRightMappings?roleId=');
         },
+        AddRole: function (role) {
+            return $http.post('AddRole', role);
+        },
+        AddRoleRightMapping: function (roleright) {
+            return $http.post('AddRoleRightMapping', roleright);
+        },
+        ModifyRoleRight: function (roleright) {
+            return $http.post('ModifyRoleRight', roleright);
+        },
+        DeleteRole: function (roleright) {
+            return $http.post('DeleteRole', roleright);
+        },
+        
         GetRoleRightMapping: function (roleId) {
-            return $http.get(RoleUrl + '/GetRoleRightMapping?roleId=' + roleId);
+            return $http.get('GetRoleRightMapping?roleId=' + roleId);
         }
 
     };
@@ -431,21 +430,18 @@ ReportApp.factory('RoleFactory', function ($http) {
 
 
 ReportApp.factory('reportFactory', function ($http, $q) {
-    var authurl = BaseURL + 'auth';
-    var userurl = BaseURL + 'users';
-    var Tokenurl = '/OAuth2/auth';
     var AuthFactory = {
         Logout: function (userId) {
-            return $http.post(authurl + '/Logout/', { userId: userId });
+            return $http.post('Logout/', { userId: userId });
         },
         GetMenuList: function (userId) {
-            return $http.get(authurl + '/?userId=' + userId);
+            return $http.get('GetmenuList?userId=' + userId);
         },
         GetRightsList: function (userId) {
-            return $http.get(authurl + '/rights/?userId=' + userId);
+            return $http.get('rights/?userId=' + userId);
         },
         GetUser: function (userId) {
-            return $http.get(userurl + '/?userId=' + userId);
+            return $http.get('GetUser?userId=' + userId);
         }
     };
     return AuthFactory;

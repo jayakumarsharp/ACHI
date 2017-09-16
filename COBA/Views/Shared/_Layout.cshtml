@@ -126,7 +126,7 @@
                     <li class='@Html.IsActive("Main", "Approvals")'>
                         <a href="Approvals">
                             <i class="fa fa-circle-o"></i>
-                            <span>Approvals</span>
+                            <span>Approvals / Transfers</span>
                         </a>
                     </li>
                     <li class='@Html.IsActive("Main", "Emails")'>
@@ -160,7 +160,7 @@
                             <i class="icon-briefcase"></i><span> Role Management</span>
                         </a>
                     </li>
-                    <li class="treeview menu-open">
+                    <li class="treeview">
                         <a href="#">
                             <i class="fa fa-files-o"></i>
                             <span>Utilities</span>
@@ -168,7 +168,7 @@
                                 <span class="label label-primary pull-right">4</span>
                             </span>
                         </a>
-                        <ul class="treeview-menu" style="display: block;">
+                        <ul class="treeview-menu" style="display: none;">
                             <li><a href="Country"><i class="fa fa-circle-o"></i> Country</a></li>
                             <li><a href="Region"><i class="fa fa-circle-o"></i> Region</a></li>
                             <li><a href="BusinessSector"><i class="fa fa-circle-o"></i> Business Sector</a></li>
@@ -285,13 +285,14 @@
     <script src="~/js/controllers/CountryMasterController.js"></script>
     <script src="~/js/controllers/ProductTypeMasterController.js"></script>
     <script src="~/js/controllers/RegionMasterController.js"></script>
-
+    <script src="~/js/controllers/CountryController.js"></script>
 
     <script src="~/js/services/TaskService.js"></script>
     <script src="~/js/services/OnboardingTaskService.js"></script>
     <script src="~/js/services/StrategyService.js"></script>
     <script src="~/js/services/EmailService.js"></script>
     <script src="~/js/services/MapTaskService.js"></script>
+    <script src="~/js/services/CountryService.js"></script>
     <style>
         .whitebg {
             background: #fff;

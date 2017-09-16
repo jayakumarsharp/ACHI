@@ -1,128 +1,134 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
-<div ng-controller="ApprovalsController" class="whitebg">
+<div class="whitebg">
+    <section class="content-header" style="padding-bottom:10px;"></section>
 
-    <section class="content-header" style="padding-bottom:10px;">
-        <h1>Approval Management</h1>
-    </section>
 
-    <section class="content">
-    
-        <div class="row">
-            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
-        </div>
-    </section>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false"><strong>Approval Management</strong> </a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="true"><strong> Transfer Management</strong> </a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                <div ng-controller="ApprovalsController"  class="row">
+                    <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
 
-    <div class="modal fade" id="LayoutModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-        <div class="modal-dialog" style="width:75%">
-            <div class="modal-content">
-                <div class="modal-header content-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
 
-                        <div class="row">
-                            <div class="box-body">
-                                <div class="row">
-
-                                    <div ng-include="'ShowApprovalDetails'"></div>
-
-                                    <div class="form-group col-lg-12">
-                                        <div class="col-sm-offset-4 col-sm-10">
-
-                                            &nbsp;
-                                            <span>
-                                                <input type="button" value="Update" ng-click="UpdatecurrencyConversion(currency)" class="btn  btn-circle btn-default btn-outline-info" />
-                                            </span>&nbsp;
-                                            <input type="button" value="Cancel" ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
+                    <div class="modal fade" id="LayoutModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+                        <div class="modal-dialog" style="width:75%">
+                            <div class="modal-content">
+                                <div class="modal-header content-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <div class="row">
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <div ng-include="'ShowApprovalDetails'"></div>
+                                                    <div class="form-group col-lg-12">
+                                                        <div class="col-sm-offset-4 col-sm-10">
+                                                            &nbsp;
+                                                            <span>
+                                                                <input type="button" value="Update" ng-click="UpdatecurrencyConversion(currency)" class="btn  btn-circle btn-default btn-outline-info" />
+                                                            </span>&nbsp;
+                                                            <input type="button" value="Cancel" ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                    <div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+                        <div class="modal-dialog" style="width:75%">
+                            <div class="modal-content">
+                                <div class="modal-header content-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="">
+                                        @*content*@
+                                        <div class="row">
+                                            <div class="box-body">
+                                                <div class="table-responsive">
+                                                    <table class="table no-margin">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>RefNumber</th>
+                                                                <th>Approver</th>
+                                                                <th>Status</th>
+                                                                <th>Comments</th>
+                                                                <th>ApprovedDate </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="right in ViewData">
+                                                                <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
+                                                                <td>{{right.Approver}}</td>
+                                                                <td><span class="label label-success">{{right.Status}}</span></td>
+                                                                <td>
+                                                                    {{right.Comments}}
+                                                                </td>
+                                                                <td>
+                                                                    {{right.ApprovedDate}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
+
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-
-    <div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-        <div class="modal-dialog" style="width:75%">
-            <div class="modal-content">
-                <div class="modal-header content-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="">
-                        @*content*@
-                        <div class="row">
-                            <div class="box-body">
-                                <div class="table-responsive">
-                                    <table class="table no-margin">
-                                        <thead>
-                                            <tr>
-                                                <th>RefNumber</th>
-                                                <th>Approver</th>
-                                                <th>Status</th>
-                                                <th>Comments</th>
-                                                <th>ApprovedDate </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="right in ViewData">
-                                                <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
-                                                <td>{{right.Approver}}</td>
-                                                <td><span class="label label-success">{{right.Status}}</span></td>
-                                                <td>
-                                                    {{right.Comments}}
-                                                </td>
-                                                <td>
-                                                    {{right.ApprovedDate}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" style="width:25%">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                                </div>
+                                <br />
+                                <div class="modal-body">
+                                    Are you sure you want to delete?
+                                </div>
+                                <br />
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                                    <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
-        </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
 
-    </div>
-
-
-    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" style="width:25%">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #3c8dbc;color:white">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
-                </div>
-                <br />
-                <div class="modal-body">
-                    Are you sure you want to delete?
-                </div>
-                <br />
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
-                    <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
-                </div>
             </div>
+            <!-- /.tab-pane -->
+            <!-- /.tab-pane -->
         </div>
+        <!-- /.tab-content -->
     </div>
 </div>

@@ -375,27 +375,27 @@ namespace CRMManagement.Controllers
         public JsonResult GetUserRoles(string roleid)
         {
             _dbOperations.GetUserRoles(roleid);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRoleRightMappings(string roleId)
         {
             _dbOperations.GetRoleRightMapping(roleId);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRoleRightMapping(string roleId)
         {
             _dbOperations.GetRoleRightMapping(roleId);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
-        public JsonResult roles(string roleid)
+        public JsonResult roles(string roleId)
         {
-            _dbOperations.GetRoles(roleid);
-            return Json("");
+            _dbOperations.GetRoles(roleId);
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRights(string right)
         {
             _dbOperations.GetRights(right);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
 
@@ -403,27 +403,27 @@ namespace CRMManagement.Controllers
         {
 
             _dbOperations.AddRole(role);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AddRoleRightMapping(string rolemenu)
         {
 
             _dbOperations.AddRoleRightMapping(rolemenu);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ModifyRoleRight(string roleright)
         {
             _dbOperations.ModifyRoleRight(roleright);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteRole(string role)
         {
 
             _dbOperations.DeleteRole(role);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         #endregion Roles
@@ -433,59 +433,59 @@ namespace CRMManagement.Controllers
         public JsonResult getusers(string userid)
         {
             _dbOperations.GetUser(userid);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult profile(string userId)
         {
             _dbOperations.GetUserProfile(userId);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetUserSessionInfo(string createdOn)
         {
             _dbOperations.GetUserSessionInfo(createdOn);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetInactiveUsers()
         {
             _dbOperations.GetInactiveUsers();
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UserSBU(string user)
         {
             _dbOperations.GetUserSBU(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AllUserSBU(string user)
         {
             _dbOperations.GetUserSBU(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UserBillingSBU(string userId)
         {
             _dbOperations.GetUserBillingSBU(userId);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AllUserBillingSBU(string user)
         {
             _dbOperations.GetUserBillingSBU(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult sbu()
         {
 
             _dbOperations.GetAllSBU();
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult email()
         {
             _dbOperations.GetAllEmail();
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult CreateUser(string user)
@@ -493,37 +493,71 @@ namespace CRMManagement.Controllers
 
             //console.log(req);      
             _dbOperations.CreateUser(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetUsersByTypes(string types)
         {
 
             _dbOperations.GetUsersByTypes(types);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult CreateTempUser(string user)
         {
 
             _dbOperations.CreateTempUser(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ModifyUser(string user)
         {
 
             _dbOperations.ModifyUser(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteUser(string user)
         {
 
             _dbOperations.DeleteUser(user);
-            return Json("");
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         #endregion User
+
+
+
+        #region Country
+
+
+        public JsonResult GetAllCountry(string CountryId)
+        {
+            _dbOperations.GetCountryList(CountryId);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddCountry(string taskInfo)
+        {
+            _dbOperations.AddCountry(taskInfo);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        public JsonResult ModifyCountry(string opp)
+        {
+            _dbOperations.ModifyCountry(opp);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult DeleteCountry(string CountryId)
+        {
+            _dbOperations.DeleteCountry(CountryId);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        #endregion Country
+
 
 
     }

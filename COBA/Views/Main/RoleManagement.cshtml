@@ -14,8 +14,9 @@
                             <div class="caption">
                                 <span class="caption-subject bold uppercase font-dark"> Role Management</span>
                             </div>
+                            @*ng-show="!IsReadOnly"*@
                             <div class="actions">
-                                <button ng-show="!IsReadOnly" data-ng-click="showadd()" name="addRole" class="btn btn-sm btn-circle green" title="Add Role">Add <i class="fa fa-plus"></i></button>
+                                <button  data-ng-click="showadd()" name="addRole" class="btn btn-sm btn-circle green" title="Add Role">Add <i class="fa fa-plus"></i></button>
                             </div>
                         </div>
 
@@ -57,7 +58,7 @@
 
 
     <div class="modal fade" id="AddEditRole" tabindex="-1" role="dialog" aria-hidden="true">
-        <div ng-include="'js/views/confirmRoleChange.html'"></div>
+        @*<div ng-include="'js/views/confirmRoleChange.html'"></div>*@
         <div class="modal-dialog" style="align-self:center;width:70%">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #444d58;color:white">
