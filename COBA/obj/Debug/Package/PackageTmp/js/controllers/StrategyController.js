@@ -3,8 +3,6 @@
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
@@ -203,6 +201,7 @@
         model.Page = "S";
         StrategyService.UpdateStrategy(model).success(function (data) {
             if (data == "success") {
+
                 if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
                     $scope.listB_Estimation[0].RefNumber = model.RefNumber;
                     $scope.listB_Estimation[0].Version = model.Version;

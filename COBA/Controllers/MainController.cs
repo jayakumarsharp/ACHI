@@ -113,7 +113,11 @@ namespace CRMManagement.Controllers
 
 
         #region TransferSetting
-
+        public JsonResult Get_ApprovaltransferByuser()
+        {
+            List<StrategyApprover> lst = _dbOperations.Get_ApprovaltransferByuser(Convert.ToString(Session["UserName"]));
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetTransferSettingByuser()
         {
             List<TransferSetting> lst = _dbOperations.GetTransfersettingIDbyuser(Convert.ToString(Session["UserName"]));
@@ -130,7 +134,7 @@ namespace CRMManagement.Controllers
             }
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult DeleteStrategyApprover()
+        public JsonResult DeleteTransferSetting()
         {
             //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
             //{
@@ -170,9 +174,9 @@ namespace CRMManagement.Controllers
             List<Strategy> lst = _dbOperations.GetStrategyDatabyStrategyId(Strategynumber);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+       
 
-
-
+        
         public JsonResult GetStrategyApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
@@ -216,7 +220,7 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
+        public JsonResult ModifyStrategyApprover(List<StrategyApprover> strategy)
         {
             //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
             //{
@@ -225,10 +229,24 @@ namespace CRMManagement.Controllers
             //}
             string errordesc = "";
             int errorcode = 0;
-            if (strategy != null && strategy.Count > 0)
-                _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+            if (strategy.Count > 0)
+                _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
+
+        //public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
+        //{
+        //    //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
+        //    //{
+        //    //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+        //    //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        //    //}
+        //    string errordesc = "";
+        //    int errorcode = 0;
+        //    if (strategy != null && strategy.Count > 0)
+        //        _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+        //    return Json(errordesc, JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult UpdateStrategyApprover(StrategyApprover strategy)
         {
@@ -736,12 +754,15 @@ public class Tasks
 
 public class StrategyApprover
 {
+
+    public string Id { get; set; }
     public string RefNumber { get; set; }
     public string Version { get; set; }
     public string Approver { get; set; }
     public string Comments { get; set; }
     public string ApprovedDate { get; set; }
     public string Status { get; set; }
+    public string OriginalApprover { get; set; }
 }
 
 

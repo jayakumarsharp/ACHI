@@ -16,7 +16,20 @@
             }
         });
     };
-
+    $scope.tab1 = true;
+    $scope.tab2 = false
+    $scope.activatetab = function (id) {
+        if(id==1)
+        {
+            $scope.tab1 = true;
+            $scope.tab2 = false;
+        }
+        else
+        {
+            $scope.tab1 = false;
+            $scope.tab2 = true;
+        }
+    }
     $scope.Strategydata = [];
     $scope.StrategyVersiondata = [];
     $scope.Selcurrentversion = 0;
@@ -77,7 +90,8 @@
         }, 1000);
     });
 
-    var columnDefs = [{ name: 'RefNumber' },
+    var columnDefs = [
+        { name: 'RefNumber' },
         {
             name: 'Version',
             cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
@@ -171,4 +185,58 @@
         $scope.ecurrency = {};
         $('#LayoutModel1').modal('hide');
     };
+
+    var columnDefs1 = [
+        { name: 'Approver' },
+        { name: 'RefNumber' },
+        {
+            name: 'Version',
+            cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
+        },
+
+        //{ headerName: 'Description', name: 'Description', width: 440 },
+        //{
+        //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
+        //        if (params.data.IsSignOff == "Y")
+        //            return "<i class='fa fa-check btn-success btn-circle'></i>"
+        //        else
+        //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
+        //    }
+        //},
+        {
+            name: 'Status'
+            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.Status=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.Status=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+        },
+
+           //{
+        //    field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
+
+        //}
+    ];
+
+
+    $scope.TransferGrid = {
+        paginationPageSizes: [10, 20, 30, 40, 50, 60],
+        paginationPageSize: 10,
+        columnDefs: columnDefs1,
+
+    };
+
+
+    $scope.GetAlltransdata = function () {
+        StrategyService.Get_ApprovaltransferByuser().success(function (data) {
+            $timeout(function () {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].Ver = "Version - " + data[i].Version;
+                    data[i].Version = data[i].Version;
+                }
+                $scope.TransferGrid.data = data;
+            }, 100)
+        }).error(function (error) {
+            $scope.Error = error;
+        });
+    };
+    $scope.GetAlltransdata();
+
+
 });

@@ -203,7 +203,51 @@ public class DbOperations
         return lst;
 
     }
-    
+
+
+    public List<StrategyApprover> Get_ApprovaltransferByuser(string userid)
+    {
+        List<StrategyApprover> lst = new List<StrategyApprover>();
+
+        string query = "Get_ApprovaltransferByuser";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new StrategyApprover
+                               {
+                                   Approver = Convert.ToString(row["Approver"]),
+                                   RefNumber = Convert.ToString(row["RefNumber"]),
+                                   Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"]),
+                                   OriginalApprover = Convert.ToString(row["OriginalApprover"])
+                               }).ToList();
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+        return lst;
+    }
+
 
     #endregion TransferSetting
 
@@ -383,6 +427,7 @@ public class DbOperations
 
     }
 
+    
     public List<StrategyApprover> Get_StrategyApprovalByuser(string userid)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();

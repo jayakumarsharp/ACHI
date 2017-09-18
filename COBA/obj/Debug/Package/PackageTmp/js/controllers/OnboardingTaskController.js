@@ -6,12 +6,9 @@
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
-    $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
             if (value.RightName.contains('Currency Rate Write')) {

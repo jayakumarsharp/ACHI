@@ -1,6 +1,6 @@
-﻿agGrid.initialiseAgGridWithAngular1(angular);
-var UserApp = angular.module('userApp', [ 'agGrid']);
-UserApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, toaster, $timeout) {
+﻿//agGrid.initialiseAgGridWithAngular1(angular);
+//var UserApp = angular.module('userApp', [ 'agGrid']);
+ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout) {
     $scope.UpdatedUserTypes = [];
     $scope.selectedType = {};
     $scope.selectedSBU = {};
@@ -730,18 +730,18 @@ UserApp.controller('UserController', function ($scope, $rootScope, $window, $loc
     };
 
     //$scope.GetADUsers();
-    $scope.GetAllTypes();
-    $scope.GetAllSBU();
-    $scope.GetAllRoles();
-    $scope.GetAllBillingOptions();
-    $scope.GetAllBaseSkillOptions();
-    $scope.GetAllLocations();
-    $scope.GetAllUsers();
-    $scope.IsUserSCHead();
-    $scope.IsPageReadOnly();
+    //$scope.GetAllTypes();
+    //$scope.GetAllSBU();
+    //$scope.GetAllRoles();
+    //$scope.GetAllBillingOptions();
+    //$scope.GetAllBaseSkillOptions();
+    //$scope.GetAllLocations();
+    //$scope.GetAllUsers();
+    //$scope.IsUserSCHead();
+    //$scope.IsPageReadOnly();
 });
 
-UserApp.factory('UserFactory', function ($http) {
+ReportApp.factory('UserFactory', function ($http) {
     var Userurl = BaseURL + 'users';
     var RoleUrl = BaseURL + 'Roles';
     var UserFactory = {

@@ -61,12 +61,16 @@ ReportApp.factory('StrategyService', function ($http) {
         return $http.post('InsertTransferSetting', currencysheet);
     }
 
-    StrategyServiceFactory.DeleteStrategyApprover = function () {
-        return $http.get('DeleteStrategyApprover');
+    StrategyServiceFactory.DeleteTransferSetting = function () {
+        return $http.get('DeleteTransferSetting');
     }
 
 
+    StrategyServiceFactory.Get_ApprovaltransferByuser = function () {
+        return $http.get('Get_ApprovaltransferByuser');
+    }
 
+    
     //TransferSettings
 
 
