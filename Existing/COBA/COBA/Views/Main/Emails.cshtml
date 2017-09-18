@@ -1,0 +1,168 @@
+﻿<div class="container">
+    <!-- BEGIN PAGE BREADCRUMBS -->
+    <div ng-app="reportApp" ng-controller="EmailController">
+        <div class="content-wrapper" style="min-height: 901px;">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    EMailbox
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Inbox</h3>
+
+                                <div class="box-tools pull-right">
+                                    <div class="has-feedback">
+                                        <input type="text" class="form-control input-sm" placeholder="Search Mail">
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </div>
+                                <!-- /.box-tools -->
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                @*<div class="mailbox-controls">
+                                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                                        <i class="fa fa-square-o"></i>
+                                    </button>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+                                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                                    </div>
+                                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                                    <div class="pull-right">
+                                        1-50/200
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>*@
+                                <div class="table-responsive mailbox-messages">
+                                    <table class="table table-hover table-striped">
+                                        <tbody>
+                                            <tr ng-repeat="row in CurrencyList">
+                                                @*<td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div></td>*@
+                                                <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
+                                                <td class="mailbox-name"><a href="read-mail.html">{{row.EmailId}}</a></td>
+                                                <td class="mailbox-subject">
+                                                    {{row.EmailSubject}}
+                                                    @*<b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...*@
+                                                </td>
+                                                <td class="mailbox-attachment"></td>
+                                                <td class="mailbox-date">{{row.CreatedDate}}</td>
+                                            </tr>
+                                         
+                                        </tbody>
+                                    </table>
+                                    <!-- /.table -->
+                                </div>
+                                <!-- /.mail-box-messages -->
+                            </div>
+                            <!-- /.box-body -->
+                       
+                        </div>
+                        <!-- /. box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+
+        <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:60%;margin-top:10%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                        <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Email Tasks</h4>
+                        <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Email Tasks</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form novalidate class="form-horizontal" role="form" name="addcurrencyform">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Task Name</label>
+                                <div class="col-sm-6" style="margin-top:6px">
+                                    <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.Name" />
+                                    <input data-ng-hide="editMode" type="text" numberdotonly class="form-control" maxlength="8" ng-model="currency.Name" title="Select Role" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Description</label>
+                                <div class="col-sm-6" style="margin-top:6px">
+                                    <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.Description" />
+                                    <input data-ng-hide="editMode" type="text" numberdotonly class="form-control" maxlength="8" ng-model="currency.Description" title="Select Role" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SBU" class="col-sm-3 control-label"></label>
+                                <div class="col-sm-8" style="margin-top:6px">
+                                    <label class="mt-checkbox mt-checkbox-outline">
+
+                                        <input type="checkbox"
+                                               ng-model="EmailActive" />
+                                        SignOff
+
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-10">
+                                    <span data-ng-hide="editMode">
+                                        <input type="button" value="Add" ng-click="add(currency)" class="btn btn-outline-info" />
+                                    </span>
+                                    <span data-ng-show="editMode">
+                                        <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-outline-info" />
+                                    </span>
+                                    <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:25%">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                        <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                    </div>
+                    <br />
+                    <div class="modal-body">
+                        Are you sure you want to delete?
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                        <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*<div data-ag-grid="CurrencyGrid" class="ag-blue" style="color:#000;min-height: 200px !important;"></div>*@
+
+
+
+    </div>
+</div>

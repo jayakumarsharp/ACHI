@@ -1,0 +1,172 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-app="reportApp" ng-controller="MapTaskController" class="whitebg">
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%;margin-top:10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Map Tasks</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Map Tasks</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form novalidate class="form-horizontal" role="form" name="addcurrencyform">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email Subject</label>
+                            <div class="col-sm-8">
+                                <input data-ng-show="editMode" class="form-control" style="height:33px" numberdotonly type="text" maxlength="8" ng-model="ecurrency.EmailSubject" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding-top:10px">
+                            <label class="col-sm-3 control-label">Email Subject</label>
+                            <div class="col-sm-8">
+                                <select ng-model="ecurrency.TaskId" class="form-control" style="height:33px" required name="TaskId">
+                                    <option value="">- Select Task-</option>
+                                    <option ng-repeat="x in EstimationProduct" value="{{x.Id}}">{{x.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-5" style="margin-left:15px;">
+                                        <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
+                                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                                Available Tasks
+
+                                            </a>
+                                            <span ng-repeat="right in listA_Estimation | orderBy:'right.productname'">
+                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                                    {{right.Name}}
+                                                    <input id="{{right.Name}}" ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Name)" name="selectedA_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 v-center text-center">
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <div class="btn-group-vertical">
+                                            <button class="btn btn-outline-info" ng-click="AlltoA_Estimation()" id="btnAllA_Estimation"><i class="fa fa-angle-double-left"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="AlltoB_Estimation()" id="btnAllB_Estimation"><i class="fa fa-angle-double-right"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
+                                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                                Selected Task(s)
+
+                                            </a>
+                                            <span ng-repeat="right in listB_Estimation | orderBy:'right.productname'">
+                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                                    {{right.Name}}
+                                                    <input id="{{right.Name}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Name)" name="selectedB_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-10">
+                                <span data-ng-hide="editMode">
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn btn-circle blue" />
+                                </span>
+                                <span data-ng-show="editMode">
+                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-circle blue" />
+                                </span>
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-circle btn-default" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="content-header row">
+        <h3 class="col-lg-3">            Map Tasks   </h3>
+        <div class="col-lg-8">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="getallcurrencyconversions()">
+                    <img class="info-box-icon bg-aqua" src="~/img/Email.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-text">All Tasks</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{totaltask}}">{{totaltask}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="GetMappingTask(true)">
+                    <img class="info-box-icon bg-aqua" src="~/img/EmailMap.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-tex">Mapped Task</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{Mappedtask}}">{{Mappedtask}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box" style="cursor:pointer" ng-click="GetUnMappingTask(true)">
+                    <img class="info-box-icon bg-aqua" src="~/img/EmailNotmap.png" />
+                    <div class="info-box-content">
+                        <span class="info-box-tex">UnMapped Task</span>
+                        <span class="info-box-number" data-counter="counterup" data-value="{{UnMappedtask}}">{{UnMappedtask}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="content">
+        <div class="row">
+
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+
+        </div>
+    </section>
+</div>
+
+<style type="text/css">
+    .grouppadding {
+        padding: 5px 5px !important;
+        font-size: 11px !important;
+    }
+
+    .info-box-icon {
+        height: 68px;
+        width: 68px;
+    }
+    .info-box{
+        min-height: 68px;
+    }
+</style>

@@ -1,0 +1,115 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-app="reportApp" ng-controller="TaskController" class="whitebg">
+    <section class="content-header" style="padding-bottom:10px;">
+        <h1>            Task Management        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <div class="actions">
+                    <button data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+                </div>
+            </li>
+        </ol>
+    </section>
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:60%;margin-top:10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Task</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Task</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form novalidate class="form-horizontal" role="form" name="addcurrencyform">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Task Name</label>
+                            <div class="col-sm-6" style="margin-top:6px">
+                                <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.Name" />
+                                <input data-ng-hide="editMode" type="text" numberdotonly class="form-control" maxlength="8" ng-model="currency.Name" title="Select Role" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-6" style="margin-top:6px">
+                                <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.Description" />
+                                <input data-ng-hide="editMode" type="text" numberdotonly class="form-control" maxlength="8" ng-model="currency.Description" title="Select Role" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="SBU" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8" style="margin-top:6px">
+                                <label class="mt-checkbox mt-checkbox-outline">
+
+                                    <input type="checkbox" ng-model="TaskActive" /> IsActive
+
+                                    <span></span>
+                                </label>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="SBU" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8">
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" ng-model="IsSignOff" /> SignOff
+                                    <span></span>
+                                </label>
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-10">
+                                <span data-ng-hide="editMode">
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn btn-outline-info" />
+                                </span>
+                                <span data-ng-show="editMode">
+                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-outline-info" />
+                                </span>
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="row">
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+        </div>
+    </section>
+</div>
+

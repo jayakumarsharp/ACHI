@@ -1,0 +1,137 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-app="reportApp" ng-controller="OnboardingTaskController">
+
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:60%;margin-top:10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add OnBoarding Tasks</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit OnBoarding Tasks</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form name="upload_form" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Client Number</label>
+                            <div class="col-sm-8" style="margin-top:6px">
+                                <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.ClientNumber" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Mail Attachement</label>
+                            <div class="col-sm-6" style="margin-top:6px">
+                                <div ng-repeat="x in FileList">
+                                    <a target="_self" id="downloadpdf" href={{x.FilePath}} download={{x.FilePath}}>{{x.FileName}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Task Attachement</label>
+                            <div class="col-sm-6" style="margin-top:6px">
+                                <div ng-repeat="x in ManualFileList">
+                                    <a target="_self" id="downloadpdf" href={{x.FilePath}} download={{x.FilePath}}>{{x.FileName}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Task Attachement Upload</label>
+                            <div class="col-sm-6" style="margin-top:6px">
+
+                                <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="file" multiple name="file" />
+
+                                <i ng-show="upload_form.file.$error.required">*required</i><br>
+                                <i ng-show="upload_form.file.$error.maxSize">
+                                    File too large
+                                    {{file.size / 1000000|number:1}}MB: max 20M
+                                </i>
+
+                                <p>{{progress}}</p>
+
+
+                                @*<button ngf-select ng-model="file" multiple
+                                            accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+                                        Select Files
+                                    </button>
+                                    <br><br>
+                                    Files:
+                                    <ul>
+                                        <li ng-repeat="f in files" style="font:smaller">
+                                            {{f.name}} {{f.$errorParam}}
+                                            <span class="progress" ng-show="f.progress >= 0">
+                                                <div style="width:{{f.progress}}%"
+                                                     ng-bind="f.progress + '%'"></div>
+                                            </span>
+                                        </li>
+                                        <li ng-repeat="f in errFiles" style="font:smaller">
+                                            {{f.name}} {{f.$error}} {{f.$errorParam}}
+                                        </li>
+                                    </ul>
+                                    {{errorMsg}}*@
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Task Comments</label>
+                            <div class="col-sm-8" style="margin-top:6px">
+                                <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.TaskComments" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="SBU" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8" style="margin-top:6px">
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox"> SignOff
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-10">
+                                <span data-ng-hide="editMode">
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn btn-outline-info" />
+                                </span>
+                                <span data-ng-show="editMode">
+                                    <input type="button" value="Update" data-ng-click="upload()" class="btn btn-outline-info" />
+                                </span>
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-sm btn-circle btn-default" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="content-header" style="padding-bottom:10px;">
+        <h1>            OnBoarding Tasks</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+        </div>
+    </section>
+</div>
+
+
