@@ -174,9 +174,9 @@ namespace CRMManagement.Controllers
             List<Strategy> lst = _dbOperations.GetStrategyDatabyStrategyId(Strategynumber);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-       
 
-        
+
+
         public JsonResult GetStrategyApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
@@ -444,13 +444,13 @@ namespace CRMManagement.Controllers
         }
         public JsonResult roles(string roleId)
         {
-            _dbOperations.GetRoles(roleId);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<Roles> lst = _dbOperations.GetRoles(roleId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRights(string right)
         {
-            _dbOperations.GetRights(right);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<RightMaster> lst = _dbOperations.GetRights(right);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -820,4 +820,60 @@ public class Strategy
     public string LastModifiedDate { get; set; }
     public string LastModifiedBy { get; set; }
     public string Page { get; set; }
+}
+
+public class RightMaster
+{
+    public int id { get; set; }
+    public int RightID { get; set; }
+    public string MenuName { get; set; }
+    public string RightName { get; set; }
+    public string Path { get; set; }
+    public string Icon { get; set; }
+    public string ShowMenu { get; set; }
+
+}
+
+public class UserMaster
+{
+    public string ApprovedDate { get; set; }
+    public string Approvedby { get; set; }
+    public int AttemptedTries { get; set; }
+    public int BaseSkillId { get; set; }
+    public int BillingId { get; set; }
+    public string CheckerComment { get; set; }
+    public string CreatedBy { get; set; }
+    public string CreatedDate { get; set; }
+    public string CustomData { get; set; }
+    public string EmailId { get; set; }
+    public string FirstWorkingDate { get; set; }
+    public string IsADUser { get; set; }
+    public string LastAuthenticatedDate { get; set; }
+    public string LastUsedDate { get; set; }
+    public string LastWorkingDate { get; set; }
+    public int LocationId { get; set; }
+    public string MakerComment { get; set; }
+    public string MobileNumber { get; set; }
+    public string ModifiedBy { get; set; }
+    public string ModifiedDate { get; set; }
+    public string Password { get; set; }
+    public string PasswordExpiryDate { get; set; }
+    public string RoleId { get; set; }
+    public string Status { get; set; }
+    public string TypeId { get; set; }
+    public string UserBlockDate { get; set; }
+    public string UserExpiryDate { get; set; }
+    public string UserImage { get; set; }
+    public string UserName { get; set; }
+    public string userId { get; set; }
+}
+
+public class Roles
+{
+    public string CreatedBy { get; set; }
+    public string CreatedDate { get; set; }
+    public string ModifiedBy { get; set; }
+    public string ModifiedDate { get; set; }
+    public string RoleName { get; set; }
+    public int id { get; set; }
 }

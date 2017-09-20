@@ -427,7 +427,7 @@ public class DbOperations
 
     }
 
-    
+
     public List<StrategyApprover> Get_StrategyApprovalByuser(string userid)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
@@ -1870,30 +1870,47 @@ public class DbOperations
 
     #region Roles
 
-    public void GetRoles(string roleId)
+    public List<Roles> GetRoles(string roleId)
     {
-        try
+
+        List<Roles> lst = new List<Roles>();
+        string query = "Sp_GetRoles";
+        //open connection
+        if (this.OpenConnection() == true)
         {
-            if (roleId != null)
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
-                //models.Role.findAll({ where: { id: roleId } })
-                //   .then(function(roles) { deferred.resolve(roles); })
-                //   .catch (function (err) { deferred.reject(err) });
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new Roles
+                               {
+                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                   id = Convert.ToInt32(row["id"]),
+                                   ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                   RoleName = Convert.ToString(row["RoleName"])
+                               }).ToList();
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
             }
-            else
-            {
-                //console.log('Inside get all roles');
-                //models.Role.findAll().then(function(roles) {
-                //    deferred.resolve(roles);
-                //}).catch (function (err) {
-                //console.log('Error' + err);
-                //deferred.reject(err)
-                //});
-            }
+            //close connection
+            this.CloseConnection();
         }
-        catch (Exception e)
-        {
-        }
+
+        return lst;
     }
     public void GetUserRoles(string roleId)
     {
@@ -1908,33 +1925,56 @@ public class DbOperations
         {
         }
     }
-    public void GetRights(string roleId)
+
+    public List<RightMaster> GetRights(string roleId)
     {
-        try
+        List<RightMaster> lst = new List<RightMaster>();
+        string query = "Sp_GetRights";
+        //open connection
+        if (this.OpenConnection() == true)
         {
-            if (roleId != null && roleId != "")
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
-                //models.Right.findAll({ where: { RightID: roleId } })
-                // .then(function(right) { deferred.resolve(right); })
-                // .catch (function (err) { deferred.reject(err) });
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new RightMaster
+                               {
+                                   Icon = Convert.ToString(row["Icon"]),
+                                   id = Convert.ToInt32(row["id"]),
+                                   MenuName = Convert.ToString(row["MenuName"]),
+                                   Path = Convert.ToString(row["Path"]),
+                                   RightID = Convert.ToInt32(row["RightID"]),
+                                   RightName = Convert.ToString(row["RightName"]),
+                                   ShowMenu = Convert.ToString(row["ShowMenu"])
+                               }).ToList();
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
             }
-            else
-            {
-                //models.Right.findAll().then(function(rights) {
-                //    deferred.resolve(rights);
-                //}).catch (function (err) { deferred.reject(err) });
-            }
+            //close connection
+            this.CloseConnection();
         }
-        catch (Exception e)
-        {
-        }
+
+        return lst;
+
+
     }
 
     public void AddRole(string role)
     {
         try
         {
-
             //models.Role.create({
             //    RoleName: role.selectedRole
             //}).then(function(role) {
