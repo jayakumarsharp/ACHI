@@ -1917,6 +1917,44 @@ public class DbOperations
 
         try
         {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToInt32(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            //return lst;
             //models.User.findAll({ where: { RoleId: roleId } })
             //   .then(function(userroles) { deferred.resolve(userroles); })
             //   .catch (function (err) { deferred.reject(err) });
@@ -1949,10 +1987,10 @@ public class DbOperations
                                select new RightMaster
                                {
                                    Icon = Convert.ToString(row["Icon"]),
-                                   id = Convert.ToInt32(row["id"]),
+                                   id = Convert.ToString(row["id"]),
                                    MenuName = Convert.ToString(row["MenuName"]),
                                    Path = Convert.ToString(row["Path"]),
-                                   RightID = Convert.ToInt32(row["RightID"]),
+                                   RightID = Convert.ToString(row["RightID"]),
                                    RightName = Convert.ToString(row["RightName"]),
                                    ShowMenu = Convert.ToString(row["ShowMenu"])
                                }).ToList();
@@ -1971,119 +2009,190 @@ public class DbOperations
 
     }
 
-    public void AddRole(string role)
+    public int AddRole(string role, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_role", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_role", role));
+
+            if (this.OpenConnection() == true)
+            {
+                cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    //done
+    public void ModifyRoleRight(RoleRightMapping roleright)
     {
         try
         {
-            //models.Role.create({
-            //    RoleName: role.selectedRole
-            //}).then(function(role) {
-            //    console.log('Added role to master table')
-            //    deferred.resolve(role);
-            //})
+            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright.id));
 
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            {
+                foreach (RightMaster s in roleright.Rights)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.id));
+                    if (this.OpenConnection() == true)
+                    {
+                        //Execute command
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
         }
         catch (Exception e)
         {
+            this.CloseConnection();
         }
     }
 
-    public void ModifyRoleRight(string roleright)
+    //done
+    public void AddRoleRightMapping(RoleRightMapping roleright, out int errorcode, out string errordesc)
     {
         try
         {
-            //var dbdate = new Date();
-            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
-            //    console.log(JSON.stringify(roleright));
-            //    models.RoleRight.destroy({ where: { RoleID: roleright.id }, truncate: false })
-            //                   .then(function() {
-            //        for (var i = 0; i < roleright.Rights.length; i++)
-            //        {
-            //            console.log('Mapping Right ' + roleright.Rights[i].RightID + ' to Role ' + roleright.id);
-            //            models.RoleRight.create({
-            //                RoleID: roleright.id,
-            //                               RightID: roleright.Rights[i].RightID
-            //                           }).then(function(role) {
-            //            console.log('Added role-right to mapping table')
-            //                               deferred.resolve(role);
-            //        }).catch (function (err) {
-            //    console.log('Error: ' + err); deferred.reject(err);
-            //})
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            {
+                foreach (RightMaster s in roleright.Rights)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.RoleID));
+                    if (this.OpenConnection() == true)
+                    {
+                        //Execute command
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
 
         }
         catch (Exception e)
         {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
 
         }
-    }
 
-    public void AddRoleRightMapping(string roleright)
-    {
-        try
-        {
-            //var dbdate = new Date();
-            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
-            //    for (var i = 0; i < roleright.Rights.length; i++)
-            //    {
-            //        console.log('Mapping Right ' + roleright.Rights[i].RightID + ' to Role ' + roleright.RoleID);
-            //        models.RoleRight.create({
-            //            RoleID: roleright.RoleID,
-            //            RightID: roleright.Rights[i].RightID
-            //            }).then(function(role) {
-            //        console.log('Added role-right to mapping table')
-            //            deferred.resolve(role);
-            //    })
-            //                        .catch (function (err) {
-            //    console.log('Error: ' + err); deferred.reject(err);
-            //})
-            //    }
-        }
-        catch (Exception e)
-        {
-        }
     }
 
     public void DeleteRole(string roleright)
     {
         try
         {
-            //    console.log('Deleting role-right mapping');
-            //    models.RoleRight.destroy({ where: { RoleID: roleright.id }, truncate: false })
-            //                       .then(function() {
-            //        console.log('Deleting Role from Role master');
-            //        models.Role.destroy({ where: { id: roleright.id }, truncate: false });
-            //    }).then(function(data) {
-            //        console.log('Deleted role and role-right map successfully');
-            //        deferred.resolve(data);
-            //    }).catch (function (error) {
-            //    console.log('Error occurred when deleting role');
-            //    deferred.reject(data);
-            //});
+            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("SP_DeleteRole", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_id", roleright));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
         }
         catch (Exception e)
         {
+            this.CloseConnection();
         }
     }
-    public void GetRoleRightMapping(string roleId)
+    public List<RoleRightMapping> GetRoleRightMapping(string roleId)
     {
+        List<RoleRightMapping> lst = new List<RoleRightMapping>();
         try
         {
-            //    if (roleId != null && roleId != undefined)
-            //    {
-            //        console.log('Inside get GetRoleRightMapping for Role ' + roleId);
-            //        models.RoleRight.findAll({ where: { RoleID: roleId } })
-            //        .then(function(roleright) { deferred.resolve(roleright); })
-            //        .catch (function (err) { console.log('GetRoleRightMapping: ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    console.log('Inside get all GetRoleRightMapping');
-            //    models.RoleRight.findAll().then(function(rolerights) {
-            //        deferred.resolve(rolerights);
-            //    }).catch (function (err) { deferred.reject(err) });
-            //    }
+            string query = "SP_GetRoleRights";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RoleRightMapping
+                                   {
+                                       RightID = Convert.ToString(row["RightID"]),
+                                       RoleID = Convert.ToString(row["RoleID"]),
+                                   }).ToList();
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            return lst;
         }
         catch (Exception e)
         {
+            return null;
         }
     }
 
@@ -2097,6 +2206,45 @@ public class DbOperations
     {
         try
         {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToInt32(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            // return lst;
+
             //sequelize.query('Select EmailId from TBL_USER_MASTER',
             //    {
             //    type: sequelize.QueryTypes.SELECT
@@ -2117,6 +2265,45 @@ public class DbOperations
     {
         try
         {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToInt32(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            //return lst;
+
             //logger.info('Inside get User profile');
             //models.ADUser.findOne({ where: { userId: userId } })
             //    .then(function(aduser) { deferred.resolve(aduser); })
@@ -2128,9 +2315,46 @@ public class DbOperations
     }
     public void GetAllSBU()
     {
-
         try
         {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToInt32(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            //return lst;
             //logger.info('Inside get all SBUs');
             //models.SBU.findAll({
             //    where: { 'SBU': { $ne: 'All' } },

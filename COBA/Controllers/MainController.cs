@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace CRMManagement.Controllers
@@ -41,6 +42,14 @@ namespace CRMManagement.Controllers
         {
             return View();
         }
+        public ActionResult BusinessSector()
+        {
+            return View();
+        }
+        public ActionResult ProductType()
+        {
+            return View();
+        }
         public ActionResult RoleManagement()
         {
             return View();
@@ -54,11 +63,6 @@ namespace CRMManagement.Controllers
 
 
         public ActionResult Region()
-        {
-            return View();
-        }
-
-        public ActionResult ProductType()
         {
             return View();
         }
@@ -439,8 +443,8 @@ namespace CRMManagement.Controllers
         }
         public JsonResult GetRoleRightMapping(string roleId)
         {
-            _dbOperations.GetRoleRightMapping(roleId);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<RoleRightMapping> lst = _dbOperations.GetRoleRightMapping(roleId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
         public JsonResult roles(string roleId)
         {
@@ -454,30 +458,32 @@ namespace CRMManagement.Controllers
         }
 
 
-        public JsonResult AddRole(string role)
+        public JsonResult AddRole(RoleRightMapping obj)
         {
+            string errordesc = "";
+            int errocode = 0;
+            int id = _dbOperations.AddRole(obj.selectedRole, out errocode, out errordesc);
+            return Json(id, JsonRequestBehavior.AllowGet);
+        }
 
-            _dbOperations.AddRole(role);
+        public JsonResult AddRoleRightMapping([FromBody]RoleRightMapping obj)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddRoleRightMapping(obj, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddRoleRightMapping(string rolemenu)
+        public JsonResult ModifyRoleRight([FromBody]RoleRightMapping obj)
         {
-
-            _dbOperations.AddRoleRightMapping(rolemenu);
+            _dbOperations.ModifyRoleRight(obj);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ModifyRoleRight(string roleright)
-        {
-            _dbOperations.ModifyRoleRight(roleright);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult DeleteRole(string role)
+        public JsonResult DeleteRole(RoleRightMapping obj)
         {
 
-            _dbOperations.DeleteRole(role);
+            _dbOperations.DeleteRole(obj.id);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -822,15 +828,25 @@ public class Strategy
     public string Page { get; set; }
 }
 
+
+public class RoleRightMapping
+{
+    public string id { get; set; }
+    public string RoleID { get; set; }
+    public string RightID { get; set; }
+    public string selectedRole { get; set; }
+    public List<RightMaster> Rights { get; set; }
+}
+
 public class RightMaster
 {
-    public int id { get; set; }
-    public int RightID { get; set; }
-    public string MenuName { get; set; }
-    public string RightName { get; set; }
-    public string Path { get; set; }
     public string Icon { get; set; }
+    public string MenuName { get; set; }
+    public string Path { get; set; }
+    public string RightID { get; set; }
+    public string RightName { get; set; }
     public string ShowMenu { get; set; }
+    public string id { get; set; }
 
 }
 
