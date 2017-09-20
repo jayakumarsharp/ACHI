@@ -92,6 +92,30 @@ Select Id,Name,Description,IsSignOff,SignOffDate,SignoffBy,IsActive from tbl_tas
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure achi.SP_AddRole
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_AddRole`()
+BEGIN
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.Sp_AddRoleRightMapping
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_AddRoleRightMapping`()
+BEGIN
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.SP_DeleteRole
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DeleteRole`()
+BEGIN
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure achi.sp_delete_strategy_Approval
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_strategy_Approval`(
@@ -174,6 +198,38 @@ select ot.Id,t.RefNumber, ot.UniqueEmailId, ot.EmailId, ot.ClientNumber, ot.Emai
 ot.IsActive, ot.IsProcessed, ot.TaskId,t.Name, ot.TaskAttachement, ot.TaskComments, ot.CreatedDate, ot.CreatedBy, ot.TaskAssignedBy,
  ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.TaskId=t.Id 
 Where ot.Id=i_Id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.Sp_GetRights
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_GetRights`(
+	IN `i_roleid` VARCHAR(50)
+
+)
+BEGIN
+
+if(i_roleid!='') then
+Select * from tbl_right_master where RightId=i_roleid;
+else
+Select * from tbl_right_master;
+end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.Sp_GetRoles
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Sp_GetRoles`(
+	IN `i_roleId` VARCHAR(50)
+)
+BEGIN
+
+if(i_roleId !='') then
+select * from tbl_Role_Master where Id=i_roleId;
+else
+select * from tbl_Role_Master ;
+End if;
+
 END//
 DELIMITER ;
 
@@ -898,11 +954,16 @@ CREATE TABLE IF NOT EXISTS `tbl_right_master` (
   `Icon` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ShowMenu` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_right_master: ~0 rows (approximately)
+-- Dumping data for table achi.tbl_right_master: ~4 rows (approximately)
 DELETE FROM `tbl_right_master`;
 /*!40000 ALTER TABLE `tbl_right_master` DISABLE KEYS */;
+INSERT INTO `tbl_right_master` (`id`, `RightID`, `RightName`, `MenuName`, `Path`, `Icon`, `ShowMenu`) VALUES
+	(1, 1, 'User Management Read', 'User Management', 'Users', 'fa fa-users', 'true'),
+	(2, 2, 'User Management Write', 'User Management', 'Users', 'fa fa-users', 'true'),
+	(3, 3, 'Role Management Read', 'Role Management', 'Roles', 'fa fa-list-alt', 'true'),
+	(4, 4, 'Role Management Write', 'Role Management', 'Roles', 'fa fa-list-alt', 'true');
 /*!40000 ALTER TABLE `tbl_right_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_roleright_mapping
@@ -927,11 +988,13 @@ CREATE TABLE IF NOT EXISTS `tbl_role_master` (
   `ModifiedDate` datetime DEFAULT NULL,
   `ModifiedBy` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_role_master: ~0 rows (approximately)
+-- Dumping data for table achi.tbl_role_master: ~1 rows (approximately)
 DELETE FROM `tbl_role_master`;
 /*!40000 ALTER TABLE `tbl_role_master` DISABLE KEYS */;
+INSERT INTO `tbl_role_master` (`id`, `RoleName`, `CreatedDate`, `CreatedBy`, `ModifiedDate`, `ModifiedBy`) VALUES
+	(1, 'Admin', '2017-09-20 08:42:30', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_role_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_strategy
