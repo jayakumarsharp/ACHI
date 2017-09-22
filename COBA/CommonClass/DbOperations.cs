@@ -1096,8 +1096,6 @@ public class DbOperations
     #endregion Strategy
 
 
-
-
     #region Task
 
     public List<Tasks> GetTaskData()
@@ -1778,7 +1776,6 @@ public class DbOperations
 
     #endregion MapTask
 
-
     #region Role
 
     #endregion Role
@@ -1867,12 +1864,10 @@ public class DbOperations
     }
 
 
-
     #region Roles
 
     public List<Roles> GetRoles(string roleId)
     {
-
         List<Roles> lst = new List<Roles>();
         string query = "Sp_GetRoles";
         //open connection
@@ -3045,98 +3040,627 @@ public class DbOperations
 
     #region Country
 
-    public void GetCountryList(string TaskTypeId)
+    public List<CountryMaster> GetCountryList(string TaskTypeId)
     {
-        try
+        List<CountryMaster> lst = new List<CountryMaster>();
+        string query = "sp_getallcountry";
+        //open connection
+        if (this.OpenConnection() == true)
         {
-            if (TaskTypeId != null && TaskTypeId != "")
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
-                //    models.TaskType.findAll({ where: { TaskTypeId: TaskTypeId} }).then(function(roles){
-                //        deferred.resolve(roles);
-                //    }).catch (function(err){
-                //console.log('Error' + err);
-                //deferred.reject(err)
-                //     });
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new CountryMaster
+                               {
+                                   CountryName = Convert.ToString(row["CountryName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
             }
-            else
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddCountry(CountryMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Country", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_CountryName", opp.CountryName));
+
+            if (this.OpenConnection() == true)
             {
-                //models.TaskType.findAll().then(function(roles){
-                //    deferred.resolve(roles);
-                //}).catch (function(err){
-                //    console.log('Error' + err);
-                //    deferred.reject(err)
-                //    });
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-        catch (Exception e)
-        {
-        }
+
     }
 
-    public void AddCountry(string opp)
+    public void ModifyCountry(CountryMaster Opp, out int errorcode, out string errordesc)
     {
-        try
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_countrymaster", connection))
         {
-            //    models.TaskType.findAndCountAll({ where: { TaskName: opp.TaskName} }).then(function(result){
-            //        if (result.count > 0)
-            //        {
-            //            var data = { Error:''};
-            //        data.Error = "TaskType already exists";
-            //        deferred.reject(data);
-            //    }
-            //        else{
-            //        models.TaskType.create({
-            //            TaskName: opp.TaskName
-            //            }).then(function(user){
-            //            deferred.resolve(user);
-            //        }).catch (function(err){
-            //    console.log('AddTaskType' + err);
-            //    deferred.reject(err);
-            //});
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_CountryName", Opp.CountryName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
-        catch (Exception e)
-        {
-        }
     }
 
-    public void ModifyCountry(string Opp)
+    public void DeleteCountry(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        try
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_country", connection))
         {
-            //models.TaskType.update({ TaskName: Opp.TaskName},{ where: { TaskTypeId: Opp.TaskTypeId} }).then(function(user){
-            //    console.log('Update success TaskTypeList')
-            //        deferred.resolve(user);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
 
-            //}).catch (function(err){
-            //console.log('Modify TaskType' + err);
-            //deferred.reject(err);
-            //});
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-        catch (Exception e)
-        {
-        }
-    }
 
-    public void DeleteCountry(string TaskTypeId)
-    {
-        try
-        {
-            //    console.log("Deleting TaskType");
-            //    models.TaskType.destroy({ where: { TaskTypeId: TaskTypeId},truncate: false}).then(function(user){
-            //        deferred.resolve(user);
-            //        console.log("deleting TaskType success");
-            //    }).catch (function(Error){
-            //    console.log("Error occured when deleting the tasktype");
-            //    deferred.reject(Error);
-            //});
-        }
-        catch (Exception e)
-        {
-        }
     }
 
     #endregion Country
+
+
+
+    #region Region
+
+    public List<RegionMaster> GetRegionList(string TaskTypeId)
+    {
+        List<RegionMaster> lst = new List<RegionMaster>();
+        string query = "sp_getallRegion";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new RegionMaster
+                               {
+                                   RegionName = Convert.ToString(row["RegionName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddRegion(RegionMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Region", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_RegionName", opp.RegionName));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+
+    }
+
+    public void ModifyRegion(RegionMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Regionmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_RegionName", Opp.RegionName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteRegion(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Region", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Region
+
+
+    #region BusinessSector
+
+    public List<BusinessSector> GetBusinessSectorList(string TaskTypeId)
+    {
+        List<BusinessSector> lst = new List<BusinessSector>();
+        string query = "sp_getallBusinessSector";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessSector
+                               {
+                                   BusinessSectorName = Convert.ToString(row["Name"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessSector(BusinessSector opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessSector", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorName", opp.BusinessSectorName));
+
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void ModifyBusinessSector(BusinessSector Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessSector", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorName", Opp.BusinessSectorName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteBusinessSector(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessSector", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessSector
+
+
+    #region ProductType
+
+    public List<ProductMaster> GetProductList(string TaskTypeId)
+    {
+        List<ProductMaster> lst = new List<ProductMaster>();
+        string query = "sp_getallProduct";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ProductMaster
+                               {
+                                   ProductName = Convert.ToString(row["ProductType"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddProduct(ProductMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Product", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_ProductName", opp.ProductName));
+
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void ModifyProduct(ProductMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Productmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_ProductName", Opp.ProductName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteProduct(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Product", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+    #endregion ProductType
+
+
+    #region Application
+
+
+    public List<ApplicationMaster> GetApplicationList(string TaskTypeId)
+    {
+        List<ApplicationMaster> lst = new List<ApplicationMaster>();
+        string query = "sp_getallApplicationMaster";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ApplicationMaster
+                               {
+                                   ApplicationName = Convert.ToString(row["ApplicationName"]),
+                                   ApplicationId = Convert.ToString(row["ApplicationId"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddApplication(ApplicationMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_ApplicationMaster", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", opp.ApplicationId));
+                cmd.Parameters.Add(new MySqlParameter("i_ApplicationName", opp.ApplicationName));
+
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void ModifyApplication(ApplicationMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Applicationmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", Opp.ApplicationId));
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationName", Opp.ApplicationName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteApplication(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ApplicationMaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                //Execute command
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+    #endregion Application
+
 
 }
 

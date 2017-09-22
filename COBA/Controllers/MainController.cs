@@ -60,6 +60,11 @@ namespace CRMManagement.Controllers
             return View();
         }
 
+        public ActionResult ApplicationMaster()
+        {
+            return View();
+        }
+
 
 
         public ActionResult Region()
@@ -587,37 +592,183 @@ namespace CRMManagement.Controllers
         #endregion User
 
 
-
         #region Country
-
 
         public JsonResult GetAllCountry(string CountryId)
         {
-            _dbOperations.GetCountryList(CountryId);
-            return Json("", JsonRequestBehavior.AllowGet);
+          List<CountryMaster> lst=  _dbOperations.GetCountryList(CountryId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddCountry(string taskInfo)
+        public JsonResult AddCountry(CountryMaster taskInfo)
         {
-            _dbOperations.AddCountry(taskInfo);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddCountry(taskInfo, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-
-
-        public JsonResult ModifyCountry(string opp)
+        public JsonResult ModifyCountry(CountryMaster opp)
         {
-            _dbOperations.ModifyCountry(opp);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyCountry(opp, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult DeleteCountry(string CountryId)
         {
-            _dbOperations.DeleteCountry(CountryId);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteCountry(CountryId, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
+
         #endregion Country
+
+
+        #region Region
+
+        public JsonResult GetAllRegion(string RegionId)
+        {
+            List<RegionMaster> lst = _dbOperations.GetRegionList(RegionId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddRegion(RegionMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddRegion(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyRegion(RegionMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyRegion(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteRegion(string RegionId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteRegion(RegionId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Region
+
+
+        #region ProductType
+
+        public JsonResult GetAllProductType(string ProductTypeId)
+        {
+            List<ProductMaster> lst = _dbOperations.GetProductList(ProductTypeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddProductType(ProductMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddProduct(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyProductType(ProductMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyProduct(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteProductType(string ProductTypeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteProduct(ProductTypeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion ProductType
+
+
+
+
+        #region Application
+
+        public JsonResult GetAllApplication(string ApplicationId)
+        {
+            List<ApplicationMaster> lst = _dbOperations.GetApplicationList(ApplicationId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddApplication(ApplicationMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddApplication(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyApplication(ApplicationMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyApplication(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteApplication(string ApplicationId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteApplication(ApplicationId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Application
+
+
+
+        #region BusinessSector
+
+        public JsonResult GetAllBusinessSector(string BusinessSectorId)
+        {
+            List<BusinessSector> lst = _dbOperations.GetBusinessSectorList(BusinessSectorId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessSector(BusinessSector taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessSector(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyBusinessSector(BusinessSector opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyBusinessSector(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteBusinessSector(string BusinessSectorId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessSector(BusinessSectorId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessSector
+
 
 
 
@@ -893,3 +1044,43 @@ public class Roles
     public string RoleName { get; set; }
     public int id { get; set; }
 }
+
+
+public class ApplicationMaster
+{
+    public string Id { get; set; }
+    public string ApplicationId { get; set; }
+    public string ApplicationName { get; set; }
+
+}
+
+
+public class CountryMaster
+{
+    public string Id { get; set; }
+    public string CountryName { get; set; }
+
+}
+
+public class RegionMaster
+{
+    public string Id { get; set; }
+    public string RegionName { get; set; }
+
+}
+
+public class ProductMaster
+{
+    public string Id { get; set; }
+    public string ProductName { get; set; }
+
+}
+
+
+public class BusinessSector
+{
+    public string Id { get; set; }
+    public string BusinessSectorName { get; set; }
+
+}
+
