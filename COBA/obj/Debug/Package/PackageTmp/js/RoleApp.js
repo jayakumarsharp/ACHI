@@ -15,16 +15,16 @@
     //$scope.DisplayMessage = '';
 
     $scope.IsPageReadOnly = function () {
-        var isRead = true;
-        $scope.IsReadOnly = true;
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName == 'Role Management Write') {
-                isRead = false;
-            }
-        })
-        if (!isRead) {
-            $scope.IsReadOnly = false;
-        }
+        //var isRead = true;
+        //$scope.IsReadOnly = true;
+        //angular.forEach($rootScope.RightList, function (value, key) {
+        //    if (value.RightName == 'Role Management Write') {
+        //        isRead = false;
+        //    }
+        //})
+        //if (!isRead) {
+        //    $scope.IsReadOnly = false;
+        //}
     },
         $scope.GetAllRights = function () {
             $scope.Rights = [];
@@ -136,7 +136,7 @@
             currentRole.Rights = $scope.listB;
             RoleFactory.AddRole(currentRole).success(function (data) {
 
-                currentRole.RoleID = data.id;
+                currentRole.RoleID = data;
 
                 $scope.role = currentRole;
 
@@ -149,7 +149,7 @@
                     $scope.GetRoleRightMappings();
                     $scope.role = {};
                     // $scope.adduserform.$setPristine(); //for form reset
-                    toaster.pop('success', "Success", "Role added successfully", null);
+                    //toaster.pop('success', "Success", "Role added successfully", null);
                     $('#AddEditRole').modal('hide');
                     $scope.listA = [];
                     $scope.listB = [];
@@ -160,7 +160,7 @@
             })
         }
         else {
-            toaster.pop('warning', "Warning", "Select the Rights", null);
+            //toaster.pop('warning', "Warning", "Select the Rights", null);
             //alert('Select the Rights');
             // $('#messageModal').modal('show');
         }
@@ -168,20 +168,19 @@
 
 
     $scope.ModifyRoleRight = function (data) {
-        RoleFactory.GetUser($rootScope.UserInfo.user.userId).success(function (userrole) {
-            if (userrole.RoleId == data.id) {
-                $scope.EditedRole = data;
-                $('#roleChange').modal('show');
-            }
-            else {
+        //RoleFactory.GetUser($rootScope.UserInfo.user.userId).success(function (userrole) {
+        //    if (userrole.RoleId == data.id) {
+        //        $scope.EditedRole = data;
+        //        $('#roleChange').modal('show');
+        //    }
+        //    else {
                 $scope.role = data;
                 $scope.role.Rights = $scope.listB;
                 RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
-
                     $scope.GetAllRoles();
                     //reset form
                     $scope.role = {};
-                    toaster.pop('success', "Success", "Role modified successfully", null);
+               //     toaster.pop('success', "Success", "Role modified successfully", null);
                     $('#AddEditRole').modal('hide');
                     $scope.listA = [];
                     $scope.listB = [];
@@ -189,10 +188,10 @@
                 }).error(function (error) {
                     console.log('Error modifying Role-right: ' + error);
                 });
-            }
-        }).error(function (error) {
-            console.log('Error getting user roles: ' + error);
-        });
+            //}
+        //}).error(function (error) {
+        //    console.log('Error getting user roles: ' + error);
+        //});
     };
     $scope.ModifySelfUser = function () {
         $('#roleChange').modal('hide');
@@ -230,14 +229,14 @@
                 //$scope.DisplayMessage = 'SThis role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.';
                 //$('#messageModal').modal('show');
                 //alert('This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.');
-                toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+                //toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
                 $('#confirmModal').modal('hide');
             }
             else {
                 RoleFactory.DeleteRole(currentRole).success(function () {
                     $scope.GetAllRoles();
                     $scope.RoleRight = null;
-                    toaster.pop('success', "Success", "Role deleted successfully", null);
+                    //toaster.pop('success', "Success", "Role deleted successfully", null);
                     $('#confirmModal').modal('hide');
 
                 }).error(function (error) {
@@ -279,14 +278,16 @@
             RoleFactory.GetRoleRightMapping($scope.role.id).success(function (data) {
                 for (i = 0; i < data.length; i++) {
                     var rightName = $scope.GetRightName(data[i].RightID);
-                    for (var j = 0; j < $scope.listB.length; j++) {
-                        if (data[j].RightID == $scope.listB[j].RightID) {
-                            $scope.listB.splice(j, 1);
-                        }
+                    if (rightName != '') {
+                        //for (var j = 0; j < $scope.listB.length; j++) {
+                        //    if (data[j].RightID == $scope.listB[j].RightID) {
+                        //        $scope.listB.splice(j, 1);
+                        //    }
+                        //}
+                        $scope.listB.push({ 'RightID': data[i].RightID, 'RightName': rightName });
+                        var delId = arrayObjectIndexOf(unselectedRights, data[i].RightID);
+                        unselectedRights.splice(delId, 1);
                     }
-                    $scope.listB.push({ 'RightID': data[i].RightID, 'RightName': rightName });
-                    var delId = arrayObjectIndexOf(unselectedRights, data[i].RightID);
-                    unselectedRights.splice(delId, 1);
                 }
             });
             $scope.listA = unselectedRights;

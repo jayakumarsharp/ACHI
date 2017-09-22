@@ -27,3 +27,32 @@ ReportApp.factory('TaskService', function ($http) {
     return TaskServiceFactory;
 });
 
+
+
+
+ReportApp.service('ApiCall', ['$http', function ($http) {
+
+    var result;
+    this.MakeApiCall = function (Url, type, jsondata) {
+        //var Jsondata = JSON.stringify(data);
+
+        if (type == 'GET') {
+
+            //return $http.get(Url, jsondata);
+
+            return $http({
+                url: Url,
+                method: type,
+                params: jsondata
+            });
+        } else if (type == 'POST') {
+            return $http.post(Url, jsondata);
+
+            //return $http({
+            //    url: Url,
+            //    method: type,
+            //    data: jsondata
+            //});
+        }
+    };
+}]);

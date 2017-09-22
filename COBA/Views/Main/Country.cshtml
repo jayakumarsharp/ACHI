@@ -1,30 +1,56 @@
-﻿<!-- BEGIN PAGE BREADCRUMBS -->
-<div ng-controller="CountryController"   class="box box-info" style="margin-top:20px">
-    <div class="box-header with-border">
-        <h3 class="box-title">Country Management</h3>
-        <hr />
-        <div class="form-group" ng-show="!IsReadOnly" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
-            <label for="inputTask" class="col-md-2 col-md-offset-2  control-label">Country</label>
-            <div class="col-md-4">
-                <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=Country.TaskName>
+﻿<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
             </div>
-            <div>
-                <button title="Clear Task name field" data-ng-click="cancel()" class="btn btn-sm btn-info btn-flat pull-right">Clear </button>
+            <div class="modal-body">
+                Are you sure you want to delete?
             </div>
-            <div>
-                <button title="Update Task" data-ng-show="editMode" data-ng-click="UpdateCountry(Country)" class="btn btn-sm btn-info btn-flat pull-right">Update</button><!--<i class="fa fa-plus" style="color:white"></i>-->
-                <button title="Add new task" data-ng-hide="editMode" data-ng-click="add(Country)" class="btn btn-sm btn-info btn-flat pull-right">Add <i class="fa fa-plus" style="color:white"></i></button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-ng-click="delete()">Ok</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
             </div>
-
-        </div>
-    </div>
-    <div class="box-body">
-        <div class="mnbxcont">
-            <div data-ag-grid="CountryGrid" class="ag-blue" style="color:#000;height: 400px !important;width:50%;margin-left:20%"></div>
         </div>
     </div>
 </div>
 
+
+<div class="whitebg">
+    <section class="content-header" style="padding-bottom:10px;"></section>
+
+
+    <div ng-controller="CountryMasterController" class="nav-tabs-custom">
+        <section class="content-header" style="padding-bottom:10px;">
+            <h1>             Country Master Management      </h1>
+            <div style="margin-top:20px;" class="form-group" ng-show="!IsReadOnly" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
+                <div class="form-group">
+                    @*<label for="inputTask" class="col-md-2 control-label">CountryId</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=CountryMaster.CountryId>
+                    </div>*@
+
+                    <label for="inputTask" class="col-md-2 control-label">Country</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=CountryMaster.CountryName>
+                    </div>
+                    <div class="col-md-2">
+                        <button title="Clear Task name field" data-ng-click="cancel()" class="btn btn-sm btn-info btn-flat pull-right btn-outline-info">Clear </button>
+                        <button title="Update Task" data-ng-show="editMode" data-ng-click="UpdateCountryMaster(CountryMaster)" class="btn btn-sm btn-info btn-flat pull-right btn-outline-info">Update</button><!--<i class="fa fa-plus" style="color:white"></i>-->
+                        <button title="Add new task" data-ng-hide="editMode" data-ng-click="add(CountryMaster)" class="btn btn-sm btn-info btn-flat pull-right btn-outline-info">Add <i class="fa fa-plus" style="color:white"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="content" style="margin-top:30px;">
+            <div id="grid1" ui-grid="CountryMasterGrid" ui-grid-pagination class="grid"></div>
+
+        </section>
+    </div>
+</div>
 
 
 
