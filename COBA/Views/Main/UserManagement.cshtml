@@ -16,14 +16,8 @@
         </section>
 
         <section class="content">
-
-
-
-
-            <div data-ag-grid="userGrid" class="ag-blue" style="color:#000;height: 350px;"></div>
+            <div ui-grid="userGrid" ui-grid-pagination class="grid"></div>
         </section>
-
-
 
         <div class="modal fade" id="userModel" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:60%;height:400px">
@@ -41,70 +35,36 @@
                                 </div>
                                 <div class="box-body">
                                     <div class="mnbxcont" style="margin:0px 20px;">
-                                        <div data-ag-grid="addUserGrid" class="ag-blue" style="color:#000;height: 250px;"></div>
+                                        <div ui-grid="addUserGrid" ui-grid-pagination class="grid"></div>
                                     </div>
                                 </div>
 
                                 <div class="box-body" style="margin-top:20px;">
-                                    <!-- <div class="col-xs-4">
-                                        <select class="form-control" name="ddlType" ng-model="user.selectedType" ng-change="stateChanged(user.selectedType)" ng-options="item.TypeName for item in Types"
-                                            title="Select Type" style="width:100%;font-size: 0.8em" required>
-                                                        <option value="">- Select User Type -</option>
-                                                    </select>
-                                    </div> -->
                                     <div class="col-xs-4">
                                         <select class="form-control" name="ddlRole" ng-model="user.selectedRole" ng-options="item.RoleName for item in Roles" title="Select Role" style="width:100%;font-size: 0.8em" required>
                                             <option value="">- Select Role -</option>
                                         </select>
                                     </div>
-                                    <!-- <div class="col-xs-4">
-                                        <select class="form-control" name="ddlSkill" ng-model="user.selectedSkill" ng-options="item.BaseSkill for item in BaseSkills"
-                                            title="Select Base Skill" style="width:100%;font-size: 0.8em">
-                                                        <option value="">- Select Base Skill -</option>
-                                                    </select>
-                                    </div>                                                       -->
+
+                                    <div class="col-xs-4">
+                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedSBU" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                                            <option value="">- Select User Region -</option>
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div class="box-body">
 
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedSBU" ng-options="item.SBU for item in SBU" title="Select User SBU" style="width:100%;font-size: 0.8em" multiple required>
-                                            <option value="">- Select User SBU -</option>
+                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedLocation" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                            <option value="">- Select BusinessSector -</option>
                                         </select>
                                     </div>
-                                    <!-- <div class="col-xs-4">
-                                        <select class="form-control" name="ddlBill" ng-model="user.selectedBilling" ng-change="stateChanged(user.selectedBilling)" ng-options="item.Billing for item in Billings"
-                                            title="Select Billing type" style="width:100%;font-size: 0.8em">
-                                                        <option value="">- Select Billing Type -</option>
-                                                    </select>
-                                    </div>     -->
-                                    <!-- <div class="col-xs-4">
-                                        <select class="form-control" name="ddlBillingSBU" ng-model="user.selectedBillingSBU" ng-options="item.SBU for item in BillingSBU" title="Select Billing SBU" style="width:100%;font-size: 0.8em"
-                                            multiple>
-                                                        <option value="">- Select Billing SBU -</option>
-                                                    </select>
-                                    </div>                              -->
-                                </div>
-                                <div class="box-body">
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedLocation" ng-options="item.Location for item in Locations" title="Select Location" style="width:100%;font-size: 0.8em">
-                                            <option value="">- Select Location -</option>
+                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedBilling" ng-options="item.CountryName for item in CountryMasterList" title="Select Division" style="width:100%;font-size: 0.8em" required>
+                                            <option value="">- Select Country -</option>
                                         </select>
                                     </div>
-
-                                    <!-- <div class="col-xs-4">
-                                        <div class="input-group date" datetimepicker ng-model="user.FirstWorkingDate">
-                                            <input name="addFWD" type='text' class="form-control" readonly title="Select First Working Date" />
-                                            <span name="addFWDCal" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="input-group date" datetimepicker ng-model="user.LastWorkingDate">
-                                            <input name="addLWD" type='text' class="form-control" readonly title="Select Last Working Date"/>
-                                            <span name="addLWDCal" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                         </form>
@@ -158,72 +118,74 @@
                                 {{GetRoleName(User.RoleId)}}
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="SBU" class="col-sm-5 control-label">User SBU</label>
-                            <div class="col-sm-7" style="margin-top:6px;">
-                                <ul ng-repeat="item in User.selectedSBU">
-                                    er
-                                    <li>{{GetSBUName(item.SBUID)}}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- <div class="form-group">
-                            <label for="SBU" class="col-sm-5 control-label">Billing SBU</label>
-                            <div class="col-sm-7" style="margin-top:6px;">
-                                <ul ng-repeat="item in User.selectedBillingSBU">
-                                    <li>{{GetSBUName(item.SBUID)}}</li>
-                                </ul>
-                            </div>
-                        </div>                       -->
-                        <div class="form-group">
-                            <label for="Status" class="col-sm-5 control-label">Status</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{User.Status}}
-                            </div>
-                            /d
-                            /d
-                        </div>
-                        <!-- <div class="form-group">
-                            <label for="Role" class="col-sm-5 control-label">Billing Type</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{GetBillingName(User.BillingId)}}
-                            </div>
-                        </div> -->
-                        <!-- <div class="form-group">
-                            <label for="Role" class="col-sm-5 control-label">Base Skill</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{GetBaseSkillName(User.BaseSkillId)}}
-                            </div>
-                        </div> -->
-                        <div class="form-group">
-                            <label for="Role" class="col-sm-5 control-label">Location</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{GetLocationName(User.LocationId)}}
-                            </div>
-
-                        </div>
-                        <!-- <div class="form-group">
-                            <label for="Role" class="col-sm-5 control-label">First Working Date</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{User.FirstWorkingDate}}
-                            </div>
-                        </div> -->
-                        <!-- <div class="form-group">
-                            <label for="Status" class="col-sm-5 control-label">Last Working Date</label>
-                            <div class="col-sm-7" style="margin-top:6px">
-                                {{User.LastWorkingDate}}
-                            </div>
-                        </div> -->
-                        </form>
                     </div>
+                    <div class="form-group">
+                        <label for="SBU" class="col-sm-5 control-label">User SBU</label>
+                        <div class="col-sm-7" style="margin-top:6px;">
+                            <ul ng-repeat="item in User.selectedSBU">
+                                er
+                                <li>{{GetSBUName(item.SBUID)}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="SBU" class="col-sm-5 control-label">Billing SBU</label>
+                        <div class="col-sm-7" style="margin-top:6px;">
+                            <ul ng-repeat="item in User.selectedBillingSBU">
+                                <li>{{GetSBUName(item.SBUID)}}</li>
+                            </ul>
+                        </div>
+                    </div>                       -->
+                    <div class="form-group">
+                        <label for="Status" class="col-sm-5 control-label">Status</label>
+                        <div class="col-sm-7" style="margin-top:6px">
+                            ar
+                            {{User.Status}}
+                        </div>
+                        /d
+                        /d
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="Role" class="col-sm-5 control-label">Billing Type</label>
+                        <div class="col-sm-7" style="margin-top:6px">
+                            {{GetBillingName(User.BillingId)}}
+                        </div>
+                    </div> -->
+                    <!-- <div class="form-group">
+                        <label for="Role" class="col-sm-5 control-label">Base Skill</label>
+                        <div class="col-sm-7" style="margin-top:6px">
+                            {{GetBaseSkillName(User.BaseSkillId)}}
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        p"
+                        be
+                        <label for="Role" class="col-sm-5 control-label">Location</label>
+                        <div class="col-sm-7" style="margin-top:6px">
+                            {{GetLocationName(User.LocationId)}}
+                        </div>
+                    </div>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" name="closeUserView" data-dismiss="modal">Close</button>
-                </div>
+                <!-- <div class="form-group">
+                    <label for="Role" class="col-sm-5 control-label">First Working Date</label>
+                    <div class="col-sm-7" style="margin-top:6px">
+                        {{User.FirstWorkingDate}}
+                    </div>
+                </div> -->
+                <!-- <div class="form-group">
+                    <label for="Status" class="col-sm-5 control-label">Last Working Date</label>
+                    <div class="col-sm-7" style="margin-top:6px">
+                        {{User.LastWorkingDate}}
+                    </div>
+                </div> -->
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" name="closeUserView" data-dismiss="modal">Close</button>
             </div>
         </div>
-
-
     </div>
 
 

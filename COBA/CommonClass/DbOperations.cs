@@ -2920,51 +2920,6 @@ public class DbOperations
     }
 
 
-    public void GetBillingOptions(string userId)
-    {
-        try
-        {
-            //    if (userId != null && userId != undefined)
-            //    {
-            //        logger.info('Inside get billing for user ' + userId);
-            //        models.Billing.findOne({ where: { Id: userId } })
-            //            .then(function(bill) { deferred.resolve(bill); })
-            //            .catch (function (err) { logger.info('GetBillingOptions error: ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    logger.info('Inside get all billing');
-            //    models.Billing.findAll().then(function(bill) {
-            //        deferred.resolve(bill);
-            //    }).catch (function (err) { logger.info('GetAllBillingOptions error: ' + err); deferred.reject(err) });
-            //    }
-        }
-        catch (Exception e)
-        {
-        }
-    }
-    public void GetLocation(string userId)
-    {
-        try
-        {
-            //    if (userId != null && userId != undefined)
-            //    {
-            //        logger.info('Inside get Location for user ' + userId);
-            //        models.Location.findOne({ where: { Id: userId } })
-            //            .then(function(loc) { deferred.resolve(loc); })
-            //            .catch (function (err) { logger.info('GetLocation error: ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    logger.info('Inside get all billing');
-            //    models.Location.findAll().then(function(locs) {
-            //        deferred.resolve(locs);
-            //    }).catch (function (err) { logger.info('GetAllLocations error: ' + err); deferred.reject(err) });
-            //    }
-        }
-        catch (Exception e)
-        {
-        }
-    }
-
     public void GetInactiveUsers()
     {
         try

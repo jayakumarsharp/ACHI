@@ -1,6 +1,7 @@
 ﻿//agGrid.initialiseAgGridWithAngular1(angular);
 //var UserApp = angular.module('userApp', [ 'agGrid']);
-ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout) {
+ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory) {
+
     $scope.UpdatedUserTypes = [];
     $scope.selectedType = {};
     $scope.selectedSBU = {};
@@ -34,12 +35,14 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     //---------------GRID------------------//
 
     $scope.addUserGrid = {
+        paginationPageSizes: [10, 20, 30, 40, 50, 60],
+        paginationPageSize: 10,
         columnDefs: [
-            { headerName: "UserID", field: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Name", field: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Email", field: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { headerName: "UserID", name: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { headerName: "Name", name: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { headerName: "Email", name: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
             {
-                headerName: "", field: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
+                headerName: "", name: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
                 cellRenderer: function (params) {
                     if ($scope.UpdatedUserTypes.length > 0) {
                         angular.forEach($scope.UpdatedUserTypes, function (value, key) {
@@ -51,27 +54,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                     return '';
                 }
             }
-        ],
-
-        rowData: null,
-        enableFilter: true,
-        rowHeight: 25,
-        headerHeight: 30,
-        pinnedColumnCount: 1,
-        enableColResize: true,
-        rowSelection: 'multiple',
-        suppressRowClickSelection: true,
-        suppressHorizontalScroll: true,
-        suppressCellSelection: true,
-        onRowSelected: function (event) {
-            $scope.chkChanged(event.node);
-        },
-        onGridReady: function (event) {
-            $scope.addUserGrid.api.sizeColumnsToFit();
-            //$timeout(function () {
-            // angular.element(document.querySelector('#loader')).addClass('hide');
-            //}, 500);
-        }
+        ]
     };
 
     $rootScope.$on("toggle", function () {
@@ -83,33 +66,22 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
 
     $scope.userGrid = {
+        paginationPageSizes: [10, 20, 30, 40, 50, 60],
+        paginationPageSize: 10,
         columnDefs: [
-            { headerName: "UserID", field: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Name", field: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Email", field: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Type", field: "Type", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Role", field: "Role", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "UserID", field: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "Name", field: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "Email", field: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "Type", field: "Type", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "Role", field: "Role", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
             //{ headerName: "SBU", field: "SBU", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Status", field: "Status", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "Status", field: "Status", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
             {
                 headerName: "", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' }, field: "Action", cellRenderer: function (params) {
                     return "<a data-ng-click=\"GetUser('" + params.data.userId + "')\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"EditUser('" + params.data.userId + "')\" href=\"javascript:;\" ng-show=\"!IsReadOnly\"> Edit</a>";
                 }
             },
-        ],
-        angularCompileRows: true,
-        rowData: null,
-        enableFilter: true,
-        rowHeight: 25,
-        headerHeight: 30,
-        pinnedColumnCount: 1,
-        enableColResize: true,
-        suppressRowClickSelection: true,
-        suppressHorizontalScroll: true,
-        suppressCellSelection: true,
-        onGridReady: function (event) {
-            $scope.userGrid.api.sizeColumnsToFit();
-        }
+        ]
     };
 
     //---------------END GRID---------------//
@@ -161,10 +133,8 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             angular.forEach(data, function (value, key) {
                 $scope.UserTypes.push({ 'userId': value.Userid, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': 6 });
             });
-            $scope.addUserGrid.api.setRowData($scope.UserTypes);
-            $timeout(function () {
-                $scope.addUserGrid.api.refreshView();
-            }, 100);
+            $scope.addUserGriddata = $scope.UserTypes;
+
         };
 
     function ConvertToGridDate(inDate) {
@@ -193,11 +163,32 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     }
 
     $scope.GetAllRoles = function () {
-        UserFactory.GetRoles().success(function (data) {
+        RoleFactory.GetRoles().success(function (data) {
             $scope.Roles = data;
         }).error(function (error) {
             $scope.Error = error;
         });
+
+        ApiCall.MakeApiCall("GetAllBusinessSector?BusinessSectorId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.BusinessSectorMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.CountryMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
+        ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.RegionMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
     };
 
     $scope.GetAllBillingOptions = function () {
@@ -352,7 +343,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             angular.forEach($scope.Users, function (value, key) {
                 $scope.UsersView.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'Type': $scope.GetTypeName(value.TypeId), 'Role': $scope.GetRoleName(value.RoleId), 'Status': value.Status })
             })
-            $scope.userGrid.api.setRowData($scope.UsersView);
+            $scope.userGriddata = $scope.UsersView;
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -480,6 +471,10 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         $timeout(function () {
             angular.element(document.querySelector('#loader')).addClass('hide');
         }, 2500);
+        window.setTimeout(function () {
+            $(window).resize();
+            $(window).resize();
+        }, 1000);
 
     };
 
@@ -546,16 +541,12 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.showSelectedUsers = function (isChecked) {
         if (isChecked) {
             console.log('setting row data');
-            $scope.addUserGrid.api.setRowData($scope.UpdatedUserTypes);
-            $timeout(function () {
-                $scope.addUserGrid.api.refreshView();
-            }, 100);
+            $scope.addUserGriddata = $scope.UpdatedUserTypes;
+
         }
         else {
-            $scope.addUserGrid.api.setRowData($scope.UserTypes);
-            $timeout(function () {
-                $scope.addUserGrid.api.refreshView();
-            }, 100);
+            $scope.addUserGriddata = $scope.UserTypes;
+
         }
     }
 
@@ -729,27 +720,20 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         });
     };
 
-    //$scope.GetADUsers();
-    //$scope.GetAllTypes();
-    //$scope.GetAllSBU();
-    //$scope.GetAllRoles();
-    //$scope.GetAllBillingOptions();
-    //$scope.GetAllBaseSkillOptions();
-    //$scope.GetAllLocations();
-    //$scope.GetAllUsers();
+
+    $scope.GetAllRoles();
+
     //$scope.IsUserSCHead();
     //$scope.IsPageReadOnly();
 });
 
 ReportApp.factory('UserFactory', function ($http) {
-    var Userurl = BaseURL + 'users';
-    var RoleUrl = BaseURL + 'Roles';
     var UserFactory = {
         GetTypes: function () {
-            return $http.get(Userurl + '/types');
+            return $http.get('/types');
         },
         GetUsers: function () {
-            return $http.get(Userurl + '/');
+            return $http.get('/');
         },
         GetRoles: function () {
             return $http.get(RoleUrl + '/roles');
