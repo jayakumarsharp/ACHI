@@ -2412,27 +2412,48 @@ public class DbOperations
         {
         }
     }
-    public void GetUser(string userId)
+
+    public List<UserMaster> GetUser(string userId)
     {
-        try
+        List<UserMaster> lst = new List<UserMaster>();
+        string query = "sp_getusers";
+        //open connection
+        if (this.OpenConnection() == true)
         {
-            //    if (userId != null && userId != undefined)
-            //    {
-            //        logger.info('Inside get all users ' + userId);
-            //        models.User.findOne({ where: { userId: userId } })
-            //            .then(function(user) { deferred.resolve(user); })
-            //            .catch (function (err) { logger.info('GetUser ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    logger.info('Inside get all users');
-            //    models.User.findAll().then(function(users) {
-            //        deferred.resolve(users);
-            //    }).catch (function (err) { deferred.reject(err) });
-            //    }
+            //create command and assign the query and connection from the constructor
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new UserMaster
+                               {
+                                   userId = Convert.ToString(row["Userid"]),
+                                   UserName = Convert.ToString(row["username"]),
+                                   EmailId = Convert.ToString(row["EmailId"]),
+                                   RoleId = Convert.ToString(row["RoleId"]),
+                                   BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                   CountryId = Convert.ToString(row["CountryId"]),
+                                   RegionId = Convert.ToString(row["RegionId"]),
+
+                               }).ToList();
+
+                    }
+                }
+                //Execute command
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
         }
-        catch (Exception e)
-        {
-        }
+        return lst;
     }
     public void GetUsersByTypes(string typeids)
     {
@@ -2524,84 +2545,48 @@ public class DbOperations
         {
         }
     }
-    public void CreateUser(string user)
+    public void CreateUser(UserMaster user, out int errorcode, out string errordesc)
     {
         try
         {
-            //    var dbdate = new Date();
-            //    var createdDate = moment(dbdate).add(30, 'days').format('L LT');
-            //    var hash_parts = Utility.UtilityModel.create_password(user.password);
-            //    var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
-            //    this.GetUser(user.userId)
-            //        .then(function(userdtl) {
-            //        models.sequelize.transaction().then(function(t) {
-            //            if (t != null && t != undefined)
-            //            {
-            //                var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //                var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //                var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_createuser", connection))
+            {
 
-            //                var fwd = moment.utc(user.FirstWorkingDate).toDate();
-            //                user.FirstWorkingDate = moment(fwd).format('YYYY-MM-DD HH:mm:ss');
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
 
-            //                if (user.LastWorkingDate != null)
-            //                {
-            //                    var lwd = moment.utc(user.LastWorkingDate).toDate();
-            //                    user.LastWorkingDate = moment(lwd).format('YYYY-MM-DD HH:mm:ss');
-            //                }
-            //                logger.info('Creating user: \nUserId: ' + user.userId + '\nUserName: ' + user.UserName + '\nUserType: ' + user.selectedType + '\nUSerSBU: ' + user.SBU + '\nUserRole:' + user.Role +
-            //                    '\nBillingId: ' + (user.Billing == undefined ? null : user.Billing) + '\nBaseSkillId: ' + (user.BaseSkill == undefined ? null : user.BaseSkill) + '\nLocationId: ' + (user.Location == undefined ? null : user.Location) + '\nFWD: ' + user.FirstWorkingDate + '\nLastWorkingDate: ' + user.LastWorkingDate);
-            //                models.User.create({
-            //                    userId: user.userId, UserName: user.UserName, TypeId: user.selectedType, RoleId: user.Role, Password: hashedpwd, EmailId: user.EmailId,
-            //                            BillingId: (user.Billing == undefined ? null : user.Billing), BaseSkillId: (user.BaseSkill == undefined ? null : user.BaseSkill), LocationId: (user.Location == undefined ? null : user.Location), FirstWorkingDate: user.FirstWorkingDate, LastWorkingDate: user.LastWorkingDate,
-            //                            MobileNumber: user.mobileNumber, CustomData: 'NA', Status: 'Active', UserExpiryDate: userExpiryDate, IsADUser: 'Yes',
-            //                            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
-            //                            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
-            //                            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
-            //                            CheckerComment: ''
-            //                        }, { transaction: t })
-            //                            .then(function(usercreate) {
-            //                    models.UserPasswordHistory.create({
-            //                        SessionTokenId: uuid.v1(), UserId: user.userId,
-            //                                    Password: hashedpwd, CreatedDate: createdDate
-            //                                })
-            //                                    .then(function(usercreated) {
-            //                        logger.info('user created successfully');
 
-            //                        var tempArr = [];
-            //                        for (var i = 0; i < user.SBU.length; i++)
-            //                        {
-            //                            tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i].id });
-            //                    }
-            //                    logger.info('SBUs:\n' + JSON.stringify(user.SBU));
-            //                    models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
-            //                        logger.info('Added SBUs');
-            //                        if (user.BillingSBU != undefined)
-            //                        {
-            //                            models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
-            //                                                    .then(function(usersbus) {
-            //                                var tempArr2 = [];
-            //                                for (var i = 0; i < user.BillingSBU.length; i++)
-            //                                {
-            //                                    tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i].id });
-            //                            }
-            //                            logger.info('Billing SBUs:\n' + JSON.stringify(user.BillingSBU));
-            //                            models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
-            //                                logger.info('Added Billing SBUs');
-            //                                t.commit();
-            //                                deferred.resolve(billsbu);
-            //                            }).catch (function (temperr) {
-            //    logger.info('Billing SBU Error: ' + temperr); t.rollback(); deferred.reject(temperr);
-            //})
-            //                                                    }).catch (function (usersbuEDestroy) { logger.info(usersbuEDestroy); t.rollback(); deferred.reject(usersbuEDestroy); })
-            //                                            }
-            //                                            else {
-            //    t.commit();
-            //    logger.info('No Billing SBUs');
+                if (this.OpenConnection() == true)
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
 
         }
         catch (Exception e)
         {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
         }
     }
     public void ModifyUser(string user)

@@ -47,21 +47,21 @@
                                     </div>
 
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedSBU" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                            <option value="">- Select BusinessSector -</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="box-body">
+                                    <div class="col-xs-4">
+                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedRegion" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                                             <option value="">- Select User Region -</option>
                                         </select>
                                     </div>
 
-                                </div>
-                                <div class="box-body">
-
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedLocation" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
-                                            <option value="">- Select BusinessSector -</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedBilling" ng-options="item.CountryName for item in CountryMasterList" title="Select Division" style="width:100%;font-size: 0.8em" required>
+                                        <select class="form-control" name="ddlSBU" ng-model="user.selectedCountry" ng-options="item.CountryName for item in CountryMasterList" title="Select Division" style="width:100%;font-size: 0.8em" required>
                                             <option value="">- Select Country -</option>
                                         </select>
                                     </div>
@@ -73,7 +73,7 @@
                         <div class="pull-right" style="padding-right:10px">
                             <span data-ng-hide="editMode">
                                 <input name="UserAdd" ng-disabled="adduserform.$invalid" type="submit" value="Add Users"
-                                       data-ng-click="getSelected(user.selectedType,user.selectedRole,user.selectedSBU,user.selectedBillingSBU,user.selectedSkill,user.selectedBilling,user.selectedLocation,user.FirstWorkingDate,user.LastWorkingDate)" class="btn btn-primary" />
+                                       data-ng-click="getSelected(user.selectedRole,user.selectedRegion,user.selectedCountry,user.selectedBusinessSector)" class="btn btn-primary" />
                             </span>
                             <input name="UserCancel" type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-primary" />
                         </div>

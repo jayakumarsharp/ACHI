@@ -498,8 +498,8 @@ namespace CRMManagement.Controllers
 
         public JsonResult getusers(string userid)
         {
-            _dbOperations.GetUser(userid);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<UserMaster> lst = _dbOperations.GetUser(userid);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult profile(string userId)
@@ -554,11 +554,12 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CreateUser(string user)
+        public JsonResult CreateUser(UserMaster user)
         {
 
-            //console.log(req);      
-            _dbOperations.CreateUser(user);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.CreateUser(user, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -596,7 +597,7 @@ namespace CRMManagement.Controllers
 
         public JsonResult GetAllCountry(string CountryId)
         {
-          List<CountryMaster> lst=  _dbOperations.GetCountryList(CountryId);
+            List<CountryMaster> lst = _dbOperations.GetCountryList(CountryId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
@@ -770,6 +771,16 @@ namespace CRMManagement.Controllers
         #endregion BusinessSector
 
 
+
+        public JsonResult getADuser()
+        {
+            List<ADUserMaster> ls = new List<ADUserMaster>();
+            ls.Add(new ADUserMaster { Userid = "John", EmailId = "John@coba.com", UserName = "John Albert" });
+            ls.Add(new ADUserMaster { Userid = "Daniel", EmailId = "Daniel@coba.com", UserName = "Daniel" });
+            ls.Add(new ADUserMaster { Userid = "Sivakumar", EmailId = "Sivakumar@coba.com", UserName = "SivaKumar" });
+
+            return Json(ls, JsonRequestBehavior.AllowGet);
+        }
 
 
     }
@@ -1001,13 +1012,22 @@ public class RightMaster
 
 }
 
+public class ADUserMaster
+{
+    public string Userid { get; set; }
+    public string UserName { get; set; }
+    public string EmailId { get; set; }
+}
 public class UserMaster
 {
     public string ApprovedDate { get; set; }
     public string Approvedby { get; set; }
     public int AttemptedTries { get; set; }
-    public int BaseSkillId { get; set; }
-    public int BillingId { get; set; }
+    public string BusinessSectorId { get; set; }
+    public string RegionId { get; set; }
+    public string CountryId { get; set; }
+    public string RoleId { get; set; }
+
     public string CheckerComment { get; set; }
     public string CreatedBy { get; set; }
     public string CreatedDate { get; set; }
@@ -1025,9 +1045,7 @@ public class UserMaster
     public string ModifiedDate { get; set; }
     public string Password { get; set; }
     public string PasswordExpiryDate { get; set; }
-    public string RoleId { get; set; }
     public string Status { get; set; }
-    public string TypeId { get; set; }
     public string UserBlockDate { get; set; }
     public string UserExpiryDate { get; set; }
     public string UserImage { get; set; }

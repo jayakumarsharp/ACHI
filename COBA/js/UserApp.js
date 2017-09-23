@@ -43,26 +43,17 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             { headerName: "Email", name: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
             {
                 headerName: "", name: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
-                cellRenderer: function (params) {
-                    if ($scope.UpdatedUserTypes.length > 0) {
-                        angular.forEach($scope.UpdatedUserTypes, function (value, key) {
-                            if (params.data.userId == value.userId) {
-                                params.node.setSelected(true);
-                            }
-                        });
-                    }
-                    return '';
-                }
+                cellTemplate: '<input type="checkbox" name="select_item" value="true" ng-model="row.entity.checked" ng-click="grid.appScope.chkChanged(row.entity)" />'
             }
         ]
     };
 
-    $rootScope.$on("toggle", function () {
-        //jay
-        $timeout(function () {
-            $scope.userGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
+    //$rootScope.$on("toggle", function () {
+    //    //jay
+    //    $timeout(function () {
+    //        $scope.userGrid.api.sizeColumnsToFit();
+    //    }, 1000);
+    //});
 
 
     $scope.userGrid = {
@@ -131,9 +122,9 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         $scope.ConvertToUserTypes = function (data) {
             $scope.UserTypes = [];
             angular.forEach(data, function (value, key) {
-                $scope.UserTypes.push({ 'userId': value.Userid, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': 6 });
+                $scope.UserTypes.push({ 'userId': value.Userid, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
             });
-            $scope.addUserGriddata = $scope.UserTypes;
+            $scope.addUserGrid.data = $scope.UserTypes;
 
         };
 
@@ -343,7 +334,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             angular.forEach($scope.Users, function (value, key) {
                 $scope.UsersView.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'Type': $scope.GetTypeName(value.TypeId), 'Role': $scope.GetRoleName(value.RoleId), 'Status': value.Status })
             })
-            $scope.userGriddata = $scope.UsersView;
+            $scope.userGrid.data = $scope.UsersView;
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -459,10 +450,11 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         $scope.UpdatedUserTypes = [];
         $scope.user.showSelected = false;
         $scope.user.selectedType = {};
-        $scope.user.selectedSBU = [];
-        $scope.user.selectedBillingSBU = [];
+        $scope.user.selectedCountry = {};
+        $scope.user.selectedRegion = {};
         $scope.user.selectedRole = {};
         $scope.user.selectedStatus = {};
+        $scope.user.selectedBusinessSector = {};
         $scope.user = {};
         $scope.GetADUsers();
         $scope.editMode = false;
@@ -519,18 +511,18 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     $scope.chkChanged = function (event) {
         var isAddedAlready = false;
-        if (event.selected == true) {
+        if (event.checked == true) {
             angular.forEach($scope.UpdatedUserTypes, function (value, key) {
-                if (event.data.userId == value.userId) {
+                if (event.userId == value.userId) {
                     isAddedAlready = true;
                 }
             });
             if (!isAddedAlready)
-                $scope.UpdatedUserTypes.push({ 'userId': event.data.userId, 'UserName': event.data.UserName, 'EmailId': event.data.EmailId, 'checked': 1 });
+                $scope.UpdatedUserTypes.push({ 'userId': event.userId, 'UserName': event.UserName, 'EmailId': event.EmailId, 'checked': true });
         }
         else {
             for (var i = $scope.UpdatedUserTypes.length - 1; i >= 0; i--) {
-                if ($scope.UpdatedUserTypes[i].userId == event.data.userId) {
+                if ($scope.UpdatedUserTypes[i].userId == event.userId) {
                     $scope.UpdatedUserTypes.splice(i, 1);
                 }
             }
@@ -541,60 +533,36 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.showSelectedUsers = function (isChecked) {
         if (isChecked) {
             console.log('setting row data');
-            $scope.addUserGriddata = $scope.UpdatedUserTypes;
+            $scope.addUserGrid.data = $scope.UpdatedUserTypes;
 
         }
         else {
-            $scope.addUserGriddata = $scope.UserTypes;
+            $scope.addUserGrid.data = $scope.UserTypes;
 
         }
     }
 
     // Add Users
-    $scope.getSelected = function (selectedType, selectedRole, selectedSBU, selectedBillingSBU, selectedSkill, selectedBilling, selectedLocation, fwd, lwd) {
+    $scope.getSelected = function (selectedRole, selectedregion, selectedcoutry, selectedBS) {
         try {
 
-            var ar = [];
-            ar = $scope.UpdatedUserTypes.filter(
-                function (value) {
-                    if (value.checked == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            );
+            var ar = $scope.UpdatedUserTypes;
             $scope.UpdatedUserTypes = [];
             console.log('Total selected: ' + ar.length);
             if (ar.length == 0) {
-                //alert('There are no users selected');
-                toaster.pop('warning', "Warning", "There are no users selected", null);
+                alert('There are no users selected');
+                //toaster.pop('warning', "Warning", "There are no users selected", null);
             }
-            else if (selectedType.TypeID == null || selectedRole.id == null || selectedSBU.length < 0) {
-                //alert('Select appropriate values for Type, Role and SBU');
-                toaster.pop('warning', "Warning", "Select appropriate values for Type, Role and SBU", null);
-            }
-            else {
-                if (fwd == null || fwd == '' || fwd == undefined) {
-                    fwd = new Date('01/01/1970');
-                }
-                if (lwd == '' || lwd == undefined) {
-                    lwd = null;
-                }
+           else {
                 var successcount = 0;
                 for (var i = 0; i < ar.length; i++) {
                     if (ar[i] != null && ar[i].UserName != null && ar[i].EmailId) {
                         console.log('Valid user: ' + ar[i].UserName);
                         $scope.user = ar[i];
-                        $scope.user.selectedType = selectedType.TypeID;
-                        $scope.user.Role = selectedRole.id;
-                        $scope.user.SBU = selectedSBU;
-                        $scope.user.BillingSBU = selectedBillingSBU;
-                        $scope.user.Billing = (selectedBilling == undefined ? undefined : selectedBilling.Id);
-                        $scope.user.BaseSkill = (selectedSkill == undefined ? undefined : selectedSkill.Id);
-                        $scope.user.Location = (selectedLocation == undefined ? undefined : selectedLocation.Id);
-                        $scope.user.FirstWorkingDate = fwd;
-                        $scope.user.LastWorkingDate = lwd;
+                        $scope.user.RoleId = selectedRole.id;
+                        $scope.user.BusinessSectorId = selectedBS.Id;
+                        $scope.user.CountryId = selectedcoutry.Id;
+                        $scope.user.RegionId = selectedregion.Id;
 
                         UserFactory.AddUser($scope.user).success(function (data) {
                             $scope.addMode = false;
@@ -607,7 +575,6 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                                 $scope.GetAllUsers();
                             }
                             successcount++;
-
                             $('#userModel').modal('hide');
 
                         }).error(function (data) {
@@ -722,18 +689,20 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
 
     $scope.GetAllRoles();
-
+    $scope.GetAllUsers();
     //$scope.IsUserSCHead();
     //$scope.IsPageReadOnly();
 });
 
 ReportApp.factory('UserFactory', function ($http) {
+    var Userurl = BaseURL + 'users';
+    var RoleUrl = BaseURL + 'Roles';
     var UserFactory = {
         GetTypes: function () {
-            return $http.get('/types');
+            return $http.get(Userurl + '/types');
         },
         GetUsers: function () {
-            return $http.get('/');
+            return $http.get('getusers?userid=');
         },
         GetRoles: function () {
             return $http.get(RoleUrl + '/roles');
@@ -742,14 +711,14 @@ ReportApp.factory('UserFactory', function ($http) {
             return $http.get(Userurl + '/sbu');
         },
         GetADUsers: function () {
-            return $http.get(Userurl + '/adduser');
+            return $http.get('getADuser');
         },
         GetAllADUsers: function () {
             return $http.get(Userurl + '/adduser/GetAllADUsers');
         },
 
         GetUser: function (userid) {
-            return $http.get(Userurl + '/?userId=' + userid);
+            return $http.get('getusers?userid=' + userid);
         },
         GetUserSessionInfo: function (createdDate) {
             return $http.get(Userurl + '/GetUserSessionInfo/?createdOn=' + createdDate);
@@ -767,7 +736,7 @@ ReportApp.factory('UserFactory', function ($http) {
             return $http.get(Userurl + '/AllUserBillingSBU');
         },
         AddUser: function (user) {
-            return $http.post(Userurl + '/CreateUser', user);
+            return $http.post('CreateUser', user);
         },
         CreateTempUser: function (user) {
             return $http.post(Userurl + '/CreateTempUser', user);
