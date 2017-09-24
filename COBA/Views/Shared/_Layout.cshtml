@@ -100,89 +100,93 @@
 
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                        <a href="Index">
-                            <i class="fa fa-dashboard"></i>
-                            <span>  Dashboard</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Strategy")'>
-                        <a href="Strategy">
-                            <i class="fa fa-circle-o"></i><span>    Application</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Tasks")'>
-                        <a href="Tasks">
-                            <i class="fa fa-circle-o"></i>
-                            <span>Change Management</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "MapTask")'>
-                        <a href="MapTask">
-                            <i class="fa fa-tasks"></i>
-                            <span>Map Strategy</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Approvals")'>
-                        <a href="Approvals">
-                            <i class="fa fa-circle-o"></i>
-                            <span>Approvals / Transfers</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "TransferSettings")'>
-                        <a href="TransferSettings">
-                            <i class="fa fa-circle-o"></i>
-                            <span>Transfer Settings</span>
-                        </a>
-                    </li>
 
-                    <li class='@Html.IsActive("Main", "Emails")'>
-                        <a href="Emails">
-                            <i class="fa fa-mail-forward"></i>
-                            <span>Emails</span>
+                    <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.MenuName }"><a href="{{menu.Path}}" ng-click="updatemenuclick(menu.MenuName)"><i class="{{menu.Icon}} "></i><span> {{menu.MenuName}}</span></a></li>
+                    @*<ul class="sidebar-menu" data-widget="tree">
+                            <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
+                                <a href="Index">
+                                    <i class="fa fa-dashboard"></i>
+                                    <span>  Dashboard</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "Strategy")'>
+                                <a href="Strategy">
+                                    <i class="fa fa-circle-o"></i><span>    Application</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "Tasks")'>
+                                <a href="Tasks">
+                                    <i class="fa fa-circle-o"></i>
+                                    <span>Change Management</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "MapTask")'>
+                                <a href="MapTask">
+                                    <i class="fa fa-tasks"></i>
+                                    <span>Map Strategy</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "Approvals")'>
+                                <a href="Approvals">
+                                    <i class="fa fa-circle-o"></i>
+                                    <span>Approvals / Transfers</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "TransferSettings")'>
+                                <a href="TransferSettings">
+                                    <i class="fa fa-circle-o"></i>
+                                    <span>Transfer Settings</span>
+                                </a>
+                            </li>
 
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
-                        <a href="Reports">
-                            <i class="fa fa-circle-o"></i>
-                            <span>Reports</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
-                        <a href="Licensing">
-                            <i class="fa fa-circle-o"></i>
-                            <i class="icon-briefcase"></i><span> Licensing</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "UserManagement")' aria-haspopup="true">
-                        <a href="UserManagement">
-                            <i class="fa fa-circle-o"></i>
-                            <i class="icon-briefcase"></i><span> User Management</span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "RoleManagement")' aria-haspopup="true">
-                        <a href="RoleManagement">
-                            <i class="fa fa-circle-o"></i>
-                            <i class="icon-briefcase"></i><span> Role Management</span>
-                        </a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-files-o"></i>
-                            <span>Utilities</span>
-                            <span class="pull-right-container">
-                                <span class="label label-primary pull-right">4</span>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu" style="display: none;">
-                            <li><a href="Country"><i class="fa fa-circle-o"></i> Country</a></li>
-                            <li><a href="Region"><i class="fa fa-circle-o"></i> Region</a></li>
-                            <li><a href="BusinessSector"><i class="fa fa-circle-o"></i> Business Sector</a></li>
-                            <li><a href="ApplicationMaster"><i class="fa fa-circle-o"></i> Application Master</a></li>
-                            <li><a href="ProductType"><i class="fa fa-circle-o"></i> Product Type</a></li>
-                        </ul>
-                    </li>
+                            <li class='@Html.IsActive("Main", "Emails")'>
+                                <a href="Emails">
+                                    <i class="fa fa-mail-forward"></i>
+                                    <span>Emails</span>
+
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
+                                <a href="Reports">
+                                    <i class="fa fa-circle-o"></i>
+                                    <span>Reports</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
+                                <a href="Licensing">
+                                    <i class="fa fa-circle-o"></i>
+                                    <i class="icon-briefcase"></i><span> Licensing</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "UserManagement")' aria-haspopup="true">
+                                <a href="UserManagement">
+                                    <i class="fa fa-circle-o"></i>
+                                    <i class="icon-briefcase"></i><span> User Management</span>
+                                </a>
+                            </li>
+                            <li class='@Html.IsActive("Main", "RoleManagement")' aria-haspopup="true">
+                                <a href="RoleManagement">
+                                    <i class="fa fa-circle-o"></i>
+                                    <i class="icon-briefcase"></i><span> Role Management</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-files-o"></i>
+                                    <span>Utilities</span>
+                                    <span class="pull-right-container">
+                                        <span class="label label-primary pull-right">4</span>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu" style="display: none;">
+                                    <li><a href="Country"><i class="fa fa-circle-o"></i> Country</a></li>
+                                    <li><a href="Region"><i class="fa fa-circle-o"></i> Region</a></li>
+                                    <li><a href="BusinessSector"><i class="fa fa-circle-o"></i> Business Sector</a></li>
+                                    <li><a href="ApplicationMaster"><i class="fa fa-circle-o"></i> Application Master</a></li>
+                                    <li><a href="ProductType"><i class="fa fa-circle-o"></i> Product Type</a></li>
+                                </ul>
+                            </li>
+                        </ul>*@
                 </ul>
             </section>
             <!-- /.sidebar -->

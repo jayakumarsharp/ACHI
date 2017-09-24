@@ -1889,7 +1889,7 @@ public class DbOperations
                                select new Roles
                                {
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   id = Convert.ToInt32(row["id"]),
+                                   id = Convert.ToString(row["id"]),
                                    ModifiedBy = Convert.ToString(row["ModifiedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    ModifiedDate = Convert.ToString(row["ModifiedDate"]),
@@ -1933,7 +1933,7 @@ public class DbOperations
                                    select new Roles
                                    {
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToInt32(row["id"]),
+                                       id = Convert.ToString(row["id"]),
                                        ModifiedBy = Convert.ToString(row["ModifiedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
@@ -2222,7 +2222,7 @@ public class DbOperations
                                    select new Roles
                                    {
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToInt32(row["id"]),
+                                       id = Convert.ToString(row["id"]),
                                        ModifiedBy = Convert.ToString(row["ModifiedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
@@ -2281,7 +2281,7 @@ public class DbOperations
                                    select new Roles
                                    {
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToInt32(row["id"]),
+                                       id = Convert.ToString(row["id"]),
                                        ModifiedBy = Convert.ToString(row["ModifiedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
@@ -2333,7 +2333,7 @@ public class DbOperations
                                    select new Roles
                                    {
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToInt32(row["id"]),
+                                       id = Convert.ToString(row["id"]),
                                        ModifiedBy = Convert.ToString(row["ModifiedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
@@ -2439,9 +2439,15 @@ public class DbOperations
                                    UserName = Convert.ToString(row["username"]),
                                    EmailId = Convert.ToString(row["EmailId"]),
                                    RoleId = Convert.ToString(row["RoleId"]),
+                                   RoleName = Convert.ToString(row["RoleName"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
+                                   BusinessSector = Convert.ToString(row["Name"]),
                                    BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                    CountryId = Convert.ToString(row["CountryId"]),
                                    RegionId = Convert.ToString(row["RegionId"]),
+                                   Status = Convert.ToString(row["Status"]),
+
 
                                }).ToList();
 
@@ -2551,7 +2557,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_createuser", connection))
+            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
             {
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -2589,86 +2595,51 @@ public class DbOperations
 
         }
     }
-    public void ModifyUser(string user)
+    public void ModifyUser(UserMaster user, out int errorcode, out string errordesc)
     {
+
         try
         {
-            //    var dbdate = new Date();
-            //    //var hash_parts = Utility.UtilityModel.create_password(user.password);
-            //    //var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
-            //    var createdDate = moment(dbdate).add(30, 'days').format('L LT');
-            //    this.GetUser(user.userId)
-            //        .then(function(userdtl) {
-            //        models.sequelize.transaction().then(function(t) {
-            //            if (t != null && t != undefined)
-            //            {
-            //                var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //                var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //                var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
-            //                //logger.info(JSON.stringify(user));
-            //                var fwd = moment.utc(user.FirstWorkingDate).toDate();
-            //                user.FirstWorkingDate = moment(fwd).format('YYYY-MM-DD HH:mm:ss');
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_updateuser", connection))
+            {
 
-            //                if (user.LastWorkingDate != null)
-            //                {
-            //                    var lwd = moment.utc(user.LastWorkingDate).toDate();
-            //                    user.LastWorkingDate = moment(lwd).format('YYYY-MM-DD HH:mm:ss');
-            //                }
-            //                logger.info('Modifying user: \n' + user.userId + '\n' + user.userName + '\n' + user.selectedType.TypeID + '\n' + user.SBU + '\nStatus: ' + user.selectedStatus +
-            //                    '\nBillingId: ' + (user.selectedBilling == undefined ? null : user.selectedBilling.Id) +
-            //                    '\nBaseSkillId: ' + (user.selectedBaseSkill == undefined ? null : user.selectedBaseSkill.Id) +
-            //                    '\nLocationId: ' + (user.selectedLocation == undefined ? null : user.selectedLocation.Id) + '\nFWD: ' + user.FirstWorkingDate + '\nLastWorkingDate: ' + user.LastWorkingDate);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_status", user.Status));
 
-            //                models.User.update({
-            //                    UserName: user.userName, TypeId: user.selectedType.TypeID, RoleId: user.Role.id, EmailId: user.emailId,
-            //                            BillingId: (user.selectedBilling == undefined ? null : user.selectedBilling.Id), BaseSkillId: (user.selectedBaseSkill == undefined ? null : user.selectedBaseSkill.Id), LocationId: (user.selectedLocation == undefined ? null : user.selectedLocation.Id), FirstWorkingDate: user.FirstWorkingDate, LastWorkingDate: user.LastWorkingDate,
-            //                            MobileNumber: user.mobileNumber, CustomData: 'NA', Status: user.selectedStatus, UserExpiryDate: userExpiryDate,
-            //                            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
-            //                            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
-            //                            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
-            //                            CheckerComment: ''
-            //                        }, { where: { userId: user.userId } }, { transaction: t })
-            //                            .then(function(user) {
-            //                    deferred.resolve(user);
-            //                })
-            //                            .then(function(userdtl) {
-            //                    models.UserSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
-            //                                    .then(function(usersbus) {
-            //                        var tempArr = [];
-            //                        for (var i = 0; i < user.SBU.length; i++)
-            //                        {
-            //                            tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i] });
-            //                    }
-            //                    logger.info('SBUs:\n' + JSON.stringify(user.SBU));
-            //                    models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
-            //                        logger.info('Added SBUs');
-            //                        if (user.BillingSBU != undefined)
-            //                        {
-            //                            models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
-            //                                                    .then(function(usersbus) {
-            //                                var tempArr2 = [];
-            //                                for (var i = 0; i < user.BillingSBU.length; i++)
-            //                                {
-            //                                    tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i] });
-            //                            }
-            //                            logger.info('Billing SBUs:\n' + JSON.stringify(user.BillingSBU));
-            //                            models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
-            //                                logger.info('Added Billing SBUs');
-            //                                t.commit();
-            //                                deferred.resolve(billsbu);
-            //                            }).catch (function (temperr) {
-            //    logger.info('Billing SBU Error: ' + temperr); t.rollback(); deferred.reject(temperr);
-            //})
-            //                                                    }).catch (function (usersbuEDestroy) { logger.info(usersbuEDestroy); t.rollback(); deferred.reject(usersbuEDestroy); })
-            //                                            }
-            //                                            else {
-            //    logger.info('No Billing SBUs');
-            //    deferred.resolve(sbu);
-            //}
+                if (this.OpenConnection() == true)
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
         }
         catch (Exception e)
         {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
         }
+
     }
     public void DeleteUser(string user)
     {
@@ -2835,26 +2806,53 @@ public class DbOperations
         }
     }
 
-    public void GetMenuList(string userId)
+    public List<RightMaster> GetMenuList(string userId)
     {
         try
         {
-            //sequelize.query('select distinct MenuName, Path, RM.RightID, RM.ShowMenu, RM.Icon from TBL_RIGHT_MASTER RM inner join TBL_ROLERIGHT_MAPPING RR on RM.RightID=RR.RightID inner join TBL_USER_MASTER UM on RR.RoleID=UM.RoleId where UM.Userid = :UserId order by RM.RightID',
-            //        {
-            //    replacements: { UserId: userId },
-            //        type: sequelize.QueryTypes.SELECT
-            //    }).then(function(response) {
-            //    logger.info('success');
-            //    logger.info('response: ' + response);
-            //    deferred.resolve(response);
-            //}).error(function(err) {
-            //    logger.info('failure: ' + err);
-            //    deferred.reject(err);
-            //});
+
+            List<RightMaster> lst = new List<RightMaster>();
+            string query = "sp_getmenuforuser";
+            //open connection
+            if (this.OpenConnection() == true)
+            {
+                //create command and assign the query and connection from the constructor
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RightMaster
+                                   {
+                                       Icon = Convert.ToString(row["Icon"]),
+                                       MenuName = Convert.ToString(row["MenuName"]),
+                                       Path = Convert.ToString(row["Path"]),
+                                       RightID = Convert.ToString(row["RightID"]),
+                                       ShowMenu = Convert.ToString(row["ShowMenu"])
+
+                                   }).ToList();
+
+                        }
+                    }
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
 
         }
         catch (Exception e)
         {
+            return null;
         }
     }
 

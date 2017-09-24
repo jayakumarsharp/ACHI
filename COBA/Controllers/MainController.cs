@@ -121,6 +121,11 @@ namespace CRMManagement.Controllers
         }
 
 
+        public string getloggedusername()
+        {
+            return Convert.ToString(Session["UserName"]);
+        }
+
         #region TransferSetting
         public JsonResult Get_ApprovaltransferByuser()
         {
@@ -436,10 +441,10 @@ namespace CRMManagement.Controllers
 
         #region Roles
 
-        public JsonResult GetUserRoles(string roleid)
+        public JsonResult GetUserRoles(string userId)
         {
-            _dbOperations.GetUserRoles(roleid);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<RightMaster> lst = _dbOperations.GetMenuList(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetRoleRightMappings(string roleId)
         {
@@ -577,10 +582,11 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ModifyUser(string user)
+        public JsonResult ModifyUser(UserMaster user)
         {
-
-            _dbOperations.ModifyUser(user);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyUser(user, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -774,10 +780,22 @@ namespace CRMManagement.Controllers
 
         public JsonResult getADuser()
         {
-            List<ADUserMaster> ls = new List<ADUserMaster>();
-            ls.Add(new ADUserMaster { Userid = "John", EmailId = "John@coba.com", UserName = "John Albert" });
-            ls.Add(new ADUserMaster { Userid = "Daniel", EmailId = "Daniel@coba.com", UserName = "Daniel" });
-            ls.Add(new ADUserMaster { Userid = "Sivakumar", EmailId = "Sivakumar@coba.com", UserName = "SivaKumar" });
+            List<UserMaster> ls = new List<UserMaster>();
+            ls.Add(new UserMaster { userId = "John", EmailId = "John@coba.com", UserName = "John Albert" });
+            ls.Add(new UserMaster { userId = "Daniel", EmailId = "Daniel@coba.com", UserName = "Daniel" });
+            ls.Add(new UserMaster { userId = "Sivakumar", EmailId = "Sivakumar@coba.com", UserName = "SivaKumar" });
+            ls.Add(new UserMaster { userId = "George", EmailId = "George@coba.com", UserName = "George" });
+            ls.Add(new UserMaster { userId = "Oliver", EmailId = "Oliver@coba.com", UserName = "Oliver" });
+            
+                
+            List<UserMaster> lst = _dbOperations.GetUser("");
+
+            foreach (UserMaster u in lst)
+            {
+                List<UserMaster> um = ls.Where(le => le.userId == u.userId).ToList();
+                if (um.Count > 0)
+                    ls.Remove(um[0]);
+            }
 
             return Json(ls, JsonRequestBehavior.AllowGet);
         }
@@ -1024,10 +1042,13 @@ public class UserMaster
     public string Approvedby { get; set; }
     public int AttemptedTries { get; set; }
     public string BusinessSectorId { get; set; }
+    public string BusinessSector { get; set; }
     public string RegionId { get; set; }
+    public string RegionName { get; set; }
     public string CountryId { get; set; }
+    public string CountryName { get; set; }
     public string RoleId { get; set; }
-
+    public string RoleName { get; set; }
     public string CheckerComment { get; set; }
     public string CreatedBy { get; set; }
     public string CreatedDate { get; set; }
@@ -1060,7 +1081,7 @@ public class Roles
     public string ModifiedBy { get; set; }
     public string ModifiedDate { get; set; }
     public string RoleName { get; set; }
-    public int id { get; set; }
+    public string id { get; set; }
 }
 
 

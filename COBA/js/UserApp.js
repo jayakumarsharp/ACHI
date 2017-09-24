@@ -60,18 +60,17 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
         columnDefs: [
-            { name: "UserID", field: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { name: "Name", field: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { name: "Email", field: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { name: "Type", field: "Type", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { name: "Role", field: "Role", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            //{ headerName: "SBU", field: "SBU", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { name: "Status", field: "Status", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { name: "userId" },
+            { name: "UserName" },
+            { name: "EmailId" },
+            { name: "RoleName" },
+            { name: "RegionName" },
+            { name: "CountryName", },
+            { name: "BusinessSector" },
             {
-                headerName: "", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' }, field: "Action", cellRenderer: function (params) {
-                    return "<a data-ng-click=\"GetUser('" + params.data.userId + "')\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"EditUser('" + params.data.userId + "')\" href=\"javascript:;\" ng-show=\"!IsReadOnly\"> Edit</a>";
-                }
-            },
+                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!IsReadOnly\"> Edit</a>'
+            }
+
         ]
     };
 
@@ -98,60 +97,36 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         if (!isRead) {
             $scope.IsReadOnly = false;
         }
-    },
+    }
 
-        $scope.stateChanged = function (selectedType) {
-            if (selectedType.Id != undefined) {
-                if (selectedType.Id == 2) {
-                    $scope.BillingSBU = $scope.OnlySBU;
-                    return;
-                }
-                else {
-                    $scope.BillingSBU = $scope.AllSBU;
-                    return;
-                }
-            }
-            else if (selectedType.TypeID == 13 || selectedType.TypeID == 14 || selectedType.TypeID == 1 || selectedType.TypeID == 2 || selectedType.TypeID == 5 || selectedType.TypeID == 3 || selectedType.TypeID == 4) {
-                $scope.SBU = $scope.OnlySBU;
+    $scope.stateChanged = function (selectedType) {
+        if (selectedType.Id != undefined) {
+            if (selectedType.Id == 2) {
+                $scope.BillingSBU = $scope.OnlySBU;
+                return;
             }
             else {
-                $scope.SBU = $scope.AllSBU;
+                $scope.BillingSBU = $scope.AllSBU;
+                return;
             }
-        },
-
-        $scope.ConvertToUserTypes = function (data) {
-            $scope.UserTypes = [];
-            angular.forEach(data, function (value, key) {
-                $scope.UserTypes.push({ 'userId': value.Userid, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
-            });
-            $scope.addUserGrid.data = $scope.UserTypes;
-
-        };
-
-    function ConvertToGridDate(inDate) {
-        try {
-            var default_Date = '01/01/1900';
-            var null_Date = '01/01/1970';
-            if (inDate != null)
-                inDate = inDate.substring(0, 10);
-            else
-                return '';
-            console.log('Date received: ' + inDate);
-            var indate = new Date(inDate);
-            console.log('New Date: ' + inDate);
-            //var twoDigitMonthIn = ((indate.getMonth().length + 1) === 1) ? (indate.getMonth() + 1) : '0' + (indate.getMonth() + 1);
-            var month = indate.getMonth() + 1;
-            var grdDate = month + "/" + indate.getDate() + "/" + indate.getFullYear();
-            if (grdDate == default_Date || grdDate == null_Date) {
-                return '';
-            }
-            console.log('Converted Date: ' + grdDate);
-            return grdDate;
         }
-        catch (err) {
-            return '';
+        else if (selectedType.TypeID == 13 || selectedType.TypeID == 14 || selectedType.TypeID == 1 || selectedType.TypeID == 2 || selectedType.TypeID == 5 || selectedType.TypeID == 3 || selectedType.TypeID == 4) {
+            $scope.SBU = $scope.OnlySBU;
         }
-    }
+        else {
+            $scope.SBU = $scope.AllSBU;
+        }
+    },
+
+    $scope.ConvertToUserTypes = function (data) {
+        $scope.UserTypes = [];
+        angular.forEach(data, function (value, key) {
+            $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
+        });
+        $scope.addUserGrid.data = $scope.UserTypes;
+
+    };
+
 
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
@@ -182,142 +157,6 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     };
 
-    $scope.GetAllBillingOptions = function () {
-        UserFactory.GetAllBillingOptions().success(function (data) {
-            $scope.Billings = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
-    $scope.GetAllBaseSkillOptions = function () {
-        UserFactory.GetAllBaseSkillOptions().success(function (data) {
-            $scope.BaseSkills = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
-    $scope.GetAllLocations = function () {
-        UserFactory.GetAllLocations().success(function (data) {
-            $scope.Locations = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
-    $scope.GetAllSBU = function () {
-        $scope.AllSBU = [];
-        $scope.OnlySBU = [];
-        UserFactory.GetAllSBU().success(function (data) {
-            $scope.SBU = data;
-            $scope.BillingSBU = data;
-            angular.forEach(data, function (value, key) {
-                if (value.SBU == 'All') {
-                    $scope.AllSBU.push(value);
-                }
-                else {
-                    $scope.OnlySBU.push(value);
-                }
-            });
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-    $scope.GetAllTypes = function () {
-        UserFactory.GetTypes().success(function (data) {
-            $scope.Types = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-    $scope.GetTypeName = function (typeId) {
-        for (var i = 0; i < $scope.Types.length; i++) {
-            if ($scope.Types[i].TypeID == typeId)
-                return $scope.Types[i].TypeName;
-        }
-    };
-    $scope.GetSBUName = function (sbuid) {
-        for (var i = 0; i < $scope.SBU.length; i++) {
-            if ($scope.SBU[i].id == sbuid)
-                return $scope.SBU[i].SBU;
-        }
-    };
-    $scope.GetBillingName = function (billid) {
-        for (var i = 0; i < $scope.Billings.length; i++) {
-            if ($scope.Billings[i].Id == billid)
-                return $scope.Billings[i].Billing;
-        }
-    };
-    $scope.GetBaseSkillName = function (skillid) {
-        for (var i = 0; i < $scope.BaseSkills.length; i++) {
-            if ($scope.BaseSkills[i].Id == skillid)
-                return $scope.BaseSkills[i].BaseSkill;
-        }
-    };
-    $scope.GetLocationName = function (locid) {
-        for (var i = 0; i < $scope.Locations.length; i++) {
-            if ($scope.Locations[i].Id == locid)
-                return $scope.Locations[i].Location;
-        }
-    };
-    $scope.GetRoleName = function (roleId) {
-        for (var i = 0; i < $scope.Roles.length; i++) {
-            if ($scope.Roles[i].id == roleId)
-                return $scope.Roles[i].RoleName;
-        }
-    };
-    $scope.GetTypeFromUserID = function (userId) {
-        for (var i = 0; i < $scope.Users.length; i++) {
-            if ($scope.Users[i].userId == userId) {
-                for (var j = 0; j < $scope.Types.length; j++) {
-                    if ($scope.Types[j].TypeID == $scope.Users[i].TypeId)
-                        return $scope.Types[j];
-                }
-            }
-        }
-    };
-    $scope.GetBillingFromUserID = function (userId) {
-        for (var i = 0; i < $scope.Users.length; i++) {
-            if ($scope.Users[i].userId == userId) {
-                for (var j = 0; j < $scope.Billings.length; j++) {
-                    if ($scope.Billings[j].Id == $scope.Users[i].BillingId)
-                        return $scope.Billings[j];
-                }
-            }
-        }
-    };
-    $scope.GetBaseSkillFromUserID = function (userId) {
-        for (var i = 0; i < $scope.Users.length; i++) {
-            if ($scope.Users[i].userId == userId) {
-                for (var j = 0; j < $scope.BaseSkills.length; j++) {
-                    if ($scope.BaseSkills[j].Id == $scope.Users[i].BaseSkillId)
-                        return $scope.BaseSkills[j];
-                }
-            }
-        }
-    };
-    $scope.GetLocationFromUserID = function (userId) {
-        for (var i = 0; i < $scope.Users.length; i++) {
-            if ($scope.Users[i].userId == userId) {
-                for (var j = 0; j < $scope.Locations.length; j++) {
-                    if ($scope.Locations[j].Id == $scope.Users[i].LocationId)
-                        return $scope.Locations[j];
-                }
-            }
-        }
-    };
-    $scope.GetRoleFromUserID = function (userId) {
-        for (var i = 0; i < $scope.Users.length; i++) {
-            if ($scope.Users[i].userId == userId) {
-                for (var j = 0; j < $scope.Roles.length; j++) {
-                    if ($scope.Roles[j].id == $scope.Users[i].RoleId)
-                        return $scope.Roles[j];
-                }
-            }
-        }
-    };
-
     $scope.GetADUsers = function () {
         UserFactory.GetADUsers().success(function (data) {
             $scope.ADUsers = data;
@@ -330,9 +169,14 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         $scope.UsersView = [];
         UserFactory.GetUsers().success(function (data) {
             $scope.Users = data;
-            console.log('UsersView length: ' + $scope.UsersView.length);
             angular.forEach($scope.Users, function (value, key) {
-                $scope.UsersView.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'Type': $scope.GetTypeName(value.TypeId), 'Role': $scope.GetRoleName(value.RoleId), 'Status': value.Status })
+                $scope.UsersView.push({
+                    'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'RoleName': value.RoleName,
+                    'RegionName': value.RegionName,
+                    'CountryName': value.CountryName,
+                    'BusinessSector': value.BusinessSector,
+                    'Status': value.Status
+                })
             })
             $scope.userGrid.data = $scope.UsersView;
         }).error(function (error) {
@@ -341,20 +185,8 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     };
     $scope.GetUser = function (userId) {
         UserFactory.GetUser(userId).success(function (data) {
-            $scope.User = data;
-            $scope.User.FirstWorkingDate = ConvertToGridDate(data.FirstWorkingDate);
-            $scope.User.LastWorkingDate = ConvertToGridDate(data.LastWorkingDate);
-            UserFactory.GetUserSBU(userId).success(function (sbu) {
-                $scope.User.selectedSBU = sbu;
-                UserFactory.GetUserBillingSBU(userId).success(function (billsbu) {
-                    $scope.User.selectedBillingSBU = billsbu;
-                    $('#viewModal').modal('show');
-                }).error(function (err) {
-                    $scope.Error = err;
-                });
-            }).error(function (err) {
-                $scope.Error = err;
-            });
+            $scope.User = data[0];
+            $('#viewModal').modal('show');
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -384,51 +216,9 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.EditUser = function (userId) {
         $scope.EditedUser = {};
         UserFactory.GetUser(userId).success(function (data) {
-            $scope.user = data;
-            $scope.user.selectedType = $scope.GetTypeFromUserID(userId);
-            $scope.user.Role = $scope.GetRoleFromUserID(userId);
-            $scope.user.selectedStatus = data.Status;
+            $scope.user = data[0];
             $scope.editMode = true;
-            $scope.user.selectedBilling = $scope.GetBillingFromUserID(userId);
-            $scope.user.selectedBaseSkill = $scope.GetBaseSkillFromUserID(userId);
-            $scope.user.selectedLocation = $scope.GetLocationFromUserID(userId);
-            $scope.user.FirstWorkingDate = ConvertToGridDate(data.FirstWorkingDate);
-            $scope.user.LastWorkingDate = ConvertToGridDate(data.LastWorkingDate);
-
-            $scope.user.selectedSBU = [];
-            $scope.user.selectedBillingSBU = [];
-            $scope.SBU = [];
-            $scope.BillingSBU = [];
-
-            UserFactory.GetUserSBU(userId).success(function (sbu) {
-                angular.forEach(sbu, function (value, key) {
-                    if (value.SBUID == 6) {
-                        $scope.SBU = $scope.AllSBU;
-                    }
-                    else {
-                        $scope.SBU = $scope.OnlySBU;
-                    }
-                    $scope.user.selectedSBU.push(value.SBUID);
-                });
-
-                UserFactory.GetUserBillingSBU(userId).success(function (billsbu) {
-                    angular.forEach(billsbu, function (value, key) {
-                        if (value.SBUID == 6) {
-                            $scope.BillingSBU = $scope.AllSBU;
-                        }
-                        else {
-                            $scope.BillingSBU = $scope.OnlySBU;
-                        }
-                        $scope.user.selectedBillingSBU.push(value.SBUID);
-                    });
-                }).error(function (err) {
-                    $scope.Error = err;
-                })
-
-                $('#editModel').modal('show');
-            }).error(function (err) {
-                $scope.Error = err;
-            })
+            $('#editModel').modal('show');
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -478,9 +268,8 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     // add User
     $scope.add = function (v) {
-
         var currentUser = v;
-        if (currentUser != null && currentUser.UserName != null && currentUser.EmailId && currentUser.MobileNumber) {
+        if (currentUser != null && currentUser.UserName != null) {
             currentUser.userId = currentUser.UserName;
             currentUser.userName = currentUser.UserName;
             currentUser.password = currentUser.UserName;
@@ -551,9 +340,9 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             console.log('Total selected: ' + ar.length);
             if (ar.length == 0) {
                 alert('There are no users selected');
-                //toaster.pop('warning', "Warning", "There are no users selected", null);
+                ////toaster.pop('warning', "Warning", "There are no users selected", null);
             }
-           else {
+            else {
                 var successcount = 0;
                 for (var i = 0; i < ar.length; i++) {
                     if (ar[i] != null && ar[i].UserName != null && ar[i].EmailId) {
@@ -568,7 +357,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                             $scope.addMode = false;
                             $scope.GetADUsers();
                             $scope.user = {};
-                            toaster.pop('success', "Success", "User added successfully", null);
+                            //toaster.pop('success', "Success", "User added successfully", null);
                             var n = parseInt(ar.length);
                             n = n - 1;
                             if (successcount == n) {
@@ -576,14 +365,14 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                             }
                             successcount++;
                             $('#userModel').modal('hide');
-
+                            
                         }).error(function (data) {
                             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
                         });
                     }
                     else {
                         //alert('Please select both the Role and SBU');
-                        toaster.pop('warning', "Warning", "Please select both the Role and SBU", null);
+                        //toaster.pop('warning', "Warning", "Please select both the Role and SBU", null);
                     }
                 }
             }
@@ -595,35 +384,28 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     $scope.ModifyUser = function (data) {
         //data.userId = data.UserName;
-        data.userName = data.UserName;
+        //data.userName = data.UserName;
         //data.password = data.UserName;
-        data.emailId = data.EmailId;
-        data.mobileNumber = data.MobileNumber;
-        data.SBU = data.selectedSBU;
-        data.BillingSBU = data.selectedBillingSBU
+        //data.emailId = data.EmailId;
+        //data.mobileNumber = data.MobileNumber;
+        //data.SBU = data.selectedSBU;
+        //data.BillingSBU = data.selectedBillingSBU
 
-        if (data.FirstWorkingDate == null || data.FirstWorkingDate == '' || data.FirstWorkingDate == undefined) {
-            data.FirstWorkingDate = new Date('01/01/1970');
-        }
-        if (data.LastWorkingDate == '' || data.LastWorkingDate == undefined) {
-            data.LastWorkingDate = null;
-        }
-        if (data.userId == $rootScope.UserInfo.user.userId) {
-            $scope.EditedUser = data;
-            $('#roleChange').modal('show');
-        }
-        else {
-            UserFactory.ModifyUser(data).success(function (data) {
+        //if (data.userId == $rootScope.UserInfo.user.userId) {
+        //    $scope.EditedUser = data;
+        //    $('#roleChange').modal('show');
+        //}
+        //else {
+        UserFactory.ModifyUser(data).success(function (data) {
+            $scope.GetAllUsers();
+            //reset form
+            $scope.user = {};
+            //toaster.pop('success', "Success", "Modified User successfully", null);
+            $('#editModel').modal('hide');
 
-                $scope.GetAllUsers();
-                //reset form
-                $scope.user = {};
-                toaster.pop('success', "Success", "Modified User successfully", null);
-                $('#editModel').modal('hide');
-
-            }).error(function (error) {
-            });
-        }
+        }).error(function (error) {
+        });
+        //}
     };
 
     $scope.ModifySelfUser = function () {
@@ -633,14 +415,6 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         // data.password = $scope.EditedUser.UserName;
         $scope.EditedUser.emailId = $scope.EditedUser.EmailId;
         $scope.EditedUser.mobileNumber = $scope.EditedUser.MobileNumber;
-        $scope.EditedUser.SBU = $scope.EditedUser.selectedSBU;
-        if ($scope.EditedUser.FirstWorkingDate == null || $scope.EditedUser.FirstWorkingDate == '' || $scope.EditedUser.FirstWorkingDate == undefined) {
-            $scope.EditedUser.FirstWorkingDate = new Date('01/01/1970');
-        }
-        if ($scope.EditedUser.LastWorkingDate == '' || $scope.EditedUser.LastWorkingDate == undefined) {
-            $scope.EditedUser.LastWorkingDate = null;
-        }
-
 
         UserFactory.ModifyUser($scope.EditedUser).success(function (data) {
             $scope.GetAllUsers();
@@ -671,7 +445,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             //reset form
             $scope.user = {};
             // $scope.adduserform.$setPristine(); //for form reset
-            toaster.pop('success', "Success", "User deleted successfully", null);
+            //toaster.pop('success', "Success", "User deleted successfully", null);
             $('#confirmModal').modal('hide');
 
 
@@ -739,13 +513,13 @@ ReportApp.factory('UserFactory', function ($http) {
             return $http.post('CreateUser', user);
         },
         CreateTempUser: function (user) {
-            return $http.post(Userurl + '/CreateTempUser', user);
+            return $http.post('CreateTempUser', user);
         },
         ModifyUser: function (user) {
-            return $http.post(Userurl + '/ModifyUser', user);
+            return $http.post('ModifyUser', user);
         },
         DeleteUser: function (user) {
-            return $http.post(Userurl + '/DeleteUser', user);
+            return $http.post('DeleteUser', user);
         },
         DeleteADUser: function (user) {
             return $http.post(Userurl + '/DeleteADUser', user);
@@ -771,11 +545,11 @@ ReportApp.factory('UserFactory', function ($http) {
         UpdateHierarchyJSON: function (user) {
             return $http.post(Userurl + '/UpdateHierarchyJSON', user);
         },
-        GetUsersByTypes: function (types) {
-            return $http.post(Userurl + '/GetUsersByTypes', types);
+        getloggedusername: function () {
+            return $http.get('getloggedusername');
         },
-        GetAllBillingOptions: function () {
-            return $http.get(Userurl + '/GetAllBillingOptions');
+        GetUserRoles: function (userId) {
+            return $http.get('GetUserRoles/?UserId=' + userId);
         },
         GetBillingForUser: function (userId) {
             return $http.get(Userurl + '/GetBillingForUser/?UserId=' + userId);
