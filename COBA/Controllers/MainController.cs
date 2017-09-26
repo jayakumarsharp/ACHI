@@ -575,10 +575,11 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CreateTempUser(string user)
+        public JsonResult CreateTempUser(UserMaster user)
         {
-
-            _dbOperations.CreateTempUser(user);
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.CreateTempUser(user, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 

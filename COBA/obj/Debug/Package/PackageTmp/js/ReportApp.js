@@ -7,11 +7,8 @@ var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid
 
 ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory) {
     $scope.notificationdata = [];
-
-
-
     $rootScope.UserInfo = {};
-
+    $scope.MenuList = [];
     $scope.GetUserRoles = function () {
         UserFactory.getloggedusername().success(function (data) {
             $rootScope.UserInfo = { userId: data };
@@ -20,13 +17,21 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
                 UserFactory.GetUserRoles(userId).success(function (data) {
                     console.log(data);
                     $rootScope.RightList = data;
+                    $scope.MenuList = [];
+                    var distinctArray = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (distinctArray.indexOf(data[i].MenuName) < 0 && data[i].ShowMenu == 'true') {
+                            distinctArray.push(data[i].MenuName);
+                            $scope.MenuList.push({ 'MenuName': data[i].MenuName, 'Path': data[i].Path, 'Icon': data[i].Icon });
+                        }
+                    }
+
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });
             }
 
         });
-
 
     }
     $scope.GetUserRoles()

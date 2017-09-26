@@ -7,6 +7,7 @@
                 <li>
                     <div class="actions">
                         <button data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+                        <button data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
                     </div>
                 </li>
             </ol>
@@ -17,7 +18,7 @@
         <div class="modal fade" id="userModel" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:60%;height:400px">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #444d58;color:white">
+                    <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                         <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add User</h4>
                         <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit User</h4>
@@ -80,7 +81,7 @@
         <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:40%">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #444d58;color:white">
+                    <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                         <h4 class="modal-title" id="myModalLabel">View User</h4>
                     </div>
@@ -145,7 +146,7 @@
         <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:60%">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #444d58;color:white">
+                    <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                         <h4 class="modal-title" id="myModalLabel">Edit User</h4>
                     </div>
@@ -220,82 +221,97 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="userCreateModel" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" style="width:30%">
-                    <div class="modal-content">
-                        <div class="modal-header" style="background-color: #444d58;color:white">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                            <h4 class="modal-title" id="myModalLabel">Create User</h4>
+        </div>
+        <div class="modal fade" id="userCreateModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:50%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                        <h4 class="modal-title" id="myModalLabel">Create User</h4>
+                    </div>
+                    <div class="box-comments">
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form" name="createUserForm">
+                                <div class="form-group">
+                                    <label for="Name" class="col-sm-4 control-label">UserID</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <input ng-model="user.userId" class="form-control" maxlength="25" placeholder="Enter user id" required /><label style="color:red">{{InvalidMessage}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Name" class="col-sm-4 control-label">User Name</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <input ng-model="user.UserName" class="form-control" maxlength="25" placeholder="Enter user name" required /><label style="color:red">{{InvalidMessage}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="EmailID" class="col-sm-4 control-label">Email</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <input type="email" class="form-control" ng-model="user.emailId" maxlength="60" placeholder="Enter email id" name="emailId" required />
+                                    </div><span style="color:red" ng-show="createUserForm.emailId.$error.email">Invalid Email</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Password" class="col-sm-4 control-label">Password</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <input type="password" class="form-control" ng-model="user.password" maxlength="25" placeholder="Enter password" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="RoleID" class="col-sm-4 control-label">Role</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <select class="form-control" ng-model="user.RoleId" ng-options="item.id as item.RoleName for item in Roles" title="Select Role" required>
+                                            <option value="">- Select Role - </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="SBU" class="col-sm-4 control-label">Business Sector</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                            <option value="">- Select BusinessSector -</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="TypeID" class="col-sm-4 control-label">Region</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <select class="form-control" name="ddlSBU" ng-model="user.RegionId" ng-options="item.Id as item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                                            <option value="">- Select User Region -</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="TypeID" class="col-sm-4 control-label">Country</label>
+                                    <div class="col-sm-6" style="margin-top:6px">
+                                        <select class="form-control" name="ddlSBU" ng-model="user.CountryId" ng-options="item.Id as item.CountryName for item in CountryMasterList" title="Select Division" style="width:100%;font-size: 0.8em" required>
+                                            <option value="">- Select Country -</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="box-comments">
-                            <div class="modal-body">
-                                <form class="form-horizontal" role="form" name="createUserForm">
-                                    <div class="form-group">
-                                        <label for="Name" class="col-sm-4 control-label">UserID</label>
-                                        <div class="col-sm-8" style="margin-top:6px">
-                                            <input ng-model="user.userId" maxlength="25" placeholder="Enter user id" required /><label style="color:red">{{InvalidMessage}}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="EmailID" class="col-sm-4 control-label">Email</label>
-                                        <div class="col-sm-6" style="margin-top:6px">
-                                            <input type="email" ng-model="user.emailId" maxlength="60" placeholder="Enter email id" name="emailId" required />
-                                        </div><span style="color:red" ng-show="createUserForm.emailId.$error.email">Invalid Email</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Password" class="col-sm-4 control-label">Password</label>
-                                        <div class="col-sm-8" style="margin-top:6px">
-                                            <input type="password" ng-model="user.password" maxlength="25" placeholder="Enter password" required />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="TypeID" class="col-sm-4 control-label">Type</label>
-                                        <div class="col-sm-6" style="margin-top:6px">
-                                            <select class="form-control" ng-model="user.selectedType" ng-change="stateChanged(user.selectedType)" ng-options="item.TypeName for item in Types" title="Select Type" required>
-                                                <option value="">- Select Type - </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="RoleID" class="col-sm-4 control-label">Role</label>
-                                        <div class="col-sm-6" style="margin-top:6px">
-                                            <select class="form-control" ng-model="user.Role" ng-options=" item.RoleName for item in Roles" title="Select Role" required>
-                                                <option value="">- Select Role - </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="SBU" class="col-sm-4 control-label">SBU</label>
-                                        <div class="col-sm-6" style="margin-top:6px">
-                                            <select class="form-control" name="ddlSBU" ng-model="user.selectedSBU" ng-options="item.id as item.SBU for item in SBU" title="Select SBU" multiple required>
-                                                <option value="">- Select SBU -</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Create" data-ng-click="CreateTempUser(user)" class="btn btn-primary" ng-disabled="createUserForm.$invalid" />
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Create" data-ng-click="CreateTempUser(user)" class="btn btn-primary" ng-disabled="createUserForm.$invalid" />
                     </div>
                 </div>
             </div>
-            <!-- <script>
-             .table-borderless td,
-            .table-borderless th {
-                border: 0;
-            }
-            </script> -->
-
-
-
-            <div id="loader " class="animationload hide ">
-                <div class="loader ">
-                    Loading...
-                </div>
-            </div>
-
         </div>
+        <!-- <script>
+         .table-borderless td,
+        .table-borderless th {
+            border: 0;
+        }
+        </script> -->
+
+        <div id="loader " class="animationload hide ">
+            <div class="loader ">
+                Loading...
+            </div>
+        </div>
+
     </div>
 </div>

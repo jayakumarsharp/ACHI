@@ -194,8 +194,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     $scope.CreateTempUser = function (user) {
         $scope.InvalidMessage = '';
-        user.SBU = user.selectedSBU;
-        user.BillingSBU = user.selectedBillingSBU;
+        
         UserFactory.GetUser(user.userId).success(function (data) {
             if (data != undefined) {
                 $scope.userId = '';
@@ -228,9 +227,6 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         // angular.element(document.querySelector('#loader')).removeClass('hide');
         $scope.InvalidMessage = '';
         $scope.user = {};
-        $scope.selectedType = [];
-        $scope.selectedSBU = [];
-        $scope.selectedRole = [];
         $('#userCreateModel').modal('show');
     };
 

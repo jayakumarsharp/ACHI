@@ -48,15 +48,8 @@ public class DbOperations
 
     #region Private Variable Declaration
     private MySqlConnection connection;
-    private string server;
-    private string database;
-    private string uid;
-    private string password;
-
-
     private static readonly log4net.ILog log = LogManager.GetLogger(typeof(DbOperations));
     private string connString = string.Empty;
-
 
     private int commandTimeout = 0;
     #endregion
@@ -2492,63 +2485,48 @@ public class DbOperations
         {
         }
     }
-    public void CreateTempUser(string user)
+    public void CreateTempUser(UserMaster user, out int errorcode, out string errordesc)
     {
         try
         {
-            //var dbdate = new Date();
-            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
-            ////var hash_parts = Utility.UtilityModel.create_password(user.password);
-            ////var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
-            //var encryptedPwd = Utility.UtilityModel.encryptStringWithRsaPublicKey(user.password);
-            //models.sequelize.transaction().then(function(t) {
-            //    if (t != null && t != undefined)
-            //    {
-            //        var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //        var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
-            //        var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
-            //        logger.info('Type: ' + JSON.stringify(user.selectedType));
-            //        logger.info('Role: ' + JSON.stringify(user.Role));
-            //        logger.info('Creating temp user: \nUserId: ' + user.userId + '\nUserType: ' + user.selectedType.TypeID + '\nUserRole:' + user.Role.id);
-            //        models.User.create({
-            //            userId: user.userId, UserName: user.userId, TypeId: user.selectedType.TypeID, RoleId: user.Role.id, Password: encryptedPwd, EmailId: user.emailId,
-            //            CustomData: 'NA', Status: 'Active', UserExpiryDate: userExpiryDate, IsADUser: 'No',
-            //            PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
-            //            LastUsedDate: createdDate, CreatedDate: createdDate, CreatedBy: '', ModifiedDate: createdDate,
-            //            ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '', MakerComment: '',
-            //            CheckerComment: ''
-            //        }, { transaction: t })
-            //            .then(function(usercreate) {
-            //            models.UserPasswordHistory.create({
-            //                SessionTokenId: uuid.v1(), UserId: user.userId,
-            //                    Password: encryptedPwd, CreatedDate: createdDate
-            //                })
-            //                    .then(function(usercreated) {
-            //                logger.info('temp user created successfully');
-            //                logger.info('SBUs:\n' + JSON.stringify(user.SBU));
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "No"));
 
-            //                var tempArr = [];
-            //                for (var i = 0; i < user.SBU.length; i++)
-            //                {
-            //                    tempArr.push({ 'UserID': user.userId, 'SBUID': user.SBU[i] });
-            //            }
-            //            models.UserSBU.bulkCreate(tempArr, { omitNull: true }).then(function(sbu) {
-            //                logger.info('Added SBUs');
-            //                models.UserBillingSBU.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
-            //                                .then(function(usersbus) {
-            //                    var tempArr2 = [];
-            //                    for (var i = 0; i < user.BillingSBU.length; i++)
-            //                    {
-            //                        tempArr2.push({ 'UserID': user.userId, 'SBUID': user.BillingSBU[i].id });
-            //                }
-            //                logger.info('SBUs:\n' + JSON.stringify(user.SBU));
-            //                models.UserBillingSBU.bulkCreate(tempArr2, { omitNull: true }).then(function(billsbu) {
-            //                    logger.info('Added Billing SBUs');
-            //                    t.commit();
-            //                    deferred.resolve(billsbu);
+                if (this.OpenConnection() == true)
+                {
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
         }
         catch (Exception e)
         {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
         }
     }
     public void CreateUser(UserMaster user, out int errorcode, out string errordesc)
@@ -2569,8 +2547,8 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
                 cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
                 cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
-
-
+                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "Yes"));
+                cmd.Parameters.Add(new MySqlParameter("i_password",""));
                 if (this.OpenConnection() == true)
                 {
                     //Execute command
@@ -3604,3 +3582,32 @@ public class DbOperations
 
 
 
+public static class EncryptLib
+{
+
+    public static string EncodePasswordToBase64(string password)
+    {
+        try
+        {
+            byte[] encData_byte = new byte[password.Length];
+            encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
+            string encodedData = Convert.ToBase64String(encData_byte);
+            return encodedData;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error in base64Encode" + ex.Message);
+        }
+    } //this function Convert to Decord your Password
+    public static string DecodeFrom64(string encodedData)
+    {
+        System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+        System.Text.Decoder utf8Decode = encoder.GetDecoder();
+        byte[] todecode_byte = Convert.FromBase64String(encodedData);
+        int charCount = utf8Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+        char[] decoded_char = new char[charCount];
+        utf8Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+        string result = new String(decoded_char);
+        return result;
+    }
+}
