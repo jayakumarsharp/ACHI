@@ -16,6 +16,19 @@
 CREATE DATABASE IF NOT EXISTS `achi` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `achi`;
 
+-- Dumping structure for procedure achi.delete_RoleRight
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_RoleRight`(
+	IN `i_roleid` INT
+
+
+)
+BEGIN
+delete from tbl_roleright_mapping where RoleID=i_roleid;
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure achi.Get_ApprovaltransferByuser
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Get_ApprovaltransferByuser`(
@@ -108,11 +121,93 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure achi.sp_adduser
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_adduser`(
+	IN `i_userid` VARCHAR(50),
+	IN `i_username` VARCHAR(50),
+	IN `i_emailid` VARCHAR(50),
+	IN `i_Roleid` VARCHAR(50),
+	IN `i_countryid` INT,
+	IN `i_regionid` INT,
+	IN `i_businesssectorid` INT
+,
+	IN `i_password` VARCHAR(4000),
+	IN `i_IsADUser` VARCHAR(50)
+
+)
+BEGIN
+if(i_IsADUser ='Yes') then
+insert into tbl_user_master (Userid,UserName,EmailId,RoleId,CountryId,RegionId,BusinessSectorId,Status,IsADUser) values(i_userid,i_username,i_emailid,i_Roleid,i_countryid,i_regionid,i_businesssectorid,'Active',i_IsADUser);
+else
+insert into tbl_user_master (Userid,UserName,EmailId,RoleId,CountryId,RegionId,BusinessSectorId,Status,password,IsADUser) values(i_userid,i_username,i_emailid,i_Roleid,i_countryid,i_regionid,i_businesssectorid,'Active',i_password,i_IsADUser);
+end if;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure achi.SP_DeleteRole
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DeleteRole`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DeleteRole`(
+	IN `i_id` INT
+)
 BEGIN
 
+delete from tbl_role_master where id=i_id;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_delete_ApplicationMaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_ApplicationMaster`(
+	IN `i_id` INT
+
+)
+BEGIN
+delete from tbl_ApplicationMaster where id=i_id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_delete_BusinessSector
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_BusinessSector`(
+	IN `i_id` INT
+
+)
+BEGIN
+delete from tbl_BusinessSector where id=i_id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_delete_country
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_country`(
+	IN `i_id` INT
+
+)
+BEGIN
+delete from tbl_country_master where id=i_id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_delete_ProductType
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_ProductType`(
+	IN `i_id` INT
+)
+BEGIN
+delete from tbl_ProductTypemaster where id=i_id;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_delete_region
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_region`(
+	IN `i_id` INT
+
+)
+BEGIN
+delete from tbl_region_master where id=i_id;
 END//
 DELIMITER ;
 
@@ -139,6 +234,98 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_transfersetting`(
 )
 BEGIN
 update tbl_transfersetting set isactive='N' where Owneruser=i_owner;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getallApplicationMaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getallApplicationMaster`(
+	IN `i_Id` VARCHAR(50)
+)
+BEGIN
+if(i_Id !='') then
+
+select * from tbl_ApplicationMaster where Id=i_id;
+else
+select * from tbl_ApplicationMaster;
+end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getallBusinessSector
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getallBusinessSector`(
+	IN `i_Id` VARCHAR(50)
+
+)
+BEGIN
+
+if(i_Id !='') then
+
+select * from tbl_BusinessSector where Id=i_id;
+else
+select * from tbl_BusinessSector;
+end if;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getallcountry
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getallcountry`(
+	IN `i_Id` VARCHAR(50)
+)
+BEGIN
+
+
+if(i_Id !='') then
+
+select * from tbl_country_master where Id=i_id;
+else
+select * from tbl_country_master;
+end if;
+
+
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getallProduct
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getallProduct`(
+	IN `i_Id` VARCHAR(50)
+
+)
+BEGIN
+
+if(i_Id !='') then
+
+select * from tbl_ProductTypemaster where Id=i_id;
+else
+select * from tbl_ProductTypemaster;
+end if;
+
+
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getallregion
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getallregion`(
+	IN `i_Id` VARCHAR(50)
+)
+BEGIN
+
+if(i_Id !='') then
+
+select * from tbl_region_master where Id=i_id;
+else
+select * from tbl_region_master;
+end if;
+
+
+
 END//
 DELIMITER ;
 
@@ -169,6 +356,16 @@ ot.IsActive, ot.IsProcessed, ot.RefNumber,t.Version, ot.TaskAttachement, ot.Task
  ot.TaskAssignedDate, ot.LastModifiedDate, ot.LastModifiedBy  from tbl_onboarding_task ot left join tbl_strategy t on ot.RefNumber=t.RefNumber and ot.Version =t.Version
 where ot.Id=i_id;
 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_getmenuforuser
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getmenuforuser`(
+	IN `i_UserId` VARCHAR(50)
+)
+BEGIN
+select distinct MenuName, Path, RM.RightID, RM.ShowMenu, RM.Icon from TBL_RIGHT_MASTER RM inner join TBL_ROLERIGHT_MAPPING RR on RM.RightID=RR.RightID inner join TBL_USER_MASTER UM on RR.RoleID=UM.RoleId where UM.Userid = i_UserId order by RM.RightID;
 END//
 DELIMITER ;
 
@@ -214,6 +411,16 @@ Select * from tbl_right_master where RightId=i_roleid;
 else
 Select * from tbl_right_master;
 end if;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.SP_GetRoleRights
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GetRoleRights`(
+	IN `i_roleId` INT
+)
+BEGIN
+select * from tbl_roleright_mapping where roleId=i_roleId;
 END//
 DELIMITER ;
 
@@ -280,6 +487,66 @@ select * from tbl_transfersetting where Owneruser=i_Owner and IsActive='Y';
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure achi.sp_getusers
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getusers`(
+	IN `i_userid` VARCHAR(50)
+
+
+)
+BEGIN
+
+if(i_userid ='') then
+select u.Userid,u.UserName,u.EmailId,u.RegionId,r.RegionName,u.CountryId,c.CountryName,u.BusinessSectorId,b.Name,u.RoleId,rm.RoleName,u.Status from tbl_user_master u join tbl_businesssector b on u.BusinessSectorId=b.Id join tbl_region_master r  on u.RegionId=r.Id join tbl_country_master c  on u.CountryId=c.id join tbl_role_master rm on u.RoleId=rm.Id;
+else
+select u.Userid,u.UserName,u.EmailId,u.RegionId,r.RegionName,u.CountryId,c.CountryName,u.BusinessSectorId,b.Name,u.RoleId,rm.RoleName,u.Status from tbl_user_master u join tbl_businesssector b on u.BusinessSectorId=b.Id join tbl_region_master r  on u.RegionId=r.Id join tbl_country_master c  on u.CountryId=c.id join tbl_role_master rm on u.RoleId=rm.Id  where u.userid=i_userid;
+end if;
+
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_ApplicationMaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_ApplicationMaster`(
+	IN `i_ApplicationId` VARCHAR(50)
+,
+	IN `i_ApplicationName` VARCHAR(50)
+
+)
+BEGIN
+
+insert into tbl_ApplicationMaster (ApplicationID,ApplicationName) values(i_ApplicationId,i_ApplicationName);
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_BusinessSector
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_BusinessSector`(
+	IN `i_BusinessSectorName` VARCHAR(50)
+
+)
+BEGIN
+
+insert into tbl_BusinessSector (Name) values(i_BusinessSectorName);
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_Country
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_Country`(
+	IN `i_CountryName` VARCHAR(50)
+
+)
+BEGIN
+
+insert into tbl_country_master (Countryname) values(i_CountryName);
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure achi.SP_insert_OnboardingTask
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_insert_OnboardingTask`(
@@ -302,6 +569,58 @@ BEGIN
 Insert into tbl_onboarding_task (UniqueEmailID,EmailID,ClientNumber,EmailSubject,EmailContent,IsMappedToTask,EmailAttachment,CreatedDate,IsActive,IsProcessed,CreatedBy,TaskAssignedDate) 
 values (i_UniqueEmailID,i_EmailID,i_ClientNumber,i_Subject,i_EmailContent,i_IsMappedToTask,i_EmailAttachment,i_CreatedDate,'Y','N',i_CreatedBy,i_TaskAssignedDate);
 
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_Product
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_Product`(
+	IN `i_ProductName` VARCHAR(50)
+
+
+)
+BEGIN
+
+insert into tbl_ProductTypemaster (ProductType) values(i_ProductName);
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_Region
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_Region`(
+	IN `i_RegionName` VARCHAR(50)
+
+
+)
+BEGIN
+
+insert into tbl_region_master (regionname) values(i_RegionName);
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_role
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_role`(
+	IN `i_role` VARCHAR(50),
+	OUT `param_auto_id` INT
+)
+BEGIN
+insert into tbl_role_master (RoleName) values(i_role);
+  set param_auto_id := last_insert_id();
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_insert_roleright
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_roleright`(
+	IN `i_RoleId` INT,
+	IN `i_RightId` INT
+
+)
+BEGIN
+insert into tbl_roleright_mapping (RoleId,RightId) values(i_RoleId,i_RightId);
 END//
 DELIMITER ;
 
@@ -481,6 +800,67 @@ insert into tbl_transfersetting(Owneruser,TransferTo,DurationFrom,DurationTo,IsA
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure achi.sp_updateuser
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_updateuser`(
+	IN `i_userid` VARCHAR(50),
+	IN `i_username` VARCHAR(50),
+	IN `i_emailid` VARCHAR(50),
+	IN `i_Roleid` VARCHAR(50),
+	IN `i_countryid` INT,
+	IN `i_regionid` INT,
+	IN `i_businesssectorid` INT,
+	IN `i_status` VARCHAR(50)
+)
+BEGIN
+
+update tbl_user_master set UserName=i_username,EmailId=i_emailid,RoleId=i_Roleid,CountryId=i_countryid,RegionId=i_regionid,BusinessSectorId=i_businesssectorid,Status=i_status 
+where Userid=i_userid;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_update_Applicationmaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_Applicationmaster`(
+	IN `i_id` INT,
+	IN `i_ApplicationId` VARCHAR(50),
+	IN `i_ApplicationName` VARCHAR(50)
+)
+BEGIN
+
+update tbl_ApplicationMaster set ApplicationName=i_ApplicationName , ApplicationId=i_ApplicationId where id=i_id;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_update_BusinessSector
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_BusinessSector`(
+	IN `i_id` INT,
+	IN `i_BusinessSectorname` VARCHAR(50)
+
+)
+BEGIN
+
+update tbl_BusinessSector set  name=i_BusinessSectorname where id=i_id;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_update_countrymaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_countrymaster`(
+	IN `i_id` INT,
+	IN `i_countryname` VARCHAR(50)
+)
+BEGIN
+
+update tbl_country_master set countryname=i_countryname where id=i_id;
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure achi.sp_update_map_task
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_map_task`(
@@ -509,6 +889,33 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_update_onboardingTask`(
 BEGIN
 
 update tbl_onboarding_task set TaskAttachement=i_TaskAttachment,comments=i_comments where Id=i_id;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_update_Productmaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_Productmaster`(
+	IN `i_id` INT,
+	IN `i_ProductName` VARCHAR(50)
+
+)
+BEGIN
+
+update tbl_ProductTypemaster set ProductType =i_ProductName where id=i_id;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure achi.sp_update_regionmaster
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_regionmaster`(
+	IN `i_id` INT,
+	IN `i_regionname` VARCHAR(50)
+)
+BEGIN
+
+update tbl_region_master set regionname=i_regionname where id=i_id;
 
 END//
 DELIMITER ;
@@ -626,6 +1033,24 @@ DELETE FROM `tbl_aduser_master`;
 /*!40000 ALTER TABLE `tbl_aduser_master` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tbl_aduser_master` ENABLE KEYS */;
 
+-- Dumping structure for table achi.tbl_applicationmaster
+CREATE TABLE IF NOT EXISTS `tbl_applicationmaster` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ApplicationID` varchar(50) DEFAULT NULL,
+  `ApplicationName` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table achi.tbl_applicationmaster: ~4 rows (approximately)
+DELETE FROM `tbl_applicationmaster`;
+/*!40000 ALTER TABLE `tbl_applicationmaster` DISABLE KEYS */;
+INSERT INTO `tbl_applicationmaster` (`Id`, `ApplicationID`, `ApplicationName`) VALUES
+	(1, '1001', 'app1'),
+	(2, '1002', 'app2'),
+	(3, '1003', 'app3'),
+	(4, '1004', 'appplicaton 4');
+/*!40000 ALTER TABLE `tbl_applicationmaster` ENABLE KEYS */;
+
 -- Dumping structure for table achi.tbl_approvaltransfer
 CREATE TABLE IF NOT EXISTS `tbl_approvaltransfer` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -651,6 +1076,20 @@ INSERT INTO `tbl_approvaltransfer` (`Id`, `RefNumber`, `Version`, `Approver`, `O
 	(75, '1', '1', 'George', 'John', '0', '0', '0', '0', 'Y', 'N', 'N', 'N'),
 	(76, '1', '1', 'George', 'John', '0', '0', '0', '0', 'Y', 'N', 'N', 'N');
 /*!40000 ALTER TABLE `tbl_approvaltransfer` ENABLE KEYS */;
+
+-- Dumping structure for table achi.tbl_businesssector
+CREATE TABLE IF NOT EXISTS `tbl_businesssector` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table achi.tbl_businesssector: ~1 rows (approximately)
+DELETE FROM `tbl_businesssector`;
+/*!40000 ALTER TABLE `tbl_businesssector` DISABLE KEYS */;
+INSERT INTO `tbl_businesssector` (`Id`, `Name`) VALUES
+	(1, 'sector');
+/*!40000 ALTER TABLE `tbl_businesssector` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_client
 CREATE TABLE IF NOT EXISTS `tbl_client` (
@@ -867,17 +1306,20 @@ DELETE FROM `tbl_client`;
 /*!40000 ALTER TABLE `tbl_client` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tbl_client` ENABLE KEYS */;
 
--- Dumping structure for table achi.tbl_coutry_master
-CREATE TABLE IF NOT EXISTS `tbl_coutry_master` (
+-- Dumping structure for table achi.tbl_country_master
+CREATE TABLE IF NOT EXISTS `tbl_country_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `CountryName` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_coutry_master: ~0 rows (approximately)
-DELETE FROM `tbl_coutry_master`;
-/*!40000 ALTER TABLE `tbl_coutry_master` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_coutry_master` ENABLE KEYS */;
+-- Dumping data for table achi.tbl_country_master: ~2 rows (approximately)
+DELETE FROM `tbl_country_master`;
+/*!40000 ALTER TABLE `tbl_country_master` DISABLE KEYS */;
+INSERT INTO `tbl_country_master` (`id`, `CountryName`) VALUES
+	(1, 'India'),
+	(2, 'England');
+/*!40000 ALTER TABLE `tbl_country_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_onboarding_task
 CREATE TABLE IF NOT EXISTS `tbl_onboarding_task` (
@@ -931,39 +1373,84 @@ INSERT INTO `tbl_onboarding_task` (`Id`, `UniqueEmailId`, `EmailId`, `ClientNumb
 	(33, '<CAE_CuUi6iNDkHPbd-p4ctE7EYNfvu115b7MYNQeXMgxaxXQDEQ@mail.gmail.com>', 'honikeyan@gmail.com', '11111123444', 'Fwd: CLient ID : 11111123444 (Trial Version)', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="ltr"><br><div class="gmail_quote">---------- Forwarded message ----------<br>From: <b class="gmail_sendername">Kar A</b> <span dir="ltr">&lt;<a href="mailto:honikeyan@gmail.com">honikeyan@gmail.com</a>&gt;</span><br>Date: Tue, Aug 15, 2017 at 10:46 PM<br>Subject: CLient ID : 11111123444<br>To: <a href="mailto:savvjayakumar@outlook.com">savvjayakumar@outlook.com</a><br><br><br><div dir="ltr"><br></div>\r\n</div><br></div>\r\n\r\n', 'Test mail.pptx,', 'Y', 'Y', 'N', '5', NULL, NULL, NULL, '2017-08-15 00:00:00', 'honikeyan@gmail.com', NULL, '2017-08-15 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_onboarding_task` ENABLE KEYS */;
 
+-- Dumping structure for table achi.tbl_producttypemaster
+CREATE TABLE IF NOT EXISTS `tbl_producttypemaster` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ProductType` varchar(50) DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table achi.tbl_producttypemaster: ~2 rows (approximately)
+DELETE FROM `tbl_producttypemaster`;
+/*!40000 ALTER TABLE `tbl_producttypemaster` DISABLE KEYS */;
+INSERT INTO `tbl_producttypemaster` (`Id`, `ProductType`) VALUES
+	(1, 'product7'),
+	(2, 'product2');
+/*!40000 ALTER TABLE `tbl_producttypemaster` ENABLE KEYS */;
+
 -- Dumping structure for table achi.tbl_region_master
 CREATE TABLE IF NOT EXISTS `tbl_region_master` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `CountryId` int(11) NOT NULL,
   `RegionName` varchar(200) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_region_master: ~0 rows (approximately)
+-- Dumping data for table achi.tbl_region_master: ~2 rows (approximately)
 DELETE FROM `tbl_region_master`;
 /*!40000 ALTER TABLE `tbl_region_master` DISABLE KEYS */;
+INSERT INTO `tbl_region_master` (`Id`, `RegionName`) VALUES
+	(1, 'Region2'),
+	(2, 'Region1');
 /*!40000 ALTER TABLE `tbl_region_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_right_master
 CREATE TABLE IF NOT EXISTS `tbl_right_master` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) DEFAULT NULL,
   `RightID` int(11) DEFAULT NULL,
   `RightName` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `MenuName` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `Path` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `Icon` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `ShowMenu` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `ShowMenu` varchar(255) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_right_master: ~4 rows (approximately)
+-- Dumping data for table achi.tbl_right_master: ~33 rows (approximately)
 DELETE FROM `tbl_right_master`;
 /*!40000 ALTER TABLE `tbl_right_master` DISABLE KEYS */;
 INSERT INTO `tbl_right_master` (`id`, `RightID`, `RightName`, `MenuName`, `Path`, `Icon`, `ShowMenu`) VALUES
-	(1, 1, 'User Management Read', 'User Management', 'Users', 'fa fa-users', 'true'),
-	(2, 2, 'User Management Write', 'User Management', 'Users', 'fa fa-users', 'true'),
-	(3, 3, 'Role Management Read', 'Role Management', 'Roles', 'fa fa-list-alt', 'true'),
-	(4, 4, 'Role Management Write', 'Role Management', 'Roles', 'fa fa-list-alt', 'true');
+	(1, 1, 'User Management Read', 'User Management', 'UserManagement', 'fa fa-users', 'true'),
+	(2, 2, 'User Management Write', 'User Management', 'UserManagement', 'fa fa-users', 'true'),
+	(3, 3, 'Role Management Read', 'Role Management', 'RoleManagement', 'fa fa-list-alt', 'true'),
+	(4, 4, 'Role Management Write', 'Role Management', 'RoleManagement', 'fa fa-list-alt', 'true'),
+	(5, 5, 'Dashboard Read', 'Dashboard', 'Index', 'fa fa-list-alt', 'true'),
+	(6, 7, 'Dashboard Write', 'Dashboard', 'Index', 'fa fa-list-alt', 'true'),
+	(7, 8, 'Application Read', 'Application Management', 'Strategy', 'fa fa-list-alt', 'true'),
+	(8, 9, 'Application Write', 'Application Management', 'Strategy', 'fa fa-list-alt', 'true'),
+	(9, 10, 'Map Strategy Read', 'Map Strategy', 'MapTask', 'fa fa-list-alt', 'true'),
+	(10, 11, 'Map Strategy  Write', 'Map Strategy', 'MapTask', 'fa fa-list-alt', 'true'),
+	(11, 12, 'Change Management Read', 'Change Management', 'Tasks', 'fa fa-list-alt', 'true'),
+	(12, 13, 'Change Management Write', 'Change Management', 'Tasks', 'fa fa-list-alt', 'true'),
+	(13, 14, 'Approvals Read', 'Approvals Management', 'Approvals', 'fa fa-list-alt', 'true'),
+	(14, 15, 'Approvals Write', 'Approvals Management', 'Approvals', 'fa fa-list-alt', 'true'),
+	(15, 16, 'Transfer Settings Read', 'Transfer Settings', 'TransferSettings', 'fa fa-list-alt', 'true'),
+	(16, 17, 'Transfer Settings Write', 'Transfer Settings', 'TransferSettings', 'fa fa-list-alt', 'true'),
+	(17, 18, 'Email Read', 'Email', 'Emails', 'fa fa-list-alt', 'true'),
+	(18, 19, 'Email Write', 'Email', 'Emails', 'fa fa-list-alt', 'true'),
+	(19, 20, 'Reports', 'Reports', 'Reports', 'fa fa-list-alt', 'true'),
+	(20, 21, 'Licensing Read', 'Licensing', 'Licensing', 'fa fa-list-alt', 'true'),
+	(21, 22, 'Licensing Write', 'Licensing', 'Licensing', 'fa fa-list-alt', 'true'),
+	(22, 23, 'Country Read', 'Country', 'Country', 'fa fa-list-alt', 'true'),
+	(23, 24, 'Country Write', 'Country', 'Country', 'fa fa-list-alt', 'true'),
+	(24, 25, 'Region Read', 'Region', 'Region', 'fa fa-list-alt', 'true'),
+	(25, 26, 'Region Write', 'Region', 'Region', 'fa fa-list-alt', 'true'),
+	(26, 27, 'Business Sector Write', 'Business Sector', 'BusinessSector', 'fa fa-list-alt', 'true'),
+	(27, 28, 'Business Sector  Write', 'Business Sector', 'BusinessSector', 'fa fa-list-alt', 'true'),
+	(28, 29, 'Application Master Write', 'Application Master', 'ApplicationMaster', 'fa fa-list-alt', 'true'),
+	(29, 30, 'Application Master Write', 'Application Master', 'ApplicationMaster', 'fa fa-list-alt', 'true'),
+	(30, 31, 'Product Type Read', 'Product Type', 'ProductType', 'fa fa-list-alt', 'true'),
+	(31, 32, 'Product Type Write', 'Product Type', 'ProductType', 'fa fa-list-alt', 'true'),
+	(33, 34, 'Utilities', 'Utilities', 'Utilities', 'fa fa-list-alt', 'true'),
+	(32, 33, 'Reports', 'Reports', 'Reports', 'fa fa-list-alt', 'true');
 /*!40000 ALTER TABLE `tbl_right_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_roleright_mapping
@@ -972,11 +1459,45 @@ CREATE TABLE IF NOT EXISTS `tbl_roleright_mapping` (
   `RoleID` int(11) DEFAULT NULL,
   `RightID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_roleright_mapping: ~0 rows (approximately)
+-- Dumping data for table achi.tbl_roleright_mapping: ~33 rows (approximately)
 DELETE FROM `tbl_roleright_mapping`;
 /*!40000 ALTER TABLE `tbl_roleright_mapping` DISABLE KEYS */;
+INSERT INTO `tbl_roleright_mapping` (`id`, `RoleID`, `RightID`) VALUES
+	(17, 2, 17),
+	(18, 2, 18),
+	(19, 2, 1),
+	(20, 2, 3),
+	(21, 2, 2),
+	(22, 2, 4),
+	(23, 2, 5),
+	(24, 2, 7),
+	(25, 2, 8),
+	(26, 2, 9),
+	(27, 2, 10),
+	(28, 2, 11),
+	(29, 2, 12),
+	(30, 2, 13),
+	(31, 2, 14),
+	(32, 2, 15),
+	(33, 2, 16),
+	(34, 2, 19),
+	(35, 2, 20),
+	(36, 2, 21),
+	(37, 2, 22),
+	(38, 2, 23),
+	(39, 2, 24),
+	(40, 2, 25),
+	(41, 2, 26),
+	(42, 2, 27),
+	(43, 2, 28),
+	(44, 2, 29),
+	(45, 2, 30),
+	(46, 2, 31),
+	(47, 2, 32),
+	(48, 2, 34),
+	(49, 2, 33);
 /*!40000 ALTER TABLE `tbl_roleright_mapping` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_role_master
@@ -988,13 +1509,13 @@ CREATE TABLE IF NOT EXISTS `tbl_role_master` (
   `ModifiedDate` datetime DEFAULT NULL,
   `ModifiedBy` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table achi.tbl_role_master: ~1 rows (approximately)
 DELETE FROM `tbl_role_master`;
 /*!40000 ALTER TABLE `tbl_role_master` DISABLE KEYS */;
 INSERT INTO `tbl_role_master` (`id`, `RoleName`, `CreatedDate`, `CreatedBy`, `ModifiedDate`, `ModifiedBy`) VALUES
-	(1, 'Admin', '2017-09-20 08:42:30', NULL, NULL, NULL);
+	(2, 'Super User', NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_role_master` ENABLE KEYS */;
 
 -- Dumping structure for table achi.tbl_strategy
@@ -1092,7 +1613,7 @@ DELETE FROM `tbl_strategyapproval`;
 INSERT INTO `tbl_strategyapproval` (`Id`, `RefNumber`, `Version`, `Approver`, `Comments`, `ApprovedDate`, `Status`, `ActionStatus`, `IsActive`, `IsTransfered`, `IsViewed`, `IsModified`) VALUES
 	(49, '1', '1', 'George', 'Test', '0', 'Y', 'N', 'N', 'N', 'N', NULL),
 	(50, '1', '1', 'John', 'Testing', '0', 'N', 'N', 'Y', 'George', 'N', 'N'),
-	(51, '1', '1', 'Sivakumar', 'siva testing', '0', 'Y', 'N', 'Y', 'N', 'N', NULL),
+	(51, '1', '1', 'Sivakumar', 'siva testing', '0', 'Y', 'N', 'Y', 'N', 'N', 'N'),
 	(52, '1', '1', 'Oliver', '0', '0', '0', 'N', 'Y', 'N', 'N', 'N'),
 	(59, '1', '1', 'Daniel', '0', '0', '0', 'N', 'Y', 'N', 'N', 'N'),
 	(60, '1', '2', 'John', '0', '0', '0', '0', 'Y', 'N', 'N', NULL),
@@ -1160,10 +1681,10 @@ INSERT INTO `tbl_transfersetting` (`Id`, `Owneruser`, `TransferTo`, `DurationFro
 CREATE TABLE IF NOT EXISTS `tbl_user_master` (
   `Userid` varchar(255) CHARACTER SET utf8 NOT NULL,
   `UserName` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `TypeId` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `BusinessSectorId` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `RoleId` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `UserImage` longblob,
-  `Password` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `Password` varchar(4000) CHARACTER SET utf8 DEFAULT NULL,
   `EmailId` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `MobileNumber` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `CustomData` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -1183,17 +1704,20 @@ CREATE TABLE IF NOT EXISTS `tbl_user_master` (
   `MakerComment` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `CheckerComment` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `IsADUser` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
-  `BillingId` int(11) DEFAULT NULL,
-  `BaseSkillId` int(11) DEFAULT NULL,
+  `RegionId` int(11) DEFAULT NULL,
+  `CountryId` int(11) DEFAULT NULL,
   `FirstWorkingDate` datetime DEFAULT NULL,
   `LastWorkingDate` datetime DEFAULT NULL,
   `LocationId` int(11) DEFAULT NULL,
   PRIMARY KEY (`Userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table achi.tbl_user_master: ~0 rows (approximately)
+-- Dumping data for table achi.tbl_user_master: ~2 rows (approximately)
 DELETE FROM `tbl_user_master`;
 /*!40000 ALTER TABLE `tbl_user_master` DISABLE KEYS */;
+INSERT INTO `tbl_user_master` (`Userid`, `UserName`, `BusinessSectorId`, `RoleId`, `UserImage`, `Password`, `EmailId`, `MobileNumber`, `CustomData`, `Status`, `UserExpiryDate`, `PasswordExpiryDate`, `UserBlockDate`, `AttemptTries`, `LastAuthenticatedDate`, `LastUsedDate`, `CreatedDate`, `CreatedBy`, `ModifiedDate`, `ModifiedBy`, `ApprovedDate`, `Approvedby`, `MakerComment`, `CheckerComment`, `IsADUser`, `RegionId`, `CountryId`, `FirstWorkingDate`, `LastWorkingDate`, `LocationId`) VALUES
+	('Michael', NULL, '1', '2', NULL, 'd2VsY29tZQ==', 'Michael@coba.com', NULL, NULL, 'Active', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'No', 2, 1, NULL, NULL, NULL),
+	('Sivakumar', 'SivaKumar', '1', '2', NULL, NULL, 'Sivakumar@coba.com', NULL, NULL, 'Active', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', 1, 2, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `tbl_user_master` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
