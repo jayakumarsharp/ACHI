@@ -13,13 +13,13 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id' },
+    var columnDefs = [{ name: 'Id', visible: false},
         //{ name: 'BusinessSectorId' },
         { name: 'BusinessSectorName' },
         {
             name: 'Action'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetBusinessSectorMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-
+            , visible: $scope.IsReadOnly
         },
 
     ];

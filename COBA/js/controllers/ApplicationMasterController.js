@@ -13,15 +13,14 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id' },
+    var columnDefs = [{ name: 'Id', visible: $scope.IsReadOnly },
         { name: 'ApplicationId' },
         { name: 'ApplicationName' },
-        
-        {
-            name: 'Action'
+                {
+                    name: 'Action'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
 
-        },
+                },
 
     ];
 
@@ -121,4 +120,12 @@
         $scope.editMode = false;
     };
 
+    $scope.GetRightsList = function () {
+        angular.forEach($rootScope.RightList, function (value, key) {
+            if (value.RightName.contains('Application Write')) {
+                $scope.IsReadOnly = false;
+            }
+        });
+    };
+    $scope.GetRightsList();
 });

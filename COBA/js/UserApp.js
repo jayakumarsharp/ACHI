@@ -68,7 +68,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             { name: "CountryName", },
             { name: "BusinessSector" },
             {
-                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!IsReadOnly\"> Edit</a>'
+                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!grid.appScope.IsReadOnly\"> Edit</a>'
             }
 
         ]
@@ -461,7 +461,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.GetAllRoles();
     $scope.GetAllUsers();
     //$scope.IsUserSCHead();
-    //$scope.IsPageReadOnly();
+    $scope.IsPageReadOnly();
 });
 
 ReportApp.factory('UserFactory', function ($http) {

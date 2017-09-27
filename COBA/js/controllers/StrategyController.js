@@ -35,7 +35,7 @@
         paginationPageSize: 10,
         //enableFiltering: true,
         //angularCompileRows: true,
-        columnDefs: [{ name: 'Id' },
+        columnDefs: [{ name: 'Id', visible: false },
         { name: 'RefNumber' },
         { name: 'Name' },
         { name: 'Type' },
@@ -50,12 +50,12 @@
         {
             field: 'Action', width: 70
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>'
-
+             , visible: $scope.IsReadOnly
         },
                {
                    field: 'Approvals', width: 70
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
-
+                    , visible: $scope.IsReadOnly
                }],
     };
 

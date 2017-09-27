@@ -9,6 +9,8 @@
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
     $scope.LockedPriceSheet = [];
+    
+    
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
             if (value.RightName.contains('Currency Rate Write')) {
@@ -114,7 +116,7 @@
         {
             name: 'Action'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Approver,row.entity.Version,row.entity.Comments,row.entity.ApprovedDate,row.entity.Status)" ><i class="fa fa-edit" ></i></a ></div>'
-
+            , visible: $scope.IsReadOnly
         },
         //{
         //    field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'

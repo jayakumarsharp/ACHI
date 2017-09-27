@@ -6,14 +6,15 @@
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
+    
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
+            if (value.RightName.contains('Change Management Write')) {
                 $scope.IsReadOnly = false;
             }
         });
     };
-
+    
     $scope.Strategydata = [];
     $scope.StrategyVersiondata = [];
     $scope.Selcurrentversion = 0;
@@ -136,7 +137,7 @@
         {
             name: 'Action'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetVersionDataview(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>'
-
+               , visible: $scope.IsReadOnly
         },
         {
             field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
@@ -347,8 +348,7 @@
         }
     };
 
-    $scope.GetRightsList();
-
+    
 
     $scope.selectedA_Estimation = [];
     $scope.selectedB_Estimation = [];
@@ -457,5 +457,5 @@
             $scope.selectedA_Estimation.splice(delId, 1);
         }
     }
-
+    $scope.GetRightsList();
 });

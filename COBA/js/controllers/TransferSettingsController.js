@@ -1,21 +1,20 @@
 ﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout) {
     $scope.status = false;
-
+    $scope.IsReadOnly = true;
     $scope.changeStatus = function () {
-        $scope.status = !$scope.status;
+        if (!$scope.IsReadOnly)
+            $scope.status = !$scope.status;
     }
     $scope.userlist = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
     $scope.transfer = {};
-    $scope.IsReadOnly = true;
+
     $scope.GetRightsList = function () {
-        $scope.item = 'true';
         angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
+            if (value.RightName.contains('Transfer Settings Write')) {
                 $scope.IsReadOnly = false;
             }
         });
     };
-
     $scope.getallcurrencyconversions = function () {
         StrategyService.GetTransfersetting().success(function (data) {
             //console.log(data);
