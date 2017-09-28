@@ -15,16 +15,16 @@
     //$scope.DisplayMessage = '';
 
     $scope.IsPageReadOnly = function () {
-        //var isRead = true;
-        //$scope.IsReadOnly = true;
-        //angular.forEach($rootScope.RightList, function (value, key) {
-        //    if (value.RightName == 'Role Management Write') {
-        //        isRead = false;
-        //    }
-        //})
-        //if (!isRead) {
-        //    $scope.IsReadOnly = false;
-        //}
+        var isRead = true;
+        $scope.IsReadOnly = true;
+        angular.forEach($rootScope.RightList, function (value, key) {
+            if (value.RightName == 'Role Management Write') {
+                isRead = false;
+            }
+        })
+        if (!isRead) {
+            $scope.IsReadOnly = false;
+        }
     },
         $scope.GetAllRights = function () {
             $scope.Rights = [];

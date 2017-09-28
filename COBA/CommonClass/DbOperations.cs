@@ -1975,7 +1975,6 @@ public class DbOperations
                                select new RightMaster
                                {
                                    Icon = Convert.ToString(row["Icon"]),
-                                   id = Convert.ToString(row["id"]),
                                    MenuName = Convert.ToString(row["MenuName"]),
                                    Path = Convert.ToString(row["Path"]),
                                    RightID = Convert.ToString(row["RightID"]),

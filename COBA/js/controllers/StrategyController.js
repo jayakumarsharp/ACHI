@@ -1,4 +1,4 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout) {
+﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -7,20 +7,62 @@
     $scope.LegalEntity = [];
     $scope.ecurrency = {};
     $scope.LockedPriceSheet = [];
+
+    $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
+
+
     $scope.GetRightsList = function () {
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
-                $scope.IsReadOnly = false;
-            }
-        });
+        //angular.forEach($rootScope.RightList, function (value, key) {
+        //    if (value.RightName.contains('Currency Rate Write')) {
+        //        $scope.IsReadOnly = false;
+        //    }
+        //});
     };
 
     $scope.getallcurrencyconversions = function () {
         StrategyService.GetAllCurrencyConversion().success(function (data) {
             console.log(data);
             $scope.CurrencyGrid.data = data;
+        });
+        ApiCall.MakeApiCall("GetAllApplication?ApplicationId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.ApplicationMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
         })
+        ApiCall.MakeApiCall("GetAllBusinessSector?BusinessSectorId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.BusinessSectorMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
+        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.CountryMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
+        ApiCall.MakeApiCall("GetAllProductType?ProductTypeId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.ProductMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
+
+        ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
+            console.log(data);
+            $scope.RegionMasterList = data;
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
     };
+
+
+
 
     $scope.getallcurrencyconversions();
 
@@ -48,15 +90,15 @@
             cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
         },
         {
-            field: 'Action', width: 70
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>'
-             , visible: $scope.IsReadOnly
+            field: 'Action', width: 70,
+            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>',
+            visible: $scope.IsReadOnly
         },
-               {
-                   field: 'Approvals', width: 70
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
-                    , visible: $scope.IsReadOnly
-               }],
+        {
+            field: 'Approvals', width: 70,
+            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>',
+            visible: $scope.IsReadOnly
+        }],
     };
 
     $scope.showadd = function () {
@@ -65,13 +107,10 @@
             $scope.StrategyActive = false;
             $scope.IsSignOff = false;
         }, 100);
-
-
         $scope.editMode = false;
         $scope.currency = {};
         $scope.ecurrency.CurrencyDescrition = '';
         $('#currencyModel').modal('show');
-
     };
 
     $scope.GetAllCurrency = function () {
@@ -82,6 +121,7 @@
             $scope.Error = error;
         });
     };
+
 
 
     $scope.InsertStrategy = function (currency) {
@@ -95,6 +135,12 @@
         else
             currency.IsSignOff = "N";
 
+
+        currency.ApplicationId = $scope.selectModel.Application.ApplicationId;
+        currency.Country = $scope.selectModel.Country.Id;
+        currency.ProductType = $scope.selectModel.ProductType.Id;
+        currency.BusinessSector = $scope.selectModel.BusinessSector.Id;
+        currency.Region = $scope.selectModel.Region.Id;
 
         if (currency != null) {
             StrategyService.InsertStrategy(currency).success(function (data) {
@@ -196,7 +242,6 @@
     };
 
 
-
     $scope.UpdateStrategy = function (model) {
         model.Page = "S";
         StrategyService.UpdateStrategy(model).success(function (data) {
@@ -290,17 +335,13 @@
 
     $scope.selectedA_Estimation = [];
     $scope.selectedB_Estimation = [];
-
     $scope.listA_Estimation = [];
     $scope.listB_Estimation = [];
-
     $scope.checkedA_Estimation = false;
     $scope.checkedB_Estimation = false;
-
     $scope.AvailableUser_Estimation = [];
 
     $scope.gettask = function () {
-
         //TaskService.GetAllTask().success(function (data) {
         //console.log(data);
         var data = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
