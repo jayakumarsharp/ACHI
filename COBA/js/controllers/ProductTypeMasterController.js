@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.ProductMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -16,7 +16,6 @@
 
 
     $rootScope.$on("toggle", function () {
-        //jay
         $timeout(function () {
             $scope.ProductMasterGrid.api.sizeColumnsToFit();
         }, 1000);
@@ -31,27 +30,27 @@
 
     $scope.add = function (ProductMaster) {
         if (ProductMaster != null) {
-            //if (ProductMaster.TaskName.trim()) {
-            ApiCall.MakeApiCall("AddProductType", 'POST', ProductMaster).success(function (data) {
-                if (data.Error != undefined) {
-                    //toaster.pop('error', "Error", data.Error, null);
-                } else {
+            if (ProductMaster.ProductName.trim() != "") {
+                ApiCall.MakeApiCall("AddProductType", 'POST', ProductMaster).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
 
-                    $scope.ProductMaster = null;
-                    $scope.GetAllProductMaster();
-                    $scope.editMode = false;
-                    //toaster.pop('success', "Success", 'ProductMaster added successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding ProductMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //    //toaster.pop('warning', "Warning", 'Please enter ProductMaster', null);
-            //}
+                        $scope.ProductMaster = null;
+                        $scope.GetAllProductMaster();
+                        $scope.editMode = false;
+                        toaster.pop('success', "Success", 'Product added successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding ProductMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Product', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter ProductMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Product', null);
         }
 
     };
@@ -61,7 +60,7 @@
             $scope.editMode = true;
             $scope.ProductMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding ProductMaster! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding Product! " + data.ExceptionMessage;
         });
     };
 
@@ -72,7 +71,7 @@
             $scope.editMode = false;
             $scope.GetAllProductMaster();
             $('#confirmModal').modal('hide');
-            //toaster.pop('success', "Success", 'ProductMaster deleted successfully', null);
+            toaster.pop('success', "Success", 'ProductMaster deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -80,22 +79,22 @@
 
     $scope.UpdateProductMaster = function (model) {
         if (model != null) {
-            //if (model.TaskName.trim()) {
-            ApiCall.MakeApiCall("ModifyProductType", 'POST', model).success(function (data) {
-                $scope.editMode = false;
-                $scope.ProductMaster = null;
-                $scope.GetAllProductMaster();
-                //toaster.pop('success', "Success", 'ProductMaster updated successfully', null);
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding ProductMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //toaster.pop('warning', "Warning", 'Please enter ProductMaster', null);
-            //}
+            if (model.ProductName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyProductType", 'POST', model).success(function (data) {
+                    $scope.editMode = false;
+                    $scope.ProductMaster = null;
+                    $scope.GetAllProductMaster();
+                    toaster.pop('success', "Success", 'Product updated successfully', null);
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding ProductMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter ProductMaster', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter ProductMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Product', null);
         }
     };
 

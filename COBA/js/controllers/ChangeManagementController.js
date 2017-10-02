@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TaskController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter, UserFactory, reportFactory, ApiCall) {
+﻿ReportApp.controller('TaskController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter, UserFactory, reportFactory, ApiCall, toaster) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -156,20 +156,20 @@
         }, 1000);
     });
 
-    var columnDefs = [{ name: 'RefNumber', displayName: 'RefNumber', },
-        { name: 'Ver', displayName: 'Version', },
+    var columnDefs = [{ name: 'RefNumber', displayName: 'Ref Number', width: '*'},
+        { name: 'Ver', displayName: 'Version', width: 180 },
         {
-            displayName: 'IsActive', name: 'IsActive'
+            displayName: 'Active', name: 'IsActive', width: 180
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
         },
 
         {
             name: 'Action'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetVersionDataview(row.entity.Id,row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>'
-               , visible: $scope.IsReadOnly
+               , visible: $scope.IsReadOnly, width: 180
         },
         {
-            field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
+            name: 'Approvals', width: 180, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
 
         }
     ];
@@ -205,7 +205,7 @@
             TaskService.AddTask(currency).success(function (data) {
                 if (data == "success") {
                     $scope.editMode = false;
-                    //toaster.pop('success', "Success", "Currency rate updated successfully", null);
+                    toaster.pop('success', "Success", "Currency rate updated successfully", null);
                     $('#currencyModel').modal('hide');
                     $scope.getallcurrencyconversions()
                 }

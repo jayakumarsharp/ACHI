@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.RegionMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -30,27 +30,27 @@
 
     $scope.add = function (RegionMaster) {
         if (RegionMaster != null) {
-            //if (RegionMaster.TaskName.trim()) {
-            ApiCall.MakeApiCall("AddRegion", 'POST', RegionMaster).success(function (data) {
-                if (data.Error != undefined) {
-                    //toaster.pop('error', "Error", data.Error, null);
-                } else {
+            if (RegionMaster.RegionName.trim() != "") {
+                ApiCall.MakeApiCall("AddRegion", 'POST', RegionMaster).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
 
-                    $scope.RegionMaster = null;
-                    $scope.GetAllRegionMaster();
-                    $scope.editMode = false;
-                    //toaster.pop('success', "Success", 'RegionMaster added successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding RegionMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //    //toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
-            //}
+                        $scope.RegionMaster = null;
+                        $scope.GetAllRegionMaster();
+                        $scope.editMode = false;
+                        toaster.pop('success', "Success", 'Region added successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding Region! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Region', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Region', null);
         }
 
     };
@@ -60,7 +60,7 @@
             $scope.editMode = true;
             $scope.RegionMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding RegionMaster! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding Region! " + data.ExceptionMessage;
         });
     };
 
@@ -71,7 +71,7 @@
             $scope.editMode = false;
             $scope.GetAllRegionMaster();
             $('#confirmModal').modal('hide');
-            //toaster.pop('success', "Success", 'RegionMaster deleted successfully', null);
+            toaster.pop('success', "Success", 'Region deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -79,22 +79,22 @@
 
     $scope.UpdateRegionMaster = function (model) {
         if (model != null) {
-            //if (model.TaskName.trim()) {
-            ApiCall.MakeApiCall("ModifyRegion", 'POST', model).success(function (data) {
-                $scope.editMode = false;
-                $scope.RegionMaster = null;
-                $scope.GetAllRegionMaster();
-                //toaster.pop('success', "Success", 'RegionMaster updated successfully', null);
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding RegionMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
-            //}
+            if (model.RegionName.trim()) {
+                ApiCall.MakeApiCall("ModifyRegion", 'POST', model).success(function (data) {
+                    $scope.editMode = false;
+                    $scope.RegionMaster = null;
+                    $scope.GetAllRegionMaster();
+                    toaster.pop('success', "Success", 'Region updated successfully', null);
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding RegionMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter RegionMaster', null);
         }
     };
 

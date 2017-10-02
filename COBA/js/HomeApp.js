@@ -1,7 +1,5 @@
 ﻿var HomeApp = angular.module('homeApp', ['ngRoute']);
 
-
-
 HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams, $location, $window, OppFactory, reportFactory, UserFactory, toaster, $timeout, EstimationApplicationMasterService, Opportunityservice) {
     $scope.Ishome = false;
     $scope.view360imgPath = View360ImagesPath;
@@ -1248,7 +1246,7 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
         $location.path("StayTravel/" + oppId + "/" + groupId);
     };
 
-     $scope.RedirectToTandE = function (oppId, groupId) {
+    $scope.RedirectToTandE = function (oppId, groupId) {
         $('#View360').modal('hide');
         $location.path("TandE/" + oppId + "/" + groupId);
     };

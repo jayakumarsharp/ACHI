@@ -1,17 +1,15 @@
 ﻿<div class="whitebg">
     <section class="content-header" style="padding-bottom:10px;"></section>
     <div ng-controller="UserController" class="nav-tabs-custom">
-        <section class="content-header" style="padding-bottom:10px;">
-            <h1>             User Management      </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <div class="actions">
-                        <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
-                        <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
-                    </div>
-                </li>
-            </ol>
-        </section>
+        <div class="box-header with-border">
+            <h3 class="box-title">    User Management   </h3>
+        </div>
+
+        <div class="row margintop10">
+            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+            <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
+        </div>
+
         <section class="content">
             <div ui-grid="userGrid" ui-grid-pagination class="grid"></div>
         </section>

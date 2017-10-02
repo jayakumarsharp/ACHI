@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall) {
+﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster) {
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -161,7 +161,7 @@
                     $scope.GetRoleRightMappings();
                     $scope.role = {};
                     // $scope.adduserform.$setPristine(); //for form reset
-                    //toaster.pop('success', "Success", "Role added successfully", null);
+                    toaster.pop('success', "Success", "Role added successfully", null);
                     $('#AddEditRole').modal('hide');
                     $scope.listA = [];
                     $scope.listB = [];
@@ -172,7 +172,7 @@
             })
         }
         else {
-            //toaster.pop('warning', "Warning", "Select the Rights", null);
+            toaster.pop('warning', "Warning", "Select the Rights", null);
             //alert('Select the Rights');
             // $('#messageModal').modal('show');
         }
@@ -249,14 +249,14 @@
                         //$scope.DisplayMessage = 'SThis role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.';
                         //$('#messageModal').modal('show');
                         //alert('This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.');
-                        //toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+                        toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
                         $('#confirmModal').modal('hide');
                     }
                     else {
                         RoleFactory.DeleteRole(currentRole).success(function () {
                             $scope.GetAllRoles();
                             $scope.RoleRight = null;
-                            //toaster.pop('success', "Success", "Role deleted successfully", null);
+                            toaster.pop('success', "Success", "Role deleted successfully", null);
                             $('#confirmModal').modal('hide');
 
                         }).error(function (error) {

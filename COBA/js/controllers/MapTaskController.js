@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, StrategyService, TaskService, $timeout, $filter) {
+﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, StrategyService, TaskService, $timeout, $filter, toaster) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -81,9 +81,9 @@
         }, 1000);
     });
 
-    var columnDefs = [{ name: 'Id' },
-    { name: 'RefNumber' },
-    { name: 'Version' },
+    var columnDefs = [{ name: 'Id', visible: false },
+    { name: 'RefNumber', displayName: 'Ref Number' },
+    { name: 'Version', displayName: 'Version' },
     { name: 'EmailSubject' },
     { name: 'EmailId' },
 
@@ -92,7 +92,7 @@
        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'
    },
         {
-            name: 'IsActive',
+            displayName: 'Active',
             cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
         },
         {
@@ -180,7 +180,7 @@
 
         MapTaskService.UpdateMapTask(model).success(function (data) {
             $scope.editMode = false;
-            //toaster.pop('success', "Success", "Currency rate updated successfully", null);
+            toaster.pop('success', "Success", "Currency rate updated successfully", null);
             $('#currencyModel').modal('hide');
             $scope.getallcurrencyconversions()
         }).error(function (data) {

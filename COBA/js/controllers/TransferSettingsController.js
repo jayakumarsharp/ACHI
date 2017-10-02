@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory) {
+﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory, toaster) {
     $scope.status = false;
     $scope.IsReadOnly = true;
     $scope.changeStatus = function () {
@@ -17,7 +17,7 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Transfer Settings Write') {
+                        if (value.RightName == 'Delegate Settings Write') {
                             isRead = false;
                         }
                     })
@@ -38,8 +38,6 @@
             if (data != null && data.length > 0) {
                 console.log(data);
                 $scope.status = true;
-                //coodata[0];
-
                 $scope.TransferTo = data[0].TransferTo;
                 $scope.TransferFrom = data[0].TransferFrom;
                 $scope.Transferuser = data[0].Transferuser;
@@ -60,30 +58,6 @@
         }, 1000);
     });
 
-
-    $scope.getallcurrencyconversions();
-
-    $scope.showadd = function () {
-        $timeout(function () {
-            $scope.errorinfo = '';
-            $scope.EmailActive = false;
-        }, 100);
-
-        $scope.editMode = false;
-        $scope.currency = {};
-        $scope.ecurrency.CurrencyDescrition = '';
-        $('#currencyModel').modal('show');
-    };
-
-    $scope.GetAllCurrency = function () {
-        EmailService.GetAllTask().success(function (data) {
-            $scope.Currency = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
-
     $scope.update = function () {
         if ($scope.status) {
             if ($scope.Transferuser != '' && $scope.TransferFrom != '' && $scope.TransferTo != '')
@@ -91,7 +65,7 @@
             StrategyService.InsertTransferSetting(currency).success(function (data) {
                 if (data == "success") {
                     $scope.getallcurrencyconversions()
-                    $('#currencyModel').modal('hide');
+                    toaster.pop('success', "Success", 'Delegate setting updated successfully', null);
                 }
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
@@ -102,7 +76,7 @@
             StrategyService.DeleteTransferSetting().success(function (data) {
                 if (data == "success") {
                     $scope.getallcurrencyconversions()
-                    $('#currencyModel').modal('hide');
+                    toaster.pop('success', "Success", 'Delegate setting updated successfully', null);
                 }
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;

@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization;
 @RenderSection("scripts", required: false)
-<!doctype html> 
+<!doctype html>
 <html style="height: auto; min-height: 100%;">
 <head>
     <base href="#">
@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+    <link href="~/css/toaster.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
@@ -263,11 +264,20 @@
         }*/
         .modal-content {
             background-color: #f7f7f7 !important;
-             padding: 10px 15px 10px 15px;
+            padding: 10px 15px 10px 15px;
         }
-        .margintop10{
-            margin-top:10px;
-            margin-left:10px;
+
+        .margintop10 {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        .modal-body {
+            border: 1px solid #6b5a5a;
+        }
+
+        .btn-default {
+            min-width: 73px !important;
         }
     </style>
 </body>

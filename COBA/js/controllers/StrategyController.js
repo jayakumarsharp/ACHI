@@ -1,4 +1,4 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -89,7 +89,7 @@
         //enableFiltering: true,
         //angularCompileRows: true,
         columnDefs: [{ name: 'Id', visible: false },
-        { name: 'RefNumber', displayName: 'RefNumber' , width: 140},
+        { name: 'RefNumber', displayName: 'Ref Number' , width: 140},
         { name: 'Name', displayName: 'Name', width: 140 },
         { name: 'Type', displayName: 'Type', width: 140 },
         { name: 'CountryName', displayName: 'Country', width: 140 },
@@ -130,15 +130,15 @@
     };
 
     $scope.InsertStrategy = function (currency) {
-        if ($scope.StrategyActive)
-            currency.IsActive = "Y";
-        else
-            currency.IsActive = "N";
+        //if ($scope.StrategyActive)
+        //    currency.IsActive = "Y";
+        //else
+        //    currency.IsActive = "N";
 
-        if ($scope.IsSignOff)
-            currency.IsSignOff = "Y";
-        else
-            currency.IsSignOff = "N";
+        //if ($scope.IsSignOff)
+        //    currency.IsSignOff = "Y";
+        //else
+        //    currency.IsSignOff = "N";
 
 
         currency.ApplicationId = $scope.selectModel.Application.Id;

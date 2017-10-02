@@ -1,4 +1,4 @@
-﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout) {
+﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout, toaster) {
     $scope.errorinfo = '';
     $scope.checked = true;
     $scope.CurrencyList = [];

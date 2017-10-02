@@ -1,4 +1,4 @@
-﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.BusinessSectorMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -30,27 +30,27 @@
 
     $scope.add = function (BusinessSectorMaster) {
         if (BusinessSectorMaster != null) {
-            //if (BusinessSectorMaster.TaskName.trim()) {
-            ApiCall.MakeApiCall("AddBusinessSector", 'POST', BusinessSectorMaster).success(function (data) {
-                if (data.Error != undefined) {
-                    //toaster.pop('error', "Error", data.Error, null);
-                } else {
+            if (BusinessSectorMaster.BusinessSectorName.trim()) {
+                ApiCall.MakeApiCall("AddBusinessSector", 'POST', BusinessSectorMaster).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
 
-                    $scope.BusinessSectorMaster = null;
-                    $scope.GetAllBusinessSectorMaster();
-                    $scope.editMode = false;
-                    //toaster.pop('success', "Success", 'BusinessSectorMaster added successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding BusinessSectorMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //    //toaster.pop('warning', "Warning", 'Please enter BusinessSectorMaster', null);
-            //}
+                        $scope.BusinessSectorMaster = null;
+                        $scope.GetAllBusinessSectorMaster();
+                        $scope.editMode = false;
+                        toaster.pop('success', "Success", 'Business Sector added successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding BusinessSectorMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Business Sector', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter BusinessSectorMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Business Sector', null);
         }
 
     };
@@ -60,7 +60,7 @@
             $scope.editMode = true;
             $scope.BusinessSectorMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding BusinessSectorMaster! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding Business Sector! " + data.ExceptionMessage;
         });
     };
 
@@ -71,30 +71,30 @@
             $scope.editMode = false;
             $scope.GetAllBusinessSectorMaster();
             $('#confirmModal').modal('hide');
-            //toaster.pop('success', "Success", 'BusinessSectorMaster deleted successfully', null);
+            toaster.pop('success', "Success", 'Business Sector deleted successfully', null);
         }).error(function (data) {
-            $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while deleting Business Sector! " + data.ExceptionMessage;
         });
     };
 
     $scope.UpdateBusinessSectorMaster = function (model) {
         if (model != null) {
-            //if (model.TaskName.trim()) {
-            ApiCall.MakeApiCall("ModifyBusinessSector", 'POST', model).success(function (data) {
-                $scope.editMode = false;
-                $scope.BusinessSectorMaster = null;
-                $scope.GetAllBusinessSectorMaster();
-                //toaster.pop('success', "Success", 'BusinessSectorMaster updated successfully', null);
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding BusinessSectorMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //toaster.pop('warning', "Warning", 'Please enter BusinessSectorMaster', null);
-            //}
+            if (model.BusinessSectorName.trim()) {
+                ApiCall.MakeApiCall("ModifyBusinessSector", 'POST', model).success(function (data) {
+                    $scope.editMode = false;
+                    $scope.BusinessSectorMaster = null;
+                    $scope.GetAllBusinessSectorMaster();
+                    toaster.pop('success', "Success", 'Business Sector updated successfully', null);
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding BusinessSectorMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Business Sector', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter BusinessSectorMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Business Sector', null);
         }
     };
 

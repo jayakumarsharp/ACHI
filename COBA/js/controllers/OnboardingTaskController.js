@@ -1,4 +1,4 @@
-﻿ReportApp.controller('OnboardingTaskController', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window) {
+﻿ReportApp.controller('OnboardingTaskController', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window, toaster) {
     $scope.downloadurl = 'http://localhost/Appserver/inbox/';
     $scope.FileList = [];
     $scope.ManualFileList = [];

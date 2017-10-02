@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory) {
+﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;

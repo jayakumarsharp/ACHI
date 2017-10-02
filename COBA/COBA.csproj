@@ -6695,6 +6695,7 @@
     <Content Include="bower_components\select2\tests\vendor\qunit-1.23.1.css" />
     <Content Include="bower_components\select2\tests\vendor\qunit-1.23.1.js" />
     <Content Include="bower_components\select2\vendor\jquery-2.1.0.js" />
+    <Content Include="css\toaster.css" />
     <Content Include="dist\css\AdminLTE.css" />
     <Content Include="dist\css\AdminLTE.min.css" />
     <Content Include="dist\css\skins\skin-black-light.css" />
@@ -6788,7 +6789,6 @@
     <Content Include="js\controllers\TransferController.js" />
     <Content Include="js\controllers\TransferSettingsController.js" />
     <Content Include="js\custom.js" />
-    <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
     <Content Include="js\ReportApp.js" />
     <Content Include="js\RoleApp.js" />
