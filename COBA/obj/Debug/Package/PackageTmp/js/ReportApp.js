@@ -3,13 +3,15 @@ var ServionImages = '';
 var HostPath = '';
 var urltype = '';
 
-var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid.pagination']);
+var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid.pagination', 'toaster']);
 
-ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory) {
+ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
+
     $scope.notificationdata = [];
     $rootScope.UserInfo = {};
     $scope.MenuList = [];
     $scope.GetUserRoles = function () {
+
         UserFactory.getloggedusername().success(function (data) {
             $rootScope.UserInfo = { userId: data };
             var userId = data;
@@ -32,11 +34,11 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
             }
 
         });
-
     }
-    $scope.GetUserRoles()
+    $scope.GetUserRoles();
+
     $scope.GetAllNofitications = function () {
-        StrategyService.GetStrategyApprovalByuser().success(function (data) {
+        ApiCall.MakeApiCall("GetStrategyApprovalByuser", 'GET', '').success(function (data) {
             $scope.notificationdata = data;
         }).error(function (error) {
             $scope.Error = error;

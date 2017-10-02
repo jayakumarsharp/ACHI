@@ -68,16 +68,27 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     };
 
     $scope.IsPageReadOnly = function () {
-        var isRead = true;
-        $scope.IsReadOnly = true;
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName == 'User Management Write') {
-                isRead = false;
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'User Management Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
-        })
-        if (!isRead) {
-            $scope.IsReadOnly = false;
-        }
+
+        });
+
     }
 
     $scope.stateChanged = function (selectedType) {
@@ -173,7 +184,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     $scope.CreateTempUser = function (user) {
         $scope.InvalidMessage = '';
-        
+
         UserFactory.GetUser(user.userId).success(function (data) {
             if (data != undefined) {
                 $scope.userId = '';
@@ -334,7 +345,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                             }
                             successcount++;
                             $('#userModel').modal('hide');
-                            
+
                         }).error(function (data) {
                             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
                         });

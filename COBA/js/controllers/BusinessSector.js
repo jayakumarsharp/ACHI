@@ -1,4 +1,4 @@
-﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall) {
+﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.BusinessSectorMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -13,16 +13,6 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id', visible: false},
-        //{ name: 'BusinessSectorId' },
-        { name: 'BusinessSectorName' },
-        {
-            name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetBusinessSectorMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-            , visible: $scope.IsReadOnly
-        },
-
-    ];
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -35,7 +25,7 @@
     $scope.BusinessSectorMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: [],
     };
 
     $scope.add = function (BusinessSectorMaster) {
@@ -108,7 +98,6 @@
         }
     };
 
-    $scope.GetAllBusinessSectorMaster();
 
     $scope.showconfirm = function (data) {
         $scope.BusinessSectorMasterId = data;
@@ -119,5 +108,43 @@
         $scope.BusinessSectorMaster = null;
         $scope.editMode = false;
     };
+
+    $scope.GetRightsList = function () {
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Business Sector Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+
+                    var columnDefs = [{ name: 'Id', visible: false },
+                        { name: 'BusinessSectorName' },
+                        {
+                            name: 'Action'
+                            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetBusinessSectorMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+                            , visible: !$scope.IsReadOnly
+                        }];
+                    $scope.BusinessSectorMasterGrid.columnDefs = columnDefs;
+
+                    $scope.GetAllBusinessSectorMaster();
+
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+    };
+    $scope.GetRightsList();
+
 
 });

@@ -1,21 +1,37 @@
-﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout) {
+﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory) {
     $scope.status = false;
-
+    $scope.IsReadOnly = true;
     $scope.changeStatus = function () {
-        $scope.status = !$scope.status;
+        if (!$scope.IsReadOnly)
+            $scope.status = !$scope.status;
     }
     $scope.userlist = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
     $scope.transfer = {};
-    $scope.IsReadOnly = true;
-    $scope.GetRightsList = function () {
-        $scope.item = 'true';
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
-                $scope.IsReadOnly = false;
-            }
-        });
-    };
 
+    $scope.GetRightsList = function () {
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Transfer Settings Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+
+    };
     $scope.getallcurrencyconversions = function () {
         StrategyService.GetTransfersetting().success(function (data) {
             //console.log(data);

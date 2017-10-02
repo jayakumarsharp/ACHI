@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization;
 @RenderSection("scripts", required: false)
+<!doctype html> 
 <html style="height: auto; min-height: 100%;">
 <head>
     <base href="#">
@@ -17,72 +18,66 @@
     <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
+
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+
 <body ng-app="reportApp" ng-controller="MainController" class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper" style="height: auto; min-height: 100%;">
         <header class="main-header">
-            <a href="index2.html" class="logo">
+            <a class="logo">
                 <span class="logo-mini"><b>ACHI</b></span>
                 <span class="logo-lg"><b>ACHI</b></span>
             </a>
-            <nav class="navbar navbar-static-top">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-
-                        <!-- Notifications: style can be found in dropdown.less -->
-                        <li class="dropdown notifications-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">{{notificationdata.length}}</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have {{notificationdata.length}} notifications</li>
-                                <li>
-                                    <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li ng-repeat="n in notificationdata">
-                                            <a ng-click="GetCurrencyConversionForId(n.RefNumber,N.Version,N.Comments,N.ApprovedDate,N.Status)" href="#">
-                                                <i class="fa fa-users text-aqua"></i> RefNumber {{n.RefNumber}} Version {{n.Version}}
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="footer"><a href="Approvals">View all</a></li>
-                            </ul>
-                        </li>
-                        <!-- Tasks: style can be found in dropdown.less -->
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">@Convert.ToString(Session["UserName"])</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header">
-                                    <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                    <p>
-                                        @Convert.ToString(Session["UserName"]) - Web Developer
-                                    </p>
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="@Url.Action("Logout", "Home")" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            @*<nav class="navbar navbar-static-top">
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-warning">{{notificationdata.length}}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">You have {{notificationdata.length}} notifications</li>
+                                    <li>
+                                        <ul class="menu">
+                                            <li ng-repeat="n in notificationdata">
+                                                <a ng-click="GetCurrencyConversionForId(n.RefNumber,N.Version,N.Comments,N.ApprovedDate,N.Status)" href="#">
+                                                    <i class="fa fa-users text-aqua"></i> RefNumber {{n.RefNumber}} Version {{n.Version}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="Approvals">View all</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                    <span class="hidden-xs">@Convert.ToString(Session["UserName"])</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="user-header">
+                                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                        <p>
+                                            @Convert.ToString(Session["UserName"]) - Web Developer
+                                        </p>
+                                    </li>
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="@Url.Action("Logout", "Home")" class="btn btn-default btn-flat">Sign out</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>*@
         </header>
         <aside class="main-sidebar">
             <!-- sidebar: style can be found in sidebar.less -->
@@ -100,93 +95,7 @@
 
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
-
                     <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.MenuName }"><a href="{{menu.Path}}" ng-click="updatemenuclick(menu.MenuName)"><i class="{{menu.Icon}} "></i><span> {{menu.MenuName}}</span></a></li>
-                    @*<ul class="sidebar-menu" data-widget="tree">
-                            <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                                <a href="Index">
-                                    <i class="fa fa-dashboard"></i>
-                                    <span>  Dashboard</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "Strategy")'>
-                                <a href="Strategy">
-                                    <i class="fa fa-circle-o"></i><span>    Application</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "Tasks")'>
-                                <a href="Tasks">
-                                    <i class="fa fa-circle-o"></i>
-                                    <span>Change Management</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "MapTask")'>
-                                <a href="MapTask">
-                                    <i class="fa fa-tasks"></i>
-                                    <span>Map Strategy</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "Approvals")'>
-                                <a href="Approvals">
-                                    <i class="fa fa-circle-o"></i>
-                                    <span>Approvals / Transfers</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "TransferSettings")'>
-                                <a href="TransferSettings">
-                                    <i class="fa fa-circle-o"></i>
-                                    <span>Transfer Settings</span>
-                                </a>
-                            </li>
-
-                            <li class='@Html.IsActive("Main", "Emails")'>
-                                <a href="Emails">
-                                    <i class="fa fa-mail-forward"></i>
-                                    <span>Emails</span>
-
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
-                                <a href="Reports">
-                                    <i class="fa fa-circle-o"></i>
-                                    <span>Reports</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
-                                <a href="Licensing">
-                                    <i class="fa fa-circle-o"></i>
-                                    <i class="icon-briefcase"></i><span> Licensing</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "UserManagement")' aria-haspopup="true">
-                                <a href="UserManagement">
-                                    <i class="fa fa-circle-o"></i>
-                                    <i class="icon-briefcase"></i><span> User Management</span>
-                                </a>
-                            </li>
-                            <li class='@Html.IsActive("Main", "RoleManagement")' aria-haspopup="true">
-                                <a href="RoleManagement">
-                                    <i class="fa fa-circle-o"></i>
-                                    <i class="icon-briefcase"></i><span> Role Management</span>
-                                </a>
-                            </li>
-                            <li class="treeview">
-                                <a href="#">
-                                    <i class="fa fa-files-o"></i>
-                                    <span>Utilities</span>
-                                    <span class="pull-right-container">
-                                        <span class="label label-primary pull-right">4</span>
-                                    </span>
-                                </a>
-                                <ul class="treeview-menu" style="display: none;">
-                                    <li><a href="Country"><i class="fa fa-circle-o"></i> Country</a></li>
-                                    <li><a href="Region"><i class="fa fa-circle-o"></i> Region</a></li>
-                                    <li><a href="BusinessSector"><i class="fa fa-circle-o"></i> Business Sector</a></li>
-                                    <li><a href="ApplicationMaster"><i class="fa fa-circle-o"></i> Application Master</a></li>
-                                    <li><a href="ProductType"><i class="fa fa-circle-o"></i> Product Type</a></li>
-                                </ul>
-                            </li>
-                        </ul>*@
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -236,12 +145,10 @@
         </div>
         <footer class="main-footer">
             <div class="container">
-
                 <div class="pull-right hidden-xs">
                     <b>Version</b> 1.0.0
                 </div>
-                <strong>Copyright &copy; 2017 COBA</strong> All rights
-                reserved.
+                <strong>Copyright &copy; 2017 COBA</strong> All rights reserved.
             </div>
         </footer>
     </div>
@@ -256,6 +163,8 @@
     <script src="~/dist/js/demo.js"></script>
     <script src="~/plugins/bootstrap-datetimepicker.js"></script>
     <script src="~/Assert/angular.js"></script>
+    <script src="~/Assert/angular-animate.min.js"></script>
+    <script src="~/Assert/toaster.js"></script>
     @*<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>*@
     @*<script data-require="ui-bootstrap@0.12.1" data-semver="0.12.1" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>*@
     <script src="~/Assert/ui-bootstrap-tpls-0.12.1.min.js"></script>
@@ -270,7 +179,7 @@
     <script src="../js/HomeApp.js"></script>
     <script src="~/js/controllers/ApprovalsController.js"></script>
     <script src="~/js/controllers/StrategyController.js"></script>
-    <script src="../js/controllers/TaskController.js"></script>
+    <script src="../js/controllers/ChangeManagementController.js"></script>
     <script src="~/js/controllers/OnboardingTaskController.js"></script>
     <script src="~/js/controllers/MapTaskController.js"></script>
     <script src="~/js/controllers/EmailsController.js"></script>
@@ -352,6 +261,14 @@
         .main-header .navbar {
             min-height: 55px;
         }*/
+        .modal-content {
+            background-color: #f7f7f7 !important;
+             padding: 10px 15px 10px 15px;
+        }
+        .margintop10{
+            margin-top:10px;
+            margin-left:10px;
+        }
     </style>
 </body>
 </html>

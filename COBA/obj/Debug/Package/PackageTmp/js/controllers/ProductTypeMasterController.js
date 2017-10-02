@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall) {
+﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.ProductMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -13,17 +13,7 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id' },
-        //{ name: 'ProductId' },
-        { name: 'ProductName' },
 
-        {
-            name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetProductMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-
-        },
-
-    ];
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -36,7 +26,7 @@
     $scope.ProductMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: [],
     };
 
     $scope.add = function (ProductMaster) {
@@ -109,7 +99,6 @@
         }
     };
 
-    $scope.GetAllProductMaster();
 
     $scope.showconfirm = function (data) {
         $scope.ProductMasterId = data;
@@ -120,5 +109,43 @@
         $scope.ProductMaster = null;
         $scope.editMode = false;
     };
+
+
+
+
+    $scope.GetRightsList = function () {
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Product Type Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                    var columnDefs = [{ name: 'Id', visible: false }, { name: 'ProductName' }, {
+                        name: 'Action'
+                       , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetProductMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+                       , visible: !$scope.IsReadOnly
+                    }];
+                    $scope.ProductMasterGrid.columnDefs = columnDefs;
+                    $scope.GetAllProductMaster();
+
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+    };
+    $scope.GetRightsList();
+
+
 
 });

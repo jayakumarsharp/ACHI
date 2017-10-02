@@ -1,4 +1,4 @@
-﻿ReportApp.controller('CountryMasterController', function ($scope, $rootScope, $timeout, ApiCall) {
+﻿ReportApp.controller('CountryMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.CountryMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -13,16 +13,7 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id', visible: false},
-        //{ name: 'CountryId' },
-        { name: 'CountryName' },
-        {
-            name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCountryMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-            , visible: $scope.IsReadOnly
-        },
 
-    ];
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -35,7 +26,7 @@
     $scope.CountryMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: [],
     };
 
     $scope.add = function (CountryMaster) {
@@ -108,7 +99,7 @@
         }
     };
 
-    $scope.GetAllCountryMaster();
+   
 
     $scope.showconfirm = function (data) {
         $scope.CountryMasterId = data;
@@ -119,5 +110,46 @@
         $scope.CountryMaster = null;
         $scope.editMode = false;
     };
+
+    $scope.GetRightsList = function () {
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Country Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+
+                    var columnDefs = [{ name: 'Id', visible: false },
+      //{ name: 'CountryId' },
+      { name: 'CountryName' },
+      {
+          name: 'Action'
+          , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCountryMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+          , visible: !$scope.IsReadOnly
+      },
+
+                    ];
+
+
+                    $scope.CountryMasterGrid.columnDefs = columnDefs;
+                    $scope.GetAllCountryMaster();
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+    };
+    $scope.GetRightsList();
+
 
 });

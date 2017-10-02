@@ -1,4 +1,4 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall) {
+﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -10,13 +10,27 @@
 
     $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
 
-
     $scope.GetRightsList = function () {
-        //angular.forEach($rootScope.RightList, function (value, key) {
-        //    if (value.RightName.contains('Currency Rate Write')) {
-        //        $scope.IsReadOnly = false;
-        //    }
-        //});
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Application Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
     };
 
     $scope.getallcurrencyconversions = function () {
@@ -60,10 +74,6 @@
         })
 
     };
-
-
-
-
     $scope.getallcurrencyconversions();
 
     $rootScope.$on("toggle", function () {
@@ -73,29 +83,26 @@
     });
 
     $scope.CurrencyGrid = {
+        rowHeight: 30,
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
         //enableFiltering: true,
         //angularCompileRows: true,
         columnDefs: [{ name: 'Id', visible: false },
-        { name: 'RefNumber' },
-        { name: 'Name' },
-        { name: 'Type' },
-        { name: 'Country' },
-        { name: 'Region' },
-        { name: 'ProductType' },
-        { name: 'Ranking' },
-        {
-            name: 'IsActive',
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
+        { name: 'RefNumber', displayName: 'RefNumber' , width: 140},
+        { name: 'Name', displayName: 'Name', width: 140 },
+        { name: 'Type', displayName: 'Type', width: 140 },
+        { name: 'CountryName', displayName: 'Country', width: 140 },
+        { name: 'RegionName', displayName: 'Region', width: 140 },
+        { name: 'ProductTypeName', displayName: 'Product Type', width: '*'},
+
         {
             field: 'Action', width: 70,
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>',
             visible: $scope.IsReadOnly
         },
         {
-            field: 'Approvals', width: 70,
+            field: 'Approvals', width: 90,
             cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>',
             visible: $scope.IsReadOnly
         }],
@@ -122,8 +129,6 @@
         });
     };
 
-
-
     $scope.InsertStrategy = function (currency) {
         if ($scope.StrategyActive)
             currency.IsActive = "Y";
@@ -136,7 +141,7 @@
             currency.IsSignOff = "N";
 
 
-        currency.ApplicationId = $scope.selectModel.Application.ApplicationId;
+        currency.ApplicationId = $scope.selectModel.Application.Id;
         currency.Country = $scope.selectModel.Country.Id;
         currency.ProductType = $scope.selectModel.ProductType.Id;
         currency.BusinessSector = $scope.selectModel.BusinessSector.Id;
@@ -161,23 +166,33 @@
             });
         }
     };
+
     $scope.notificationExist = false;
     $scope.notificationdata = [];
     $scope.Availableusers = [];
+
     $scope.GetCurrencyConversionForId = function (id, Version) {
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.editMode = true;
             $scope.ecurrency = data[0];
 
-            if (data[0].IsActive == "Y")
-                $scope.StrategyActive = true;
-            else
-                $scope.StrategyActive = false;
+            $scope.selectModel.Application = $scope.GetRoleFromUserID($scope.ecurrency.ApplicationId, "ApplicationMasterList")
+            $scope.selectModel.Country = $scope.GetRoleFromUserID($scope.ecurrency.Country, "CountryMasterList")
+            $scope.selectModel.ProductType = $scope.GetRoleFromUserID($scope.ecurrency.ProductType, "ProductMasterList")
+            $scope.selectModel.BusinessSector = $scope.GetRoleFromUserID($scope.ecurrency.BusinessSector, "BusinessSectorMasterList")
+            $scope.selectModel.Region = $scope.GetRoleFromUserID($scope.ecurrency.Region, "RegionMasterList")
 
-            if (data[0].IsSignOff == "Y")
-                $scope.IsSignOff = true;
-            else
-                $scope.IsSignOff = false;
+
+            //$scope.user.Role = $scope.GetRoleFromUserID(userId);
+            //if (data[0].IsActive == "Y")
+            //    $scope.StrategyActive = true;
+            //else
+            //    $scope.StrategyActive = false;
+
+            //if (data[0].IsSignOff == "Y")
+            //    $scope.IsSignOff = true;
+            //else
+            //    $scope.IsSignOff = false;
 
             $('#currencyModel').modal('show');
 
@@ -227,6 +242,45 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
 
+    };
+
+
+    $scope.GetRoleFromUserID = function (userId, type) {
+        if ("BusinessSectorMasterList" == type) {
+            for (var i = 0; i < $scope.BusinessSectorMasterList.length; i++) {
+                if ($scope.BusinessSectorMasterList[i].Id == userId) {
+                    return $scope.BusinessSectorMasterList[i];
+                }
+            }
+        }
+        else if ("RegionMasterList" == type) {
+            for (var i = 0; i < $scope.RegionMasterList.length; i++) {
+                if ($scope.RegionMasterList[i].Id == userId) {
+                    return $scope.RegionMasterList[i];
+                }
+            }
+        }
+        if ("ProductMasterList" == type) {
+            for (var i = 0; i < $scope.ProductMasterList.length; i++) {
+                if ($scope.ProductMasterList[i].Id == userId) {
+                    return $scope.ProductMasterList[i];
+                }
+            }
+        }
+        if ("CountryMasterList" == type) {
+            for (var i = 0; i < $scope.CountryMasterList.length; i++) {
+                if ($scope.CountryMasterList[i].Id == userId) {
+                    return $scope.CountryMasterList[i];
+                }
+            }
+        }
+        if ("ApplicationMasterList" == type) {
+            for (var i = 0; i < $scope.ApplicationMasterList.length; i++) {
+                if ($scope.ApplicationMasterList[i].Id == userId) {
+                    return $scope.ApplicationMasterList[i];
+                }
+            }
+        }
     };
 
 

@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TransfersController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter) {
+﻿ReportApp.controller('TransfersController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter,UserFactory, reportFactory) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -10,10 +10,26 @@
     $scope.ecurrency = {};
     $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
-                $scope.IsReadOnly = false;
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Approvals Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
+
         });
     };
 

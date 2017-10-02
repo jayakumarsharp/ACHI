@@ -93,7 +93,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -130,7 +130,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_owner", OwnerUser));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -157,10 +157,10 @@ public class DbOperations
     {
         List<TransferSetting> lst = new List<TransferSetting>();
         string query = "sp_gettransfersettingbyuser";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -186,7 +186,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -203,10 +203,10 @@ public class DbOperations
         List<StrategyApprover> lst = new List<StrategyApprover>();
 
         string query = "Get_ApprovaltransferByuser";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -232,7 +232,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -264,7 +264,7 @@ public class DbOperations
 
                     if (this.OpenConnection() == true)
                     {
-                        //Execute command
+
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -322,7 +322,7 @@ public class DbOperations
 
                     if (this.OpenConnection() == true)
                     {
-                        //Execute command
+
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -364,7 +364,7 @@ public class DbOperations
                 //cmd.Parameters.Add(new MySqlParameter("i_Approver", s.ApprovedDate));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -391,10 +391,10 @@ public class DbOperations
     {
         int Version = 0;
         string query = "Get_StrategyLatestversionById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -409,7 +409,7 @@ public class DbOperations
                         Version = Convert.ToInt32(dt.Rows[0]["Version"]);
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -426,10 +426,10 @@ public class DbOperations
         List<StrategyApprover> lst = new List<StrategyApprover>();
 
         string query = "Get_StrategyApprovalByUser";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -455,7 +455,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -471,10 +471,10 @@ public class DbOperations
         List<StrategyApprover> lst = new List<StrategyApprover>();
 
         string query = "Get_StrategyApprovalById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -500,7 +500,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -516,10 +516,10 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
 
         string query = "SP_GetStrategy";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -548,19 +548,20 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   ApplicationName = Convert.ToString(row["ApplicationName"]),
-
+                                   AppId = Convert.ToString(row["AppId"]),
+                                   AppName = Convert.ToString(row["ApplicationName"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
                                    Attribute4 = Convert.ToString(row["Attribute4"]),
                                    BusinessImpact = Convert.ToString(row["BusinessImpact"]),
                                    BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
                                    ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
                                    ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
                                    Country = Convert.ToString(row["Country"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
@@ -576,19 +577,20 @@ public class DbOperations
                                    NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                    Objective = Convert.ToString(row["Objective"]),
                                    ProductType = Convert.ToString(row["ProductType"]),
+                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
                                    Ranking = Convert.ToString(row["Ranking"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Region = Convert.ToString(row["Region"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
                                    RiskRating = Convert.ToString(row["RiskRating"]),
                                    SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
-
                                }).ToList();
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -604,10 +606,10 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
 
         string query = "SP_GetStrategyByRefnumber";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -637,19 +639,20 @@ public class DbOperations
                                    AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   ApplicationName = Convert.ToString(row["ApplicationName"]),
-
+                                   AppId = Convert.ToString(row["AppId"]),
+                                   AppName = Convert.ToString(row["ApplicationName"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
                                    Attribute4 = Convert.ToString(row["Attribute4"]),
                                    BusinessImpact = Convert.ToString(row["BusinessImpact"]),
                                    BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
                                    ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
                                    ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
                                    Country = Convert.ToString(row["Country"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
@@ -665,9 +668,11 @@ public class DbOperations
                                    NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                    Objective = Convert.ToString(row["Objective"]),
                                    ProductType = Convert.ToString(row["ProductType"]),
+                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
                                    Ranking = Convert.ToString(row["Ranking"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Region = Convert.ToString(row["Region"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
                                    RiskRating = Convert.ToString(row["RiskRating"]),
                                    SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    Type = Convert.ToString(row["Type"]),
@@ -676,7 +681,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -692,10 +697,10 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
 
         string query = "SP_GetStrategyById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -726,16 +731,19 @@ public class DbOperations
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   ApplicationName = Convert.ToString(row["ApplicationName"]),
+                                   AppId = Convert.ToString(row["AppId"]),
+                                   AppName = Convert.ToString(row["ApplicationName"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
                                    Attribute4 = Convert.ToString(row["Attribute4"]),
                                    BusinessImpact = Convert.ToString(row["BusinessImpact"]),
                                    BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
                                    ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
                                    ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
                                    Country = Convert.ToString(row["Country"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
@@ -751,9 +759,11 @@ public class DbOperations
                                    NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                    Objective = Convert.ToString(row["Objective"]),
                                    ProductType = Convert.ToString(row["ProductType"]),
+                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
                                    Ranking = Convert.ToString(row["Ranking"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Region = Convert.ToString(row["Region"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
                                    RiskRating = Convert.ToString(row["RiskRating"]),
                                    SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    Type = Convert.ToString(row["Type"]),
@@ -762,7 +772,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -778,10 +788,10 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
 
         string query = "SP_GetStrategyById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -812,16 +822,19 @@ public class DbOperations
                                    AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
                                    AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
                                    ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   ApplicationName = Convert.ToString(row["ApplicationName"]),
+                                   AppId = Convert.ToString(row["AppId"]),
+                                   AppName = Convert.ToString(row["ApplicationName"]),
                                    Attribute1 = Convert.ToString(row["Attribute1"]),
                                    Attribute2 = Convert.ToString(row["Attribute2"]),
                                    Attribute3 = Convert.ToString(row["Attribute3"]),
                                    Attribute4 = Convert.ToString(row["Attribute4"]),
                                    BusinessImpact = Convert.ToString(row["BusinessImpact"]),
                                    BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
                                    ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
                                    ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
                                    Country = Convert.ToString(row["Country"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
@@ -837,9 +850,11 @@ public class DbOperations
                                    NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                    Objective = Convert.ToString(row["Objective"]),
                                    ProductType = Convert.ToString(row["ProductType"]),
+                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
                                    Ranking = Convert.ToString(row["Ranking"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Region = Convert.ToString(row["Region"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
                                    RiskRating = Convert.ToString(row["RiskRating"]),
                                    SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    Type = Convert.ToString(row["Type"]),
@@ -848,7 +863,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -865,19 +880,18 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
                 cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
                 cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationName", _StrategyInfo.ApplicationName));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
-                cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
-                cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
-                cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", _StrategyInfo.BusinessSector));
+                cmd.Parameters.Add(new MySqlParameter("i_CountryId", _StrategyInfo.Country));
+                cmd.Parameters.Add(new MySqlParameter("i_RegionId", _StrategyInfo.Region));
+                cmd.Parameters.Add(new MySqlParameter("i_ProductTypeId", _StrategyInfo.ProductType));
                 cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
                 cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
                 cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
@@ -897,7 +911,6 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
                 cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
                 cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
@@ -906,7 +919,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -937,7 +950,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand("sp_update_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -945,7 +958,6 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
                 cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
                 cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationName", _StrategyInfo.ApplicationName));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
                 cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
                 cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
@@ -982,7 +994,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -1013,14 +1025,13 @@ public class DbOperations
             //Get_StrategyLatestversionById
             errorcode = 0;
             errordesc = "success";
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy_Version", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
                 cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
                 cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationName", _StrategyInfo.ApplicationName));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
                 cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
                 cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
@@ -1062,7 +1073,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                     errordesc = "success|" + Convert.ToString(version);
@@ -1096,10 +1107,10 @@ public class DbOperations
         List<Tasks> lst = new List<Tasks>();
 
         string query = "Get_Tasks";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1124,7 +1135,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1140,10 +1151,10 @@ public class DbOperations
         List<Tasks> lst = new List<Tasks>();
 
         string query = "Get_TasksById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1171,7 +1182,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1200,7 +1211,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -1241,7 +1252,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -1273,10 +1284,10 @@ public class DbOperations
         List<OnboardingTasks> lst = new List<OnboardingTasks>();
 
         string query = "SP_GetOnboardingTask";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1313,7 +1324,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1329,10 +1340,10 @@ public class DbOperations
         List<OnboardingTasks> lst = new List<OnboardingTasks>();
 
         string query = "SP_GetOnboardingTaskbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1372,7 +1383,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 //    cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1400,7 +1411,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -1432,10 +1443,10 @@ public class DbOperations
         List<Emails> lst = new List<Emails>();
 
         string query = "SP_GetEmail";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1472,7 +1483,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1488,10 +1499,10 @@ public class DbOperations
         List<Emails> lst = new List<Emails>();
 
         string query = "SP_GetEmailbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1531,7 +1542,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1556,10 +1567,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "SP_GetMapTask";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1596,7 +1607,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1614,10 +1625,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "Get_Mapped_Mail_Task";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1657,7 +1668,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1673,10 +1684,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "SP_GetMapTaskbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1716,7 +1727,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1744,7 +1755,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsMappedToTask", objMaptask.IsMappedToTask));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -1784,13 +1795,13 @@ public class DbOperations
         errorCode = 0;
         string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
 
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             MySqlCommand cmd = new MySqlCommand(query, connection);
 
-            //Execute command
+
             cmd.ExecuteNonQuery();
 
             //close connection
@@ -1863,10 +1874,10 @@ public class DbOperations
     {
         List<Roles> lst = new List<Roles>();
         string query = "Sp_GetRoles";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1891,7 +1902,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -1907,10 +1918,10 @@ public class DbOperations
         {
             List<Roles> lst = new List<Roles>();
             string query = "Sp_GetRoles";
-            //open connection
+
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
+
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -1935,7 +1946,7 @@ public class DbOperations
 
                         }
                     }
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                 }
                 //close connection
@@ -1956,10 +1967,10 @@ public class DbOperations
     {
         List<RightMaster> lst = new List<RightMaster>();
         string query = "Sp_GetRights";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1984,7 +1995,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -2010,7 +2021,7 @@ public class DbOperations
             {
                 cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -2047,7 +2058,7 @@ public class DbOperations
                     cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.id));
                     if (this.OpenConnection() == true)
                     {
-                        //Execute command
+
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -2077,7 +2088,7 @@ public class DbOperations
                     cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.RoleID));
                     if (this.OpenConnection() == true)
                     {
-                        //Execute command
+
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -2145,10 +2156,8 @@ public class DbOperations
         try
         {
             string query = "SP_GetRoleRights";
-            //open connection
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -2168,10 +2177,8 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-                    //Execute command
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
 
@@ -2193,56 +2200,7 @@ public class DbOperations
     {
         try
         {
-            List<Roles> lst = new List<Roles>();
-            string query = "Sp_GetRoles";
-            //open connection
-            if (this.OpenConnection() == true)
-            {
-                //create command and assign the query and connection from the constructor
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                        if (dt != null && dt.Rows.Count > 0)
-                        {
-                            lst = (from DataRow row in dt.Rows
-                                   select new Roles
-                                   {
-                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToString(row["id"]),
-                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
-                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
-                                       RoleName = Convert.ToString(row["RoleName"])
-                                   }).ToList();
 
-                        }
-                    }
-                    //Execute command
-                    cmd.ExecuteNonQuery();
-                }
-                //close connection
-                this.CloseConnection();
-            }
-
-            // return lst;
-
-            //sequelize.query('Select EmailId from TBL_USER_MASTER',
-            //    {
-            //    type: sequelize.QueryTypes.SELECT
-            //    }).then(function(response) {
-            //    logger.info('success');
-            //    logger.info('response: ' + JSON.stringify(response));
-            //    deferred.resolve(response);
-            //}).error(function(err) {
-            //    logger.info('failure: ' + err);
-            //    deferred.reject(err)
-            //    });
         }
         catch (Exception ex)
         {
@@ -2254,10 +2212,10 @@ public class DbOperations
         {
             List<Roles> lst = new List<Roles>();
             string query = "Sp_GetRoles";
-            //open connection
+
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
+
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -2282,38 +2240,36 @@ public class DbOperations
 
                         }
                     }
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                 }
                 //close connection
                 this.CloseConnection();
             }
 
-            //return lst;
 
-            //logger.info('Inside get User profile');
-            //models.ADUser.findOne({ where: { userId: userId } })
-            //    .then(function(aduser) { deferred.resolve(aduser); })
-            //    .catch (function (err) { deferred.reject(err) });
         }
         catch (Exception e)
         {
         }
     }
-    public void GetAllSBU()
+    public List<UserMaster> GetUserbyFilter(string CountryId, string RegionId, string BusinessSectorId)
     {
+
         try
         {
-            List<Roles> lst = new List<Roles>();
-            string query = "Sp_GetRoles";
-            //open connection
+            List<UserMaster> lst = new List<UserMaster>();
+            string query = "sp_getusersbycondition";
+
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
+
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    cmd.Parameters.Add(new MySqlParameter("i_regionId", RegionId));
+                    cmd.Parameters.Add(new MySqlParameter("i_countryId", CountryId));
+                    cmd.Parameters.Add(new MySqlParameter("i_businesssectorId", BusinessSectorId));
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -2322,97 +2278,49 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new Roles
+                                   select new UserMaster
                                    {
-                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                       id = Convert.ToString(row["id"]),
-                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
-                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
-                                       RoleName = Convert.ToString(row["RoleName"])
+                                       userId = Convert.ToString(row["Userid"]),
+                                       UserName = Convert.ToString(row["username"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       RoleId = Convert.ToString(row["RoleId"]),
+                                       RoleName = Convert.ToString(row["RoleName"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       BusinessSector = Convert.ToString(row["Name"]),
+                                       BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                       CountryId = Convert.ToString(row["CountryId"]),
+                                       RegionId = Convert.ToString(row["RegionId"]),
+                                       Status = Convert.ToString(row["Status"]),
+
+
                                    }).ToList();
 
                         }
                     }
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                 }
                 //close connection
                 this.CloseConnection();
             }
-
-            //return lst;
-            //logger.info('Inside get all SBUs');
-            //models.SBU.findAll({
-            //    where: { 'SBU': { $ne: 'All' } },
-            //    order: [
-            //        ['SBU', 'ASC']]
-            //}).then(function(sbus) {
-            //    sbus.push({ 'id': 6, 'SBU': 'All' });
-            //    logger.info(JSON.stringify(sbus));
-            //    deferred.resolve(sbus);
-            //}).catch (function (err) { deferred.reject(err) });
+            return lst;
         }
         catch (Exception e)
         {
+            return null;
         }
     }
-    public void GetUserSBU(string userId)
-    {
 
-        try
-        {
-
-            //    if (userId != null && userId != undefined)
-            //    {
-            //        logger.info('Inside get user SBU for user:  ' + userId);
-            //        models.UserSBU.findAll({ where: { UserID: userId } })
-            //            .then(function(sbus) { deferred.resolve(sbus); })
-            //            .catch (function (err) { logger.info('GetUserSBU ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    logger.info('Inside get all users');
-            //    models.UserSBU.findAll().then(function(users) {
-            //        deferred.resolve(users);
-            //    }).catch (function (err) { deferred.reject(err) });
-            //    }
-        }
-        catch (Exception e)
-        {
-        }
-    }
-    public void GetUserBillingSBU(string userId)
-    {
-        try
-        {
-
-            //    if (userId != null && userId != undefined)
-            //    {
-            //        logger.info('Inside get user Billing SBU for user:  ' + userId);
-            //        models.UserBillingSBU.findAll({ where: { UserID: userId } })
-            //            .then(function(sbus) { deferred.resolve(sbus); })
-            //            .catch (function (err) { logger.info('GetUserBillingSBU ' + err); deferred.reject(err) });
-            //}
-            //    else {
-            //    logger.info('Inside get all user sbu billings');
-            //    models.UserBillingSBU.findAll().then(function(users) {
-            //        deferred.resolve(users);
-            //    }).catch (function (err) { deferred.reject(err) });
-            //    }
-        }
-        catch (Exception e)
-        {
-        }
-    }
 
     public List<UserMaster> GetUser(string userId)
     {
         List<UserMaster> lst = new List<UserMaster>();
         string query = "sp_getusers";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -2445,7 +2353,7 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -2453,35 +2361,62 @@ public class DbOperations
         }
         return lst;
     }
-    public void GetUsersByTypes(string typeids)
+    public List<UserMaster> GetUsersByRoles(string Roleid)
     {
         try
         {
-            //var typearray = '';
+            List<UserMaster> lst = new List<UserMaster>();
+            string query = "Sp_getRolesbyuserassigned";
 
-            //for (var i = 0; i < typeids.length; i++)
-            //{
-            //    typearray = typearray + typeids[i].TypeId;
-            //    if (i != typeids.length - 1)
-            //    {
-            //        typearray = typearray + ',';
-            //    }
-            //}
+            if (this.OpenConnection() == true)
+            {
 
-            //sequelize.query('select Userid as userId, UserName,EmailId,BillingId,LastWorkingDate, FirstWorkingDate, LocationId from TBL_USER_MASTER where TypeId in (' + typearray + ') and Userid != \'OTHER\'',
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleid", Roleid));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new UserMaster
+                                   {
+                                       userId = Convert.ToString(row["Userid"]),
+                                       UserName = Convert.ToString(row["username"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       RoleId = Convert.ToString(row["RoleId"]),
+                                       RoleName = Convert.ToString(row["RoleName"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       BusinessSector = Convert.ToString(row["Name"]),
+                                       BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                       CountryId = Convert.ToString(row["CountryId"]),
+                                       RegionId = Convert.ToString(row["RegionId"]),
+                                       Status = Convert.ToString(row["Status"]),
 
-            //    {
-            //    type: sequelize.QueryTypes.SELECT
-            //    }).then(function(response) {
-            //    logger.info('Retrieved users successfully');
-            //    deferred.resolve(response);
-            //}).error(function(err) {
-            //    logger.info('Failed to retrieve users: ' + err);
-            //    deferred.reject(err);
-            //});
+
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
+
         }
-        catch (Exception e)
+        catch (MySqlException e)
         {
+
+            this.CloseConnection();
+            return null;
         }
     }
     public void CreateTempUser(UserMaster user, out int errorcode, out string errordesc)
@@ -2506,7 +2441,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -2547,10 +2482,10 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
                 cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
                 cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "Yes"));
-                cmd.Parameters.Add(new MySqlParameter("i_password",""));
+                cmd.Parameters.Add(new MySqlParameter("i_password", ""));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -2595,7 +2530,7 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -2790,10 +2725,10 @@ public class DbOperations
 
             List<RightMaster> lst = new List<RightMaster>();
             string query = "sp_getmenuforuser";
-            //open connection
+
             if (this.OpenConnection() == true)
             {
-                //create command and assign the query and connection from the constructor
+
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -2818,7 +2753,7 @@ public class DbOperations
 
                         }
                     }
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                 }
                 //close connection
@@ -2833,27 +2768,48 @@ public class DbOperations
         }
     }
 
-    public void GetRightsList(string userId)
+    public List<RightMaster> GetRightsList(string userId)
     {
         try
         {
-            //logger.info('query' + userId);
-            //sequelize.query('select distinct RightName, Path from TBL_RIGHT_MASTER RM inner join TBL_ROLERIGHT_MAPPING RR on RM.RightID=RR.RightID inner join TBL_USER_MASTER UM on RR.RoleID=UM.RoleId where UM.Userid = :UserId',
-            //        {
-            //    replacements: { UserId: userId },
-            //        type: sequelize.QueryTypes.SELECT
-            //    }).then(function(response) {
-            //    logger.info('success');
-            //    logger.info('response: ' + response);
-            //    deferred.resolve(response);
-            //}).error(function(err) {
-            //    logger.info('failure: ' + err);
-            //    deferred.reject(err);
-            //});
+
+            List<RightMaster> lst = new List<RightMaster>();
+            string query = "SP_GetRightForUser";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RightMaster
+                                   {
+                                       RightName = Convert.ToString(row["RightName"]),
+                                       Path = Convert.ToString(row["Path"]),
+                                   }).ToList();
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
 
         }
         catch (Exception e)
         {
+            return null;
         }
     }
 
@@ -2959,10 +2915,10 @@ public class DbOperations
     {
         List<CountryMaster> lst = new List<CountryMaster>();
         string query = "sp_getallcountry";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -2982,7 +2938,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -3006,7 +2962,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3030,7 +2986,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3053,7 +3009,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3072,10 +3028,10 @@ public class DbOperations
     {
         List<RegionMaster> lst = new List<RegionMaster>();
         string query = "sp_getallRegion";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -3095,7 +3051,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -3156,7 +3112,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3179,7 +3135,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3197,10 +3153,10 @@ public class DbOperations
     {
         List<BusinessSector> lst = new List<BusinessSector>();
         string query = "sp_getallBusinessSector";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -3220,7 +3176,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -3246,7 +3202,7 @@ public class DbOperations
                 {
                     // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                     //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -3284,7 +3240,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3307,7 +3263,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3325,10 +3281,10 @@ public class DbOperations
     {
         List<ProductMaster> lst = new List<ProductMaster>();
         string query = "sp_getallProduct";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -3348,7 +3304,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -3374,7 +3330,7 @@ public class DbOperations
                 {
                     // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                     //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -3412,7 +3368,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3435,7 +3391,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3453,10 +3409,10 @@ public class DbOperations
     {
         List<ApplicationMaster> lst = new List<ApplicationMaster>();
         string query = "sp_getallApplicationMaster";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -3477,7 +3433,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
             //close connection
@@ -3504,7 +3460,7 @@ public class DbOperations
                 {
                     // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                     //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -3543,7 +3499,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -3566,7 +3522,7 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-                //Execute command
+
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }

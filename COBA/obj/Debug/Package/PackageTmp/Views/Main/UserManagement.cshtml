@@ -6,8 +6,8 @@
             <ol class="breadcrumb">
                 <li>
                     <div class="actions">
-                        <button data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
-                        <button data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
+                        <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+                        <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
                     </div>
                 </li>
             </ol>

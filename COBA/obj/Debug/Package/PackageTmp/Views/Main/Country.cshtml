@@ -18,20 +18,20 @@
 
 
 <div class="whitebg">
-    <section class="content-header" style="padding-bottom:10px;"></section>
-
+    <div class="box-header with-border">
+        <h3 class="box-title">      Country Master Management    </h3>
+    </div>
 
     <div ng-controller="CountryMasterController" class="nav-tabs-custom">
         <section class="content-header" style="padding-bottom:10px;">
-            <h1>             Country Master Management      </h1>
             <div style="margin-top:20px;" class="form-group" ng-show="!IsReadOnly" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
                 <div class="form-group">
                     @*<label for="inputTask" class="col-md-2 control-label">CountryId</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=CountryMaster.CountryId>
-                    </div>*@
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=CountryMaster.CountryId>
+                        </div>*@
 
-                    <label for="inputTask" class="col-md-2 control-label">Country</label>
+                    <label for="inputTask" class="col-md-2 control-label">Country Name</label>
                     <div class="col-md-3">
                         <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=CountryMaster.CountryName>
                     </div>

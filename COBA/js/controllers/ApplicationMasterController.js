@@ -1,28 +1,16 @@
-﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall) {
+﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.ApplicationMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
 
     $scope.GetAllApplicationMaster = function () {
         ApiCall.MakeApiCall("GetAllApplication?ApplicationId=", 'GET', '').success(function (data) {
-            console.log(data);
             $scope.ApplicationMasterList = data;
             $scope.ApplicationMasterGrid.data = $scope.ApplicationMasterList;
         }).error(function (error) {
             $scope.Error = error;
         })
     };
-
-    var columnDefs = [{ name: 'Id', visible: $scope.IsReadOnly },
-        { name: 'ApplicationId' },
-        { name: 'ApplicationName' },
-                {
-                    name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-
-                },
-
-    ];
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -35,7 +23,7 @@
     $scope.ApplicationMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: [],
     };
 
     $scope.add = function (ApplicationMaster) {
@@ -108,7 +96,6 @@
         }
     };
 
-    $scope.GetAllApplicationMaster();
 
     $scope.showconfirm = function (data) {
         $scope.ApplicationMasterId = data;
@@ -121,11 +108,44 @@
     };
 
     $scope.GetRightsList = function () {
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Application Write')) {
-                $scope.IsReadOnly = false;
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Application Master Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+
+
+                    var columnDefs = [{ name: 'Id', visible: false },
+                        { name: 'ApplicationId', displayName: 'Application Id' },
+                        { name: 'ApplicationName', displayName: 'Application Name' },
+                        {
+                            name: 'Action', cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+                            , visible: $scope.IsReadOnly
+                        },
+
+                    ];
+
+
+                    $scope.ApplicationMasterGrid.columnDefs = columnDefs;
+                    $scope.GetAllApplicationMaster();
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
+
         });
     };
+
+    $scope.GetAllApplicationMaster();
     $scope.GetRightsList();
 });

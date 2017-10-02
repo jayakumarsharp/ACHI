@@ -2,7 +2,7 @@
     <div ng-controller="TransferSettingsController" class="row">
         <form novalidate class="form-horizontal">
             <div class="form-group">
-                <label for="inputTask" class="col-md-2 col-md-offset-2  control-label">Transfer Stauts</label>
+                <label for="inputTask" class="col-md-2 col-md-offset-2  control-label">Delegate Status</label>
                 <div class="col-md-4">
                     <i class="fa fa-toggle-on active" ng-if="status == true" ng-click="changeStatus();"></i>
                     <i class="fa fa-toggle-on fa-rotate-180 inactive" ng-if="status == false" ng-click="changeStatus();"></i>
@@ -11,7 +11,7 @@
 
             <div ng-show="status">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Deligate To</label>
+                    <label class="col-sm-3 control-label">Delegate To</label>
                     <div class="col-sm-5">
 
                         <select ng-model="Transferuser" class="form-control" style="height:33px">
@@ -23,7 +23,7 @@
                 <div class="form-group">
                     <div>
                         <label class="col-sm-3 control-label">Transfer Duration</label>
-                    </div>5 v
+                    </div>
                     <div class="col-lg-4">
                         <div class='input-group date' datetimepicker ng-model="TransferFrom">
                             <input type='text' class="form-control" readonly />

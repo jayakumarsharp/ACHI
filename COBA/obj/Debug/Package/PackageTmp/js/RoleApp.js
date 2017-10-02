@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory) {
+﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall) {
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -15,16 +15,28 @@
     //$scope.DisplayMessage = '';
 
     $scope.IsPageReadOnly = function () {
-        //var isRead = true;
-        //$scope.IsReadOnly = true;
-        //angular.forEach($rootScope.RightList, function (value, key) {
-        //    if (value.RightName == 'Role Management Write') {
-        //        isRead = false;
-        //    }
-        //})
-        //if (!isRead) {
-        //    $scope.IsReadOnly = false;
-        //}
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Role Management Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+
     },
         $scope.GetAllRights = function () {
             $scope.Rights = [];
@@ -174,21 +186,21 @@
         //        $('#roleChange').modal('show');
         //    }
         //    else {
-                $scope.role = data;
-                $scope.role.Rights = $scope.listB;
-                RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
-                    $scope.GetAllRoles();
-                    //reset form
-                    $scope.role = {};
-               //     toaster.pop('success', "Success", "Role modified successfully", null);
-                    $('#AddEditRole').modal('hide');
-                    $scope.listA = [];
-                    $scope.listB = [];
+        $scope.role = data;
+        $scope.role.Rights = $scope.listB;
+        RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
+            $scope.GetAllRoles();
+            //reset form
+            $scope.role = {};
+            //     toaster.pop('success', "Success", "Role modified successfully", null);
+            $('#AddEditRole').modal('hide');
+            $scope.listA = [];
+            $scope.listB = [];
 
-                }).error(function (error) {
-                    console.log('Error modifying Role-right: ' + error);
-                });
-            //}
+        }).error(function (error) {
+            console.log('Error modifying Role-right: ' + error);
+        });
+        //}
         //}).error(function (error) {
         //    console.log('Error getting user roles: ' + error);
         //});
@@ -224,30 +236,41 @@
     }
     $scope.delete = function () {
         var currentRole = $scope.RoleRight;
-        RoleFactory.GetUserRoles(currentRole.id).success(function (userrole) {
-            if (userrole.length > 0) {
-                //$scope.DisplayMessage = 'SThis role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.';
-                //$('#messageModal').modal('show');
-                //alert('This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.');
-                //toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+        ApiCall.MakeApiCall("GetUsersByRoles?Roleid=" + currentRole.id, 'GET', '').success(function (data) {
+            console.log(data);
+            if (data.length > 0) {
                 $('#confirmModal').modal('hide');
+                alert('Role is associated with users!.. please remove dependencies.')
             }
             else {
-                RoleFactory.DeleteRole(currentRole).success(function () {
-                    $scope.GetAllRoles();
-                    $scope.RoleRight = null;
-                    //toaster.pop('success', "Success", "Role deleted successfully", null);
-                    $('#confirmModal').modal('hide');
+
+                RoleFactory.GetUserRoles(currentRole.id).success(function (userrole) {
+                    if (userrole.length > 0) {
+                        //$scope.DisplayMessage = 'SThis role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.';
+                        //$('#messageModal').modal('show');
+                        //alert('This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.');
+                        //toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+                        $('#confirmModal').modal('hide');
+                    }
+                    else {
+                        RoleFactory.DeleteRole(currentRole).success(function () {
+                            $scope.GetAllRoles();
+                            $scope.RoleRight = null;
+                            //toaster.pop('success', "Success", "Role deleted successfully", null);
+                            $('#confirmModal').modal('hide');
+
+                        }).error(function (error) {
+                            console.log('Error occurred when deleting Role');
+                        });
+                    }
 
                 }).error(function (error) {
-                    console.log('Error occurred when deleting Role');
+                    console.log('Error occurred when fetching User - Role mapping');
                 });
             }
-
         }).error(function (error) {
-            console.log('Error occurred when fetching User - Role mapping');
-        });
-
+            $scope.Error = error;
+        })
     };
 
     //---Dual list control---//
@@ -419,7 +442,7 @@ ReportApp.factory('RoleFactory', function ($http) {
         DeleteRole: function (roleright) {
             return $http.post('DeleteRole', roleright);
         },
-        
+
         GetRoleRightMapping: function (roleId) {
             return $http.get('GetRoleRightMapping?roleId=' + roleId);
         }
@@ -439,7 +462,7 @@ ReportApp.factory('reportFactory', function ($http, $q) {
             return $http.get('GetmenuList?userId=' + userId);
         },
         GetRightsList: function (userId) {
-            return $http.get('rights/?userId=' + userId);
+            return $http.get('GetUserRights/?userId=' + userId);
         },
         GetUser: function (userId) {
             return $http.get('GetUser?userId=' + userId);

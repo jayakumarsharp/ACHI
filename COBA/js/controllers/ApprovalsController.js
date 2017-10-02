@@ -1,16 +1,12 @@
-﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter) {
+﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
-    $scope.Currency = [];
-    $scope.LegalEntity = [];
     $scope.ecurrency = {};
     $scope.LockedPriceSheet = [];
-    
-    
+
+
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
             if (value.RightName.contains('Currency Rate Write')) {
@@ -20,16 +16,32 @@
     };
     $scope.tab1 = true;
     $scope.tab2 = false
+    $scope.tab3 = false
+    $scope.tab4 = false
     $scope.activatetab = function (id) {
-        if(id==1)
-        {
+        if (id == 1) {
             $scope.tab1 = true;
             $scope.tab2 = false;
+            $scope.tab3 = false;
+            $scope.tab4 = false;
         }
-        else
-        {
+        else if (id == 2) {
             $scope.tab1 = false;
             $scope.tab2 = true;
+            $scope.tab3 = false;
+            $scope.tab4 = false;
+        }
+        else if (id == 3) {
+            $scope.tab1 = false;
+            $scope.tab2 = false;
+            $scope.tab3 = true;
+            $scope.tab4 = false;
+        }
+        else if (id == 4) {
+            $scope.tab1 = false;
+            $scope.tab2 = false;
+            $scope.tab3 = false;
+            $scope.tab4 = true;
         }
     }
     $scope.Strategydata = [];
@@ -99,15 +111,7 @@
             cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
         },
 
-        //{ headerName: 'Description', name: 'Description', width: 440 },
-        //{
-        //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
-        //        if (params.data.IsSignOff == "Y")
-        //            return "<i class='fa fa-check btn-success btn-circle'></i>"
-        //        else
-        //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
-        //    }
-        //},
+      
         {
             name: 'Status'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.Status=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.Status=="Y"}}><i class="fa fa-check" ></i></a> </div>'
@@ -118,10 +122,7 @@
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Approver,row.entity.Version,row.entity.Comments,row.entity.ApprovedDate,row.entity.Status)" ><i class="fa fa-edit" ></i></a ></div>'
             , visible: $scope.IsReadOnly
         },
-        //{
-        //    field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
 
-        //}
     ];
 
 
@@ -132,13 +133,7 @@
 
     };
 
-    $scope.GetAllCurrency = function () {
-        TaskService.GetAllTask().success(function (data) {
-            $scope.Currency = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
+
 
 
     $scope.UpdatecurrencyConversion = function (model) {
@@ -150,7 +145,6 @@
         TaskService.UpdateStrategyApprover(model).success(function (data) {
             if (data == "success") {
                 $scope.editMode = false;
-                //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $timeout(function () {
                     $scope.GetAlldata();
                 })
@@ -163,18 +157,6 @@
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-    };
-
-    var formatDate = function (indate) {
-        if (indate != null) {
-            indateTime = indate.split('T');
-            var date = new Date(indateTime[0]);
-            var time = indateTime[1].substring(0, 8);
-            return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + time;
-        }
-        else {
-            return '';
-        }
     };
 
     $scope.showconfirm = function (data) {
@@ -195,25 +177,11 @@
             name: 'Version',
             cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
         },
-
-        //{ headerName: 'Description', name: 'Description', width: 440 },
-        //{
-        //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
-        //        if (params.data.IsSignOff == "Y")
-        //            return "<i class='fa fa-check btn-success btn-circle'></i>"
-        //        else
-        //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
-        //    }
-        //},
         {
             name: 'Status'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.Status=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.Status=="Y"}}><i class="fa fa-check" ></i></a> </div>'
         },
 
-           //{
-        //    field: 'Approvals', width: 70, cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>'
-
-        //}
     ];
 
 

@@ -446,6 +446,19 @@ namespace CRMManagement.Controllers
             List<RightMaster> lst = _dbOperations.GetMenuList(userId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetUsersByRoles(string Roleid)
+        {
+            List<UserMaster> lst = _dbOperations.GetUsersByRoles(Roleid);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetUserRights(string userId)
+        {
+            List<RightMaster> lst = _dbOperations.GetRightsList(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetRoleRightMappings(string roleId)
         {
             _dbOperations.GetRoleRightMapping(roleId);
@@ -524,35 +537,13 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UserSBU(string user)
+        public JsonResult GetUserbyFilter(string CountryId, string RegionId, string BusinessSectorId)
         {
-            _dbOperations.GetUserSBU(user);
-            return Json("", JsonRequestBehavior.AllowGet);
+            List<UserMaster> lst = _dbOperations.GetUserbyFilter(CountryId, RegionId, BusinessSectorId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AllUserSBU(string user)
-        {
-            _dbOperations.GetUserSBU(user);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
 
-        public JsonResult UserBillingSBU(string userId)
-        {
-            _dbOperations.GetUserBillingSBU(userId);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AllUserBillingSBU(string user)
-        {
-            _dbOperations.GetUserBillingSBU(user);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult sbu()
-        {
-
-            _dbOperations.GetAllSBU();
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
         public JsonResult email()
         {
             _dbOperations.GetAllEmail();
@@ -568,12 +559,7 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUsersByTypes(string types)
-        {
-
-            _dbOperations.GetUsersByTypes(types);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
+       
 
         public JsonResult CreateTempUser(UserMaster user)
         {
@@ -787,8 +773,8 @@ namespace CRMManagement.Controllers
             ls.Add(new UserMaster { userId = "Sivakumar", EmailId = "Sivakumar@coba.com", UserName = "SivaKumar" });
             ls.Add(new UserMaster { userId = "George", EmailId = "George@coba.com", UserName = "George" });
             ls.Add(new UserMaster { userId = "Oliver", EmailId = "Oliver@coba.com", UserName = "Oliver" });
-            
-                
+
+
             List<UserMaster> lst = _dbOperations.GetUser("");
 
             foreach (UserMaster u in lst)
@@ -960,12 +946,17 @@ public class Strategy
     public string RefNumber { get; set; }
     public string Name { get; set; }
     public string Type { get; set; }
-    public string ApplicationName { get; set; }
     public string ApplicationId { get; set; }
+    public string AppId { get; set; }
+    public string AppName { get; set; }
     public string BusinessSector { get; set; }
+    public string BusinessSectorName { get; set; }
     public string Country { get; set; }
+    public string CountryName { get; set; }
     public string Region { get; set; }
+    public string RegionName { get; set; }
     public string ProductType { get; set; }
+    public string ProductTypeName { get; set; }
     public string Ranking { get; set; }
     public string Objective { get; set; }
     public string Description { get; set; }

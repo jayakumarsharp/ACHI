@@ -1,11 +1,10 @@
-﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall) {
+﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
     $scope.RegionMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
 
     $scope.GetAllRegionMaster = function () {
         ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
-            console.log(data);
             $scope.RegionMasterList = data;
             $scope.RegionMasterGrid.data = $scope.RegionMasterList;
         }).error(function (error) {
@@ -13,18 +12,7 @@
         })
     };
 
-    var columnDefs = [{ name: 'Id', visible: false},
-        //{ name: 'RegionId' },
-        { name: 'RegionName' },
 
-        {
-            name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetRegionMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-            , visible: $scope.IsReadOnly
-
-        },
-
-    ];
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -37,7 +25,7 @@
     $scope.RegionMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: [],
     };
 
     $scope.add = function (RegionMaster) {
@@ -110,7 +98,7 @@
         }
     };
 
-    $scope.GetAllRegionMaster();
+
 
     $scope.showconfirm = function (data) {
         $scope.RegionMasterId = data;
@@ -121,5 +109,46 @@
         $scope.RegionMaster = null;
         $scope.editMode = false;
     };
+
+
+
+    $scope.GetRightsList = function () {
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Region Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+
+
+                    var columnDefs = [{ name: 'Id', visible: false },
+                       { name: 'RegionName' },
+                       {
+                           name: 'Action'
+                           , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetRegionMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+                           , visible: !$scope.IsReadOnly
+
+                       }];
+                    $scope.RegionMasterGrid.columnDefs = columnDefs;
+                    $scope.GetAllRegionMaster();
+
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+    };
+    $scope.GetRightsList();
+
 
 });

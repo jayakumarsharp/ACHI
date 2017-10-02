@@ -18,12 +18,12 @@
 
 
 <div class="whitebg">
-    <section class="content-header" style="padding-bottom:10px;"></section>
-
+    <div class="box-header with-border">
+        <h3 class="box-title">      Region Master Management    </h3>
+    </div>
 
     <div ng-controller="RegionMasterController" class="nav-tabs-custom">
         <section class="content-header" style="padding-bottom:10px;">
-            <h1>             Region Master Management      </h1>
             <div style="margin-top:20px;" class="form-group" ng-show="!IsReadOnly" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
                 <div class="form-group">
                     @*<label for="inputTask" class="col-md-2 control-label">RegionId</label>

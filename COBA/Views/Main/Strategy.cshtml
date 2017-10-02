@@ -1,16 +1,14 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
 <div ng-controller="StrategyController" class="whitebg">
-    <section class="content-header" style="padding-bottom:10px;">
-        <h1>            Application Detail Management        </h1>
-        <ol class="breadcrumb">
-            <li>
-                <div class="actions">
-                    <button data-ng-click="showadd()" ng-show="IsReadOnly"  class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
-                </div>
-            </li>
-        </ol>
-    </section>
+    <div class="box-header with-border">
+        <h3 class="box-title">     Model/Algorithm Management   </h3>
+    </div>
+
+    <div class="row margintop10">
+        <button data-ng-click="showadd()" ng-show="!IsReadOnly" class="btn btn-outline-info">Add Model/Algorithm Management<i class="fa fa-plus"></i></button>
+    </div>
     <section class="content">
+
         <div class="row">
             <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
         </div>
@@ -23,7 +21,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Model/Algorithm Approval Status</h4>
                 </div>
                 <div class="modal-body">
                     <div>
@@ -37,12 +35,12 @@
                                         <div class="col-sm-offset-4 col-sm-10">
 
                                             <span data-ng-hide="editMode">
-                                                <input type="button" value="Add" ng-click="InsertStrategy(currency)" class="btn  btn-circle btn-default btn-outline-info"  />
+                                                <input type="button" value="Add" ng-click="InsertStrategy(currency)" class="btn  btn-circle btn-default btn-outline-info" />
                                             </span>&nbsp;
                                             <span data-ng-show="editMode">
-                                                <input type="button" value="Update" ng-click="UpdateStrategy(ecurrency)" class="btn  btn-circle btn-default btn-outline-info"  />
+                                                <input type="button" value="Update" ng-click="UpdateStrategy(ecurrency)" class="btn  btn-circle btn-default btn-outline-info" />
                                             </span>&nbsp;
-                                            <input type="button" value="Cancel" ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info"  />
+                                            <input type="button" value="Cancel" ng-click="cancel()" class="btn  btn-circle btn-default btn-outline-info" />
                                         </div>
                                     </div>
 
@@ -59,7 +57,7 @@
             </div>
         </div>
     </div>
-    
+
     <div ng-include="'ViewApprovals'"></div>
 
 </div>

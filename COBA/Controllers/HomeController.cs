@@ -109,31 +109,36 @@ namespace CRUserManagement.Controllers
                 }
                 else
                 {
-                    //   _dbOperations.CheckUserLogin(userName, passWord, out  errorCode, out errorDesc);
-                    if ((userName == "Daniel" || userName == "Oliver" || userName == "Sivakumar" || userName == "John" || userName == "George") && passWord == "welcome@17")
+                    List<UserMaster> lst = _dbOperations.GetUser(userName);
+
+                    if (lst.Count > 0)
                     {
-                        errorCode = 0;
-                        if (errorCode == 0)
+                        if (lst[0].IsADUser == "No" && passWord == EncryptLib.DecodeFrom64(lst[0].Password))
                         {
                             FormsAuthentication.SetAuthCookie(userName, false);
                             Session["UserName"] = userName;
                             return "Logged in successfully";
                         }
-                        else if (errorCode == 1)
+                        else if ((userName == lst[0].userId) && passWord == "welcome@17")
+                        {
+                            FormsAuthentication.SetAuthCookie(userName, false);
+                            Session["UserName"] = userName;
+                            return "Logged in successfully";
+                        }
+                        else
                         {
                             log.Info("Login failed for the user " + userName);
                             return "You account has been blocked. Please contact the Admin";
                         }
-                        else
-                        {
-                            log.Info("Login failed for the user " + userName + " error code " + errorCode);
-                            return "Login failed please check the credentials you entered";
-                        }
                     }
-                    else
-                        return "Invalid Login";
 
+                    else
+                    {
+                        log.Info("Login failed for the user " + userName + " error code " + errorCode);
+                        return "Login failed please check the credentials you entered";
+                    }
                 }
+
 
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout) {
+﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory) {
     $scope.status = false;
     $scope.IsReadOnly = true;
     $scope.changeStatus = function () {
@@ -9,11 +9,28 @@
     $scope.transfer = {};
 
     $scope.GetRightsList = function () {
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Transfer Settings Write')) {
-                $scope.IsReadOnly = false;
+
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Transfer Settings Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
+
         });
+
     };
     $scope.getallcurrencyconversions = function () {
         StrategyService.GetTransfersetting().success(function (data) {

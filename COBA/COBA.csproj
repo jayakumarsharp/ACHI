@@ -171,12 +171,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Assert\angular-animate.min.js" />
     <Content Include="Assert\angular-pdf.js" />
     <Content Include="Assert\angular.js" />
     <Content Include="Assert\bootstrap.min.js" />
     <Content Include="Assert\Jquery-1.11.0.min.js" />
     <Content Include="Assert\pdf.js" />
     <Content Include="Assert\pdf.worker.js" />
+    <Content Include="Assert\toaster.js" />
     <Content Include="Assert\ui-bootstrap-tpls-0.12.1.min.js" />
     <Content Include="Assert\ui-grid.js" />
     <Content Include="Assert\ui-grid.min.css" />
@@ -6780,7 +6782,7 @@
     <Content Include="js\controllers\MapTaskController.js" />
     <Content Include="js\controllers\ProductTypeMasterController.js" />
     <Content Include="js\controllers\RegionMasterController.js" />
-    <Content Include="js\controllers\TaskController.js" />
+    <Content Include="js\controllers\ChangeManagementController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
     <Content Include="js\controllers\TransferController.js" />

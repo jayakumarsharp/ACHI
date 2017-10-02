@@ -1,15 +1,10 @@
 ﻿//agGrid.initialiseAgGridWithAngular1(angular);
 //var UserApp = angular.module('userApp', [ 'agGrid']);
 ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory) {
-
     $scope.UpdatedUserTypes = [];
-    $scope.selectedType = {};
     $scope.selectedSBU = {};
     $scope.selectedRole = {};
     $scope.selectedStatus = {};
-    $scope.selectedBilling = {};
-    $scope.selectedSkill = {};
-    $scope.selectedLocation = {};
     $scope.InvalidMessage = '';
     $scope.Error = {};
     $scope.user = {};
@@ -18,22 +13,10 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.Users = [];
     $scope.UsersView = [];
     $scope.ADUsers = [];
-    $scope.editMode = false;
-    $scope.Types = [];
-    $scope.SBU = [];
-    $scope.BillingSBU = [];
-    $scope.UserTypes = [];
     $scope.Roles = [];
-    $scope.Billings = [];
-    $scope.BaseSkills = []
-    $scope.Locations = []
     $scope.IsReadOnly = false;
-    $scope.IsSCUser = false;
-    $scope.AllSBU = [];
-    $scope.OnlySBU = [];
 
     //---------------GRID------------------//
-
     $scope.addUserGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
@@ -54,8 +37,6 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     //        $scope.userGrid.api.sizeColumnsToFit();
     //    }, 1000);
     //});
-
-
     $scope.userGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
@@ -68,7 +49,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             { name: "CountryName", },
             { name: "BusinessSector" },
             {
-                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!IsReadOnly\"> Edit</a>'
+                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!grid.appScope.IsReadOnly\"> Edit</a>'
             }
 
         ]
@@ -87,16 +68,27 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     };
 
     $scope.IsPageReadOnly = function () {
-        var isRead = true;
-        $scope.IsReadOnly = true;
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName == 'User Management Write') {
-                isRead = false;
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'User Management Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
-        })
-        if (!isRead) {
-            $scope.IsReadOnly = false;
-        }
+
+        });
+
     }
 
     $scope.stateChanged = function (selectedType) {
@@ -124,9 +116,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
         });
         $scope.addUserGrid.data = $scope.UserTypes;
-
     };
-
 
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
@@ -194,7 +184,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
 
     $scope.CreateTempUser = function (user) {
         $scope.InvalidMessage = '';
-        
+
         UserFactory.GetUser(user.userId).success(function (data) {
             if (data != undefined) {
                 $scope.userId = '';
@@ -273,15 +263,12 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             currentUser.mobileNumber = currentUser.MobileNumber;
             $scope.user = currentUser;
             UserFactory.AddUser(currentUser).success(function (data) {
-
                 $scope.addMode = false;
                 //currentUser.UserId = data;
                 //$scope.users.push(currentUser);
                 $scope.GetAllUsers();
-                //reset form
                 $scope.user = {};
                 // $scope.adduserform.$setPristine(); //for form reset
-
                 $('#userModel').modal('hide');
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
@@ -319,18 +306,15 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         if (isChecked) {
             console.log('setting row data');
             $scope.addUserGrid.data = $scope.UpdatedUserTypes;
-
         }
         else {
             $scope.addUserGrid.data = $scope.UserTypes;
-
         }
     }
 
     // Add Users
     $scope.getSelected = function (selectedRole, selectedregion, selectedcoutry, selectedBS) {
         try {
-
             var ar = $scope.UpdatedUserTypes;
             $scope.UpdatedUserTypes = [];
             console.log('Total selected: ' + ar.length);
@@ -361,7 +345,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                             }
                             successcount++;
                             $('#userModel').modal('hide');
-                            
+
                         }).error(function (data) {
                             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
                         });
@@ -461,7 +445,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
     $scope.GetAllRoles();
     $scope.GetAllUsers();
     //$scope.IsUserSCHead();
-    //$scope.IsPageReadOnly();
+    $scope.IsPageReadOnly();
 });
 
 ReportApp.factory('UserFactory', function ($http) {
