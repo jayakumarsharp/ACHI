@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster) {
+﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster, TaskService) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -52,17 +52,17 @@
         $('#LayoutModel1').modal('show');
         $scope.notificationExist = true;
         $scope.currency = { 'Comments': Comments, 'RefNumber': RefNumber, 'Approver': Approver, 'Version': Version, 'Comments': Comments, 'ApprovedDate': ApprovedDate, 'Status': Status };
-        debugger
-        if ($scope.currency.Status == "Y")
-            $scope.Status = true;
-        else
-            $scope.Status = false;
-        $scope.OStatus = angular.copy($scope.Status);
+
+        //if ($scope.currency.Status == "Y")
+        //    $scope.Status = true;
+        //else
+        //    $scope.Status = false;
+        //$scope.OStatus = angular.copy($scope.Status);
 
     };
 
     $scope.changestatus = function (status) {
-        $timeout(function () { $scope.Status = status; });
+        $timeout(function () { $scope.currency.Status = status; });
     }
 
     $scope.notificationExist = false;
@@ -80,16 +80,29 @@
 
     };
 
+    $scope.PendingGriddata = [];
+    $scope.CompletedGriddata = [];
 
 
     $scope.GetAlldata = function () {
         StrategyService.GetStrategyApprovalByuser().success(function (data) {
             $timeout(function () {
+                debugger;
+                $scope.PendingGriddata = [];
+                $scope.CompletedGriddata = [];
                 for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
                     data[i].Ver = "Version - " + data[i].Version;
                     data[i].Version = data[i].Version;
+                    if (data[i].Status == 'N' || data[i].Status == 'Y')
+                        $scope.CompletedGriddata.push(data[i])
+                    else
+                        $scope.PendingGriddata.push(data[i])
+
                 }
-                $scope.CurrencyGrid.data = data;
+
+                $scope.PendingGrid.data = $scope.PendingGriddata;
+                $scope.CompletedGrid.data = $scope.CompletedGriddata;
             }, 100)
         }).error(function (error) {
             $scope.Error = error;
@@ -98,27 +111,20 @@
     $scope.GetAlldata();
 
 
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
 
-    var columnDefs = [
-        { name: 'RefNumber' },
+    var PendingcolumnDefs = [
+        { name: 'RefNumber', width: 140 },
+        // { name: 'Name', displayName: 'Name', width: 100 },
+        //{ name: 'BusinessSectorName', displayName: 'Business Sector', width: 120 },
+
         {
-            name: 'Version',
+            name: 'Version', width: 140,
             cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
         },
 
-      
-        {
-            name: 'Status'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.Status=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.Status=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
 
         {
-            name: 'Action'
+            name: 'Action', width: '*'
             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Approver,row.entity.Version,row.entity.Comments,row.entity.ApprovedDate,row.entity.Status)" ><i class="fa fa-edit" ></i></a ></div>'
             , visible: $scope.IsReadOnly
         },
@@ -126,25 +132,61 @@
     ];
 
 
-    $scope.CurrencyGrid = {
+
+    var CompletedcolumnDefs = [
+        { name: 'RefNumber', width: 100 },
+        // { name: 'Name', displayName: 'Name', width: 80 },
+        //{ name: 'BusinessSectorName', displayName: 'Business Sector', width: 110 },
+        {
+            name: 'Version', width: 80,
+            cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
+        },
+        {
+            name: 'Status', width: 80
+            , cellTemplate: '<div class="ui-grid-cell-contents"> <input type="button" class="btn btn-success" ng-show={{row.entity.Status=="Y"}} value="Approved" /><input type="button" class="btn btn-danger" ng-show={{row.entity.Status=="N"}} value="Rejected" /></div>'
+        },
+         {
+             name: 'Comments', width: 140
+
+         },
+        {
+            name: 'ApprovedDate', displayName: 'Date', width: 80
+        },
+
+
+    ];
+
+
+    $scope.PendingGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        columnDefs: columnDefs,
+        columnDefs: PendingcolumnDefs,
+
+    };
+
+    $scope.CompletedGrid = {
+        paginationPageSizes: [10, 20, 30, 40, 50, 60],
+        paginationPageSize: 10,
+        columnDefs: CompletedcolumnDefs,
 
     };
 
 
-
-
     $scope.UpdatecurrencyConversion = function (model) {
         //model.UpdatedBy = $rootScope.UserInfo.user.userId;
-        if ($scope.Status)
-            model.Status = "Y";
-        else
-            model.Status = "N";
+       
         TaskService.UpdateStrategyApprover(model).success(function (data) {
             if (data == "success") {
                 $scope.editMode = false;
+
+                if ($scope.currency.Status == "Y") {
+
+                }
+                else if ($scope.currency.Status == "N")
+                {
+
+                }
+
                 $timeout(function () {
                     $scope.GetAlldata();
                 })
@@ -168,28 +210,6 @@
         $scope.currency = {};
         $scope.ecurrency = {};
         $('#LayoutModel1').modal('hide');
-    };
-
-    var columnDefs1 = [
-        { name: 'Approver' },
-        { name: 'RefNumber' },
-        {
-            name: 'Version',
-            cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
-        },
-        {
-            name: 'Status'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.Status=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.Status=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
-
-    ];
-
-
-    $scope.TransferGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: columnDefs1,
-
     };
 
 

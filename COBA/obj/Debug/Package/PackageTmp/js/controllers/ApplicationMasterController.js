@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.ApplicationMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -13,7 +13,6 @@
     };
 
     $rootScope.$on("toggle", function () {
-        //jay
         $timeout(function () {
             $scope.ApplicationMasterGrid.api.sizeColumnsToFit();
         }, 1000);
@@ -28,27 +27,26 @@
 
     $scope.add = function (ApplicationMaster) {
         if (ApplicationMaster != null) {
-            //if (ApplicationMaster.TaskName.trim()) {
-            ApiCall.MakeApiCall("AddApplication", 'POST', ApplicationMaster).success(function (data) {
-                if (data.Error != undefined) {
-                    //toaster.pop('error', "Error", data.Error, null);
-                } else {
-
-                    $scope.ApplicationMaster = null;
-                    $scope.GetAllApplicationMaster();
-                    $scope.editMode = false;
-                    //toaster.pop('success', "Success", 'ApplicationMaster added successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding ApplicationMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //    //toaster.pop('warning', "Warning", 'Please enter ApplicationMaster', null);
-            //}
+            if (ApplicationMaster.ApplicationId.trim() != "" && ApplicationMaster.ApplicationName.trim() != "") {
+                ApiCall.MakeApiCall("AddApplication", 'POST', ApplicationMaster).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
+                        $scope.ApplicationMaster = null;
+                        $scope.GetAllApplicationMaster();
+                        $scope.editMode = false;
+                        toaster.pop('success', "Success", 'Application added successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding Application! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Application ID and Application Name', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter ApplicationMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Application ID and Application Name', null);
         }
 
     };
@@ -69,7 +67,7 @@
             $scope.editMode = false;
             $scope.GetAllApplicationMaster();
             $('#confirmModal').modal('hide');
-            //toaster.pop('success', "Success", 'ApplicationMaster deleted successfully', null);
+            toaster.pop('success', "Success", 'ApplicationMaster deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -77,22 +75,22 @@
 
     $scope.UpdateApplicationMaster = function (model) {
         if (model != null) {
-            //if (model.TaskName.trim()) {
-            ApiCall.MakeApiCall("ModifyApplication", 'POST', model).success(function (data) {
-                $scope.editMode = false;
-                $scope.ApplicationMaster = null;
-                $scope.GetAllApplicationMaster();
-                //toaster.pop('success', "Success", 'ApplicationMaster updated successfully', null);
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding ApplicationMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //toaster.pop('warning', "Warning", 'Please enter ApplicationMaster', null);
-            //}
+            if (model.ApplicationId.trim() != "" && model.ApplicationName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyApplication", 'POST', model).success(function (data) {
+                    $scope.editMode = false;
+                    $scope.ApplicationMaster = null;
+                    $scope.GetAllApplicationMaster();
+                    toaster.pop('success', "Success", 'Application updated successfully', null);
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding Application ! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Application ', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter ApplicationMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Application', null);
         }
     };
 
@@ -116,7 +114,7 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Application Master Write') {
+                        if (value.RightName == 'Application Write') {
                             isRead = false;
                         }
                     })
@@ -126,11 +124,11 @@
 
 
                     var columnDefs = [{ name: 'Id', visible: false },
-                        { name: 'ApplicationId', displayName: 'Application Id' },
-                        { name: 'ApplicationName', displayName: 'Application Name' },
+                        { name: 'ApplicationId', displayName: 'Application Id',width:150 },
+                        { name: 'ApplicationName', displayName: 'Application Name', width: '*' },
                         {
                             name: 'Action', cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                            , visible: $scope.IsReadOnly
+                            , visible: !$scope.IsReadOnly, width: 100
                         },
 
                     ];

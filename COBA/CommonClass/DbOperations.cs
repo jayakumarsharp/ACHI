@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -465,6 +466,51 @@ public class DbOperations
         return lst;
 
     }
+    public List<StrategyApprover> Get_DelegatedApprovalByuser(string userid)
+    {
+        List<StrategyApprover> lst = new List<StrategyApprover>();
+
+        string query = "Get_DelegateApprovalByUser";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new StrategyApprover
+                               {
+                                   Approver = Convert.ToString(row["Approver"]),
+                                   RefNumber = Convert.ToString(row["RefNumber"]),
+                                   Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
+
+                               }).ToList();
+
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+
 
     public List<StrategyApprover> Get_StrategyApprovalById(string StrategyNumber, string Version)
     {
@@ -1277,164 +1323,6 @@ public class DbOperations
 
     #endregion Task
 
-    #region OnboardingTask
-
-    public List<OnboardingTasks> GetOnboardingTaskData()
-    {
-        List<OnboardingTasks> lst = new List<OnboardingTasks>();
-
-        string query = "SP_GetOnboardingTask";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new OnboardingTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public List<OnboardingTasks> GetOnboardingTaskDatabyId(int taskid)
-    {
-        List<OnboardingTasks> lst = new List<OnboardingTasks>();
-
-        string query = "SP_GetOnboardingTaskbyId";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", taskid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new OnboardingTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   TaskName = Convert.ToString(row["Name"])
-                               }).ToList();
-
-                    }
-                }
-
-                //    cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-
-    public void UpdateOnboardingTaskdata(string Id, string emailattachment, string comments, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("SP_update_onboardingTask", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add(new MySqlParameter("i_id", Id));
-                cmd.Parameters.Add(new MySqlParameter("i_TaskAttachment", emailattachment));
-                cmd.Parameters.Add(new MySqlParameter("i_comments", comments));
-
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
-    #endregion OnboardingTask
 
     #region Email
 
@@ -2280,6 +2168,7 @@ public class DbOperations
                             lst = (from DataRow row in dt.Rows
                                    select new UserMaster
                                    {
+                                       Id = Convert.ToString(row["Id"]),
                                        userId = Convert.ToString(row["Userid"]),
                                        UserName = Convert.ToString(row["username"]),
                                        EmailId = Convert.ToString(row["EmailId"]),
@@ -2335,6 +2224,7 @@ public class DbOperations
                         lst = (from DataRow row in dt.Rows
                                select new UserMaster
                                {
+                                   Id = Convert.ToString(row["Id"]),
                                    userId = Convert.ToString(row["Userid"]),
                                    UserName = Convert.ToString(row["username"]),
                                    EmailId = Convert.ToString(row["EmailId"]),
@@ -2347,7 +2237,8 @@ public class DbOperations
                                    CountryId = Convert.ToString(row["CountryId"]),
                                    RegionId = Convert.ToString(row["RegionId"]),
                                    Status = Convert.ToString(row["Status"]),
-
+                                   Password = Convert.ToString(row["Password"]),
+                                   IsADUser = Convert.ToString(row["IsADUser"]),
 
                                }).ToList();
 

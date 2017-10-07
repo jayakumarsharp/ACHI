@@ -127,11 +127,11 @@
                     }
 
                     var columnDefs = [{ name: 'Id', visible: false },
-                        { name: 'CountryName' },
+                        { name: 'CountryName', displayName: 'Country Name', width: '*' },
                         {
                             name: 'Action'
                             , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCountryMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                            , visible: !$scope.IsReadOnly
+                            , visible: !$scope.IsReadOnly, width: 150
                         }];
 
 

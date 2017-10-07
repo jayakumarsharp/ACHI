@@ -1,4 +1,4 @@
-﻿ReportApp.controller('CountryMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('CountryMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.CountryMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
@@ -12,8 +12,6 @@
             $scope.Error = error;
         })
     };
-
-
 
     $rootScope.$on("toggle", function () {
         //jay
@@ -31,27 +29,27 @@
 
     $scope.add = function (CountryMaster) {
         if (CountryMaster != null) {
-            //if (CountryMaster.TaskName.trim()) {
-            ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
-                if (data.Error != undefined) {
-                    //toaster.pop('error', "Error", data.Error, null);
-                } else {
+            if (CountryMaster.CountryName.trim() != "") {
+                ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
 
-                    $scope.CountryMaster = null;
-                    $scope.GetAllCountryMaster();
-                    $scope.editMode = false;
-                    //toaster.pop('success', "Success", 'CountryMaster added successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //    //toaster.pop('warning', "Warning", 'Please enter CountryMaster', null);
-            //}
+                        $scope.CountryMaster = null;
+                        $scope.GetAllCountryMaster();
+                        $scope.editMode = false;
+                        toaster.pop('success', "Success", 'Country added successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Country', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter CountryMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Country', null);
         }
 
     };
@@ -61,7 +59,7 @@
             $scope.editMode = true;
             $scope.CountryMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding Country! " + data.ExceptionMessage;
         });
     };
 
@@ -72,7 +70,7 @@
             $scope.editMode = false;
             $scope.GetAllCountryMaster();
             $('#confirmModal').modal('hide');
-            //toaster.pop('success', "Success", 'CountryMaster deleted successfully', null);
+            toaster.pop('success', "Success", 'Country deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -80,26 +78,26 @@
 
     $scope.UpdateCountryMaster = function (model) {
         if (model != null) {
-            //if (model.TaskName.trim()) {
-            ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
-                $scope.editMode = false;
-                $scope.CountryMaster = null;
-                $scope.GetAllCountryMaster();
-                //toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
-            });
-            //}
-            //else {
-            //toaster.pop('warning', "Warning", 'Please enter CountryMaster', null);
-            //}
+            if (model.CountryName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+                    $scope.editMode = false;
+                    $scope.CountryMaster = null;
+                    $scope.GetAllCountryMaster();
+                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter Country', null);
+            }
         }
         else {
-            //toaster.pop('warning', "Warning", 'Please enter CountryMaster', null);
+            toaster.pop('warning', "Warning", 'Please enter Country', null);
         }
     };
 
-   
+
 
     $scope.showconfirm = function (data) {
         $scope.CountryMasterId = data;
@@ -129,15 +127,12 @@
                     }
 
                     var columnDefs = [{ name: 'Id', visible: false },
-      //{ name: 'CountryId' },
-      { name: 'CountryName' },
-      {
-          name: 'Action'
-          , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCountryMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-          , visible: !$scope.IsReadOnly
-      },
-
-                    ];
+                        { name: 'CountryName', displayName: 'Country Name', width: '*' },
+                        {
+                            name: 'Action'
+                            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCountryMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+                            , visible: !$scope.IsReadOnly, width: 150
+                        }];
 
 
                     $scope.CountryMasterGrid.columnDefs = columnDefs;

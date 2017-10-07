@@ -1,18 +1,38 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
-<div class="whitebg">
-    <section class="content-header" style="padding-bottom:10px;"></section>
-
-    <div ng-controller="ApprovalsController" class="nav-tabs-custom">
+<div style="margin-left:-10px;margin-right:-10px">
+    <div ng-controller="ApprovalsController">
         <ul class="nav nav-tabs">
-            <li class="active"><a ng-click="activatetab(1)" data-toggle="tab" aria-expanded="false"><strong>Approval Management</strong> </a></li>
-            <li class=""><a ng-click="activatetab(2)" data-toggle="tab" aria-expanded="true"><strong> Transfer Management</strong> </a></li>
-            <li class=""><a ng-click="activatetab(3)" data-toggle="tab" aria-expanded="true"><strong> Accepted Delegates</strong> </a></li>
-            <li class=""><a ng-click="activatetab(4)" data-toggle="tab" aria-expanded="true"><strong> Denied Delegates</strong> </a></li>
+            <li class="active"><a ng-click="activatetab(1)" data-toggle="tab" aria-expanded="false"><strong>My Approvals</strong> </a></li>            
+            <li class=""><a ng-click="activatetab(3)" data-toggle="tab" aria-expanded="true"><strong> Delegate Request</strong> </a></li>
+            <li class=""><a ng-click="activatetab(2)" data-toggle="tab" aria-expanded="true"><strong> Delegate Approvals Status</strong> </a></li>
+            @*<li class=""><a ng-click="activatetab(4)" data-toggle="tab" aria-expanded="true"><strong> Denied Delegates</strong> </a></li>*@
         </ul>
         <div>
             <div class="tab-pane" ng-if="tab1">
-                <div class="row">
-                    <div id="grid1" ui-grid="CurrencyGrid" ui-grid-pagination class="grid"></div>
+                <div class="row m-t-xs">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Pending Approvals</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="PendingGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Completed Approvals</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="CompletedGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+                    </div>
+
 
                     <div class="modal fade" id="LayoutModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
                         <div class="modal-dialog" style="width:75%">
@@ -21,7 +41,7 @@
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
-                                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
+                                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Approval Status</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div>
@@ -30,7 +50,7 @@
                                                 <div class="row">
                                                     <div ng-include="'ShowApprovalDetails'"></div>
                                                     <div class="form-group col-lg-12">
-                                                        <div class="col-sm-offset-4 col-sm-10">
+                                                        <div class="col-sm-offset-5 col-sm-10">
                                                             &nbsp;
                                                             <span>
                                                                 <input type="button" value="Update" ng-click="UpdatecurrencyConversion(currency)" class="btn  btn-circle btn-default btn-outline-info" />
@@ -49,97 +69,75 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-                        <div class="modal-dialog" style="width:75%">
-                            <div class="modal-content">
-                                <div class="modal-header content-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;">Application Approval Status</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="">
-                                        @*content*@
-                                        <div class="row">
-                                            <div class="box-body">
-                                                <div class="table-responsive">
-                                                    <table class="table no-margin">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>RefNumber</th>
-                                                                <th>Approver</th>
-                                                                <th>Status</th>
-                                                                <th>Comments</th>
-                                                                <th>ApprovedDate </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr ng-repeat="right in ViewData">
-                                                                <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
-                                                                <td>{{right.Approver}}</td>
-                                                                <td><span class="label label-success">{{right.Status}}</span></td>
-                                                                <td>
-                                                                    {{right.Comments}}
-                                                                </td>
-                                                                <td>
-                                                                    {{right.ApprovedDate}}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog" style="width:25%">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #3c8dbc;color:white">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
-                                </div>
-                                <br />
-                                <div class="modal-body">
-                                    Are you sure you want to delete?
-                                </div>
-                                <br />
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-info" data-ng-click="delete()">Yes</button>
-                                    <button type="button" class="btn btn-sm btn-circle btn-default" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <!-- /.tab-pane -->
             <div class="tab-pane" ng-if="tab2">
-                <div class="row">
-                    <div id="grid1" ui-grid="TransferGrid" ui-grid-pagination class="grid"></div>
+                <div class="row m-t-xs">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Pending Approvals</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="PendingGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Completed Approvals</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="CompletedGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
             <!-- /.tab-pane -->
             <!-- /.tab-pane -->
             <div class="tab-pane" ng-if="tab3">
-                <div class="row">
-                    <div ui-grid="TransferGrid" ui-grid-pagination class="grid"></div>
+                <div class="row m-t-xs">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Pending Accepts</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="PendingGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Completed Accepts</h3>
+                            </div>
+                            <form role="form">
+                                <div id="grid1" ui-grid="CompletedGrid" ui-grid-pagination class="grid"></div>
+                            </form>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
-            <div class="tab-pane" ng-if="tab4">
-                <div class="row">
-                    <div ui-grid="TransferGrid" ui-grid-pagination class="grid"></div>
-                </div>
-            </div>
+            @*<div class="tab-pane" ng-if="tab4">
+                    <div class="row">
+                        <div ui-grid="TransferGrid" ui-grid-pagination class="grid"></div>
+                    </div>
+                </div>*@
         </div>
         <!-- /.tab-content -->
+
+
     </div>
 </div>

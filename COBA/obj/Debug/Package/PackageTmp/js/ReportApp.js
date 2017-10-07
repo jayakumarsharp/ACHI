@@ -6,10 +6,27 @@ var urltype = '';
 var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid.pagination', 'toaster']);
 
 ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
+    $scope.rootname = 'Index';
+
+    if (sessionStorage.getItem('menuname') != null) {
+        var root = sessionStorage.getItem('menuname');
+        $scope.rootname = root;
+    }
+    else {
+        sessionStorage.setItem('menuname', 'Index');
+        $scope.rootname = 'Index';
+    }
 
     $scope.notificationdata = [];
     $rootScope.UserInfo = {};
     $scope.MenuList = [];
+
+    $scope.updatemenuclick = function (path) {
+        sessionStorage.setItem('menuname', path);
+
+
+    }
+
     $scope.GetUserRoles = function () {
 
         UserFactory.getloggedusername().success(function (data) {

@@ -12,30 +12,22 @@
         </div>
         <div class="form-group">
             <label>Application</label>
-            @*{{ApplicationMasterList}}*@
             <select class="form-control" name="ddlSBU" ng-model="selectModel.Application" ng-options="item.ApplicationName for item in ApplicationMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                 <option value="">- Select Application -</option>
             </select>
-            @*<input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.ApplicationId" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.ApplicationId" required />*@
+
         </div>
         <div class="form-group">
             <label>Country</label>
-            @*{{CountryMasterList}}*@
             <select class="form-control" name="ddlSBU" ng-model="selectModel.Country" ng-change="userfilter()" ng-options="item.CountryName for item in CountryMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                 <option value="">- Select Country -</option>
             </select>
-            @*<input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.Country" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.Country" required />*@
         </div>
         <div class="form-group">
             <label>Product Type</label>
-            @*{{ProductMasterList}}*@
             <select class="form-control" name="ddlSBU" ng-model="selectModel.ProductType" ng-options="item.ProductName for item in ProductMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                 <option value="">- Select Product -</option>
             </select>
-            @*<input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.ProductType" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.ProductType" required />*@
         </div>
     </div>
 </div>
@@ -46,16 +38,10 @@
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.Name" />
             <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.Name" required />
         </div>
-        @*<div class="form-group">
-                <label>Application Name</label>
-                <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.ApplicationName" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.ApplicationName" required />
-            </div>*@
+
         <div class="form-group">
             <label>Business Sector</label>
-            @*{{BusinessSectorMasterList}}*@
-            @*<input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.BusinessSector" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.BusinessSector" required />*@
+
             <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessSector" ng-change="userfilter()" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                 <option value="">- Select Business Master -</option>
             </select>
@@ -63,8 +49,6 @@
 
         <div class="form-group">
             <label>Region</label>
-            @*<input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.Region" />
-                <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.Region" required />*@
 
             <select class="form-control" name="ddlSBU" ng-model="selectModel.Region" ng-change="userfilter()" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
                 <option value="">- Select Region -</option>
@@ -108,35 +92,35 @@
         <div class="form-group">
             <label>Additional Parameter 2</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam2" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam2" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam2" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 4</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam4" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam4" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam4" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 6</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam6" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam6" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam6" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 8</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam8" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam8" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam8" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 10</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam10" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam10" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam10" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 12</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam12" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam12" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam12" />
         </div>
 
-     
+
     </div>
 </div>
 <div class="col-md-6">
@@ -149,41 +133,39 @@
         <div class="form-group">
             <label>Additional Parameter 1</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam1" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam1" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam1" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 3</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam3" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam3" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam3" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 5</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam5" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam5" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam5" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 7</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam7" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam7" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam7" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 9</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam9" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam9" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam9" />
         </div>
 
         <div class="form-group">
             <label>Additional Parameter 11</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam11" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam11" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam11" />
         </div>
         <div class="form-group">
             <label>Additional Parameter 13</label>
             <input data-ng-show="editMode" class="form-control" numberdotonly type="text" maxlength="50" ng-model="ecurrency.AdditionalParam13" />
-            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam13" required />
+            <input data-ng-hide="editMode" class="form-control" type="text" numberdotonly maxlength="50" ng-model="currency.AdditionalParam13" />
         </div>
-
-      
 
     </div>
 </div>

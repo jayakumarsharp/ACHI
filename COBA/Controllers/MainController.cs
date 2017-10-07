@@ -15,11 +15,12 @@ namespace CRMManagement.Controllers
 
         //
         // GET: /Main/
-
+        //[SessionTimeout]
         public ActionResult ShowApplicationDetails()
         {
             return PartialView();
         }
+
         public ActionResult ViewApprovals()
         {
             return PartialView();
@@ -28,86 +29,93 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
+        [SessionTimeout]
         public ActionResult Index()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult TransferSettings()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult Country()
         {
             return View();
         }
+
+        [SessionTimeout]
         public ActionResult BusinessSector()
         {
             return View();
         }
+        [SessionTimeout]
         public ActionResult ProductType()
         {
             return View();
         }
+        [SessionTimeout]
         public ActionResult RoleManagement()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult UserManagement()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult ApplicationMaster()
         {
             return View();
         }
 
 
-
+        [SessionTimeout]
         public ActionResult Region()
         {
             return View();
         }
 
-
+        [SessionTimeout]
         public ActionResult Strategy()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult Tasks()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult OnBoardingTasks()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult MapTask()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult Emails()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult Reports()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult Licensing()
         {
             return View();
         }
-
+        [SessionTimeout]
         public ActionResult Approvals()
         {
             return View();
@@ -189,13 +197,19 @@ namespace CRMManagement.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-
-
         public JsonResult GetStrategyApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+
+
+        public JsonResult GetDelegatedApprovalByuser()
+        {
+            List<StrategyApprover> lst = _dbOperations.Get_DelegatedApprovalByuser(Convert.ToString(Session["UserName"]));
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetStrategyApprovalById(string Strategynumber, string Version)
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalById(Strategynumber, Version);
@@ -321,17 +335,6 @@ namespace CRMManagement.Controllers
 
         #region OnboardingTask
 
-        public JsonResult GetOnboardingTaskData()
-        {
-            List<OnboardingTasks> lst = _dbOperations.GetOnboardingTaskData();
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetOnboardingTaskbyId(int Id)
-        {
-            List<OnboardingTasks> lst = _dbOperations.GetOnboardingTaskDatabyId(Id);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
 
         public JsonResult UpdateOnboardingTask(string Id, string TaskComments, string StrategyNumber, string ExisitingFiles)
         {
@@ -368,7 +371,7 @@ namespace CRMManagement.Controllers
 
                 string errordesc = "success";
                 int errocode = 0;
-                _dbOperations.UpdateOnboardingTaskdata(Id, ExisitingFiles, TaskComments, out errocode, out errordesc);
+                // _dbOperations.UpdateOnboardingTaskdata(Id, ExisitingFiles, TaskComments, out errocode, out errordesc);
 
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
@@ -443,8 +446,22 @@ namespace CRMManagement.Controllers
 
         public JsonResult GetUserRoles(string userId)
         {
-            List<RightMaster> lst = _dbOperations.GetMenuList(userId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            if (userId != "")
+            {
+                if (Session["MenuList"] != null)
+                {
+                    List<RightMaster> ls = Session["MenuList"] as List<RightMaster>;
+                    return Json(ls, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    List<RightMaster> lst = _dbOperations.GetMenuList(userId);
+                    Session["MenuList"] = lst;
+                    return Json(lst, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+                return null;
         }
         public JsonResult GetUsersByRoles(string Roleid)
         {
@@ -559,7 +576,7 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-       
+
 
         public JsonResult CreateTempUser(UserMaster user)
         {
@@ -1064,6 +1081,7 @@ public class UserMaster
     public string UserImage { get; set; }
     public string UserName { get; set; }
     public string userId { get; set; }
+    public string Id { get; set; }
 }
 
 public class Roles
@@ -1115,3 +1133,16 @@ public class BusinessSector
 
 }
 
+public class SessionTimeoutAttribute : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext filterContext)
+    {
+        HttpContext ctx = HttpContext.Current;
+        if (HttpContext.Current.Session["UserName"] == null)
+        {
+            filterContext.Result = new RedirectResult("~/Home/LoginDisplay");
+            return;
+        }
+        base.OnActionExecuting(filterContext);
+    }
+}

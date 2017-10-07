@@ -4,16 +4,15 @@
 
 
     <div ng-controller="RoleController" class="nav-tabs-custom">
-        <section class="content-header" style="padding-bottom:10px;">
-            <h1>             Role Management      </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <div class="actions">
-                        <button data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
-                    </div>
-                </li>
-            </ol>
-        </section>
+
+        <div class="box-header with-border">
+            <h3 class="box-title">    Role Management   </h3>
+        </div>
+
+        <div class="row margintop10">
+            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+        </div>
+
 
         <section class="content">
 
@@ -73,7 +72,7 @@
                                             <div class="list-group box-comments" id="list1" style="height:300px;overflow-x:auto">
                                                 <a href="javascript:;" class="list-group-item active">
                                                     Available Rights
-                                                    <!--<input title="Toggle all" ng-click="toggleA()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
+                                                      <!--<input title="Toggle all" ng-click="toggleA()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
                                                 </a>
                                                 <span ng-repeat="right in listA | orderBy:'right.RightID' track by right.RightID">
                                                     <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">
@@ -99,7 +98,7 @@
                                             <div class="list-group box-comments" id="list2" style="height:300px;overflow-x:auto">
                                                 <a href="javascript:;" class="list-group-item active">
                                                     Selected Rights
-                                                    <!--<input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
+                                                      <!--<input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
                                                 </a>
                                                 <span ng-repeat="right in listB | orderBy:'right.RightID' track by right.RightID">
                                                     <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">

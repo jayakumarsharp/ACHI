@@ -29,74 +29,37 @@
                 <span class="logo-mini"><b>ACHI</b></span>
                 <span class="logo-lg"><b>ACHI</b></span>
             </a>
-            @*<nav class="navbar navbar-static-top">
-                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                        <span class="sr-only">Toggle navigation</span>
-                    </a>
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown notifications-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">{{notificationdata.length}}</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have {{notificationdata.length}} notifications</li>
-                                    <li>
-                                        <ul class="menu">
-                                            <li ng-repeat="n in notificationdata">
-                                                <a ng-click="GetCurrencyConversionForId(n.RefNumber,N.Version,N.Comments,N.ApprovedDate,N.Status)" href="#">
-                                                    <i class="fa fa-users text-aqua"></i> RefNumber {{n.RefNumber}} Version {{n.Version}}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="footer"><a href="Approvals">View all</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">@Convert.ToString(Session["UserName"])</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="user-header">
-                                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                        <p>
-                                            @Convert.ToString(Session["UserName"]) - Web Developer
-                                        </p>
-                                    </li>
-                                    <li class="user-footer">
-                                        <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                        </div>
-                                        <div class="pull-right">
-                                            <a href="@Url.Action("Logout", "Home")" class="btn btn-default btn-flat">Sign out</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>*@
+
         </header>
         <aside class="main-sidebar">
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
                 <!-- Sidebar user panel -->
-                <div class="user-panel">
+                <div class="user-panel" style="background-color: #1283ae !important;">
                     <div class="pull-left image">
                         <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>@Convert.ToString(Session["UserName"]) </p>
-                        <a href="#"><i class="fa fa-circle text-success"></i>Admin</a>
+
+                        <div class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @*<i class="fa fa-circle text-success"></i>Admin*@
+                                <p>@Convert.ToString(Session["UserName"]) </p>
+
+                                <b class="fa fa-cog"></b>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="#">Profile</a></li>
+                                <li class="divider"></li>
+                                <li><a href="@Url.Action("Logout", "Home")">Sign out</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.MenuName }"><a href="{{menu.Path}}" ng-click="updatemenuclick(menu.MenuName)"><i class="{{menu.Icon}} "></i><span> {{menu.MenuName}}</span></a></li>
+                    <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"><i class="{{menu.Icon}} "></i><span> {{menu.MenuName}}</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -278,6 +241,109 @@
 
         .btn-default {
             min-width: 73px !important;
+        }
+
+        .open > .dropdown-menu {
+            display: block;
+        }
+
+        .m-t-xs {
+            margin-top: 5px;
+        }
+
+        .dropdown-menu {
+            border: medium none;
+            border-radius: 3px;
+            box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+            display: none;
+            float: left;
+            font-size: 12px;
+            left: 0;
+            list-style: none outside none;
+            padding: 0;
+            position: absolute;
+            text-shadow: none;
+            top: 100%;
+            z-index: 1000;
+        }
+
+        .fadeInRight {
+            -webkit-animation-name: fadeInRight;
+            animation-name: fadeInRight;
+        }
+
+        .animated {
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            font-size: 14px;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 4px;
+            -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+            box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        }
+
+        .sidebar-menu, .main-sidebar .user-panel, .sidebar-menu > li.header {
+            overflow: inherit;
+        }
+
+            .sidebar-menu, .main-sidebar, .sidebar-menu > li.header, .skin-blue .main-header .logo {
+                background-color: #159ad0;
+                background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #00aced), color-stop(1, #00aced) );
+                background: -moz-linear-gradient( center top, #00aced 5%, #00aced 100% );
+            }
+
+        .skin-blue .sidebar-menu > li:hover > a, .skin-blue .sidebar-menu > li.active > a, .skin-blue .sidebar-menu > li.menu-open > a {
+            background-color: #48b0cf;
+        }
+
+        .sidebar-menu > li.active {
+            background-color: #48b0cf;
+        }
+
+        .skin-blue .sidebar a {
+            color: #fff;
+        }
+
+        .dropdown-menu a {
+            color: #000000 !important;
+        }
+
+        i.active, .inactive {
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        i.active, .inactive {
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        i.active {
+            color: #5cb85c;
+        }
+
+        i.inactive {
+            color: #d9534f;
         }
     </style>
 </body>

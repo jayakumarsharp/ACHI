@@ -5,7 +5,9 @@
         if (!$scope.IsReadOnly)
             $scope.status = !$scope.status;
     }
-    $scope.userlist = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
+
+
+    $scope.userlist = [];
     $scope.transfer = {};
 
     $scope.GetRightsList = function () {
@@ -30,6 +32,13 @@
             }
 
         });
+        UserFactory.GetUsers().success(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                $scope.userlist.push({ RefNumber: '', Approver: data[i].userId, Id: data[i].Id })
+            }
+            $scope.getallcurrencyconversions();
+
+        });
 
     };
     $scope.getallcurrencyconversions = function () {
@@ -50,8 +59,7 @@
         })
     };
 
-    $scope.getallcurrencyconversions();
-
+    
     $rootScope.$on("toggle", function () {
         $timeout(function () {
             $scope.CurrencyGrid.api.sizeColumnsToFit();

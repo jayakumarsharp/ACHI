@@ -1,6 +1,6 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory) {
+﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
     $scope.errorinfo = '';
-    $scope.CurrencyList = [];
+    $scope.Strategydata = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
     $scope.Currency = [];
@@ -33,7 +33,7 @@
         });
     };
 
-    $scope.getallcurrencyconversions = function () {
+    $scope.getallalgodata = function () {
         StrategyService.GetAllCurrencyConversion().success(function (data) {
             console.log(data);
             $scope.CurrencyGrid.data = data;
@@ -74,7 +74,7 @@
         })
 
     };
-    $scope.getallcurrencyconversions();
+    $scope.getallalgodata();
 
     $rootScope.$on("toggle", function () {
         $timeout(function () {
@@ -86,23 +86,22 @@
         rowHeight: 30,
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
-        //enableFiltering: true,
-        //angularCompileRows: true,
         columnDefs: [{ name: 'Id', visible: false },
-        { name: 'RefNumber', displayName: 'RefNumber' , width: 140},
-        { name: 'Name', displayName: 'Name', width: 140 },
-        { name: 'Type', displayName: 'Type', width: 140 },
-        { name: 'CountryName', displayName: 'Country', width: 140 },
-        { name: 'RegionName', displayName: 'Region', width: 140 },
-        { name: 'ProductTypeName', displayName: 'Product Type', width: '*'},
+        { name: 'RefNumber', displayName: 'Ref Number', width: 140 },
+        { name: 'Name', displayName: 'Name', width: 120 },
+        { name: 'BusinessSectorName', displayName: 'Business Sector', width: 120 },
+        { name: 'Type', displayName: 'Type', width: 120 },
+        { name: 'CountryName', displayName: 'Country', width: 120 },
+        { name: 'RegionName', displayName: 'Region', width: 120 },
+        { name: 'ProductTypeName', displayName: 'Product Type', width: 120 },
 
         {
             field: 'Action', width: 70,
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id,row.entity.Version)" ><i class="fa fa-edit" ></i></a ></div>',
+            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id,row.entity.Version,row.entity.RefNumber)" ><i class="fa fa-edit" ></i></a ></div>',
             visible: $scope.IsReadOnly
         },
         {
-            field: 'Approvals', width: 90,
+            field: 'Approvals', width: 70,
             cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>',
             visible: $scope.IsReadOnly
         }],
@@ -122,56 +121,59 @@
 
     $scope.GetAllCurrency = function () {
         StrategyService.GetAllCurrency().success(function (data) {
-            //$scope.Currency = data;
-            $scope.CurrencyGrid.data = data;
+            $scope.Strategydata = data;
+            $scope.CurrencyGrid.data = $scope.Strategydata;
         }).error(function (error) {
             $scope.Error = error;
         });
     };
 
     $scope.InsertStrategy = function (currency) {
-        if ($scope.StrategyActive)
-            currency.IsActive = "Y";
-        else
-            currency.IsActive = "N";
+        //if ($scope.StrategyActive)
+        //    currency.IsActive = "Y";
+        //else
+        //    currency.IsActive = "N";
 
-        if ($scope.IsSignOff)
-            currency.IsSignOff = "Y";
-        else
-            currency.IsSignOff = "N";
+        //if ($scope.IsSignOff)
+        //    currency.IsSignOff = "Y";
+        //else
+        //    currency.IsSignOff = "N";
+        if ($scope.listB_Estimation.length > 0) {
+
+            currency.ApplicationId = $scope.selectModel.Application.Id;
+            currency.Country = $scope.selectModel.Country.Id;
+            currency.ProductType = $scope.selectModel.ProductType.Id;
+            currency.BusinessSector = $scope.selectModel.BusinessSector.Id;
+            currency.Region = $scope.selectModel.Region.Id;
+
+            if (currency != null) {
+                StrategyService.InsertStrategy(currency).success(function (data) {
+                    if (data == "success") {
+                        $scope.listB_Estimation[0].RefNumber = currency.RefNumber;
+                        $scope.listB_Estimation[0].Version = 1;
+                        StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+                            toaster.pop('success', "Success", "Model/Algo added successfully", null);
+                        });
 
 
-        currency.ApplicationId = $scope.selectModel.Application.Id;
-        currency.Country = $scope.selectModel.Country.Id;
-        currency.ProductType = $scope.selectModel.ProductType.Id;
-        currency.BusinessSector = $scope.selectModel.BusinessSector.Id;
-        currency.Region = $scope.selectModel.Region.Id;
-
-        if (currency != null) {
-            StrategyService.InsertStrategy(currency).success(function (data) {
-                if (data == "success") {
-                    $scope.listB_Estimation[0].RefNumber = currency.RefNumber;
-                    $scope.listB_Estimation[0].Version = 1;
-                    StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
-
-                    });
-
-
-                    $('#currencyModel').modal('hide');
-                }
-                else
-                    $scope.errorinfo = data;
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
-            });
+                        $('#currencyModel').modal('hide');
+                    }
+                    else
+                        $scope.errorinfo = data;
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
+                });
+            }
         }
+        else
+            toaster.pop('warning', "Warning", "Please select approvers", null);
     };
 
     $scope.notificationExist = false;
     $scope.notificationdata = [];
     $scope.Availableusers = [];
 
-    $scope.GetCurrencyConversionForId = function (id, Version) {
+    $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.editMode = true;
             $scope.ecurrency = data[0];
@@ -200,43 +202,48 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
 
-        StrategyService.GetStrategyApprovalByuser().success(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].RefNumber == id && data[i].Version == Version) {
-                    $scope.notificationdata = data[i];
-                    $scope.notificationExist = true;
-                }
-            }
+        //StrategyService.GetStrategyApprovalByuser().success(function (data) {
+        //    for (var i = 0; i < data.length; i++) {
+        //        if (data[i].RefNumber == id && data[i].Version == Version) {
+        //            $scope.notificationdata = data[i];
+        //            $scope.notificationExist = true;
+        //        }
+        //    }
 
-        }).error(function (error) {
-            $scope.Error = error;
-        });
+        //}).error(function (error) {
+        //    $scope.Error = error;
+        //});
 
 
-        StrategyService.GetStrategyApprovalById(id, Version).success(function (data) {
+        StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
 
             $scope.Availableusers = data;
             for (var i = 0; i < data.length; i++) {
                 data[i].Id = i;
             }
 
-            var adata = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
-            $scope.aEstimationProduct = adata;
+            ApiCall.MakeApiCall("GetUserbyFilter?CountryId=" + $scope.ecurrency.Country + "&RegionId=" + $scope.ecurrency.Region + "&BusinessSectorId=" + $scope.ecurrency.BusinessSector, 'GET', '').success(function (adata) {
 
-            $scope.EstimationProduct = data;
+                //var adata = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
+                $scope.aEstimationProduct = [];
+                debugger;
+                for (var k = 0; k < adata.length; k++) {
+                    $scope.aEstimationProduct.push({ RefNumber: '', Approver: adata[k].userId, Id: adata[k].Id });
+                }
 
-            $scope.listA_Estimation = [];
-            $scope.listB_Estimation = [];
-            var temp = JSON.parse(JSON.stringify($scope.aEstimationProduct));
+                $scope.EstimationProduct = data;
 
-            for (i = 0; i < $scope.EstimationProduct.length; i++) {
-                $scope.listB_Estimation.push({ 'Approver': $scope.EstimationProduct[i].Approver, 'Id': $scope.EstimationProduct[i].Id });
-                var delId = arrayObjectEstimationProductIndexOf(temp, $scope.EstimationProduct[i].Approver);
-                temp.splice(delId, 1);
-            }
+                $scope.listA_Estimation = [];
+                $scope.listB_Estimation = [];
+                var temp = JSON.parse(JSON.stringify($scope.aEstimationProduct));
 
-            $scope.listA_Estimation = temp;
-
+                for (i = 0; i < $scope.EstimationProduct.length; i++) {
+                    $scope.listB_Estimation.push({ 'Approver': $scope.EstimationProduct[i].Approver, 'Id': $scope.EstimationProduct[i].Id });
+                    var delId = arrayObjectEstimationProductIndexOf(temp, $scope.EstimationProduct[i].Approver);
+                    temp.splice(delId, 1);
+                }
+                $scope.listA_Estimation = temp;
+            });
 
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
@@ -298,40 +305,47 @@
 
     $scope.UpdateStrategy = function (model) {
         model.Page = "S";
-        StrategyService.UpdateStrategy(model).success(function (data) {
-            if (data == "success") {
+        if ($scope.listB_Estimation.length > 0) {
 
-                if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
-                    $scope.listB_Estimation[0].RefNumber = model.RefNumber;
-                    $scope.listB_Estimation[0].Version = model.Version;
+            StrategyService.UpdateStrategy(model).success(function (data) {
+                if (data == "success") {
 
-                    StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+                    if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
+                        $scope.listB_Estimation[0].RefNumber = model.RefNumber;
+                        $scope.listB_Estimation[0].Version = model.Version;
 
-                    });
+                        StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+
+                        });
+                    }
+
+                    var temp = [];
+                    for (var j = 0; j < $scope.Availableusers.length; j++) {
+                        var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
+                        if (delId < 0)
+                            temp.push($scope.Availableusers[j])
+                    }
+
+                    if (temp.length > 0) {
+                        StrategyService.DeleteStrategyApprover(temp).success(function (data) {
+
+                        });
+                    }
+
+                    $scope.editMode = false;
+                    $('#currencyModel').modal('hide');
+
+                    toaster.pop('success', "Success", "Model/Algo updated successfully", null);
+                    $scope.getallalgodata()
                 }
-
-                var temp = [];
-                for (var j = 0; j < $scope.Availableusers.length; j++) {
-                    var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
-                    if (delId < 0)
-                        temp.push($scope.Availableusers[j])
-                }
-
-                if (temp.length > 0) {
-                    StrategyService.DeleteStrategyApprover(temp).success(function (data) {
-
-                    });
-                }
-
-                $scope.editMode = false;
-                $('#currencyModel').modal('hide');
-                $scope.getallcurrencyconversions()
-            }
-            else
-                $scope.errorinfo = data;
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
+                else
+                    $scope.errorinfo = data;
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+            });
+        }
+        else
+            toaster.pop('warning', "Warning", "Please select approvers", null);
     };
 
     var formatDate = function (indate) {
@@ -395,27 +409,80 @@
     $scope.checkedB_Estimation = false;
     $scope.AvailableUser_Estimation = [];
 
-    $scope.gettask = function () {
-        //TaskService.GetAllTask().success(function (data) {
-        //console.log(data);
-        var data = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
-        $scope.EstimationProduct = data;
 
-        $scope.listA_Estimation = [];
-        $scope.listB_Estimation = [];
-        var temp = JSON.parse(JSON.stringify($scope.EstimationProduct));
+    $scope.userfilter = function () {
+        try {
+            var Country = $scope.selectModel.Country.Id;
+            var BusinessSector = $scope.selectModel.BusinessSector.Id;
+            var Region = $scope.selectModel.Region.Id;
+            if (Country != "" && BusinessSector != "" && Region != "" && Country != undefined && BusinessSector != undefined && Region != undefined) {
+                ApiCall.MakeApiCall("GetUserbyFilter?CountryId=" + Country + "&RegionId=" + Region + "&BusinessSectorId=" + BusinessSector, 'GET', '').success(function (data) {
+                    console.log(data);
+                    $scope.listA_Estimation = [];
+                    $scope.listB_Estimation = [];
+                    $scope.EstimationProduct = [];
+                    for (var k = 0; k < data.length; k++) {
+                        $scope.EstimationProduct.push({ RefNumber: '', Approver: data[k].userId, Id: data[k].Id });
+                    }
 
-        for (i = 0; i < $scope.AvailableUser_Estimation.length; i++) {
-            $scope.listB_Estimation.push({ 'Approver': $scope.AvailableUser_Estimation[i].Approver, 'Id': $scope.AvailableUser_Estimation[i].Id });
-            var delId = arrayObjectEstimationProductIndexOf(temp, $scope.AvailableUser_Estimation[i].Approver);
-            temp.splice(delId, 1);
+                    var temp = JSON.parse(JSON.stringify($scope.EstimationProduct));
+                    for (i = 0; i < $scope.AvailableUser_Estimation.length; i++) {
+                        $scope.listB_Estimation.push({ 'Approver': $scope.AvailableUser_Estimation[i].Approver, 'Id': $scope.AvailableUser_Estimation[i].Id });
+                        var delId = arrayObjectEstimationProductIndexOf(temp, $scope.AvailableUser_Estimation[i].Approver);
+                        temp.splice(delId, 1);
+                    }
+                    $scope.listA_Estimation = temp;
+                }).error(function (error) {
+                    $scope.Error = error;
+                })
+            }
+            else {
+                $scope.listA_Estimation = [];
+                $scope.listB_Estimation = [];
+            }
         }
+        catch (e) {
+        }
+    }
 
-        $scope.listA_Estimation = temp;
 
-    };
+    //$scope.gettask = function () {
+    //    //TaskService.GetAllTask().success(function (data) {
+    //    //console.log(data);
+    //    UserFactory.GetUser("").success(function (data) {
+    //        console.log(data);
+    //        $('#viewModal').modal('show');
 
-    $scope.gettask();
+    //        var json = []
+    //        for (var i = 0; i < data.length > 0; i++) {
+    //            json.push({ RefNumber: '', Approver: data[i].userId, Id: data[i].Id });
+    //        }
+
+    //        $scope.EstimationProduct = json;
+    //        $scope.listA_Estimation = [];
+    //        $scope.listB_Estimation = [];
+    //        var temp = JSON.parse(JSON.stringify($scope.EstimationProduct));
+
+    //        for (i = 0; i < $scope.AvailableUser_Estimation.length; i++) {
+    //            $scope.listB_Estimation.push({ 'Approver': $scope.AvailableUser_Estimation[i].Approver, 'Id': $scope.AvailableUser_Estimation[i].Id });
+    //            var delId = arrayObjectEstimationProductIndexOf(temp, $scope.AvailableUser_Estimation[i].Approver);
+    //            temp.splice(delId, 1);
+    //        }
+
+    //        $scope.listA_Estimation = temp;
+
+
+
+
+    //    }).error(function (error) {
+    //        $scope.Error = error;
+    //    })
+
+
+
+    //};
+
+    ///$scope.gettask();
 
     $scope.AlltoA_Estimation = function () {
         $scope.selectedB_Estimation = [];

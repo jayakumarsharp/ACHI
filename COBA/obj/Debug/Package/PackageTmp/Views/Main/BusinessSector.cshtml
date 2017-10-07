@@ -29,7 +29,7 @@
             <div style="margin-top:20px;" class="form-group" ng-show="!IsReadOnly" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
                 <div class="form-group">
 
-                    <label for="inputTask" class="col-md-2 control-label">Business Sector</label>
+                    <label for="inputTask" class="col-md-2  col-md-offset-2 control-label">Business Sector</label>
                     <div class="col-md-3">
                         <input type="text" class="form-control" maxlength="50" name="inputTask" ng-model=BusinessSectorMaster.BusinessSectorName>
                     </div>
@@ -43,7 +43,7 @@
 
         </section>
 
-        <section class="content" style="margin-top:30px;">
+        <section class="content" style="margin-top:30px;width:48%;margin-left:24%;">
             <div id="grid1" ui-grid="BusinessSectorMasterGrid" ui-grid-pagination class="grid"></div>
 
         </section>

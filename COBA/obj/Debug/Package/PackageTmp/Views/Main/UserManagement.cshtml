@@ -1,17 +1,15 @@
 ﻿<div class="whitebg">
     <section class="content-header" style="padding-bottom:10px;"></section>
     <div ng-controller="UserController" class="nav-tabs-custom">
-        <section class="content-header" style="padding-bottom:10px;">
-            <h1>             User Management      </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <div class="actions">
-                        <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
-                        <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
-                    </div>
-                </li>
-            </ol>
-        </section>
+        <div class="box-header with-border">
+            <h3 class="box-title">    User Management   </h3>
+        </div>
+
+        <div class="row margintop10">
+            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+            <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-outline-info">Manual User<i class="fa fa-plus"></i></button>
+        </div>
+
         <section class="content">
             <div ui-grid="userGrid" ui-grid-pagination class="grid"></div>
         </section>
@@ -43,8 +41,8 @@
                                     </div>
 
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
-                                            <option value="">- Select BusinessSector -</option>
+                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
+                                            <option value="">- Select Business Sector -</option>
                                         </select>
                                     </div>
 
@@ -241,7 +239,7 @@
                                 <div class="form-group">
                                     <label for="Name" class="col-sm-4 control-label">User Name</label>
                                     <div class="col-sm-6" style="margin-top:6px">
-                                        <input ng-model="user.UserName" class="form-control" maxlength="25" placeholder="Enter user name" required /><label style="color:red">{{InvalidMessage}}</label>
+                                        <input ng-model="user.UserName" class="form-control" maxlength="25" placeholder="Enter user name" required />
                                     </div>
                                 </div>
                                 <div class="form-group">

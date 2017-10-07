@@ -114,7 +114,7 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Application Master Write') {
+                        if (value.RightName == 'Application Write') {
                             isRead = false;
                         }
                     })
@@ -124,11 +124,11 @@
 
 
                     var columnDefs = [{ name: 'Id', visible: false },
-                        { name: 'ApplicationId', displayName: 'Application Id' },
-                        { name: 'ApplicationName', displayName: 'Application Name' },
+                        { name: 'ApplicationId', displayName: 'Application Id',width:150 },
+                        { name: 'ApplicationName', displayName: 'Application Name', width: '*' },
                         {
                             name: 'Action', cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                            , visible: $scope.IsReadOnly
+                            , visible: !$scope.IsReadOnly, width: 100
                         },
 
                     ];

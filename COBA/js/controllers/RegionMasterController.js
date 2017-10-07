@@ -131,11 +131,11 @@
 
 
                     var columnDefs = [{ name: 'Id', visible: false },
-                       { name: 'RegionName' },
+                       { name: 'RegionName', width: '*' },
                        {
                            name: 'Action'
                            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetRegionMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                           , visible: !$scope.IsReadOnly
+                           , visible: !$scope.IsReadOnly, width: 150
 
                        }];
                     $scope.RegionMasterGrid.columnDefs = columnDefs;

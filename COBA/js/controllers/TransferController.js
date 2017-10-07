@@ -113,7 +113,7 @@
         TaskService.UpdateStrategyApprover(model).success(function (data) {
             if (data == "success") {
                 $scope.editMode = false;
-                toaster.pop('success', "Success", "Currency rate updated successfully", null);
+                toaster.pop('success', "Success", " updated successfully", null);
                 $timeout(function () {
                     $scope.GetAlldata();
                 })

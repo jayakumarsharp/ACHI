@@ -1,6 +1,4 @@
-﻿//agGrid.initialiseAgGridWithAngular1(angular);
-//var UserApp = angular.module('userApp', [ 'agGrid']);
-ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory) {
+﻿ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster) {
     $scope.UpdatedUserTypes = [];
     $scope.selectedSBU = {};
     $scope.selectedRole = {};
@@ -21,11 +19,11 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
         columnDefs: [
-            { headerName: "UserID", name: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Name", name: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { headerName: "Email", name: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { displayName: "UserID", name: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { displayName: "Name", name: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
+            { displayName: "Email", name: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
             {
-                headerName: "", name: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
+                displayName: "", name: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
                 cellTemplate: '<input type="checkbox" name="select_item" value="true" ng-model="row.entity.checked" ng-click="grid.appScope.chkChanged(row.entity)" />'
             }
         ]
@@ -41,13 +39,13 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
         columnDefs: [
-            { name: "userId" },
-            { name: "UserName" },
-            { name: "EmailId" },
-            { name: "RoleName" },
-            { name: "RegionName" },
-            { name: "CountryName", },
-            { name: "BusinessSector" },
+            { name: "userId", displayName: "UserID", },
+            { name: "UserName", displayName: "User Name", },
+            { name: "EmailId", displayName: "Email", },
+            { name: "RoleName", displayName: "Role", },
+            { name: "RegionName", displayName: "Region", },
+            { name: "CountryName", displayName: "Country", },
+            { name: "BusinessSector", displayName: "Business Sector", },
             {
                 name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!grid.appScope.IsReadOnly\"> Edit</a>'
             }
@@ -186,7 +184,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
         $scope.InvalidMessage = '';
 
         UserFactory.GetUser(user.userId).success(function (data) {
-            if (data != undefined) {
+            if (data != undefined || data.length > 0) {
                 $scope.userId = '';
                 $scope.InvalidMessage = 'The UserID already exists!'
             }
@@ -319,8 +317,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             $scope.UpdatedUserTypes = [];
             console.log('Total selected: ' + ar.length);
             if (ar.length == 0) {
-                alert('There are no users selected');
-                ////toaster.pop('warning', "Warning", "There are no users selected", null);
+                toaster.pop('warning', "Warning", "There are no users selected", null);
             }
             else {
                 var successcount = 0;
@@ -337,7 +334,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                             $scope.addMode = false;
                             $scope.GetADUsers();
                             $scope.user = {};
-                            //toaster.pop('success', "Success", "User added successfully", null);
+                            toaster.pop('success', "Success", "User added successfully", null);
                             var n = parseInt(ar.length);
                             n = n - 1;
                             if (successcount == n) {
@@ -352,7 +349,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
                     }
                     else {
                         //alert('Please select both the Role and SBU');
-                        //toaster.pop('warning', "Warning", "Please select both the Role and SBU", null);
+                        toaster.pop('warning', "Warning", "Please select both the Role and SBU", null);
                     }
                 }
             }
@@ -380,7 +377,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             $scope.GetAllUsers();
             //reset form
             $scope.user = {};
-            //toaster.pop('success', "Success", "Modified User successfully", null);
+            toaster.pop('success', "Success", "Modified User successfully", null);
             $('#editModel').modal('hide');
 
         }).error(function (error) {
@@ -425,7 +422,7 @@ ReportApp.controller('UserController', function ($scope, $rootScope, $window, $l
             //reset form
             $scope.user = {};
             // $scope.adduserform.$setPristine(); //for form reset
-            //toaster.pop('success', "Success", "User deleted successfully", null);
+            toaster.pop('success', "Success", "User deleted successfully", null);
             $('#confirmModal').modal('hide');
 
 
