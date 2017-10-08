@@ -184,7 +184,7 @@
         $scope.InvalidMessage = '';
 
         UserFactory.GetUser(user.userId).success(function (data) {
-            if (data != undefined || data.length > 0) {
+            if (data.length > 0) {
                 $scope.userId = '';
                 $scope.InvalidMessage = 'The UserID already exists!'
             }
