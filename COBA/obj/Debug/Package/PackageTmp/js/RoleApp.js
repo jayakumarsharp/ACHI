@@ -1,4 +1,27 @@
-﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster) {
+﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('id').withTitle('ID'),
+        DTColumnBuilder.newColumn('RoleName').withTitle('First name'),
+        DTColumnBuilder.newColumn('id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        // Recompiling so we can bind Angular directive to the DT
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="EditRole(' + data + ')"><img src="../images/edit.png"></a>';
+        //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
+
+
+
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -51,7 +74,8 @@
 
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
-            $scope.Roles = data;
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data;
         }).error(function (error) {
             //alert('Get all roles error');
             $scope.Error = error;
@@ -102,11 +126,15 @@
     };
 
     $scope.EditRole = function (data) {
-        $scope.role = data;
-        console.log('editing role: ' + $scope.role.RoleName)
-        $scope.editMode = true;
+        RoleFactory.GetRole(data).success(function (data) {
+
+            $scope.role = data[0];
+             $scope.editMode = true;
         $scope.GetLists();
         $('#AddEditRole').modal('show');
+        });
+       // console.log('editing role: ' + $scope.role.RoleName)
+       
     };
 
     $scope.GetRoleRightMapping = function (roleId) {

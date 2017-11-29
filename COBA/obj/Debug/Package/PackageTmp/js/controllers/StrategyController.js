@@ -1,43 +1,85 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
+﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.IsModelAlgopage = true;
+
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+        .withOption('rowCallback', rowCallback);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID'),
+        DTColumnBuilder.newColumn('RefNumber').withTitle('RefNumber'),
+        DTColumnBuilder.newColumn('Name').withTitle('Name'),
+        DTColumnBuilder.newColumn('BusinessSectorName').withTitle('Business Sector'),
+        DTColumnBuilder.newColumn('Type').withTitle('Type'),
+        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+        DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
+        DTColumnBuilder.newColumn('ProductTypeName').withTitle('Product Type'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
+
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        return '<a  class="test"><img src="../images/edit.png"></a>' +
+        '&nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="../images/eyeicon.png"></a>';
+    }
+
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.test', nRow).unbind('click');
+        $('.test', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetCurrencyConversionForId(aData.Id, aData.Version, aData.RefNumber);
+            });
+        });
+        $('.test1', nRow).unbind('click');
+        $('.test1', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetCurrencyConversionForIdView(aData.RefNumber, aData.Version);
+            });
+        });
+        return nRow;
+    }
+
     $scope.errorinfo = '';
     $scope.Strategydata = [];
     $scope.editMode = false;
+    $scope.showaction = false;
+    $scope.pageList = [{ Page: true }, {
+        Page: false
+    }, {
+        Page: false
+    }];
+
+    $scope.activateTab = function (tabid) {
+        for (var i = 0; i < $scope.pageList.length; i++) {
+            $scope.pageList[i].Page = false;
+        }
+        $scope.pageList[tabid].Page = true;
+    }
+
     $scope.IsReadOnly = true;
     $scope.Currency = [];
     $scope.LegalEntity = [];
-    $scope.ecurrency = {};
+    $scope.currency = {};
     $scope.LockedPriceSheet = [];
 
     $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
 
-    $scope.GetRightsList = function () {
-        UserFactory.getloggedusername().success(function (data) {
-            var userId = data;
-            if (data != '') {
-                reportFactory.GetRightsList(userId).success(function (data) {
-                    var isRead = true;
-                    $scope.IsReadOnly = true;
-                    angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Application Write') {
-                            isRead = false;
-                        }
-                    })
-                    if (!isRead) {
-                        $scope.IsReadOnly = false;
-                    }
-                }).error(function (error) {
-                    console.log('Error when getting rights list: ' + error);
-                });
-            }
-
+    function getallgriddata() {
+        StrategyService.GetAllCurrencyConversion().success(function (data) {
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data;
         });
-    };
+    }
 
     $scope.getallalgodata = function () {
-        StrategyService.GetAllCurrencyConversion().success(function (data) {
-            console.log(data);
-            $scope.CurrencyGrid.data = data;
-        });
+        getallgriddata();
         ApiCall.MakeApiCall("GetAllApplication?ApplicationId=", 'GET', '').success(function (data) {
             console.log(data);
             $scope.ApplicationMasterList = data;
@@ -76,38 +118,8 @@
     };
     $scope.getallalgodata();
 
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
-
-    $scope.CurrencyGrid = {
-        rowHeight: 30,
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: [{ name: 'Id', visible: false },
-        { name: 'RefNumber', displayName: 'Ref Number', width: 140 },
-        { name: 'Name', displayName: 'Name', width: 120 },
-        { name: 'BusinessSectorName', displayName: 'Business Sector', width: 120 },
-        { name: 'Type', displayName: 'Type', width: 120 },
-        { name: 'CountryName', displayName: 'Country', width: 120 },
-        { name: 'RegionName', displayName: 'Region', width: 120 },
-        { name: 'ProductTypeName', displayName: 'Product Type', width: 120 },
-
-        {
-            field: 'Action', width: 70,
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id,row.entity.Version,row.entity.RefNumber)" ><i class="fa fa-edit" ></i></a ></div>',
-            visible: $scope.IsReadOnly
-        },
-        {
-            field: 'Approvals', width: 70,
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForIdView(row.entity.RefNumber,row.entity.Version)" ><i class="fa fa-eye" ></i></a ></div>',
-            visible: $scope.IsReadOnly
-        }],
-    };
-
     $scope.showadd = function () {
+        $scope.showaction = true;
         $timeout(function () {
             $scope.errorinfo = '';
             $scope.StrategyActive = false;
@@ -115,31 +127,11 @@
         }, 100);
         $scope.editMode = false;
         $scope.currency = {};
-        $scope.ecurrency.CurrencyDescrition = '';
+        $scope.activateTab(0);
         $('#currencyModel').modal('show');
     };
-
-    $scope.GetAllCurrency = function () {
-        StrategyService.GetAllCurrency().success(function (data) {
-            $scope.Strategydata = data;
-            $scope.CurrencyGrid.data = $scope.Strategydata;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
     $scope.InsertStrategy = function (currency) {
-        //if ($scope.StrategyActive)
-        //    currency.IsActive = "Y";
-        //else
-        //    currency.IsActive = "N";
-
-        //if ($scope.IsSignOff)
-        //    currency.IsSignOff = "Y";
-        //else
-        //    currency.IsSignOff = "N";
         if ($scope.listB_Estimation.length > 0) {
-
             currency.ApplicationId = $scope.selectModel.Application.Id;
             currency.Country = $scope.selectModel.Country.Id;
             currency.ProductType = $scope.selectModel.ProductType.Id;
@@ -151,15 +143,15 @@
                     if (data == "success") {
                         $scope.listB_Estimation[0].RefNumber = currency.RefNumber;
                         $scope.listB_Estimation[0].Version = 1;
+                        $scope.showaction = false;
                         StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
                             toaster.pop('success', "Success", "Model/Algo added successfully", null);
                         });
-
-
                         $('#currencyModel').modal('hide');
                     }
                     else
                         $scope.errorinfo = data;
+                    getallgriddata();
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
                 });
@@ -174,46 +166,21 @@
     $scope.Availableusers = [];
 
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
+        $scope.showaction = true;
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.editMode = true;
-            $scope.ecurrency = data[0];
+            $scope.currency = data[0];
 
-            $scope.selectModel.Application = $scope.GetRoleFromUserID($scope.ecurrency.ApplicationId, "ApplicationMasterList")
-            $scope.selectModel.Country = $scope.GetRoleFromUserID($scope.ecurrency.Country, "CountryMasterList")
-            $scope.selectModel.ProductType = $scope.GetRoleFromUserID($scope.ecurrency.ProductType, "ProductMasterList")
-            $scope.selectModel.BusinessSector = $scope.GetRoleFromUserID($scope.ecurrency.BusinessSector, "BusinessSectorMasterList")
-            $scope.selectModel.Region = $scope.GetRoleFromUserID($scope.ecurrency.Region, "RegionMasterList")
+            $scope.selectModel.Application = $scope.GetRoleFromUserID($scope.currency.ApplicationId, "ApplicationMasterList")
+            $scope.selectModel.Country = $scope.GetRoleFromUserID($scope.currency.Country, "CountryMasterList")
+            $scope.selectModel.ProductType = $scope.GetRoleFromUserID($scope.currency.ProductType, "ProductMasterList")
+            $scope.selectModel.BusinessSector = $scope.GetRoleFromUserID($scope.currency.BusinessSector, "BusinessSectorMasterList")
+            $scope.selectModel.Region = $scope.GetRoleFromUserID($scope.currency.Region, "RegionMasterList")
 
-
-            //$scope.user.Role = $scope.GetRoleFromUserID(userId);
-            //if (data[0].IsActive == "Y")
-            //    $scope.StrategyActive = true;
-            //else
-            //    $scope.StrategyActive = false;
-
-            //if (data[0].IsSignOff == "Y")
-            //    $scope.IsSignOff = true;
-            //else
-            //    $scope.IsSignOff = false;
-
-            $('#currencyModel').modal('show');
-
+            $scope.activateTab(0);
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
-        //StrategyService.GetStrategyApprovalByuser().success(function (data) {
-        //    for (var i = 0; i < data.length; i++) {
-        //        if (data[i].RefNumber == id && data[i].Version == Version) {
-        //            $scope.notificationdata = data[i];
-        //            $scope.notificationExist = true;
-        //        }
-        //    }
-
-        //}).error(function (error) {
-        //    $scope.Error = error;
-        //});
-
 
         StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
 
@@ -222,11 +189,8 @@
                 data[i].Id = i;
             }
 
-            ApiCall.MakeApiCall("GetUserbyFilter?CountryId=" + $scope.ecurrency.Country + "&RegionId=" + $scope.ecurrency.Region + "&BusinessSectorId=" + $scope.ecurrency.BusinessSector, 'GET', '').success(function (adata) {
-
-                //var adata = [{ RefNumber: '', Approver: 'Daniel', Id: 1 }, { RefNumber: '', Approver: 'George', Id: 2 }, { RefNumber: '', Approver: 'John', Id: 3 }, { RefNumber: '', Approver: 'Sivakumar', Id: 4 }, { RefNumber: '', Approver: 'Oliver', Id: 5 }]
+            ApiCall.MakeApiCall("GetUserbyFilter?CountryId=" + $scope.currency.Country + "&RegionId=" + $scope.currency.Region + "&BusinessSectorId=" + $scope.currency.BusinessSector, 'GET', '').success(function (adata) {
                 $scope.aEstimationProduct = [];
-                debugger;
                 for (var k = 0; k < adata.length; k++) {
                     $scope.aEstimationProduct.push({ RefNumber: '', Approver: adata[k].userId, Id: adata[k].Id });
                 }
@@ -294,7 +258,7 @@
     $scope.GetCurrencyConversionForIdView = function (id, Version) {
         $scope.ViewData = [];
         StrategyService.GetStrategyApprovalById(id, Version).success(function (data) {
-            $('#currencyModel1').modal('show');
+            $('#viewApprovals').modal('show');
             $scope.ViewData = data;
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
@@ -331,7 +295,7 @@
 
                         });
                     }
-
+                    $scope.showaction = false;
                     $scope.editMode = false;
                     $('#currencyModel').modal('hide');
 
@@ -340,6 +304,7 @@
                 }
                 else
                     $scope.errorinfo = data;
+                getallgriddata();
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
             });
@@ -367,14 +332,16 @@
 
     $scope.cancel = function () {
         $scope.currency = {};
-        $scope.ecurrency = {};
-        $('#currencyModel').modal('hide');
+        $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
+        //$('#currencyModel').modal('hide');
+        $scope.showaction = false;
+        $('#confirmModal').modal('hide');
     };
 
     $scope.updatecancel = function (data) {
         StrategyService.GetCurrencyConversionbyId(id).success(function (data) {
             $scope.editMode = true;
-            $scope.ecurrency = data[0];
+            $scope.currency = data[0];
             $('#currencyModel').modal('show');
 
         }).error(function (data) {
@@ -382,23 +349,6 @@
         });
 
     };
-
-    $scope.SetCurrencyDescription = function (currencyId) {
-        if (currencyId != null && currencyId != '' && currencyId != undefined) {
-            var currDesc = '';
-            angular.forEach($scope.Currency, function (value, key) {
-                if (value.Id == currencyId) {
-                    currDesc = value.CurrencyDescrition;
-                }
-            })
-            $scope.ecurrency.CurrencyDescrition = currDesc;
-        }
-        else {
-            $scope.ecurrency.CurrencyDescrition = '';
-        }
-    };
-
-    $scope.GetRightsList();
 
 
     $scope.selectedA_Estimation = [];
@@ -446,44 +396,6 @@
     }
 
 
-    //$scope.gettask = function () {
-    //    //TaskService.GetAllTask().success(function (data) {
-    //    //console.log(data);
-    //    UserFactory.GetUser("").success(function (data) {
-    //        console.log(data);
-    //        $('#viewModal').modal('show');
-
-    //        var json = []
-    //        for (var i = 0; i < data.length > 0; i++) {
-    //            json.push({ RefNumber: '', Approver: data[i].userId, Id: data[i].Id });
-    //        }
-
-    //        $scope.EstimationProduct = json;
-    //        $scope.listA_Estimation = [];
-    //        $scope.listB_Estimation = [];
-    //        var temp = JSON.parse(JSON.stringify($scope.EstimationProduct));
-
-    //        for (i = 0; i < $scope.AvailableUser_Estimation.length; i++) {
-    //            $scope.listB_Estimation.push({ 'Approver': $scope.AvailableUser_Estimation[i].Approver, 'Id': $scope.AvailableUser_Estimation[i].Id });
-    //            var delId = arrayObjectEstimationProductIndexOf(temp, $scope.AvailableUser_Estimation[i].Approver);
-    //            temp.splice(delId, 1);
-    //        }
-
-    //        $scope.listA_Estimation = temp;
-
-
-
-
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    })
-
-
-
-    //};
-
-    ///$scope.gettask();
-
     $scope.AlltoA_Estimation = function () {
         $scope.selectedB_Estimation = [];
         angular.forEach($scope.listB_Estimation, function (value, key) {
@@ -500,7 +412,6 @@
     }
 
     function arrayObjectEstimationProductIndexOf(myArray, searchTerm) {
-        //debugger;
         for (var i = 0, len = myArray.length; i < len; i++) {
             if (myArray[i].Approver == searchTerm) {
                 return i;
@@ -557,6 +468,33 @@
             $scope.selectedA_Estimation.splice(delId, 1);
         }
     }
+
+    $scope.GetRightsList = function () {
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Application Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
+
+        });
+    };
+
+
+
+    $scope.GetRightsList();
 
 
 });

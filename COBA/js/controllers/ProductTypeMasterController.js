@@ -1,32 +1,44 @@
-﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
-    $scope.ProductMasterList = [];
+﻿ReportApp.controller('ProductMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID'),
+        DTColumnBuilder.newColumn('ProductName').withTitle('First name'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
+
+
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetProductMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+    }
+    $scope.Showadd = function () {
+        $scope.showAddwindow = true;
+    }
+    $scope.showAddwindow = false;
+
     $scope.editMode = false;
     $scope.IsReadOnly = false;
 
     $scope.GetAllProductMaster = function () {
         ApiCall.MakeApiCall("GetAllProductType?ProductTypeId=", 'GET', '').success(function (data) {
-            console.log(data);
-            $scope.ProductMasterList = data;
-            $scope.ProductMasterGrid.data = $scope.ProductMasterList;
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data
         }).error(function (error) {
             $scope.Error = error;
         })
     };
 
-
-
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.ProductMasterGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
-
-
-    $scope.ProductMasterGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: [],
-    };
 
     $scope.add = function (ProductMaster) {
         if (ProductMaster != null) {
@@ -35,9 +47,9 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-
                         $scope.ProductMaster = null;
                         $scope.GetAllProductMaster();
+                        $scope.showAddwindow = false;
                         $scope.editMode = false;
                         toaster.pop('success', "Success", 'Product added successfully', null);
                     }
@@ -58,6 +70,7 @@
     $scope.GetProductMasterById = function (ProductMasterId) {
         ApiCall.MakeApiCall("GetAllProductType?ProductTypeId=" + ProductMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
+            $scope.showAddwindow = true;
             $scope.ProductMaster = data[0];
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding Product! " + data.ExceptionMessage;
@@ -83,6 +96,7 @@
                 ApiCall.MakeApiCall("ModifyProductType", 'POST', model).success(function (data) {
                     $scope.editMode = false;
                     $scope.ProductMaster = null;
+                    $scope.showAddwindow = false;
                     $scope.GetAllProductMaster();
                     toaster.pop('success', "Success", 'Product updated successfully', null);
                 }).error(function (data) {
@@ -107,6 +121,8 @@
     $scope.cancel = function () {
         $scope.ProductMaster = null;
         $scope.editMode = false;
+        $scope.showAddwindow = false;
+        $('#confirmModal').modal('hide');
     };
 
 
@@ -124,16 +140,11 @@
                         if (value.RightName == 'Product Type Write') {
                             isRead = false;
                         }
-                    })
+                    });
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
-                    var columnDefs = [{ name: 'Id', visible: false }, { name: 'ProductName', width: '*' }, {
-                        name: 'Action'
-                       , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetProductMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                       , visible: !$scope.IsReadOnly, width: 150
-                    }];
-                    $scope.ProductMasterGrid.columnDefs = columnDefs;
+
                     $scope.GetAllProductMaster();
 
                 }).error(function (error) {

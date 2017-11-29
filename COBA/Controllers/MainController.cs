@@ -21,6 +21,13 @@ namespace CRMManagement.Controllers
             return PartialView();
         }
 
+        public ActionResult ConfirmModal()
+        {
+            return PartialView();
+        }
+
+
+
         public ActionResult ViewApprovals()
         {
             return PartialView();
@@ -81,12 +88,12 @@ namespace CRMManagement.Controllers
         }
 
         [SessionTimeout]
-        public ActionResult Strategy()
+        public ActionResult ModelAlgoManagement()
         {
             return View();
         }
         [SessionTimeout]
-        public ActionResult Tasks()
+        public ActionResult ChangeManagement()
         {
             return View();
         }
@@ -173,8 +180,6 @@ namespace CRMManagement.Controllers
         #endregion TransferSetting
 
 
-
-
         #region Strategy
 
         public JsonResult GetData()
@@ -200,6 +205,12 @@ namespace CRMManagement.Controllers
         public JsonResult GetStrategyApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetStrategyDelegatesApprovalByuser()
+        {
+            List<StrategyApprover> lst = _dbOperations.GetStrategyDelegatesApprovalByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
@@ -233,7 +244,6 @@ namespace CRMManagement.Controllers
         }
 
 
-
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
         {
             //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
@@ -262,19 +272,19 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
-        //{
-        //    //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-        //    //{
-        //    //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-        //    //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-        //    //}
-        //    string errordesc = "";
-        //    int errorcode = 0;
-        //    if (strategy != null && strategy.Count > 0)
-        //        _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
-        //    return Json(errordesc, JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
+        {
+            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
+            //{
+            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //}
+            string errordesc = "";
+            int errorcode = 0;
+            if (strategy != null && strategy.Count > 0)
+                _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult UpdateStrategyApprover(StrategyApprover strategy)
         {
@@ -289,6 +299,14 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult updatedelegateAcceptance(StrategyApprover strategy)
+        {
+            string errordesc = "";
+            int errorcode = 0;
+            _dbOperations.updatedelegateAcceptance(strategy, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
 
         public JsonResult UpdateStrategy(Strategy Strategy)
         {
@@ -300,38 +318,6 @@ namespace CRMManagement.Controllers
 
         #endregion Strategy
 
-        #region Task
-
-        public JsonResult GetTaskData()
-        {
-            List<Tasks> lst = _dbOperations.GetTaskData();
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetTaskbyId(int Id)
-        {
-            List<Tasks> lst = _dbOperations.GetTaskDatabyId(Id);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult InsertTask(Tasks task)
-        {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.Inserttaskdata(task, out errocode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-
-        }
-
-        public JsonResult UpdateTask(Tasks task)
-        {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.Updatetaskdata(task, out errocode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion Task
 
         #region OnboardingTask
 
@@ -416,31 +402,7 @@ namespace CRMManagement.Controllers
         }
 
         #endregion MapTask
-
-
-        #region Email
-
-        public JsonResult GetEmailData()
-        {
-            List<Emails> lst = _dbOperations.GetEmailData();
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetEmailbyId(int Id)
-        {
-            List<Emails> lst = _dbOperations.GetEmailDatabyId(Id);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-
-
-        public void UpdateEmail(Emails task)
-        {
-
-        }
-
-        #endregion Email
-
+                
 
         #region Roles
 
@@ -951,8 +913,11 @@ public class StrategyApprover
     public string Approver { get; set; }
     public string Comments { get; set; }
     public string ApprovedDate { get; set; }
+    public string CreatedDate { get; set; }
+
     public string Status { get; set; }
     public string OriginalApprover { get; set; }
+    public string Type { get; set; }
 }
 
 

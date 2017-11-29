@@ -73,7 +73,6 @@ public class DbOperations
 
     #endregion
 
-
     #region TransferSetting
 
     public void InsertTransferSetting(TransferSetting objTransferSetting, out int errorcode, out string errordesc)
@@ -84,17 +83,22 @@ public class DbOperations
             errordesc = "success";
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_transfersetting", connection))
             {
-
+                DateTime FromDate = new DateTime();
+                DateTime Todate = new DateTime();
+                if (objTransferSetting.TransferFrom != "")
+                {
+                    FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                }
+                
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
                 cmd.Parameters.Add(new MySqlParameter("i_TransferTo", objTransferSetting.Transferuser));
-                cmd.Parameters.Add(new MySqlParameter("i_DurationFrom", objTransferSetting.TransferFrom));
-                cmd.Parameters.Add(new MySqlParameter("i_DurationTo", objTransferSetting.TransferTo));
-
+                cmd.Parameters.Add(new MySqlParameter("i_DurationFrom", FromDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new MySqlParameter("i_DurationTo", Todate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 if (this.OpenConnection() == true)
                 {
-
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -177,7 +181,7 @@ public class DbOperations
                                select new TransferSetting
                                {
                                    TransferFrom = Convert.ToString(row["DurationFrom"]),
-                                   TransferTo = Convert.ToString(row["DurationFrom"]),
+                                   TransferTo = Convert.ToString(row["DurationTo"]),
                                    OwnerUser = Convert.ToString(row["Owneruser"]),
                                    Transferuser = Convert.ToString(row["TransferTo"]),
                                    IsActive = Convert.ToString(row["IsActive"]),
@@ -362,6 +366,8 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
                 cmd.Parameters.Add(new MySqlParameter("i_Comments", s.Comments));
                 cmd.Parameters.Add(new MySqlParameter("i_Status", s.Status));
+                cmd.Parameters.Add(new MySqlParameter("i_Type", s.Type));
+
                 //cmd.Parameters.Add(new MySqlParameter("i_Approver", s.ApprovedDate));
                 if (this.OpenConnection() == true)
                 {
@@ -421,6 +427,54 @@ public class DbOperations
 
     }
 
+    //checking waiting request of approval
+    public List<StrategyApprover> GetStrategyDelegatesApprovalByuser(string userid)
+    {
+        List<StrategyApprover> lst = new List<StrategyApprover>();
+
+        string query = "Get_StrategyDelegatesApprovalByuser";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new StrategyApprover
+                               {
+                                   Id = Convert.ToString(row["Id"]),
+                                   Approver = Convert.ToString(row["Approver"]),
+                                   RefNumber = Convert.ToString(row["RefNumber"]),
+                                   Version = Convert.ToString(row["Version"]),
+                                   Comments = Convert.ToString(row["Comments"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"]),
+                                   OriginalApprover= Convert.ToString(row["OriginalApprover"])
+                               }).ToList();
+
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+
 
     public List<StrategyApprover> Get_StrategyApprovalByuser(string userid)
     {
@@ -445,13 +499,15 @@ public class DbOperations
                         lst = (from DataRow row in dt.Rows
                                select new StrategyApprover
                                {
+                                   Id = Convert.ToString(row["Id"]),
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
                                    Comments = Convert.ToString(row["Comments"]),
                                    Status = Convert.ToString(row["Status"]),
-                                   ApprovedDate = Convert.ToString(row["ApprovedDate"])
-
+                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   ApprovedDate = Convert.ToString(row["ApprovedDate"]),
+                                   Type = Convert.ToString(row["Type"])
                                }).ToList();
 
                     }
@@ -466,6 +522,7 @@ public class DbOperations
         return lst;
 
     }
+
     public List<StrategyApprover> Get_DelegatedApprovalByuser(string userid)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
@@ -489,11 +546,13 @@ public class DbOperations
                         lst = (from DataRow row in dt.Rows
                                select new StrategyApprover
                                {
+                                   Id = Convert.ToString(row["Id"]),
                                    Approver = Convert.ToString(row["Approver"]),
                                    RefNumber = Convert.ToString(row["RefNumber"]),
                                    Version = Convert.ToString(row["Version"]),
                                    Comments = Convert.ToString(row["Comments"]),
                                    Status = Convert.ToString(row["Status"]),
+                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"])
 
                                }).ToList();
@@ -512,6 +571,8 @@ public class DbOperations
     }
 
 
+
+    //selected user for particular strategy
     public List<StrategyApprover> Get_StrategyApprovalById(string StrategyNumber, string Version)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
@@ -557,6 +618,44 @@ public class DbOperations
 
     }
 
+    public void updatedelegateAcceptance(StrategyApprover s, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_update_delegate_Acceptance", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", s.Id));
+                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
+                cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+                cmd.Parameters.Add(new MySqlParameter("i_Status", s.Status));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+    
     public List<Strategy> GetStrategyData()
     {
         List<Strategy> lst = new List<Strategy>();
@@ -1144,310 +1243,8 @@ public class DbOperations
     }
 
     #endregion Strategy
-
-
-    #region Task
-
-    public List<Tasks> GetTaskData()
-    {
-        List<Tasks> lst = new List<Tasks>();
-
-        string query = "Get_Tasks";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new Tasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   Name = Convert.ToString(row["Name"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   IsSignOff = Convert.ToString(row["IsSignOff"]),
-                                   SignoffBy = Convert.ToString(row["SignoffBy"]),
-                                   SignOffDate = Convert.ToString(row["SignOffDate"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public List<Tasks> GetTaskDatabyId(int taskid)
-    {
-        List<Tasks> lst = new List<Tasks>();
-
-        string query = "Get_TasksById";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("TaskId", taskid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new Tasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   Name = Convert.ToString(row["Name"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   IsSignOff = Convert.ToString(row["IsSignOff"]),
-                                   SignoffBy = Convert.ToString(row["SignoffBy"]),
-                                   SignOffDate = Convert.ToString(row["SignOffDate"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public void Inserttaskdata(Tasks _taskInfo, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_task", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add(new MySqlParameter("i_Name", _taskInfo.Name));
-                cmd.Parameters.Add(new MySqlParameter("i_Description", _taskInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_IsSignOff", _taskInfo.IsSignOff));
-                //cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _taskInfo.SignOffDate));
-                cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _taskInfo.SignoffBy));
-                cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
-    public void Updatetaskdata(Tasks _taskInfo, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_update_task", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", _taskInfo.Id));
-                cmd.Parameters.Add(new MySqlParameter("i_Name", _taskInfo.Name));
-                cmd.Parameters.Add(new MySqlParameter("i_Description", _taskInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_IsSignOff", _taskInfo.IsSignOff));
-                //cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _taskInfo.SignOffDate));
-                cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _taskInfo.SignoffBy));
-                cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
-    #endregion Task
-
-
-    #region Email
-
-    public List<Emails> GetEmailData()
-    {
-        List<Emails> lst = new List<Emails>();
-
-        string query = "SP_GetEmail";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new Emails
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   StrategyNumber = Convert.ToString(row["StrategyNumber"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public List<Emails> GetEmailDatabyId(int taskid)
-    {
-        List<Emails> lst = new List<Emails>();
-
-        string query = "SP_GetEmailbyId";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", taskid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new Emails
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   StrategyNumber = Convert.ToString(row["StrategyNumber"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public void UpdateEmaildata()
-    {
-
-    }
-
-    #endregion Email
-
+    
+    
     #region MapTask
 
     public List<MapTasks> GetMapTaskData()

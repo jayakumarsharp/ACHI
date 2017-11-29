@@ -1,30 +1,49 @@
-﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
+﻿ReportApp.controller('ApplicationMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(), ,
+        DTColumnBuilder.newColumn('ApplicationId').withTitle('Application ID'),
+        DTColumnBuilder.newColumn('ApplicationName').withTitle('Application Name'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        return '<a  ng-click="GetApplicationMasterById(' + data + ')"><img src="../images/edit.png"></a>';
+        //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
+
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
+
+    $scope.Showadd = function () {
+        $scope.showAddwindow = true;
+    }
+    $scope.showAddwindow = false;
     $scope.ApplicationMasterList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = false;
-
     $scope.GetAllApplicationMaster = function () {
         ApiCall.MakeApiCall("GetAllApplication?ApplicationId=", 'GET', '').success(function (data) {
-            $scope.ApplicationMasterList = data;
-            $scope.ApplicationMasterGrid.data = $scope.ApplicationMasterList;
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data
         }).error(function (error) {
             $scope.Error = error;
         })
     };
-
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.ApplicationMasterGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
-
 
     $scope.ApplicationMasterGrid = {
         paginationPageSizes: [10, 20, 30, 40, 50, 60],
         paginationPageSize: 10,
         columnDefs: [],
     };
-
     $scope.add = function (ApplicationMaster) {
         if (ApplicationMaster != null) {
             if (ApplicationMaster.ApplicationId.trim() != "" && ApplicationMaster.ApplicationName.trim() != "") {
@@ -35,6 +54,7 @@
                         $scope.ApplicationMaster = null;
                         $scope.GetAllApplicationMaster();
                         $scope.editMode = false;
+                        $scope.showAddwindow = false;
                         toaster.pop('success', "Success", 'Application added successfully', null);
                     }
                 }).error(function (data) {
@@ -54,6 +74,7 @@
     $scope.GetApplicationMasterById = function (ApplicationMasterId) {
         ApiCall.MakeApiCall("GetAllApplication?ApplicationId=" + ApplicationMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
+            $scope.showAddwindow = true;
             $scope.ApplicationMaster = data[0];
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding ApplicationMaster! " + data.ExceptionMessage;
@@ -80,6 +101,7 @@
                     $scope.editMode = false;
                     $scope.ApplicationMaster = null;
                     $scope.GetAllApplicationMaster();
+                    $scope.showAddwindow = false;
                     toaster.pop('success', "Success", 'Application updated successfully', null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Application ! " + data.ExceptionMessage;
@@ -103,6 +125,8 @@
     $scope.cancel = function () {
         $scope.ApplicationMaster = null;
         $scope.editMode = false;
+        $scope.showAddwindow = false;
+        $('#confirmModal').modal('hide');
     };
 
     $scope.GetRightsList = function () {
@@ -122,19 +146,6 @@
                         $scope.IsReadOnly = false;
                     }
 
-
-                    var columnDefs = [{ name: 'Id', visible: false },
-                        { name: 'ApplicationId', displayName: 'Application Id',width:150 },
-                        { name: 'ApplicationName', displayName: 'Application Name', width: '*' },
-                        {
-                            name: 'Action', cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetApplicationMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                            , visible: !$scope.IsReadOnly, width: 100
-                        },
-
-                    ];
-
-
-                    $scope.ApplicationMasterGrid.columnDefs = columnDefs;
                     $scope.GetAllApplicationMaster();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);

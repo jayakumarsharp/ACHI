@@ -1,4 +1,4 @@
-﻿<div class="modal fade" id="currencyModel1" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+﻿<div class="modal fade" id="viewApprovals" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog" style="width:75%">
         <div class="modal-content">
             <div class="modal-header content-header">
@@ -7,42 +7,42 @@
                 </button>
                 <h4 class="modal-title text-center" id="myModalLabel">Approval Status</h4>
             </div>
-            <div class="modal-body">
-                <div class="">
+            @*class="modal-body"*@
+            <div>
+                <div style="padding:30px">
                     @*content*@
                     <div class="row">
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <table class="table no-margin">
-                                    <thead>
-                                        <tr>
-                                            <th>RefNumber</th>
-                                            <th>Approver</th>
-                                            <th>Status</th>
-                                            <th>Comments</th>
-                                            <th>ApprovedDate </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="right in ViewData">
-                                            <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
-                                            <td>{{right.Approver}}</td>
-                                            <td>
-                                                <span class="label ">
-                                                    <input type="button" class="btn btn-success" ng-show={{right.Status=="Y"}} value="Approved" /><input type="button" class="btn btn-danger" ng-show={{right.Status=="N"}} value="Rejected" />
-                                                    <input type="button" class="btn btn-info" ng-show={{right.Status==""}} value="Pending" />
-                                                </span>
-                                            </td>
-                                            <td>
-                                                {{right.Comments}}
-                                            </td>
-                                            <td>
-                                                {{right.ApprovedDate}}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+                        <div>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>RefNumber</th>
+                                        <th>Approver</th>
+                                        <th>Status</th>
+                                        <th>Comments</th>
+                                        <th>ApprovedDate </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="right in ViewData">
+                                        <td><a href="pages/examples/invoice.html">{{right.RefNumber }}</a></td>
+                                        <td>{{right.Approver}}</td>
+                                        <td>
+                                            <span class="label ">
+                                                <input type="button" class="btn btn-success" ng-show={{right.Status=="Y"}} value="Approved" /><input type="button" class="btn btn-danger" ng-show={{right.Status=="N"}} value="Rejected" />
+                                                <input type="button" class="btn btn-info" ng-show={{right.Status==""}} value="Pending" />
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{right.Comments}}
+                                        </td>
+                                        <td>
+                                            {{right.ApprovedDate}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -50,3 +50,4 @@
         </div>
     </div>
 </div>
+

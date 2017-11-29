@@ -59,26 +59,20 @@
         })
     };
 
-    
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
 
     $scope.update = function () {
         if ($scope.status) {
-            if ($scope.Transferuser != '' && $scope.TransferFrom != '' && $scope.TransferTo != '')
+            if (validate()) {
                 var currency = { Transferuser: $scope.Transferuser, TransferFrom: $scope.TransferFrom, TransferTo: $scope.TransferTo }
-            StrategyService.InsertTransferSetting(currency).success(function (data) {
-                if (data == "success") {
-                    $scope.getallcurrencyconversions()
-                    toaster.pop('success', "Success", 'Delegate setting updated successfully', null);
-                }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
-            });
-
+                StrategyService.InsertTransferSetting(currency).success(function (data) {
+                    if (data == "success") {
+                        $scope.getallcurrencyconversions()
+                        toaster.pop('success', "Success", 'Delegate setting updated successfully', null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
+                });
+            }
         }
         else {
             StrategyService.DeleteTransferSetting().success(function (data) {
@@ -93,6 +87,22 @@
 
 
     };
+
+    function validate() {
+        if (!$scope.Transferuser) {
+            toaster.pop('warning', "Warning", 'please select delegate user', null);
+            return false;
+        }
+        else if (!$scope.TransferFrom) {
+            toaster.pop('warning', "Warning", 'please select delegate duration From', null);
+            return false;
+        }
+        else if (!$scope.TransferTo) {
+            toaster.pop('warning', "Warning", 'please select delegate duration To', null);
+            return false;
+        }
+        return true;
+    }
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;

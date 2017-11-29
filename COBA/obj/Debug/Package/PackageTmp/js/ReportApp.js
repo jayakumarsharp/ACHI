@@ -3,7 +3,7 @@ var ServionImages = '';
 var HostPath = '';
 var urltype = '';
 
-var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid.pagination', 'toaster']);
+var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster','datatables']);
 
 ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
     $scope.rootname = 'Index';
@@ -23,12 +23,8 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
 
     $scope.updatemenuclick = function (path) {
         sessionStorage.setItem('menuname', path);
-
-
     }
-
     $scope.GetUserRoles = function () {
-
         UserFactory.getloggedusername().success(function (data) {
             $rootScope.UserInfo = { userId: data };
             var userId = data;
@@ -54,38 +50,40 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
     }
     $scope.GetUserRoles();
 
-    $scope.GetAllNofitications = function () {
-        ApiCall.MakeApiCall("GetStrategyApprovalByuser", 'GET', '').success(function (data) {
-            $scope.notificationdata = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-    $scope.GetAllNofitications();
+    //$scope.GetAllNofitications = function () {
+    //    ApiCall.MakeApiCall("GetStrategyApprovalByuser", 'GET', '').success(function (data) {
+    //        $scope.notificationdata = data;
+    //    }).error(function (error) {
+    //        $scope.Error = error;
+    //    });
+    //};
+    //$scope.GetAllNofitications();
 
 
-    $scope.GetCurrencyConversionForId = function (id, Version, Comments, ApprovedDate, Status) {
-        $('#LayoutModel').modal('show');
-        $scope.notificationExist = true;
-        $scope.currency = { 'Comments': Comments };
-        //StrategyService.GetStrategyApprovalByuser().success(function (data) {
-        //    for (var i = 0; i < data.length; i++) {
-        //        //if (data[i].RefNumber == id && data[i].Version == Version) {
+    //$scope.GetCurrencyConversionForId = function (id, Version, Comments, ApprovedDate, Status) {
+    //    $('#LayoutModel').modal('show');
+    //    $scope.notificationExist = true;
+    //    $scope.currency = { 'Comments': Comments };
+    //    //StrategyService.GetStrategyApprovalByuser().success(function (data) {
+    //    //    for (var i = 0; i < data.length; i++) {
+    //    //        //if (data[i].RefNumber == id && data[i].Version == Version) {
 
-        //        //}
-        //    }
-        //}).error(function (error) {
-        //    $scope.Error = error;
-        //});
-    };
+    //    //        //}
+    //    //    }
+    //    //}).error(function (error) {
+    //    //    $scope.Error = error;
+    //    //});
+    //};
 
-    $scope.layoutcancel = function () {
-        $scope.currency = {};
-        $('#LayoutModel').modal('hide');
-    };
+    //$scope.layoutcancel = function () {
+    //    $scope.currency = {};
+    //    $('#LayoutModel').modal('hide');
+    //};
 
 
 });
+
+
 
 ReportApp.directive('datetimepicker', function () {
     return {

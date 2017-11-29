@@ -8,6 +8,14 @@ ReportApp.factory('StrategyService', function ($http) {
         var result = $http.get('GetStrategyApprovalByuser');
         return result;
     }
+
+
+    StrategyServiceFactory.GetDelegatedApprovalByuser = function () {
+        var result = $http.get('GetDelegatedApprovalByuser');
+        return result;
+    }
+    
+
     StrategyServiceFactory.GetAllCurrencyConversion = function () {
         var result = $http.get('GetData');
         return result;

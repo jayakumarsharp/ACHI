@@ -1,63 +1,57 @@
 ﻿<div ng-show="notificationExist">
     <div class="col-md-12">
-        <div class="box-body">
-            @*<div class="form-group">
-                    <h2>Approval Request</h2>
-                </div>*@
-            <form>
-                <div class="form-group">
-                    <label for="SBU" class="col-sm-3 control-label"></label>
-                    <div class="col-sm-12 col-sm-offset-3" style="margin-top:6px">
+        <form>
+            <div class="form-group">
+                <label for="SBU" class="col-sm-3 control-label"></label>
+                <div class="col-sm-12 col-sm-offset-3" style="margin-top:6px">
 
-                        @*<input type="checkbox" name="awesome" ng-model="currency.Status" ng-true-value="'Y'" ng-false-value="'N'" />*@
-                        <label class="mt-checkbox mt-checkbox-outline col-sm-2 ">
-                            Approve Status&nbsp;&nbsp;
+                    <label class="mt-checkbox mt-checkbox-outline col-sm-2 ">
+                        Approve Status&nbsp;&nbsp;
+                    </label>
+                    <div class="col-sm-8">
+
+                        <label style="display :inline-flex;">
+                            <input type="radio" name="status" class="radio" value="Y" ng-model="currency.Status">
+                            &nbsp;   Approve
                         </label>
-                        <div class="radio">
-
-                            <label>
-                                <input type="radio" name="chickenEgg" value="Y" ng-model="currency.Status">
-                                Approve
-                            </label>
                         &nbsp;
-                            <label>
-                                <input type="radio" name="chickenEgg" value="N" ng-model="currency.Status">
-                                Not Approve
-                            </label>
-                        </div>
-
-
+                        <label style="display :inline-flex;">
+                            <input type="radio" name="status" class="radio" value="N" ng-model="currency.Status">
+                            &nbsp;   Not Approve
+                        </label>
                     </div>
+
+
                 </div>
-                <div class="form-group" ng-show="currency.Status == 'N'">
-                    <div class="col-sm-12" style="margin-top:6px">
-                        <label>Comments</label>
-                        <textarea class="form-control" type="text" numberdotonly maxlength="4000" ng-model="currency.Comments" required> </textarea>
-                    </div>
+            </div>
+            <div class="row" ng-show="currency.Status == 'N'" style="margin-bottom:10px;">
+                <div class="col-sm-8 col-sm-offset-2 ">
+                    <label>Comments</label>
+                    <textarea class="form-control" type="text" numberdotonly maxlength="4000" style="height:50px;" ng-model="currency.Comments" required> </textarea>
                 </div>
+            </div>
 
-                @*<div class="col-sm-12 col-sm-offset-3" style="margin-top:6px">
-                        <label class="mt-checkbox mt-checkbox-outline col-sm-2">Status</label>
-                        <div class="btn-group">
-                            <span>
-                                <button type="button" ng-click="changestatus('Y')" class="btn" ng-class="{'btn-success': currency.Status== 'Y' }">Approve</button>
-                            </span>&nbsp;
-                            <span>
-                                <button type="button" ng-click="changestatus('N')" class="btn" ng-class="{'btn-danger': currency.Status== 'N' }">Reject</button>
-                            </span>&nbsp;
+            @*<div class="col-sm-12 col-sm-offset-3" style="margin-top:6px">
+                    <label class="mt-checkbox mt-checkbox-outline col-sm-2">Status</label>
+                    <div class="btn-group">
+                        <span>
+                            <button type="button" ng-click="changestatus('Y')" class="btn" ng-class="{'btn-success': currency.Status== 'Y' }">Approve</button>
+                        </span>&nbsp;
+                        <span>
+                            <button type="button" ng-click="changestatus('N')" class="btn" ng-class="{'btn-danger': currency.Status== 'N' }">Reject</button>
+                        </span>&nbsp;
 
 
-                        </div>
-                    </div>*@
-
-            </form>
-            @*<div class="form-group">
-                    <div class="col-md-3"><label>Current Status</label></div>
-                    <div class="col-md-2">
-                        <a ng-show={{ OStatus == true }}><i class="fa fa-check"></i></a>
-                        <a ng-show={{ OStatus == false }}><i class="fa fa-close"></i></a>
                     </div>
                 </div>*@
-        </div>
+
+        </form>
+        @*<div class="form-group">
+                <div class="col-md-3"><label>Current Status</label></div>
+                <div class="col-md-2">
+                    <a ng-show={{ OStatus == true }}><i class="fa fa-check"></i></a>
+                    <a ng-show={{ OStatus == false }}><i class="fa fa-close"></i></a>
+                </div>
+            </div>*@
     </div>
 </div>

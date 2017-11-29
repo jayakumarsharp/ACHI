@@ -1,4 +1,83 @@
-﻿ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster) {
+﻿ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+    .withOption('rowCallback', rowCallback1);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('userId').withTitle('UserId'),
+        DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
+        DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
+
+        DTColumnBuilder.newColumn('checked').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+
+    $scope.dtOptions1 = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+    .withOption('rowCallback', rowCallback);
+
+    $scope.dtColumns1 = [
+       DTColumnBuilder.newColumn('userId').withTitle('UserId'),
+       DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
+       DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
+          DTColumnBuilder.newColumn('RoleName').withTitle('RoleName'),
+        DTColumnBuilder.newColumn('RegionName').withTitle('RegionName'),
+        DTColumnBuilder.newColumn('CountryName').withTitle('CountryName'),
+        DTColumnBuilder.newColumn('BusinessSector').withTitle('BusinessSector'),
+       DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
+           .renderWith(actionsHtml1)
+    ];
+
+
+    function createdRow(row, data, dataIndex) {
+        // Recompiling so we can bind Angular directive to the DT
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml1(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  class="test" ><img src="../images/edit.png"></a>' +
+            '&nbsp;<a  class="view"><img style="width:24px;height:24px;" src="../images/eyeicon.png"></a>';
+    }
+
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        if (data)
+            return '<input type="checkbox" class="checkclick"  checked />';
+        else
+            return '<input type="checkbox" class="checkclick" />';
+    }
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.test', nRow).unbind('click');
+        $('.test', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.EditUser(aData.userId);
+            });
+        });
+
+        $('.view', nRow).unbind('click');
+        $('.view', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetUser(aData.userId);
+            });
+        });
+        //$('.checkclick', nRow).unbind('click');
+        //$('.checkclick', nRow).bind('click', function () {
+        //    $scope.$apply(function () {
+        //        $scope.chkChanged(aData);
+        //    });
+        //});
+        return nRow;
+    }
+    function rowCallback1(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.checkclick', nRow).unbind('click');
+        $('.checkclick', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.chkChanged(aData);
+            });
+        });
+        return nRow;
+    }
+
     $scope.UpdatedUserTypes = [];
     $scope.selectedSBU = {};
     $scope.selectedRole = {};
@@ -13,47 +92,6 @@
     $scope.ADUsers = [];
     $scope.Roles = [];
     $scope.IsReadOnly = false;
-
-    //---------------GRID------------------//
-    $scope.addUserGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: [
-            { displayName: "UserID", name: "userId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { displayName: "Name", name: "UserName", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            { displayName: "Email", name: "EmailId", cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' } },
-            {
-                displayName: "", name: "chkAddUser", checkboxSelection: true, cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' },
-                cellTemplate: '<input type="checkbox" name="select_item" value="true" ng-model="row.entity.checked" ng-click="grid.appScope.chkChanged(row.entity)" />'
-            }
-        ]
-    };
-
-    //$rootScope.$on("toggle", function () {
-    //    //jay
-    //    $timeout(function () {
-    //        $scope.userGrid.api.sizeColumnsToFit();
-    //    }, 1000);
-    //});
-    $scope.userGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: [
-            { name: "userId", displayName: "UserID", },
-            { name: "UserName", displayName: "User Name", },
-            { name: "EmailId", displayName: "Email", },
-            { name: "RoleName", displayName: "Role", },
-            { name: "RegionName", displayName: "Region", },
-            { name: "CountryName", displayName: "Country", },
-            { name: "BusinessSector", displayName: "Business Sector", },
-            {
-                name: 'Action', cellTemplate: '<a ng-click=\"grid.appScope.GetUser(row.entity.userId)\" href=\"javascript:;\">View</a><span ng-show=\"!IsReadOnly\"> |</span><a data-ng-click=\"grid.appScope.EditUser(row.entity.userId )\" href=\"javascript:;\" ng-show=\"!grid.appScope.IsReadOnly\"> Edit</a>'
-            }
-
-        ]
-    };
-
-    //---------------END GRID---------------//
 
     $scope.IsUserSCHead = function () {
         UserFactory.GetUser($rootScope.UserInfo.user.userId).success(function (data) {
@@ -113,7 +151,8 @@
         angular.forEach(data, function (value, key) {
             $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
         });
-        $scope.addUserGrid.data = $scope.UserTypes;
+
+        $scope.dtOptions.data = $scope.UserTypes;
     };
 
     $scope.GetAllRoles = function () {
@@ -148,7 +187,9 @@
     $scope.GetADUsers = function () {
         UserFactory.GetADUsers().success(function (data) {
             $scope.ADUsers = data;
+
             $scope.ConvertToUserTypes(data);
+
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -166,7 +207,9 @@
                     'Status': value.Status
                 })
             })
-            $scope.userGrid.data = $scope.UsersView;
+
+            $scope.dtOptions1.data = $scope.UsersView;
+
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -281,7 +324,9 @@
 
     $scope.chkChanged = function (event) {
         var isAddedAlready = false;
-        if (event.checked == true) {
+
+        if (event.checked == false) {
+
             angular.forEach($scope.UpdatedUserTypes, function (value, key) {
                 if (event.userId == value.userId) {
                     isAddedAlready = true;
@@ -297,16 +342,17 @@
                 }
             }
         }
+        event.checked = !event.checked;
     }
 
     //Display only selected users
     $scope.showSelectedUsers = function (isChecked) {
         if (isChecked) {
             console.log('setting row data');
-            $scope.addUserGrid.data = $scope.UpdatedUserTypes;
+            $scope.dtOptions.data = $scope.UpdatedUserTypes;
         }
         else {
-            $scope.addUserGrid.data = $scope.UserTypes;
+            $scope.dtOptions.data = $scope.UserTypes;
         }
     }
 
@@ -446,46 +492,19 @@
 });
 
 ReportApp.factory('UserFactory', function ($http) {
-    var Userurl = BaseURL + 'users';
-    var RoleUrl = BaseURL + 'Roles';
     var UserFactory = {
-        GetTypes: function () {
-            return $http.get(Userurl + '/types');
-        },
         GetUsers: function () {
             return $http.get('getusers?userid=');
         },
-        GetRoles: function () {
-            return $http.get(RoleUrl + '/roles');
-        },
-        GetAllSBU: function () {
-            return $http.get(Userurl + '/sbu');
-        },
+
         GetADUsers: function () {
             return $http.get('getADuser');
-        },
-        GetAllADUsers: function () {
-            return $http.get(Userurl + '/adduser/GetAllADUsers');
         },
 
         GetUser: function (userid) {
             return $http.get('getusers?userid=' + userid);
         },
-        GetUserSessionInfo: function (createdDate) {
-            return $http.get(Userurl + '/GetUserSessionInfo/?createdOn=' + createdDate);
-        },
-        GetUserSBU: function (userid) {
-            return $http.get(Userurl + '/UserSBU/?userId=' + userid);
-        },
-        GetAllUserSBU: function () {
-            return $http.get(Userurl + '/AllUserSBU');
-        },
-        GetUserBillingSBU: function (userid) {
-            return $http.get(Userurl + '/UserBillingSBU/?userId=' + userid);
-        },
-        GetAllUserBillingSBU: function () {
-            return $http.get(Userurl + '/AllUserBillingSBU');
-        },
+
         AddUser: function (user) {
             return $http.post('CreateUser', user);
         },
@@ -498,60 +517,19 @@ ReportApp.factory('UserFactory', function ($http) {
         DeleteUser: function (user) {
             return $http.post('DeleteUser', user);
         },
-        DeleteADUser: function (user) {
-            return $http.post(Userurl + '/DeleteADUser', user);
-        },
-        ChangePassword: function (user) {
-            return $http.post(Userurl + '/ChangePassword', user);
-        },
-        GetAllUserHierarchy: function () {
-            return $http.get(Userurl + '/GetAllUserHierarchy');
-        },
-        GetUserHierarchy: function (userId) {
-            return $http.get(Userurl + '/GetUserHierarchy/?UserId=' + userId);
-        },
-        AddUserHierarchy: function (user) {
-            return $http.post(Userurl + '/AddUserHierarchy', user);
-        },
-        ModifyUserHierarchy: function (user) {
-            return $http.post(Userurl + '/ModifyUserHierarchy', user);
-        },
-        DeleteUserHierarchy: function (user) {
-            return $http.post(Userurl + '/DeleteUserHierarchy', user);
-        },
-        UpdateHierarchyJSON: function (user) {
-            return $http.post(Userurl + '/UpdateHierarchyJSON', user);
-        },
+
         getloggedusername: function () {
             return $http.get('getloggedusername');
         },
         GetUserRoles: function (userId) {
             return $http.get('GetUserRoles/?UserId=' + userId);
         },
-        GetBillingForUser: function (userId) {
-            return $http.get(Userurl + '/GetBillingForUser/?UserId=' + userId);
-        },
-        GetAllBaseSkillOptions: function () {
-            return $http.get(Userurl + '/GetAllBaseSkillOptions');
-        },
-        GetBaseSkillForUser: function (userId) {
-            return $http.get(Userurl + '/GetBaseSkillForUser/?UserId=' + userId);
-        },
-        GetAllLocations: function () {
-            return $http.get(Userurl + '/GetAllLocations');
-        },
+
         GetInactiveUsers: function () {
             return $http.get(Userurl + '/GetInactiveUsers');
         },
-        GetLocationForUser: function (userId) {
-            return $http.get(Userurl + '/GetLocationForUser/?UserId=' + userId);
-        },
-        GetUsersToAddInHierarchy: function () {
-            return $http.get(Userurl + '/GetUsersToAddInHierarchy');
-        },
-        GetHierarchyJSON: function () {
-            return $http.get(Userurl + '/GetHierarchyJSON');
-        },
+
+
     };
     return UserFactory;
 });

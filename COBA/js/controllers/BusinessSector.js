@@ -1,32 +1,51 @@
-﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster) {
+﻿ReportApp.controller('BusinessSectorMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+        DTColumnBuilder.newColumn('BusinessSectorName').withTitle('Business Sector'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetBusinessSectorMasterById(' + data + ')"><img src="../images/edit.png"></a>';
+        //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
+    $scope.Showadd = function () {
+        $scope.showAddwindow = true;
+    }
+
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
+
     $scope.BusinessSectorMasterList = [];
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
 
+    $scope.showAddwindow = false
+    $scope.IsReadOnly = false;
     $scope.GetAllBusinessSectorMaster = function () {
         ApiCall.MakeApiCall("GetAllBusinessSector?BusinessSectorId=", 'GET', '').success(function (data) {
-            console.log(data);
-            $scope.BusinessSectorMasterList = data;
-            $scope.BusinessSectorMasterGrid.data = $scope.BusinessSectorMasterList;
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data
+
         }).error(function (error) {
             $scope.Error = error;
         })
     };
-
-
     $rootScope.$on("toggle", function () {
         //jay
         $timeout(function () {
             $scope.BusinessSectorMasterGrid.api.sizeColumnsToFit();
         }, 1000);
     });
-
-
-    $scope.BusinessSectorMasterGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: [],
-    };
 
     $scope.add = function (BusinessSectorMaster) {
         if (BusinessSectorMaster != null) {
@@ -39,6 +58,7 @@
                         $scope.BusinessSectorMaster = null;
                         $scope.GetAllBusinessSectorMaster();
                         $scope.editMode = false;
+                        $scope.showAddwindow = false;
                         toaster.pop('success', "Success", 'Business Sector added successfully', null);
                     }
                 }).error(function (data) {
@@ -58,6 +78,7 @@
     $scope.GetBusinessSectorMasterById = function (BusinessSectorMasterId) {
         ApiCall.MakeApiCall("GetAllBusinessSector?BusinessSectorId=" + BusinessSectorMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
+            $scope.showAddwindow = true;
             $scope.BusinessSectorMaster = data[0];
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding Business Sector! " + data.ExceptionMessage;
@@ -82,6 +103,7 @@
             if (model.BusinessSectorName.trim()) {
                 ApiCall.MakeApiCall("ModifyBusinessSector", 'POST', model).success(function (data) {
                     $scope.editMode = false;
+                    $scope.showAddwindow = false;
                     $scope.BusinessSectorMaster = null;
                     $scope.GetAllBusinessSectorMaster();
                     toaster.pop('success', "Success", 'Business Sector updated successfully', null);
@@ -107,6 +129,8 @@
     $scope.cancel = function () {
         $scope.BusinessSectorMaster = null;
         $scope.editMode = false;
+        $scope.showAddwindow = false;
+        $('#confirmModal').modal('hide');
     };
 
     $scope.GetRightsList = function () {
@@ -126,14 +150,6 @@
                         $scope.IsReadOnly = false;
                     }
 
-                    var columnDefs = [{ name: 'Id', visible: false },
-                        { name: 'BusinessSectorName', displayName: 'Business Sector', width: '*' },
-                        {
-                            name: 'Action'
-                            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetBusinessSectorMasterById(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-                            , visible: !$scope.IsReadOnly, width: 150
-                        }];
-                    $scope.BusinessSectorMasterGrid.columnDefs = columnDefs;
 
                     $scope.GetAllBusinessSectorMaster();
 

@@ -1,53 +1,44 @@
-﻿
-<div class="whitebg">
-    <section class="content-header" style="padding-bottom:10px;"></section>
-
-
+﻿<div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;">
     <div ng-controller="RoleController" class="nav-tabs-custom">
-
         <div class="box-header with-border">
-            <h3 class="box-title">    Role Management   </h3>
+            <h4> Role Management   </h4>
         </div>
-
-        <div class="row margintop10">
-            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-outline-info">Add <i class="fa fa-plus"></i></button>
+        <div class="row pull-right">
+            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
         </div>
+        <div class="col-md-12 data-table">
 
+            <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive"></table>
 
-        <section class="content">
+            @*<div class="table-responsive">
+                    <table class="table no-margin table-striped">
+                        <thead style="background-color :#5b9bd5;color: #fff;">
+                            <tr>
+                                <th style="border-right :1px solid #9bc2e6;">Role Name</th>
+                                <th style="border-right :1px solid #9bc2e6;">Access Rights</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="role in Roles" ng-class="$index % 2 == 0 ? 'even' : 'odd'">
+                                <td>
+                                    <p style="margin:0px;">{{ role.RoleName }}</p>
+                                </td>
+                                <td>
+                                    <p style="margin:0px;">
+                                        <a data-ng-click="ViewRole(role.id)" name="viewRole" href="javascript:;">View</a>                                                    <span ng-show="!IsReadOnly"> | </span>
+                                        <a ng-show="!IsReadOnly" name="editRole" data-ng-click="EditRole(role)" href="javascript:;">Edit</a>
+                                        <span ng-show="!IsReadOnly"> | </span>
+                                        <a ng-show="!IsReadOnly" name="deleteRole" data-ng-click="showconfirm(role)" href="javascript:;">Delete</a>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>*@
 
-            <div class="table-responsive">
-                <table class="table no-margin table-striped">
-                    <thead style=" background-color #5b9bd5;color #fff;">
-                        <tr>
-                            <th style=" border-right 1px solid #9bc2e6;">Role Name</th>
-                            <th style=" border-right 1px solid #9bc2e6;">Access Rights</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!--<tr data-ng-repeat="role in RoleMenu | filter:search">-->
-                        <tr data-ng-repeat="role in Roles" ng-class="$index % 2 == 0 ? 'even' : 'odd'">
-                            <td>
-                                <p style="margin:0px;">{{ role.RoleName }}</p>
-                            </td>
-                            <td>
-                                <p style="margin:0px;">
-                                    <a data-ng-click="ViewRole(role.id)" name="viewRole" href="javascript:;">View</a>                                                    <span ng-show="!IsReadOnly"> | </span>
-                                    <a ng-show="!IsReadOnly" name="editRole" data-ng-click="EditRole(role)" href="javascript:;">Edit</a>
-                                    <span ng-show="!IsReadOnly"> | </span>
-                                    <a ng-show="!IsReadOnly" name="deleteRole" data-ng-click="showconfirm(role)" href="javascript:;">Delete</a>
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </section>
-
+        </div>
 
         <div class="modal fade" id="AddEditRole" tabindex="-1" role="dialog" aria-hidden="true">
-            @*<div ng-include="'js/views/confirmRoleChange.html'"></div>*@
             <div class="modal-dialog" style="align-self:center;width:70%">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -65,68 +56,63 @@
                                 </div>
                             </div>
                             <br />
-                            <div class="form-group">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-sm-4 col-sm-offset-1">
-                                            <div class="list-group box-comments" id="list1" style="height:300px;overflow-x:auto">
-                                                <a href="javascript:;" class="list-group-item active">
-                                                    Available Rights
-                                                      <!--<input title="Toggle all" ng-click="toggleA()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
-                                                </a>
-                                                <span ng-repeat="right in listA | orderBy:'right.RightID' track by right.RightID">
-                                                    <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">
-                                                        {{right.RightName}}
-                                                        <input id="{{right.RightID}}" ng-model="isCheckedA" ng-click="stateAChanged(isCheckedA, right.RightID)" name="selectedA[]" value="{{right.RightID}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--/col-4-->
-                                        <div class="col-md-1 v-center text-center">
-                                            <br /><br /><br />
-                                            <div class="btn-group-vertical">
-                                                <button class="btn btn-primary" ng-click="AlltoA()" id="btnAllA"><i class="fa fa-angle-double-left"></i></button>
-                                                <button class="btn btn-primary" ng-click="bToA()" id="btnA"><i class="fa fa-angle-left"></i></button>
-                                                <button class="btn btn-primary" ng-click="aToB()" id="btnB"><i class="fa fa-angle-right"></i></button>
-                                                <button class="btn btn-primary" ng-click="AlltoB()" id="btnAllB"><i class="fa fa-angle-double-right"></i></button>
-                                            </div>
-                                        </div>
-                                        <!--/col-2-->
 
-                                        <div class="col-sm-4">
-                                            <div class="list-group box-comments" id="list2" style="height:300px;overflow-x:auto">
-                                                <a href="javascript:;" class="list-group-item active">
-                                                    Selected Rights
-                                                      <!--<input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
-                                                </a>
-                                                <span ng-repeat="right in listB | orderBy:'right.RightID' track by right.RightID">
-                                                    <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">
-                                                        {{right.RightName}}
-                                                        <!--<input i
-                                                        d="{{right.RightID}}" ng-click="selectedB.push(right.RightID)" name="selectedB[]" value="{{right.RightID}}" ng-checked="selectedB.indexOf(right.RightID) > -1" class="pull-right" type="checkbox">-->
-                                                        <input id="{
-                                                        <input id="{{right.RightID}}" ng-click="stateBChanged(isCheckedB, right.RightID)" ng-model="isCheckedB" name="selectedB[]" value="{{right.RightID}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                                    </a>
-                                                    </a>
-
-                                                </span>
-                                            </div>
-                                        </div>
-
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-1">
+                                    <div class="list-group box-comments" id="list1" style="height:300px;overflow-x:auto">
+                                        <a href="javascript:;" class="list-group-item active">
+                                            Available Rights
+                                            <!--<input title="Toggle all" ng-click="toggleA()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
+                                        </a>
+                                        <span ng-repeat="right in listA | orderBy:'right.RightID' track by right.RightID">
+                                            <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">
+                                                {{right.RightName}}
+                                                <input id="{{right.RightID}}" ng-model="isCheckedA" ng-click="stateAChanged(isCheckedA, right.RightID)" name="selectedA[]" value="{{right.RightID}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                            </a>
+                                        </span>
                                     </div>
                                 </div>
+                                <!--/col-4-->
+                                <div class="col-md-1 v-center text-center">
+                                    <br /><br /><br />
+                                    <div class="btn-group-vertical">
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="AlltoA()" id="btnAllA"><i class="fa fa-angle-double-left"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="bToA()" id="btnA"><i class="fa fa-angle-left"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="aToB()" id="btnB"><i class="fa fa-angle-right"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="AlltoB()" id="btnAllB"><i class="fa fa-angle-double-right"></i></button>
+                                    </div>
+                                </div>
+                                <!--/col-2-->
+
+                                <div class="col-sm-4">
+                                    <div class="list-group box-comments" id="list2" style="height:300px;overflow-x:auto">
+                                        <a href="javascript:;" class="list-group-item active">
+                                            Selected Rights
+                                            <!--<input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" class="pull-right" type="checkbox">-->
+                                        </a>
+                                        <span ng-repeat="right in listB | orderBy:'right.RightID' track by right.RightID">
+                                            <a href="javascript:;" data-id="{{right.RightID}}" class="list-group-item">
+                                                {{right.RightName}}
+                                                <input id="{{right.RightID}}" ng-click="stateBChanged(isCheckedB, right.RightID)" ng-model="isCheckedB" name="selectedB[]" value="{{right.RightID}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <!---->
-                            <div class="form-group">
-                                <div class="col-sm-offset-9 col-sm-10">
-                                    <span data-ng-hide="editMode">
-                                        <input type="submit" value="Add" ng-disabled="addroleform.$invalid" name="roleAdd" data-ng-click="add(role)" class="btn btn-primary" />
-                                    </span>
-                                    <span data-ng-show="editMode">
-                                        <input type="submit" value="Update" data-ng-click="ModifyRoleRight(role)" name="roleEdit" class="btn btn-primary" />
-                                    </span>
-                                    <input type="button" value="Cancel" data-ng-click="cancel()" name="roleCancel" class="btn btn-primary" />
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-offset-6 col-sm-6">
+                                        <span data-ng-hide="editMode">
+                                            <input type="submit" value="Add" ng-disabled="addroleform.$invalid" name="roleAdd" data-ng-click="add(role)" class="btn btn-primary" />
+                                        </span>
+                                        <span data-ng-show="editMode">
+                                            <input type="submit" value="Update" data-ng-click="ModifyRoleRight(role)" name="roleEdit" class="btn btn-primary" />
+                                        </span>
+                                        <input type="button" value="Cancel" data-ng-click="cancel()" name="roleCancel" class="btn btn-primary" />
+                                    </div>
                                 </div>
                             </div>
                         </form>

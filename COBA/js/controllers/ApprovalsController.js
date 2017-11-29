@@ -1,4 +1,88 @@
-﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster, TaskService) {
+﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster, TaskService, $compile, DTOptionsBuilder, DTColumnBuilder, ApiCall) {
+    $scope.data = [];
+
+    //grid1
+    $scope.dtOptionspendingAppproval = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+       .withOption('rowCallback', rowCallback);
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
+
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.test', nRow).unbind('click');
+        $('.test', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.showapprovaldata(aData);
+            });
+        });
+        return nRow;
+    }
+    $scope.dtColumnsPendingAppproval = [
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Ref Number'),
+        DTColumnBuilder.newColumn('Ver').withTitle('Version'),
+           DTColumnBuilder.newColumn('CreatedDate').withTitle('Created Date'),
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+
+    //grid2
+    $scope.dtOptionscompleteAppproval = DTOptionsBuilder.fromSource()
+       .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumnsCompleteAppproval = [
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Ref Number'),
+        DTColumnBuilder.newColumn('Ver').withTitle('Version'),
+        DTColumnBuilder.newColumn('Status').withTitle('Status').renderWith(actionsStatus),
+         DTColumnBuilder.newColumn('Comments').withTitle('Comments'),
+          DTColumnBuilder.newColumn('ApprovedDate').withTitle('Date'),
+    ];
+
+
+    //grid1
+    $scope.dtOptionspendingDelegates = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumnsPendingDelegates = [
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Ref Number'),
+        DTColumnBuilder.newColumn('Approver').withTitle('Approver'),
+        DTColumnBuilder.newColumn('Ver').withTitle('Version'),
+        DTColumnBuilder.newColumn('CreatedDate').withTitle('Created Date')
+    ];
+
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a   class="test"><img src="../images/edit.png"></a>';
+    }
+    function actionsStatus(data, type, full, meta) {
+
+        if (data == "Y")
+            return '<a  class="dta-act">Approved</a>';
+        else if (data == "N")
+            return '<a  class="dta-act-not">Not Approved</a>';
+        else
+            return '<a  class="dta-sign">Pending</a>';
+    }
+
+
+    //grid2
+    $scope.dtOptionscompleteDelegates = DTOptionsBuilder.fromSource()
+       .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumnsCompleteDelegates = [
+     //DTColumnBuilder.newColumn('Id').withTitle('ID'),
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Ref Number'),
+        DTColumnBuilder.newColumn('Approver').withTitle('Approver'),
+        DTColumnBuilder.newColumn('Ver').withTitle('Version'),
+        DTColumnBuilder.newColumn('Status').withTitle('Status'),
+         DTColumnBuilder.newColumn('Comments').withTitle('Comments'),
+          DTColumnBuilder.newColumn('ApprovedDate').withTitle('Date'),
+    ];
+
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -48,46 +132,32 @@
     $scope.StrategyVersiondata = [];
     $scope.Selcurrentversion = 0;
 
-    $scope.GetCurrencyConversionForId = function (RefNumber, Approver, Version, Comments, ApprovedDate, Status) {
+    $scope.showapprovaldata = function (obj) {
         $('#LayoutModel1').modal('show');
         $scope.notificationExist = true;
-        $scope.currency = { 'Comments': Comments, 'RefNumber': RefNumber, 'Approver': Approver, 'Version': Version, 'Comments': Comments, 'ApprovedDate': ApprovedDate, 'Status': Status };
-
-        //if ($scope.currency.Status == "Y")
-        //    $scope.Status = true;
-        //else
-        //    $scope.Status = false;
-        //$scope.OStatus = angular.copy($scope.Status);
-
+        $scope.currency = { 'Comments': obj.Comments, 'RefNumber': obj.RefNumber, 'Approver': obj.Approver, 'Version': obj.Version, 'ApprovedDate': obj.ApprovedDate, 'Status': obj.Status, 'Type': obj.Type };
     };
 
     $scope.changestatus = function (status) {
         $timeout(function () { $scope.currency.Status = status; });
     }
-
     $scope.notificationExist = false;
     $scope.notificationdata = [];
-
     $scope.GetCurrencyConversionForIdView = function (id, Version) {
         $scope.ViewData = [];
         StrategyService.GetStrategyApprovalById(id, Version).success(function (data) {
-            $('#currencyModel1').modal('show');
-
+            $('#viewApprovals').modal('show');
             $scope.ViewData = data;
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
     };
 
     $scope.PendingGriddata = [];
     $scope.CompletedGriddata = [];
-
-
-    $scope.GetAlldata = function () {
+    $scope.GetAlldata = function (opt) {
         StrategyService.GetStrategyApprovalByuser().success(function (data) {
             $timeout(function () {
-                debugger;
                 $scope.PendingGriddata = [];
                 $scope.CompletedGriddata = [];
                 for (var i = 0; i < data.length; i++) {
@@ -97,108 +167,81 @@
                     if (data[i].Status == 'N' || data[i].Status == 'Y')
                         $scope.CompletedGriddata.push(data[i])
                     else
-                        $scope.PendingGriddata.push(data[i])
-
+                        $scope.PendingGriddata.push(data[i]);
                 }
-
-                $scope.PendingGrid.data = $scope.PendingGriddata;
-                $scope.CompletedGrid.data = $scope.CompletedGriddata;
+                $scope.dtOptionspendingAppproval.data = $scope.PendingGriddata;
+                $scope.dtOptionscompleteAppproval.data = $scope.CompletedGriddata;
+                if (opt == 'Completed')
+                    $scope.showMyApproval = false;
+                else
+                    $scope.showMyApproval = true;
             }, 100)
         }).error(function (error) {
             $scope.Error = error;
         });
     };
-    $scope.GetAlldata();
+    $scope.GetAlldata('Pending');
+
+    $scope.PendingGriddata = [];
+    $scope.CompletedGriddata = [];
 
 
-
-    var PendingcolumnDefs = [
-        { name: 'RefNumber', width: 140 },
-        // { name: 'Name', displayName: 'Name', width: 100 },
-        //{ name: 'BusinessSectorName', displayName: 'Business Sector', width: 120 },
-
-        {
-            name: 'Version', width: 140,
-            cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
-        },
-
-
-        {
-            name: 'Action', width: '*'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.RefNumber,row.entity.Approver,row.entity.Version,row.entity.Comments,row.entity.ApprovedDate,row.entity.Status)" ><i class="fa fa-edit" ></i></a ></div>'
-            , visible: $scope.IsReadOnly
-        },
-
-    ];
-
-
-
-    var CompletedcolumnDefs = [
-        { name: 'RefNumber', width: 100 },
-        // { name: 'Name', displayName: 'Name', width: 80 },
-        //{ name: 'BusinessSectorName', displayName: 'Business Sector', width: 110 },
-        {
-            name: 'Version', width: 80,
-            cellTemplate: '<div class="ui-grid-cell-contents"> {{row.entity.Ver}}</div>'
-        },
-        {
-            name: 'Status', width: 80
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <input type="button" class="btn btn-success" ng-show={{row.entity.Status=="Y"}} value="Approved" /><input type="button" class="btn btn-danger" ng-show={{row.entity.Status=="N"}} value="Rejected" /></div>'
-        },
-         {
-             name: 'Comments', width: 140
-
-         },
-        {
-            name: 'ApprovedDate', displayName: 'Date', width: 80
-        },
-
-
-    ];
-
-
-    $scope.PendingGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: PendingcolumnDefs,
-
-    };
-
-    $scope.CompletedGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: CompletedcolumnDefs,
-
-    };
-
-
-    $scope.UpdatecurrencyConversion = function (model) {
-        //model.UpdatedBy = $rootScope.UserInfo.user.userId;
-       
-        TaskService.UpdateStrategyApprover(model).success(function (data) {
-            if (data == "success") {
-                $scope.editMode = false;
-
-                if ($scope.currency.Status == "Y") {
-
-                }
-                else if ($scope.currency.Status == "N")
-                {
+    $scope.GetDelegatedApprovalAlldata = function (opt) {
+        StrategyService.Get_ApprovaltransferByuser().success(function (data) {
+            $timeout(function () {
+                $scope.DelegatedPendingGriddata = [];
+                $scope.DelegatedCompletedGriddata = [];
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i])
+                    data[i].Ver = "Version - " + data[i].Version;
+                    data[i].Version = data[i].Version;
+                    if (data[i].Status == 'N' || data[i].Status == 'Y')
+                        $scope.DelegatedCompletedGriddata.push(data[i])
+                    else
+                        $scope.DelegatedPendingGriddata.push(data[i])
 
                 }
 
-                $timeout(function () {
-                    $scope.GetAlldata();
-                })
-
-                $('#LayoutModel1').modal('hide');
-            }
-            else
-                $scope.errorinfo = data;
-
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+                $scope.dtOptionspendingDelegates.data = $scope.DelegatedPendingGriddata;
+                $scope.dtOptionscompleteDelegates.data = $scope.DelegatedCompletedGriddata;
+                if (opt == 'Completed')
+                    $scope.showMyDelegateApproved = false;
+                else
+                    $scope.showMyDelegateApproved = true;
+            }, 100)
+        }).error(function (error) {
+            $scope.Error = error;
         });
+    };
+    $scope.GetDelegatedApprovalAlldata('Pending');
+
+    $scope.UpdateStrategyApprover = function (model) {
+        //model.UpdatedBy = $rootScope.UserInfo.user.userId;
+        if (model.Status) {
+            if (model.Status == "N" && model.Comments.trim() == "") {
+                toaster.pop('warning', "warning", "Please enter comments", null);
+                return;
+            }
+            TaskService.UpdateStrategyApprover(model).success(function (data) {
+                if (data == "success") {
+                    $scope.editMode = false;
+                    toaster.pop('success', "Success", "Approval status updated successfully", null);
+                    $timeout(function () {
+                        $scope.GetAlldata();
+                    })
+                    $('#LayoutModel1').modal('hide');
+                }
+                else
+                    $scope.errorinfo = data;
+
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+            });
+        }
+        else {
+            toaster.pop('warning', "warning", "Please select approval status", null);
+        }
+
     };
 
     $scope.showconfirm = function (data) {
@@ -212,21 +255,66 @@
         $('#LayoutModel1').modal('hide');
     };
 
+    $scope.dtOptionsDelegateRequestAppproval = DTOptionsBuilder.fromSource()
+      .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+    .withOption('rowCallback', rowCallbackapprove);
 
+    $scope.dtColumnsDelegateRequestAppproval = [
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Ref Number'),
+        DTColumnBuilder.newColumn('Ver').withTitle('Version'),
+        DTColumnBuilder.newColumn('OriginalApprover').withTitle('Delegated By'),
+        DTColumnBuilder.newColumn('CreatedDate').withTitle('Created Date'),
+        DTColumnBuilder.newColumn('RefNumber').withTitle('Actions').notSortable()
+            .renderWith(actionsrequestHtml)
+    ];
+    function actionsrequestHtml(data, type, full, meta) {
+        $scope.data = data;
+        return ' <button  class="btn btn-success approvereq"> Accept</button>        <button  class="btn btn-danger rejectreq"> Reject</button>';
+    }
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+
+    function rowCallbackapprove(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.approvereq', nRow).unbind('click');
+        $('.approvereq', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.updatedelegateAcceptance(aData, 'Y');
+            });
+        });
+        $('.rejectreq', nRow).unbind('click');
+        $('.rejectreq', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.updatedelegateAcceptance(aData, 'N');
+            });
+        });
+        return nRow;
+    }
+
+    $scope.updatedelegateAcceptance = function (model, status) {
+        model.Status = status;
+        TaskService.updatedelegateAcceptance(model).success(function (data) {
+            if (data == "success") {
+                $timeout(function () {
+                    $scope.GetAlltransdata();
+                })
+            }
+        }).error(function (data) {
+            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+        });
+    }
     $scope.GetAlltransdata = function () {
-        StrategyService.Get_ApprovaltransferByuser().success(function (data) {
-            $timeout(function () {
-                for (var i = 0; i < data.length; i++) {
-                    data[i].Ver = "Version - " + data[i].Version;
-                    data[i].Version = data[i].Version;
-                }
-                $scope.TransferGrid.data = data;
-            }, 100)
+        ApiCall.MakeApiCall("GetStrategyDelegatesApprovalByuser", 'GET', '').success(function (data) {
+            console.log(data);
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i])
+                data[i].Ver = "Version - " + data[i].Version;
+                data[i].Version = data[i].Version;
+            }
+            $scope.dtOptionsDelegateRequestAppproval.data = data;
         }).error(function (error) {
             $scope.Error = error;
         });
     };
     $scope.GetAlltransdata();
-
-
 });

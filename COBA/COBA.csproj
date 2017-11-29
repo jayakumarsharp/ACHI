@@ -135,9 +135,6 @@
     <Reference Include="Web.Optimization">
       <HintPath>..\packages\Web.Optimization.0.0.8\lib\net40\Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="WebGrease">
-      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-    </Reference>
     <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\WebMatrix.Data.dll</HintPath>
@@ -151,10 +148,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="CommonClass\DbOperations.cs" />
     <Compile Include="CommonClass\GeneralClasses.cs" />
-    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="fonts\Filters\MyAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -6695,6 +6690,14 @@
     <Content Include="bower_components\select2\tests\vendor\qunit-1.23.1.css" />
     <Content Include="bower_components\select2\tests\vendor\qunit-1.23.1.js" />
     <Content Include="bower_components\select2\vendor\jquery-2.1.0.js" />
+    <Content Include="css\bootstrap-datetimepicker.css" />
+    <Content Include="css\bootstrap-theme.css" />
+    <Content Include="css\bootstrap-theme.min.css" />
+    <Content Include="css\bootstrap.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\dataTables.bootstrap.min.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="css\style.css" />
     <Content Include="css\toaster.css" />
     <Content Include="dist\css\AdminLTE.css" />
     <Content Include="dist\css\AdminLTE.min.css" />
@@ -6766,39 +6769,65 @@
     <Content Include="DLL\WebMatrix.Data.dll" />
     <Content Include="DLL\WebMatrix.WebData.dll" />
     <Content Include="Global.asax" />
-    <Content Include="img\CSV_icon.png" />
-    <Content Include="img\dashboard.png" />
-    <Content Include="img\Email.png" />
-    <Content Include="img\EmailMap.png" />
-    <Content Include="img\EmailNotmap.png" />
-    <Content Include="img\PDF_icon.png" />
-    <Content Include="img\RoleManagement_icon.png" />
-    <Content Include="img\search-icon.jpg" />
+    <Content Include="images\clock.png" />
+    <Content Include="images\Close.png" />
+    <Content Include="images\coba-bg.png" />
+    <Content Include="images\CSV_icon.png" />
+    <Content Include="images\dash.png" />
+    <Content Include="images\dashboard.png" />
+    <Content Include="images\dele.png" />
+    <Content Include="images\docs.png" />
+    <Content Include="images\edit.png" />
+    <Content Include="images\Email.png" />
+    <Content Include="images\EmailMap.png" />
+    <Content Include="images\EmailNotmap.png" />
+    <Content Include="images\Excel.png" />
+    <Content Include="images\fax.png" />
+    <Content Include="images\icu.png" />
+    <Content Include="images\img-set.png" />
+    <Content Include="images\lice.png" />
+    <Content Include="images\list.png" />
+    <Content Include="images\mail.png" />
+    <Content Include="images\map.png" />
+    <Content Include="images\pdf.png" />
+    <Content Include="images\PDF_icon.png" />
+    <Content Include="images\pge.png" />
+    <Content Include="images\rep.png" />
+    <Content Include="images\RoleManagement_icon.png" />
+    <Content Include="images\search-icon.jpg" />
+    <Content Include="images\tasks.png" />
+    <Content Include="images\user.jpg" />
+    <Content Include="js\animate.js" />
     <Content Include="js\Config.js" />
     <Content Include="js\controllers\ApplicationMasterController.js" />
     <Content Include="js\controllers\ApprovalsController.js" />
     <Content Include="js\controllers\BusinessSector.js" />
     <Content Include="js\controllers\CountryMasterController.js" />
-    <Content Include="js\controllers\EmailsController.js" />
-    <Content Include="js\controllers\MapTaskController.js" />
     <Content Include="js\controllers\ProductTypeMasterController.js" />
     <Content Include="js\controllers\RegionMasterController.js" />
     <Content Include="js\controllers\ChangeManagementController.js" />
     <Content Include="js\controllers\StrategyController.js" />
-    <Content Include="js\controllers\OnboardingTaskController.js" />
-    <Content Include="js\controllers\TransferController.js" />
     <Content Include="js\controllers\TransferSettingsController.js" />
     <Content Include="js\custom.js" />
+    <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
     <Content Include="js\ReportApp.js" />
     <Content Include="js\RoleApp.js" />
-    <Content Include="js\services\EmailService.js" />
-    <Content Include="js\services\MapTaskService.js" />
-    <Content Include="js\services\OnboardingTaskService.js" />
     <Content Include="js\services\TaskService.js" />
     <Content Include="js\services\StrategyService.js" />
     <Content Include="js\services\CountryService.js" />
     <Content Include="js\UserApp.js" />
+    <Content Include="Lib\angular.min.js" />
+    <Content Include="Lib\angulardatatabes.js" />
+    <Content Include="Lib\bootstrap-datetimepicker.js" />
+    <Content Include="Lib\bootstrap.js" />
+    <Content Include="Lib\bootstrap.min.js" />
+    <Content Include="Lib\dataTables.bootstrap.min.js" />
+    <Content Include="Lib\jquery-1.11.0.min.js" />
+    <Content Include="Lib\jquery.dataTables.min.js" />
+    <Content Include="Lib\moment-with-locales.js" />
+    <Content Include="Lib\npm.js" />
+    <Content Include="Lib\responsive-tabs.js" />
     <Content Include="plugins\bootstrap-datetimepicker.js" />
     <Content Include="plugins\bootstrap-datetimepicker.min.css" />
     <Content Include="plugins\bootstrap-slider\bootstrap-slider.js" />
@@ -7541,6 +7570,10 @@
     <Content Include="plugins\ng-file-upload\release.sh" />
     <Content Include="plugins\ng-file-upload\test\.bowerrc" />
     <Content Include="plugins\ng-file-upload\test\bower.json" />
+    <Content Include="css\bootstrap-theme.css.map" />
+    <Content Include="css\bootstrap-theme.min.css.map" />
+    <Content Include="css\bootstrap.css.map" />
+    <Content Include="css\bootstrap.min.css.map" />
     <None Include="Properties\PublishProfiles\CRMUserManagement.pubxml" />
     <Content Include="plugins\ng-file-upload\demo\.idea\artifacts\ng_file_upload_demo_server_war.xml" />
     <Content Include="plugins\ng-file-upload\demo\.idea\artifacts\ng_file_upload_demo_server_war_exploded.xml" />
@@ -7660,14 +7693,10 @@
     <Content Include="Views\UserManagement\_CreateUser.cshtml" />
     <Content Include="Views\UserManagement\_EditUser.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\UserManagement\_HierarchyUser.cshtml" />
     <Content Include="Views\UserManagement\_UpdatePassword.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
-    <Content Include="Views\Main\Strategy.cshtml" />
-    <Content Include="Views\Main\Tasks.cshtml" />
-    <Content Include="Views\Main\Emails.cshtml" />
-    <Content Include="Views\Main\OnBoardingTasks.cshtml" />
-    <Content Include="Views\Main\MapTask.cshtml" />
+    <Content Include="Views\Main\ModelAlgoManagement.cshtml" />
+    <Content Include="Views\Main\ChangeManagement.cshtml" />
     <Content Include="Views\Main\Reports.cshtml" />
     <Content Include="Views\Main\Licensing.cshtml" />
     <Content Include="Views\Main\Country.cshtml" />
@@ -7682,6 +7711,7 @@
     <Content Include="Views\Main\TransferSettings.cshtml" />
     <Content Include="Views\Main\BusinessSector.cshtml" />
     <Content Include="Views\Main\ApplicationMaster.cshtml" />
+    <Content Include="Views\Main\ConfirmModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -128,7 +128,7 @@ namespace CRUserManagement.Controllers
                         else
                         {
                             log.Info("Login failed for the user " + userName);
-                            return "You account has been blocked. Please contact the Admin";
+                            return "Login failed please check the credentials";
                         }
                     }
 

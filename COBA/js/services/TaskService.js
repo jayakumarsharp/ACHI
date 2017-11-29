@@ -23,6 +23,11 @@ ReportApp.factory('TaskService', function ($http) {
     TaskServiceFactory.UpdateStrategyApprover = function (inputdata) {
         return $http.post('UpdateStrategyApprover', inputdata);
     }
+
+    TaskServiceFactory.updatedelegateAcceptance = function (inputdata) {
+        return $http.post('updatedelegateAcceptance', inputdata);
+    }
+    
     
     return TaskServiceFactory;
 });
