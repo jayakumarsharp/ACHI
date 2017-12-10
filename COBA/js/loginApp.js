@@ -9,9 +9,7 @@ LoginApp.controller('LoginController', function ($location, $scope) {
             var $target = $($form.attr('data-target'));
             var $id = "#" + $form.attr('id');
             var disabled = $form.find(':input:disabled').removeAttr('disabled');
-
             $('.validation').html("<img width='50' height='50' src='../../Content/images/ajax-loader2.gif' />");
-
             $.ajax({
                 type: $form.attr('method'),
                 url: $form.attr('action'),
@@ -38,9 +36,8 @@ LoginApp.controller('LoginController', function ($location, $scope) {
         //Redirect helper
         function reloadPage(redirectTo) {
             var url = $(redirectTo).val();
-            location.href = url;
+            location.href = 'Main/Index' //url;
         }
-
     });
 
     //$scope.login = function () {

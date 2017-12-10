@@ -1,7 +1,6 @@
 ﻿@using System.Web.Optimization;
-@RenderSection("scripts", required: false)
-@Scripts.Render("~/bundles/jquery");
-@Scripts.Render("~/js/main.js");
+@Scripts.Render("~/bundles/customscripts");
+
 <!doctype html>
 <html style="height: auto; min-height: 100%;">
 <head>
@@ -84,7 +83,7 @@
     <script src="~/Assert/toaster.js"></script>
     <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload.min.js"></script>
     <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>*@
-    @*<script src="~/js/ReportApp.js"></script>
+    <script src="~/js/ReportApp.js"></script>
     <script src="~/js/UserApp.js"></script>
     <script src="~/js/RoleApp.js"></script>
 
@@ -102,7 +101,7 @@
     <script src="~/js/controllers/TransferSettingsController.js"></script>
     <script src="~/js/services/TaskService.js"></script>
     <script src="~/js/services/StrategyService.js"></script>
-    <script src="~/js/services/CountryService.js"></script>*@
+    <script src="~/js/services/CountryService.js"></script>
     <style>
         i.active, .inactive {
             font-size: 40px;
@@ -128,4 +127,7 @@
 
     </script>
 </body>
+
+@RenderSection("scripts", required: false)
+@RenderSection("styles", required: false)
 </html>

@@ -9,7 +9,7 @@
     </div>*@
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
-@Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }))
+@Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }));
 <div ng-app="LoginApp" ng-controller="LoginController" class="container">
     <div class="login-logo">
         <h1>COBA</h1>
