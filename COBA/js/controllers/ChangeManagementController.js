@@ -1,16 +1,11 @@
-﻿ReportApp.controller('ChangeManagementController', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter, UserFactory, reportFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
-
-
-    $scope.notificationExist = false;
-    $scope.notificationdata = [];
-
+﻿ReportApp.controller('ChangeManagementController', ['$scope', '$rootScope', 'StrategyService', 'TaskService', '$timeout', '$filter', 'UserFactory', 'reportFactory', 'ApiCall', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, StrategyService, TaskService, $timeout, $filter, UserFactory, reportFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.Strategydata = [];
     $scope.StrategyVersiondata = [];
     $scope.Selcurrentversion = 0;
 
     $scope.IsModelAlgopage = false;
 
-    $scope.pageList = [{ Page: false }, { Page: false }, { Page: false }, { Page: true }];
+    $scope.pageList = [{ Page: false, isValid: false }, { Page: false, isValid: false }, { Page: false, isValid: false, isValid: false }, { Page: true, isValid: false }];
     $scope.errorinfo = '';
     $scope.editMode = false;
     $scope.IsReadOnly = true;
@@ -192,19 +187,6 @@
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
-        //StrategyService.GetStrategyApprovalByuser().success(function (data) {
-        //    for (var i = 0; i < data.length; i++) {
-        //        if (data[i].RefNumber == RefNumber && data[i].Version == Version) {
-        //            $scope.notificationdata = data[i];
-        //            $scope.notificationExist = true;
-        //        }
-        //    }
-
-        //}).error(function (error) {
-        //    $scope.Error = error;
-        //});
-
     }
 
     $scope.GetCurrencyConversionForId = function (id) {
@@ -533,4 +515,4 @@
         };
 
     }
-});
+}]);

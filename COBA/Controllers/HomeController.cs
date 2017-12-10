@@ -39,15 +39,7 @@ namespace CRUserManagement.Controllers
         {
             try
             {
-                //if (System.Web.HttpContext.Current.Session["UserName"] != null)
-                //{
-                //return RedirectToAction("Dashboard");
                 return RedirectToAction("Index", "Main");
-                //}
-                //else
-                //{
-                //    return RedirectToAction("LoginDisplay", "Home");
-                //}
 
             }
             catch (SqlException ex1)

@@ -6811,6 +6811,7 @@
     <Content Include="js\custom.js" />
     <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
+    <Content Include="js\main.js" />
     <Content Include="js\ReportApp.js" />
     <Content Include="js\RoleApp.js" />
     <Content Include="js\services\TaskService.js" />
@@ -7720,7 +7721,9 @@
     <Folder Include="js\models\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

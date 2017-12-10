@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COBA", "COBA\COBA.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailReaderService", "EmailReaderService\EmailReaderService\EmailReaderService.csproj", "{3C16C440-2946-4C23-95B3-85BA6F2DCD16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{14B8A50E-1FED-4A05-B76A-4C3F33713228}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3C16C440-2946-4C23-95B3-85BA6F2DCD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C16C440-2946-4C23-95B3-85BA6F2DCD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C16C440-2946-4C23-95B3-85BA6F2DCD16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B8A50E-1FED-4A05-B76A-4C3F33713228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B8A50E-1FED-4A05-B76A-4C3F33713228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B8A50E-1FED-4A05-B76A-4C3F33713228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B8A50E-1FED-4A05-B76A-4C3F33713228}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

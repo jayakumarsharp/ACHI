@@ -1,10 +1,11 @@
-﻿ReportApp.controller('StrategyController', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('StrategyController', ['$scope', '$rootScope', 'StrategyService', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, StrategyService, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.IsModelAlgopage = true;
 
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
         .withOption('rowCallback', rowCallback);
+
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID'),
         DTColumnBuilder.newColumn('RefNumber').withTitle('RefNumber'),
@@ -25,6 +26,7 @@
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
     }
+
     function actionsHtml(data, type, full, meta) {
         return '<a  class="test"><img src="../images/edit.png"></a>' +
         '&nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="../images/eyeicon.png"></a>';
@@ -50,17 +52,15 @@
     $scope.Strategydata = [];
     $scope.editMode = false;
     $scope.showaction = false;
-    $scope.pageList = [{ Page: true }, {
-        Page: false
-    }, {
-        Page: false
-    }];
+
+    $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
 
     $scope.activateTab = function (tabid) {
         for (var i = 0; i < $scope.pageList.length; i++) {
             $scope.pageList[i].Page = false;
         }
         $scope.pageList[tabid].Page = true;
+        $scope.pageList[tabid].IsValid = true;
     }
 
     $scope.IsReadOnly = true;
@@ -127,6 +127,7 @@
         }, 100);
         $scope.editMode = false;
         $scope.currency = {};
+        $scope.selectModel = { Application: "", Country: "", ProductType: "", BusinessSector: "", Region: "" };
         $scope.activateTab(0);
         $('#currencyModel').modal('show');
     };
@@ -161,8 +162,7 @@
             toaster.pop('warning', "Warning", "Please select approvers", null);
     };
 
-    $scope.notificationExist = false;
-    $scope.notificationdata = [];
+
     $scope.Availableusers = [];
 
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
@@ -170,7 +170,6 @@
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.editMode = true;
             $scope.currency = data[0];
-
             $scope.selectModel.Application = $scope.GetRoleFromUserID($scope.currency.ApplicationId, "ApplicationMasterList")
             $scope.selectModel.Country = $scope.GetRoleFromUserID($scope.currency.Country, "CountryMasterList")
             $scope.selectModel.ProductType = $scope.GetRoleFromUserID($scope.currency.ProductType, "ProductMasterList")
@@ -178,6 +177,10 @@
             $scope.selectModel.Region = $scope.GetRoleFromUserID($scope.currency.Region, "RegionMasterList")
 
             $scope.activateTab(0);
+            for (var i = 0; i < $scope.pageList.length; i++) {
+                $scope.pageList[i].IsValid = true;
+            }
+
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
@@ -403,6 +406,7 @@
         })
         $scope.bToA_Estimation();
     }
+
     $scope.AlltoB_Estimation = function () {
         $scope.selectedA_Estimation = [];
         angular.forEach($scope.listA_Estimation, function (value, key) {
@@ -497,4 +501,4 @@
     $scope.GetRightsList();
 
 
-});
+}]);
