@@ -1,0 +1,105 @@
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Antlr3.Runtime.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\log4net.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Infrastructure.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\MvcPaging.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Servion.CCA.DatabaseApplicationBlocks.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Optimization.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Razor.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Web.Optimization.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\WebGrease.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Razor.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.xml
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\CRMManagement.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\bin\CRMManagement.pdb
+D:\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.dll
+D:\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.pdb
+D:\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRUserManagement.csprojResolveAssemblyReference.cache
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\CRMManagement.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\CRMManagement.pdb
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Antlr3.Runtime.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\log4net.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Infrastructure.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\MvcPaging.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Servion.CCA.DatabaseApplicationBlocks.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Optimization.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Razor.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Web.Optimization.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\WebGrease.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.Razor.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.xml
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRUserManagement.csprojResolveAssemblyReference.cache
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.dll
+D:\RCOM Projects\CRUserManagement\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.pdb
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\CRMManagement.dll.config
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\CRMManagement.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\CRMManagement.pdb
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Antlr3.Runtime.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\log4net.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Infrastructure.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\MvcPaging.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Http.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Optimization.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Razor.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Web.Optimization.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\WebGrease.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\WebMatrix.Data.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\WebMatrix.WebData.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\Newtonsoft.Json.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Net.Http.Formatting.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Helpers.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Http.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Http.WebHost.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Mvc.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.Razor.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Deployment.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\System.Web.WebPages.Razor.xml
+D:\Basic IT\CRUserManagement\CRUserManagement\obj\Debug\CRUserManagement.csprojResolveAssemblyReference.cache
+D:\Basic IT\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.dll
+D:\Basic IT\CRUserManagement\CRUserManagement\obj\Debug\CRMManagement.pdb
+D:\Basic IT\CRUserManagement\CRUserManagement\bin\MySql.Data.dll

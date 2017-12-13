@@ -22,11 +22,8 @@
         @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "login-form", data_async = "", data_target = "#rating-modal" }))
         {
             <div class="input-group">
-                <!--form-group has-feedback-->
-                @*<input type="email" class="form-control" placeholder="Email">*@
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                 <input class="form-control" type="text" autocomplete="off" placeholder="Username" name="username" />
-                @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
             </div>
             <div class="input-group">
                 <!--form-group has-feedback-->

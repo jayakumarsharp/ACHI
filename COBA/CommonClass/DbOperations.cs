@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -9,7 +8,6 @@ using CRUserManagement.Models;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-using CRUserManagement.CommonClass;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -18,7 +16,6 @@ public static class StaticClass
     public static string Adduser = "spsvn_Adduser";
     public static string updateuser = "spsvn_updateuser";
     public static string ChangePwd = "spsvn_ChangePwd";
-
     public static string DeleteUser = "spsvn_deleteuser";
 
     public static string GetAllFCCLocations = "SPSVN_GetAllFCCLocations";
@@ -41,8 +38,6 @@ public static class StaticClass
     public static string UpdatePwd = "spsvn_UpdatePwd";
 
 }
-
-
 
 public class DbOperations
 {
@@ -1244,7 +1239,6 @@ public class DbOperations
 
     #endregion Strategy
     
-    
     #region MapTask
 
     public List<MapTasks> GetMapTaskData()
@@ -1302,8 +1296,6 @@ public class DbOperations
         return lst;
 
     }
-
-
 
     public List<MapTasks> Get_Mapped_Mail_Task(string type)
     {
@@ -1493,22 +1485,7 @@ public class DbOperations
             this.CloseConnection();
         }
     }
-
-    //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)
-    //{
-    //    object[] outParamList = new object[0];
-    //    List<SqlParameter> paramList = new List<SqlParameter>();
-    //    paramList.Add(_sqlDb.CreateParameter("@i_RoleName", SqlDbType.VarChar, 50, ParameterDirection.Input, roleName));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorCode", SqlDbType.Int, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorDescription", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_MenusList", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    executeStatus = _sqlDb.ExecuteNonQuery(StaticClass.GetRightsForRole, CommandType.StoredProcedure, paramList, out outParamList);
-    //    errorCode = Convert.ToInt32(Convert.ToString(outParamList[0]));
-    //    errorDesc = Convert.ToString(outParamList[1]);
-    //    string menuRights = Convert.ToString(outParamList[2]);
-    //    return menuRights;
-    //}
-
+    
     private bool OpenConnection()
     {
         try
@@ -1551,7 +1528,6 @@ public class DbOperations
             return false;
         }
     }
-
 
     #region Roles
 
@@ -1876,7 +1852,6 @@ public class DbOperations
     }
 
     #endregion Roles
-
 
     #region Users
 
@@ -2596,7 +2571,6 @@ public class DbOperations
 
     #endregion Users
 
-
     #region Country
 
     public List<CountryMaster> GetCountryList(string TaskTypeId)
@@ -2707,8 +2681,6 @@ public class DbOperations
     }
 
     #endregion Country
-
-
 
     #region Region
 
@@ -2833,8 +2805,7 @@ public class DbOperations
     }
 
     #endregion Region
-
-
+    
     #region BusinessSector
 
     public List<BusinessSector> GetBusinessSectorList(string TaskTypeId)
@@ -2962,7 +2933,6 @@ public class DbOperations
 
     #endregion BusinessSector
 
-
     #region ProductType
 
     public List<ProductMaster> GetProductList(string TaskTypeId)
@@ -3087,8 +3057,8 @@ public class DbOperations
         }
 
     }
+    
     #endregion ProductType
-
 
     #region Application
 
@@ -3219,11 +3189,8 @@ public class DbOperations
 
     }
     #endregion Application
-
-
+    
 }
-
-
 
 public static class EncryptLib
 {
