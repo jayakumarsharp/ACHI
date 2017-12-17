@@ -5,7 +5,7 @@ var urltype = '';
 
 var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster','datatables']);
 
-ReportApp.controller('MainController', function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
+ReportApp.controller('MainController', ['$scope', '$rootScope', 'StrategyService', 'UserFactory', 'ApiCall',function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
     $scope.rootname = 'Index';
 
     if (sessionStorage.getItem('menuname') != null) {
@@ -81,7 +81,7 @@ ReportApp.controller('MainController', function ($scope, $rootScope, StrategySer
     //};
 
 
-});
+}]);
 
 
 

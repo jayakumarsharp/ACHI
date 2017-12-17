@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('StrategyService', function ($http) {
+ReportApp.factory('StrategyService', ['$http',function ($http) {
     var StrategyServiceURI = BaseURL;
     var StrategyServiceFactory = {};
 
@@ -84,5 +84,5 @@ ReportApp.factory('StrategyService', function ($http) {
 
 
     return StrategyServiceFactory;
-});
+}]);
 

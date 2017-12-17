@@ -1,4 +1,4 @@
-﻿ReportApp.controller('UserController', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('UserController',['$scope', '$rootScope', '$window','$location', 'UserFactory', 'reportFactory', '$timeout', 'ApiCall', 'RoleFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
@@ -489,9 +489,9 @@
     $scope.GetAllUsers();
     //$scope.IsUserSCHead();
     $scope.IsPageReadOnly();
-});
+}]);
 
-ReportApp.factory('UserFactory', function ($http) {
+ReportApp.factory('UserFactory', ['$http',function ($http) {
     var UserFactory = {
         GetUsers: function () {
             return $http.get('getusers?userid=');
@@ -532,4 +532,4 @@ ReportApp.factory('UserFactory', function ($http) {
 
     };
     return UserFactory;
-});
+}]);

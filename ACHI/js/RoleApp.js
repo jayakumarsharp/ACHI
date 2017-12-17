@@ -438,7 +438,7 @@
     $scope.IsPageReadOnly();
 });
 
-ReportApp.factory('RoleFactory', function ($http) {
+ReportApp.factory('RoleFactory', ['$http',function ($http) {
     var RoleFactory = {
         GetRoles: function () {
             return $http.get('roles?roleId=');
@@ -477,11 +477,11 @@ ReportApp.factory('RoleFactory', function ($http) {
 
     };
     return RoleFactory;
-});
+}]);
 
 
 
-ReportApp.factory('reportFactory', function ($http, $q) {
+ReportApp.factory('reportFactory', ['$http',function ($http) {
     var AuthFactory = {
         Logout: function (userId) {
             return $http.post('Logout/', { userId: userId });
@@ -497,4 +497,4 @@ ReportApp.factory('reportFactory', function ($http, $q) {
         }
     };
     return AuthFactory;
-});
+}]);

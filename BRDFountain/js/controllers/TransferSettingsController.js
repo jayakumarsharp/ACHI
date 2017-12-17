@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TransferSettingsController', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory, toaster) {
+﻿ReportApp.controller('TransferSettingsController', ['$scope', '$rootScope', 'StrategyService', '$timeout', 'UserFactory', 'reportFactory', 'toaster', function ($scope, $rootScope, StrategyService, $timeout, UserFactory, reportFactory, toaster) {
     $scope.status = false;
     $scope.IsReadOnly = true;
     $scope.userlist = [];
@@ -115,4 +115,4 @@
 
     $scope.GetRightsList();
 
-});
+}]);

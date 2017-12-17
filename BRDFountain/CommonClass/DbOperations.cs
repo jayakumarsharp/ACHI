@@ -1245,225 +1245,6 @@ public class DbOperations
     #endregion Strategy
     
     
-    #region MapTask
-
-    public List<MapTasks> GetMapTaskData()
-    {
-        List<MapTasks> lst = new List<MapTasks>();
-
-        string query = "SP_GetMapTask";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new MapTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-
-
-    public List<MapTasks> Get_Mapped_Mail_Task(string type)
-    {
-        List<MapTasks> lst = new List<MapTasks>();
-
-        string query = "Get_Mapped_Mail_Task";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_tasktype", type));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new MapTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public List<MapTasks> GetMapTaskDatabyId(int taskid)
-    {
-        List<MapTasks> lst = new List<MapTasks>();
-
-        string query = "SP_GetMapTaskbyId";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", taskid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new MapTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   EmailAttachment = Convert.ToString(row["EmailAttachment"]),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
-
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
-    }
-
-    public void UpdateMapTaskdata(MapTasks objMaptask, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-
-            using (MySqlCommand cmd = new MySqlCommand("sp_update_map_task", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add(new MySqlParameter("i_Id", objMaptask.Id));
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", objMaptask.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", objMaptask.Version));
-                cmd.Parameters.Add(new MySqlParameter("i_IsMappedToTask", objMaptask.IsMappedToTask));
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
-    #endregion MapTask
 
     #region Role
 
@@ -3221,7 +3002,2029 @@ public class DbOperations
     #endregion Application
 
 
+    #region FTAApplicationCode
+
+    public List<FTAApplicationCodeMaster> GetFTAApplicationCodeList(string TaskTypeId)
+    {
+        List<FTAApplicationCodeMaster> lst = new List<FTAApplicationCodeMaster>();
+        string query = "sp_getallFTAApplicationCode";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAApplicationCodeMaster
+                               {
+                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAApplicationCode(FTAApplicationCodeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAApplicationCode(FTAApplicationCodeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationCodemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAApplicationCode(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAApplicationCode
+
+    #region FTAStrategyCode
+
+    public List<FTAStrategyCodeMaster> GetFTAStrategyCodeList(string TaskTypeId)
+    {
+        List<FTAStrategyCodeMaster> lst = new List<FTAStrategyCodeMaster>();
+        string query = "sp_getallFTAStrategyCode";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAStrategyCodeMaster
+                               {
+                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAStrategyCode(FTAStrategyCodeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAStrategyCode(FTAStrategyCodeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyCodemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAStrategyCode(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAStrategyCode
+
+
+
+    #region DiscretionaryCode
+
+    public List<DiscretionaryCodeMaster> GetDiscretionaryCodeList(string TaskTypeId)
+    {
+        List<DiscretionaryCodeMaster> lst = new List<DiscretionaryCodeMaster>();
+        string query = "sp_getallDiscretionaryCode";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new DiscretionaryCodeMaster
+                               {
+                                   DiscretionaryCode = Convert.ToString(row["DiscretionaryCode"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddDiscretionaryCode(DiscretionaryCodeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_DiscretionaryCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCode", opp.DiscretionaryCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyDiscretionaryCode(DiscretionaryCodeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_DiscretionaryCodemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCode", Opp.DiscretionaryCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteDiscretionaryCode(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_DiscretionaryCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion DiscretionaryCode
+
+    #region BusinessSuffix
+
+    public List<BusinessSuffixMaster> GetBusinessSuffixList(string TaskTypeId)
+    {
+        List<BusinessSuffixMaster> lst = new List<BusinessSuffixMaster>();
+        string query = "sp_getallBusinessSuffix";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessSuffixMaster
+                               {
+                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessSuffix(BusinessSuffixMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessSuffix", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffix", opp.BusinessSuffix));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyBusinessSuffix(BusinessSuffixMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessSuffixmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffix", Opp.BusinessSuffix));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteBusinessSuffix(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessSuffix", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessSuffix
+
+    #region FTAShortCode
+
+    public List<FTAShortCodeMaster> GetFTAShortCodeList(string TaskTypeId)
+    {
+        List<FTAShortCodeMaster> lst = new List<FTAShortCodeMaster>();
+        string query = "sp_getallFTAShortCode";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAShortCodeMaster
+                               {
+                                   FTAShortCode = Convert.ToString(row["FTAShortCode"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAShortCode(FTAShortCodeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAShortCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", opp.FTAShortCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAShortCode(FTAShortCodeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAShortCodemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", Opp.FTAShortCode));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAShortCode(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAShortCode", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAShortCode
+
+
+    #region ParentID
+
+    public List<ParentIDMaster> GetParentIDList(string TaskTypeId)
+    {
+        List<ParentIDMaster> lst = new List<ParentIDMaster>();
+        string query = "sp_getallParentID";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ParentIDMaster
+                               {
+                                   ParentID = Convert.ToString(row["ParentID"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddParentID(ParentIDMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ParentID", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_ParentID", opp.ParentID));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyParentID(ParentIDMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_ParentIDmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_ParentID", Opp.ParentID));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteParentID(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ParentID", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion ParentID
+
+    #region ChildID
+
+    public List<ChildIDMaster> GetChildIDList(string TaskTypeId)
+    {
+        List<ChildIDMaster> lst = new List<ChildIDMaster>();
+        string query = "sp_getallChildID";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ChildIDMaster
+                               {
+                                   ChildID = Convert.ToString(row["ChildID"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddChildID(ChildIDMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ChildID", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_ChildID", opp.ChildID));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyChildID(ChildIDMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_ChildIDmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_ChildID", Opp.ChildID));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteChildID(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ChildID", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion ChildID
+
+    #region BusinessLine
+
+    public List<BusinessLineMaster> GetBusinessLineList(string TaskTypeId)
+    {
+        List<BusinessLineMaster> lst = new List<BusinessLineMaster>();
+        string query = "sp_getallBusinessLine";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessLineMaster
+                               {
+                                   BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessLine(BusinessLineMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessLine", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", opp.BusinessLine));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyBusinessLine(BusinessLineMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessLinemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", Opp.BusinessLine));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteBusinessLine(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessLine", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessLine
+
+
+    #region FTAApplicationName
+
+    public List<FTAApplicationNameMaster> GetFTAApplicationNameList(string TaskTypeId)
+    {
+        List<FTAApplicationNameMaster> lst = new List<FTAApplicationNameMaster>();
+        string query = "sp_getallFTAApplicationName";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAApplicationNameMaster
+                               {
+                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAApplicationName(FTAApplicationNameMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationName", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAApplicationName(FTAApplicationNameMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationNamemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAApplicationName(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationName", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAApplicationName
+
+
+    #region FTAApplicationOwner
+
+    public List<FTAApplicationOwnerMaster> GetFTAApplicationOwnerList(string TaskTypeId)
+    {
+        List<FTAApplicationOwnerMaster> lst = new List<FTAApplicationOwnerMaster>();
+        string query = "sp_getallFTAApplicationOwner";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAApplicationOwnerMaster
+                               {
+                                   FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAApplicationOwner(FTAApplicationOwnerMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationOwner", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAApplicationOwner(FTAApplicationOwnerMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationOwnermaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAApplicationOwner(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationOwner", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAApplicationOwner
+
+
+
+    #region FTAStrategyName
+
+    public List<FTAStrategyNameMaster> GetFTAStrategyNameList(string TaskTypeId)
+    {
+        List<FTAStrategyNameMaster> lst = new List<FTAStrategyNameMaster>();
+        string query = "sp_getallFTAStrategyName";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAStrategyNameMaster
+                               {
+                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAStrategyName(FTAStrategyNameMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyName", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAStrategyName(FTAStrategyNameMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyNamemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAStrategyName(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyName", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAStrategyName
+
+
+    #region FTAStrategyOwner
+
+    public List<FTAStrategyOwnerMaster> GetFTAStrategyOwnerList(string TaskTypeId)
+    {
+        List<FTAStrategyOwnerMaster> lst = new List<FTAStrategyOwnerMaster>();
+        string query = "sp_getallFTAStrategyOwner";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAStrategyOwnerMaster
+                               {
+                                   FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAStrategyOwner(FTAStrategyOwnerMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyOwner", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyFTAStrategyOwner(FTAStrategyOwnerMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyOwnermaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteFTAStrategyOwner(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyOwner", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAStrategyOwner
+
+
+
+    #region SystemFlow
+
+    public List<SystemFlowMaster> GetSystemFlowList(string TaskTypeId)
+    {
+        List<SystemFlowMaster> lst = new List<SystemFlowMaster>();
+        string query = "sp_getallSystemFlow";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new SystemFlowMaster
+                               {
+                                   SystemFlow = Convert.ToString(row["SystemFlow"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddSystemFlow(SystemFlowMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_SystemFlow", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_SystemFlow", opp.SystemFlow));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifySystemFlow(SystemFlowMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_SystemFlowmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_SystemFlow", Opp.SystemFlow));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteSystemFlow(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_SystemFlow", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion SystemFlow
+
+
+
+    #region ApplicationCategory
+
+    public List<ApplicationCategoryMaster> GetApplicationCategoryList(string TaskTypeId)
+    {
+        List<ApplicationCategoryMaster> lst = new List<ApplicationCategoryMaster>();
+        string query = "sp_getallApplicationCategory";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ApplicationCategoryMaster
+                               {
+                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddApplicationCategory(ApplicationCategoryMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ApplicationCategory", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", opp.ApplicationCategory));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyApplicationCategory(ApplicationCategoryMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_ApplicationCategorymaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", Opp.ApplicationCategory));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteApplicationCategory(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ApplicationCategory", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion ApplicationCategory
+
+
+
+    #region Strategytype
+
+    public List<StrategytypeMaster> GetStrategytypeList(string TaskTypeId)
+    {
+        List<StrategytypeMaster> lst = new List<StrategytypeMaster>();
+        string query = "sp_getallStrategytype";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new StrategytypeMaster
+                               {
+                                   Strategytype = Convert.ToString(row["Strategytype"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddStrategytype(StrategytypeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategytype", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_Strategytype", opp.Strategytype));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyStrategytype(StrategytypeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Strategytypemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_Strategytype", Opp.Strategytype));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteStrategytype(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Strategytype", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Strategytype
+
+
+
+    #region Venuetype
+
+    public List<VenuetypeMaster> GetVenuetypeList(string TaskTypeId)
+    {
+        List<VenuetypeMaster> lst = new List<VenuetypeMaster>();
+        string query = "sp_getallVenuetype";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new VenuetypeMaster
+                               {
+                                   Venuetype = Convert.ToString(row["Venuetype"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddVenuetype(VenuetypeMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Venuetype", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_Venuetype", opp.Venuetype));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyVenuetype(VenuetypeMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Venuetypemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_Venuetype", Opp.Venuetype));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteVenuetype(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Venuetype", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Venuetype
+
+
+    #region Capacity
+
+    public List<CapacityMaster> GetCapacityList(string TaskTypeId)
+    {
+        List<CapacityMaster> lst = new List<CapacityMaster>();
+        string query = "sp_getallCapacity";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new CapacityMaster
+                               {
+                                   Capacity = Convert.ToString(row["Capacity"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddCapacity(CapacityMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Capacity", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_Capacity", opp.Capacity));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyCapacity(CapacityMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Capacitymaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_Capacity", Opp.Capacity));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteCapacity(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Capacity", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Capacity
+
+
+    #region PriorityScore
+
+    public List<PriorityScoreMaster> GetPriorityScoreList(string TaskTypeId)
+    {
+        List<PriorityScoreMaster> lst = new List<PriorityScoreMaster>();
+        string query = "sp_getallPriorityScore";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new PriorityScoreMaster
+                               {
+                                   PriorityScore = Convert.ToString(row["PriorityScore"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddPriorityScore(PriorityScoreMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_PriorityScore", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", opp.PriorityScore));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyPriorityScore(PriorityScoreMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_PriorityScoremaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", Opp.PriorityScore));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeletePriorityScore(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_PriorityScore", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion PriorityScore
+
+
+ 
+
+
 }
+
+
 
 
 

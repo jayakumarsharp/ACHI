@@ -1,6 +1,6 @@
 ﻿var LoginApp = angular.module('LoginApp', []);
 
-LoginApp.controller('LoginController', function ($location, $scope) {
+LoginApp.controller('LoginController', ['$location', '$scope', function ($location, $scope) {
     $scope.errorMessage = '';
     jQuery(function ($) {
         //Generic Ajax handler
@@ -50,7 +50,7 @@ LoginApp.controller('LoginController', function ($location, $scope) {
     //function Login() {
     //    return $http.get('Login?userName=' + $scope.username + '&passWord=' + $scope.password + '&auth_type&=');
     //}
-});
+}]);
 //var loginApp = angular.module('loginApp', ['ngRoute', 'oauth', 'ngRoute']);
 //loginApp.run(['$rootScope', '$window', '$http', function ($rootScope, $window, $http) {
 //  $rootScope.UserInfo = angular.fromJson($window.sessionStorage.getItem('userAuth'));

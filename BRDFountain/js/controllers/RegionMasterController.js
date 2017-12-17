@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster,$compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('RegionMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -118,7 +118,7 @@
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
-        
+
     };
 
 
@@ -152,4 +152,4 @@
     $scope.GetRightsList();
 
 
-});
+}]);

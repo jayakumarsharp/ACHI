@@ -1435,7 +1435,7 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
 
 });
 
-HomeApp.factory('OppFactory', function ($http) {
+HomeApp.factory('OppFactory',['$http', function ($http) {
     var Homeurl = BaseURL + 'home';
     var Authurl = BaseURL + 'auth';
     var Mailurl = BaseURL + 'Mail';
@@ -1502,6 +1502,6 @@ HomeApp.factory('OppFactory', function ($http) {
         },
     };
     return OppFactory;
-});
+}]);
 
 

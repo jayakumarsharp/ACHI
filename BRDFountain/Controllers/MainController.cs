@@ -16,6 +16,8 @@ namespace CRMManagement.Controllers
         //
         // GET: /Main/
         //[SessionTimeout]
+
+        #region PArtial Views
         public ActionResult ShowApplicationDetails()
         {
             return PartialView();
@@ -26,8 +28,6 @@ namespace CRMManagement.Controllers
             return PartialView();
         }
 
-
-
         public ActionResult ViewApprovals()
         {
             return PartialView();
@@ -36,6 +36,11 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
+
+        #endregion PArtial Views
+
+        #region View displays
+
         [SessionTimeout]
         public ActionResult Index()
         {
@@ -97,37 +102,124 @@ namespace CRMManagement.Controllers
         {
             return View();
         }
-        [SessionTimeout]
-        public ActionResult OnBoardingTasks()
-        {
-            return View();
-        }
-        [SessionTimeout]
-        public ActionResult MapTask()
-        {
-            return View();
-        }
-        [SessionTimeout]
-        public ActionResult Emails()
-        {
-            return View();
-        }
-        [SessionTimeout]
-        public ActionResult Reports()
-        {
-            return View();
-        }
-        [SessionTimeout]
-        public ActionResult Licensing()
-        {
-            return View();
-        }
+
         [SessionTimeout]
         public ActionResult Approvals()
         {
             return View();
         }
 
+
+        [SessionTimeout]
+        public ActionResult FTAApplicationCode()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult FTAStrategyCode()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult DiscretionaryCode()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult BusinessSuffix()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult FTAShortCode()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult ParentID()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult ChildID()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult BusinessLine()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult FTAApplicationName()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult FTAApplicationOwner()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult FTAStrategyName()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult FTAStrategyOwner()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult SystemFlow()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult ApplicationCategory()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult Strategytype()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult Venuetype()
+        {
+            return View();
+        }
+
+
+        [SessionTimeout]
+        public ActionResult Capacity()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult PriorityScore()
+        {
+            return View();
+        }
+
+        #endregion View displays
 
 
         public ActionResult Logout()
@@ -370,39 +462,6 @@ namespace CRMManagement.Controllers
         #endregion OnboardingTask
 
 
-        #region MapTask
-
-
-        public JsonResult Get_Mapped_Mail_Task(string type)
-        {
-            List<MapTasks> lst = _dbOperations.Get_Mapped_Mail_Task(type);
-
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-
-        public JsonResult GetMapTaskData()
-        {
-            List<MapTasks> lst = _dbOperations.GetMapTaskData();
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetMapTaskbyId(int Id)
-        {
-            List<MapTasks> lst = _dbOperations.GetMapTaskDatabyId(Id);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult UpdateMapTask(MapTasks task)
-        {
-            string errordesc = "";
-            int errorcode = 0;
-            _dbOperations.UpdateMapTaskdata(task, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion MapTask
-                
 
         #region Roles
 
@@ -1110,4 +1169,121 @@ public class SessionTimeoutAttribute : ActionFilterAttribute
         }
         base.OnActionExecuting(filterContext);
     }
+}
+
+
+
+public class FTAStrategyCodeMaster
+{
+    public string Id { get; set; }
+    public string FTAStrategyCode { get; set; }
+
+}
+public class DiscretionaryCodeMaster
+{
+    public string Id { get; set; }
+    public string DiscretionaryCode { get; set; }
+
+}
+
+public class BusinessSuffixMaster
+{
+    public string Id { get; set; }
+    public string BusinessSuffix { get; set; }
+
+}
+public class FTAShortCodeMaster
+{
+    public string Id { get; set; }
+    public string FTAShortCode { get; set; }
+
+}
+
+public class ParentIDMaster
+{
+    public string Id { get; set; }
+    public string ParentID { get; set; }
+
+}
+public class ChildIDMaster
+{
+    public string Id { get; set; }
+    public string ChildID { get; set; }
+
+}
+public class BusinessLineMaster
+{
+    public string Id { get; set; }
+    public string BusinessLine { get; set; }
+
+}
+
+
+
+public class FTAApplicationNameMaster
+{
+    public string Id { get; set; }
+    public string FTAApplicationName { get; set; }
+
+}
+public class FTAApplicationOwnerMaster
+{
+    public string Id { get; set; }
+    public string FTAApplicationOwner { get; set; }
+
+}
+public class FTAStrategyNameMaster
+{
+    public string Id { get; set; }
+    public string FTAStrategyName { get; set; }
+
+}
+public class FTAStrategyOwnerMaster
+{
+    public string Id { get; set; }
+    public string FTAStrategyOwner { get; set; }
+
+}
+public class SystemFlowMaster
+{
+    public string Id { get; set; }
+    public string SystemFlow { get; set; }
+
+}
+
+public class ApplicationCategoryMaster
+{
+    public string Id { get; set; }
+    public string ApplicationCategory { get; set; }
+
+}
+public class StrategytypeMaster
+{
+    public string Id { get; set; }
+    public string Strategytype { get; set; }
+
+}
+public class VenuetypeMaster
+{
+    public string Id { get; set; }
+    public string Venuetype { get; set; }
+
+}
+public class CapacityMaster
+{
+    public string Id { get; set; }
+    public string Capacity { get; set; }
+
+}
+public class PriorityScoreMaster
+{
+    public string Id { get; set; }
+    public string PriorityScore { get; set; }
+
+}
+public class FTAApplicationCodeMaster
+{
+    public string Id { get; set; }
+    public string FTAApplicationCode { get; set; }
+
 }

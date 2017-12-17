@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('RoleController', ['$scope', '$rootScope', '$window', '$location', 'RoleFactory', 'reportFactory', 'UserFactory', 'ApiCall', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -436,9 +436,9 @@
     $scope.GetAllRights();
     $scope.GetRoleRightMappings();
     $scope.IsPageReadOnly();
-});
+}]);
 
-ReportApp.factory('RoleFactory', function ($http) {
+ReportApp.factory('RoleFactory',['$http', function ($http) {
     var RoleFactory = {
         GetRoles: function () {
             return $http.get('roles?roleId=');
@@ -477,11 +477,11 @@ ReportApp.factory('RoleFactory', function ($http) {
 
     };
     return RoleFactory;
-});
+}]);
 
 
 
-ReportApp.factory('reportFactory', function ($http, $q) {
+ReportApp.factory('reportFactory',['$http', function ($http, $q) {
     var AuthFactory = {
         Logout: function (userId) {
             return $http.post('Logout/', { userId: userId });
@@ -497,4 +497,4 @@ ReportApp.factory('reportFactory', function ($http, $q) {
         }
     };
     return AuthFactory;
-});
+}]);

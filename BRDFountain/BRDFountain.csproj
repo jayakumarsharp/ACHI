@@ -581,10 +581,8 @@
     <Content Include="js\controllers\ChangeManagementController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\TransferSettingsController.js" />
-    <Content Include="js\custom.js" />
     <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
-    <Content Include="js\main.js" />
     <Content Include="js\ReportApp.js" />
     <Content Include="js\RoleApp.js" />
     <Content Include="js\services\TaskService.js" />
@@ -1050,6 +1048,24 @@
     <Content Include="Views\Main\BusinessSector.cshtml" />
     <Content Include="Views\Main\ApplicationMaster.cshtml" />
     <Content Include="Views\Main\ConfirmModal.cshtml" />
+    <Content Include="Views\Main\FTAApplicationCode.cshtml" />
+    <Content Include="Views\Main\FTAStrategyCode.cshtml" />
+    <Content Include="Views\Main\DiscretionaryCode.cshtml" />
+    <Content Include="Views\Main\BusinessSuffix.cshtml" />
+    <Content Include="Views\Main\FTAShortCode.cshtml" />
+    <Content Include="Views\Main\ParentID.cshtml" />
+    <Content Include="Views\Main\ChildID.cshtml" />
+    <Content Include="Views\Main\BusinessLine.cshtml" />
+    <Content Include="Views\Main\FTAApplicationName.cshtml" />
+    <Content Include="Views\Main\FTAApplicationOwner.cshtml" />
+    <Content Include="Views\Main\FTAStrategyName.cshtml" />
+    <Content Include="Views\Main\FTAStrategyOwner.cshtml" />
+    <Content Include="Views\Main\SystemFlow.cshtml" />
+    <Content Include="Views\Main\ApplicationCategory.cshtml" />
+    <Content Include="Views\Main\Strategytype.cshtml" />
+    <Content Include="Views\Main\Venuetype.cshtml" />
+    <Content Include="Views\Main\Capacity.cshtml" />
+    <Content Include="Views\Main\PriorityScore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

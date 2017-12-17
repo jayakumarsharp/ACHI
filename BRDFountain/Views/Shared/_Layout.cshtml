@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization;
+@Scripts.Render("~/bundles/defaultscripts")
 @Scripts.Render("~/bundles/customscripts")
 <!doctype html>
 <html style="height: auto; min-height: 100%;">
@@ -17,14 +18,7 @@
     <link href="~/css/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
-    @*<script src="~/plugins/moment.js"></script>
-        <script src="~/Lib/bootstrap.js"></script>
-        <script src="~/plugins/moment.js"></script>
-        <script src="~/Lib/jquery-1.11.0.min.js"></script>
-        <script src="~/Lib/bootstrap-datetimepicker.js"></script>
-        <script src="~/Lib/jquery.dataTables.min.js"></script>
-        <script src="~/Lib/angular.min.js"></script>
-        <script src="~/Lib/angulardatatabes.js"></script>*@
+   
 </head>
 <body ng-app="reportApp" ng-controller="MainController">
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
@@ -77,23 +71,7 @@
         <script src="~/Assert/toaster.js"></script>
         <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload.min.js"></script>
         <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>*@
-    <script src="~/js/ReportApp.js"></script>
-    <script src="~/js/UserApp.js"></script>
-    <script src="~/js/RoleApp.js"></script>
-    <script src="~/js/HomeApp.js"></script>
-    <script src="~/js/controllers/ApprovalsController.js"></script>
-    <script src="~/js/controllers/StrategyController.js"></script>
-    <script src="~/js/controllers/ChangeManagementController.js"></script>
-    <script src="~/js/controllers/ApplicationMasterController.js"></script>
-    <script src="~/js/controllers/ApprovalsController.js"></script>
-    <script src="~/js/controllers/CountryMasterController.js"></script>
-    <script src="~/js/controllers/ProductTypeMasterController.js"></script>
-    <script src="~/js/controllers/RegionMasterController.js"></script>
-    <script src="~/js/controllers/BusinessSector.js"></script>
-    <script src="~/js/controllers/TransferSettingsController.js"></script>
-    <script src="~/js/services/TaskService.js"></script>
-    <script src="~/js/services/StrategyService.js"></script>
-    <script src="~/js/services/CountryService.js"></script>
+   
     <style>
         i.active, .inactive {
             font-size: 40px;

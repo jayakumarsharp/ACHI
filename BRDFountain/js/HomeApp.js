@@ -1,6 +1,6 @@
 ﻿var HomeApp = angular.module('homeApp', ['ngRoute']);
 
-HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams, $location, $window, OppFactory, reportFactory, UserFactory, toaster, $timeout, EstimationApplicationMasterService, Opportunityservice) {
+HomeApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', 'OppFactory', 'reportFactory', 'UserFactory', 'toaster', '$timeout', 'EstimationApplicationMasterService', 'Opportunityservice', function ($scope, $rootScope, $routeParams, $location, $window, OppFactory, reportFactory, UserFactory, toaster, $timeout, EstimationApplicationMasterService, Opportunityservice) {
     $scope.Ishome = false;
     $scope.view360imgPath = View360ImagesPath;
     $scope.MyType = 0;
@@ -1433,9 +1433,9 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
     };
     //End angular grid
 
-});
+}]);
 
-HomeApp.factory('OppFactory', function ($http) {
+HomeApp.factory('OppFactory', ['$http',function ($http) {
     var Homeurl = BaseURL + 'home';
     var Authurl = BaseURL + 'auth';
     var Mailurl = BaseURL + 'Mail';
@@ -1502,6 +1502,6 @@ HomeApp.factory('OppFactory', function ($http) {
         },
     };
     return OppFactory;
-});
+}]);
 
 

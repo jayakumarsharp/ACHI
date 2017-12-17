@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('TaskService', function ($http) {
+ReportApp.factory('TaskService', ['$http',function ($http) {
     var TaskServiceURI = BaseURL;
     var TaskServiceFactory = {};
 
@@ -30,7 +30,7 @@ ReportApp.factory('TaskService', function ($http) {
     
     
     return TaskServiceFactory;
-});
+}]);
 
 
 

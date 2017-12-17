@@ -32,6 +32,5 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.Razor.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.Deployment.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.Razor.xml
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\ACHI.csprojResolveAssemblyReference.cache
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\CRMManagement.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\CRMManagement.pdb

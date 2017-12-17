@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ApprovalsController', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster, TaskService, $compile, DTOptionsBuilder, DTColumnBuilder, ApiCall) {
+﻿ReportApp.controller('ApprovalsController', ['$scope', '$rootScope', 'StrategyService', '$timeout', '$filter', 'UserFactory', 'reportFactory', 'toaster', 'TaskService', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'ApiCall', function ($scope, $rootScope, StrategyService, $timeout, $filter, UserFactory, reportFactory, toaster, TaskService, $compile, DTOptionsBuilder, DTColumnBuilder, ApiCall) {
     $scope.data = [];
 
     //grid1
@@ -317,4 +317,4 @@
         });
     };
     $scope.GetAlltransdata();
-});
+}]);
