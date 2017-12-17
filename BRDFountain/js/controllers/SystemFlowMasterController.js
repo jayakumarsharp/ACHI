@@ -1,11 +1,11 @@
-﻿ReportApp.controller('CountryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('SystemFlowMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+        DTColumnBuilder.newColumn('SystemFlowName').withTitle('SystemFlow'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -18,7 +18,7 @@
 
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetCountryMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+        return '<a  ng-click="GetSystemFlowMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
         //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -31,8 +31,8 @@
     }
 
 
-    $scope.GetAllCountryMaster = function () {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+    $scope.GetAllSystemFlowMaster = function () {
+        ApiCall.MakeApiCall("GetAllSystemFlow?SystemFlowId=", 'GET', '').success(function (data) {
             $scope.data = data;
             $scope.dtOptions.data = $scope.data
         }).error(function (error) {
@@ -41,53 +41,53 @@
     };
 
 
-    $scope.add = function (CountryMaster) {
-        if (CountryMaster != null) {
-            if (CountryMaster.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
+    $scope.add = function (SystemFlowMaster) {
+        if (SystemFlowMaster != null) {
+            if (SystemFlowMaster.SystemFlowName.trim() != "") {
+                ApiCall.MakeApiCall("AddSystemFlow", 'POST', SystemFlowMaster).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.CountryMaster = null;
-                        $scope.GetAllCountryMaster();
+                        $scope.SystemFlowMaster = null;
+                        $scope.GetAllSystemFlowMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Country added successfully', null);
+                        toaster.pop('success', "Success", 'SystemFlow added successfully', null);
                     }
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding SystemFlow ! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter SystemFlow', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter SystemFlow', null);
         }
 
     };
 
-    $scope.GetCountryMasterById = function (CountryMasterId) {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=" + CountryMasterId, 'GET', '').success(function (data) {
+    $scope.GetSystemFlowMasterById = function (SystemFlowMasterId) {
+        ApiCall.MakeApiCall("GetAllSystemFlow?SystemFlowId=" + SystemFlowMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
             $scope.showAddwindow = true;
-            $scope.CountryMaster = data[0];
+            $scope.SystemFlowMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding Country! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding SystemFlow! " + data.ExceptionMessage;
         });
     };
 
 
     $scope.delete = function () {
-        ApiCall.MakeApiCall("DeleteCountry?CountryId=" + $scope.CountryMasterId, 'GET', '').success(function (data) {
-            $scope.CountryMaster = null;
+        ApiCall.MakeApiCall("DeleteSystemFlow?SystemFlowId=" + $scope.SystemFlowMasterId, 'GET', '').success(function (data) {
+            $scope.SystemFlowMaster = null;
             $scope.editMode = false;
-            $scope.GetAllCountryMaster();
+            $scope.GetAllSystemFlowMaster();
             $('#confirmModal').modal('hide');
             $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'Country deleted successfully', null);
+            toaster.pop('success', "Success", 'SystemFlow deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -97,37 +97,37 @@
         $('#confirmModal').modal('show');
     }
 
-    $scope.UpdateCountryMaster = function (model) {
+    $scope.UpdateSystemFlowMaster = function (model) {
         if (model != null) {
-            if (model.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+            if (model.SystemFlowName.trim() != "") {
+                ApiCall.MakeApiCall("ModifySystemFlow", 'POST', model).success(function (data) {
                     $scope.editMode = false;
-                    $scope.CountryMaster = null;
-                    $scope.GetAllCountryMaster();
+                    $scope.SystemFlowMaster = null;
+                    $scope.GetAllSystemFlowMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'SystemFlowMaster updated successfully', null);
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding SystemFlowMaster! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter SystemFlow', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter SystemFlow', null);
         }
     };
 
 
 
     $scope.showconfirm = function (data) {
-        $scope.CountryMasterId = data;
+        $scope.SystemFlowMasterId = data;
         $('#confirmModal').modal('show');
     };
 
     $scope.cancel = function () {
-        $scope.CountryMaster = null;
+        $scope.SystemFlowMaster = null;
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
@@ -141,14 +141,14 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Country Write') {
+                        if (value.RightName == 'SystemFlow Write') {
                             isRead = false;
                         }
                     })
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
-                    $scope.GetAllCountryMaster();
+                    $scope.GetAllSystemFlowMaster();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });

@@ -2490,7 +2490,6 @@ public class DbOperations
     #endregion Country
 
 
-
     #region Region
 
     public List<RegionMaster> GetRegionList(string TaskTypeId)
@@ -3000,7 +2999,8 @@ public class DbOperations
 
     }
     #endregion Application
-
+    
+    //new code start here
 
     #region FTAApplicationCode
 
@@ -3223,8 +3223,6 @@ public class DbOperations
     }
 
     #endregion FTAStrategyCode
-
-
 
     #region DiscretionaryCode
 
@@ -3559,7 +3557,6 @@ public class DbOperations
 
     #endregion FTAShortCode
 
-
     #region ParentID
 
     public List<ParentIDMaster> GetParentIDList(string TaskTypeId)
@@ -3893,7 +3890,6 @@ public class DbOperations
 
     #endregion BusinessLine
 
-
     #region FTAApplicationName
 
     public List<FTAApplicationNameMaster> GetFTAApplicationNameList(string TaskTypeId)
@@ -4004,7 +4000,6 @@ public class DbOperations
     }
 
     #endregion FTAApplicationName
-
 
     #region FTAApplicationOwner
 
@@ -4117,8 +4112,6 @@ public class DbOperations
 
     #endregion FTAApplicationOwner
 
-
-
     #region FTAStrategyName
 
     public List<FTAStrategyNameMaster> GetFTAStrategyNameList(string TaskTypeId)
@@ -4229,7 +4222,6 @@ public class DbOperations
     }
 
     #endregion FTAStrategyName
-
 
     #region FTAStrategyOwner
 
@@ -4342,8 +4334,6 @@ public class DbOperations
 
     #endregion FTAStrategyOwner
 
-
-
     #region SystemFlow
 
     public List<SystemFlowMaster> GetSystemFlowList(string TaskTypeId)
@@ -4454,8 +4444,6 @@ public class DbOperations
     }
 
     #endregion SystemFlow
-
-
 
     #region ApplicationCategory
 
@@ -4568,8 +4556,6 @@ public class DbOperations
 
     #endregion ApplicationCategory
 
-
-
     #region Strategytype
 
     public List<StrategytypeMaster> GetStrategytypeList(string TaskTypeId)
@@ -4680,8 +4666,6 @@ public class DbOperations
     }
 
     #endregion Strategytype
-
-
 
     #region Venuetype
 
@@ -4794,7 +4778,6 @@ public class DbOperations
 
     #endregion Venuetype
 
-
     #region Capacity
 
     public List<CapacityMaster> GetCapacityList(string TaskTypeId)
@@ -4906,7 +4889,6 @@ public class DbOperations
 
     #endregion Capacity
 
-
     #region PriorityScore
 
     public List<PriorityScoreMaster> GetPriorityScoreList(string TaskTypeId)
@@ -5017,10 +4999,6 @@ public class DbOperations
     }
 
     #endregion PriorityScore
-
-
- 
-
 
 }
 

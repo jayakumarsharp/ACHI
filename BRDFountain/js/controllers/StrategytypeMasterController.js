@@ -1,11 +1,11 @@
-﻿ReportApp.controller('CountryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('StrategytypeMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+        DTColumnBuilder.newColumn('StrategytypeName').withTitle('Strategytype'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -18,7 +18,7 @@
 
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetCountryMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+        return '<a  ng-click="GetStrategytypeMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
         //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -31,8 +31,8 @@
     }
 
 
-    $scope.GetAllCountryMaster = function () {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+    $scope.GetAllStrategytypeMaster = function () {
+        ApiCall.MakeApiCall("GetAllStrategytype?StrategytypeId=", 'GET', '').success(function (data) {
             $scope.data = data;
             $scope.dtOptions.data = $scope.data
         }).error(function (error) {
@@ -41,53 +41,53 @@
     };
 
 
-    $scope.add = function (CountryMaster) {
-        if (CountryMaster != null) {
-            if (CountryMaster.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
+    $scope.add = function (StrategytypeMaster) {
+        if (StrategytypeMaster != null) {
+            if (StrategytypeMaster.StrategytypeName.trim() != "") {
+                ApiCall.MakeApiCall("AddStrategytype", 'POST', StrategytypeMaster).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.CountryMaster = null;
-                        $scope.GetAllCountryMaster();
+                        $scope.StrategytypeMaster = null;
+                        $scope.GetAllStrategytypeMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Country added successfully', null);
+                        toaster.pop('success', "Success", 'Strategytype added successfully', null);
                     }
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding Strategytype ! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter Strategytype', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter Strategytype', null);
         }
 
     };
 
-    $scope.GetCountryMasterById = function (CountryMasterId) {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=" + CountryMasterId, 'GET', '').success(function (data) {
+    $scope.GetStrategytypeMasterById = function (StrategytypeMasterId) {
+        ApiCall.MakeApiCall("GetAllStrategytype?StrategytypeId=" + StrategytypeMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
             $scope.showAddwindow = true;
-            $scope.CountryMaster = data[0];
+            $scope.StrategytypeMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding Country! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding Strategytype! " + data.ExceptionMessage;
         });
     };
 
 
     $scope.delete = function () {
-        ApiCall.MakeApiCall("DeleteCountry?CountryId=" + $scope.CountryMasterId, 'GET', '').success(function (data) {
-            $scope.CountryMaster = null;
+        ApiCall.MakeApiCall("DeleteStrategytype?StrategytypeId=" + $scope.StrategytypeMasterId, 'GET', '').success(function (data) {
+            $scope.StrategytypeMaster = null;
             $scope.editMode = false;
-            $scope.GetAllCountryMaster();
+            $scope.GetAllStrategytypeMaster();
             $('#confirmModal').modal('hide');
             $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'Country deleted successfully', null);
+            toaster.pop('success', "Success", 'Strategytype deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -97,37 +97,37 @@
         $('#confirmModal').modal('show');
     }
 
-    $scope.UpdateCountryMaster = function (model) {
+    $scope.UpdateStrategytypeMaster = function (model) {
         if (model != null) {
-            if (model.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+            if (model.StrategytypeName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyStrategytype", 'POST', model).success(function (data) {
                     $scope.editMode = false;
-                    $scope.CountryMaster = null;
-                    $scope.GetAllCountryMaster();
+                    $scope.StrategytypeMaster = null;
+                    $scope.GetAllStrategytypeMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'StrategytypeMaster updated successfully', null);
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding StrategytypeMaster! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter Strategytype', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter Strategytype', null);
         }
     };
 
 
 
     $scope.showconfirm = function (data) {
-        $scope.CountryMasterId = data;
+        $scope.StrategytypeMasterId = data;
         $('#confirmModal').modal('show');
     };
 
     $scope.cancel = function () {
-        $scope.CountryMaster = null;
+        $scope.StrategytypeMaster = null;
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
@@ -141,14 +141,14 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Country Write') {
+                        if (value.RightName == 'Strategytype Write') {
                             isRead = false;
                         }
                     })
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
-                    $scope.GetAllCountryMaster();
+                    $scope.GetAllStrategytypeMaster();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });

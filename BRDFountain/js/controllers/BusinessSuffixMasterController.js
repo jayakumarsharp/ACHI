@@ -1,11 +1,11 @@
-﻿ReportApp.controller('CountryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('BusinessSuffixMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+        DTColumnBuilder.newColumn('BusinessSuffixName').withTitle('BusinessSuffix'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -18,7 +18,7 @@
 
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetCountryMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+        return '<a  ng-click="GetBusinessSuffixMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
         //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -31,8 +31,8 @@
     }
 
 
-    $scope.GetAllCountryMaster = function () {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+    $scope.GetAllBusinessSuffixMaster = function () {
+        ApiCall.MakeApiCall("GetAllBusinessSuffix?BusinessSuffixId=", 'GET', '').success(function (data) {
             $scope.data = data;
             $scope.dtOptions.data = $scope.data
         }).error(function (error) {
@@ -41,53 +41,53 @@
     };
 
 
-    $scope.add = function (CountryMaster) {
-        if (CountryMaster != null) {
-            if (CountryMaster.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
+    $scope.add = function (BusinessSuffixMaster) {
+        if (BusinessSuffixMaster != null) {
+            if (BusinessSuffixMaster.BusinessSuffixName.trim() != "") {
+                ApiCall.MakeApiCall("AddBusinessSuffix", 'POST', BusinessSuffixMaster).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.CountryMaster = null;
-                        $scope.GetAllCountryMaster();
+                        $scope.BusinessSuffixMaster = null;
+                        $scope.GetAllBusinessSuffixMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Country added successfully', null);
+                        toaster.pop('success', "Success", 'BusinessSuffix added successfully', null);
                     }
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding BusinessSuffix ! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
         }
 
     };
 
-    $scope.GetCountryMasterById = function (CountryMasterId) {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=" + CountryMasterId, 'GET', '').success(function (data) {
+    $scope.GetBusinessSuffixMasterById = function (BusinessSuffixMasterId) {
+        ApiCall.MakeApiCall("GetAllBusinessSuffix?BusinessSuffixId=" + BusinessSuffixMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
             $scope.showAddwindow = true;
-            $scope.CountryMaster = data[0];
+            $scope.BusinessSuffixMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding Country! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding BusinessSuffix! " + data.ExceptionMessage;
         });
     };
 
 
     $scope.delete = function () {
-        ApiCall.MakeApiCall("DeleteCountry?CountryId=" + $scope.CountryMasterId, 'GET', '').success(function (data) {
-            $scope.CountryMaster = null;
+        ApiCall.MakeApiCall("DeleteBusinessSuffix?BusinessSuffixId=" + $scope.BusinessSuffixMasterId, 'GET', '').success(function (data) {
+            $scope.BusinessSuffixMaster = null;
             $scope.editMode = false;
-            $scope.GetAllCountryMaster();
+            $scope.GetAllBusinessSuffixMaster();
             $('#confirmModal').modal('hide');
             $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'Country deleted successfully', null);
+            toaster.pop('success', "Success", 'BusinessSuffix deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -97,37 +97,37 @@
         $('#confirmModal').modal('show');
     }
 
-    $scope.UpdateCountryMaster = function (model) {
+    $scope.UpdateBusinessSuffixMaster = function (model) {
         if (model != null) {
-            if (model.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+            if (model.BusinessSuffixName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyBusinessSuffix", 'POST', model).success(function (data) {
                     $scope.editMode = false;
-                    $scope.CountryMaster = null;
-                    $scope.GetAllCountryMaster();
+                    $scope.BusinessSuffixMaster = null;
+                    $scope.GetAllBusinessSuffixMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'BusinessSuffixMaster updated successfully', null);
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding BusinessSuffixMaster! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
         }
     };
 
 
 
     $scope.showconfirm = function (data) {
-        $scope.CountryMasterId = data;
+        $scope.BusinessSuffixMasterId = data;
         $('#confirmModal').modal('show');
     };
 
     $scope.cancel = function () {
-        $scope.CountryMaster = null;
+        $scope.BusinessSuffixMaster = null;
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
@@ -141,14 +141,14 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Country Write') {
+                        if (value.RightName == 'BusinessSuffix Write') {
                             isRead = false;
                         }
                     })
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
-                    $scope.GetAllCountryMaster();
+                    $scope.GetAllBusinessSuffixMaster();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });

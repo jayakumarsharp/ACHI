@@ -1,11 +1,11 @@
-﻿ReportApp.controller('CountryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('ParentIDMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+        DTColumnBuilder.newColumn('ParentIDName').withTitle('ParentID'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -18,7 +18,7 @@
 
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetCountryMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+        return '<a  ng-click="GetParentIDMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
         //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -31,8 +31,8 @@
     }
 
 
-    $scope.GetAllCountryMaster = function () {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+    $scope.GetAllParentIDMaster = function () {
+        ApiCall.MakeApiCall("GetAllParentID?ParentIDId=", 'GET', '').success(function (data) {
             $scope.data = data;
             $scope.dtOptions.data = $scope.data
         }).error(function (error) {
@@ -41,53 +41,53 @@
     };
 
 
-    $scope.add = function (CountryMaster) {
-        if (CountryMaster != null) {
-            if (CountryMaster.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("AddCountry", 'POST', CountryMaster).success(function (data) {
+    $scope.add = function (ParentIDMaster) {
+        if (ParentIDMaster != null) {
+            if (ParentIDMaster.ParentIDName.trim() != "") {
+                ApiCall.MakeApiCall("AddParentID", 'POST', ParentIDMaster).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.CountryMaster = null;
-                        $scope.GetAllCountryMaster();
+                        $scope.ParentIDMaster = null;
+                        $scope.GetAllParentIDMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Country added successfully', null);
+                        toaster.pop('success', "Success", 'ParentID added successfully', null);
                     }
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding ParentID ! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter ParentID', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter ParentID', null);
         }
 
     };
 
-    $scope.GetCountryMasterById = function (CountryMasterId) {
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=" + CountryMasterId, 'GET', '').success(function (data) {
+    $scope.GetParentIDMasterById = function (ParentIDMasterId) {
+        ApiCall.MakeApiCall("GetAllParentID?ParentIDId=" + ParentIDMasterId, 'GET', '').success(function (data) {
             $scope.editMode = true;
             $scope.showAddwindow = true;
-            $scope.CountryMaster = data[0];
+            $scope.ParentIDMaster = data[0];
         }).error(function (data) {
-            $scope.error = "An Error has occured while Adding Country! " + data.ExceptionMessage;
+            $scope.error = "An Error has occured while Adding ParentID! " + data.ExceptionMessage;
         });
     };
 
 
     $scope.delete = function () {
-        ApiCall.MakeApiCall("DeleteCountry?CountryId=" + $scope.CountryMasterId, 'GET', '').success(function (data) {
-            $scope.CountryMaster = null;
+        ApiCall.MakeApiCall("DeleteParentID?ParentIDId=" + $scope.ParentIDMasterId, 'GET', '').success(function (data) {
+            $scope.ParentIDMaster = null;
             $scope.editMode = false;
-            $scope.GetAllCountryMaster();
+            $scope.GetAllParentIDMaster();
             $('#confirmModal').modal('hide');
             $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'Country deleted successfully', null);
+            toaster.pop('success', "Success", 'ParentID deleted successfully', null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });
@@ -97,37 +97,37 @@
         $('#confirmModal').modal('show');
     }
 
-    $scope.UpdateCountryMaster = function (model) {
+    $scope.UpdateParentIDMaster = function (model) {
         if (model != null) {
-            if (model.CountryName.trim() != "") {
-                ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+            if (model.ParentIDName.trim() != "") {
+                ApiCall.MakeApiCall("ModifyParentID", 'POST', model).success(function (data) {
                     $scope.editMode = false;
-                    $scope.CountryMaster = null;
-                    $scope.GetAllCountryMaster();
+                    $scope.ParentIDMaster = null;
+                    $scope.GetAllParentIDMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'ParentIDMaster updated successfully', null);
                 }).error(function (data) {
-                    $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
+                    $scope.error = "An Error has occured while Adding ParentIDMaster! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter Country', null);
+                toaster.pop('warning', "Warning", 'Please enter ParentID', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter Country', null);
+            toaster.pop('warning', "Warning", 'Please enter ParentID', null);
         }
     };
 
 
 
     $scope.showconfirm = function (data) {
-        $scope.CountryMasterId = data;
+        $scope.ParentIDMasterId = data;
         $('#confirmModal').modal('show');
     };
 
     $scope.cancel = function () {
-        $scope.CountryMaster = null;
+        $scope.ParentIDMaster = null;
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
@@ -141,14 +141,14 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Country Write') {
+                        if (value.RightName == 'ParentID Write') {
                             isRead = false;
                         }
                     })
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
-                    $scope.GetAllCountryMaster();
+                    $scope.GetAllParentIDMaster();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });
