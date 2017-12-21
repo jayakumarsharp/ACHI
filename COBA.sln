@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestAppl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRDFountain", "BRDFountain\BRDFountain.csproj", "{D4A4CDE4-408F-4D83-A72F-9077528F71EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COBA", "COBA\COBA.csproj", "{E99FA407-CA37-4D98-AF53-CAA73EF4DA00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D4A4CDE4-408F-4D83-A72F-9077528F71EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4A4CDE4-408F-4D83-A72F-9077528F71EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4A4CDE4-408F-4D83-A72F-9077528F71EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E99FA407-CA37-4D98-AF53-CAA73EF4DA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E99FA407-CA37-4D98-AF53-CAA73EF4DA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E99FA407-CA37-4D98-AF53-CAA73EF4DA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E99FA407-CA37-4D98-AF53-CAA73EF4DA00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

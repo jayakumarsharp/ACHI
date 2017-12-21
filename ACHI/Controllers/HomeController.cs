@@ -1,4 +1,4 @@
-﻿using CRUserManagement.Filters;
+﻿using ACHI.Filters;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -7,11 +7,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using log4net;
-using CRUserManagement.Models;
 using System.Data.SqlClient;
 using WebMatrix.WebData;
 
-namespace CRUserManagement.Controllers
+namespace ACHI.Controllers
 {
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class HomeController : Controller
@@ -25,8 +24,7 @@ namespace CRUserManagement.Controllers
 
         private int errorCode = 0;
         private string errorDesc = string.Empty;
-        private List<UserProfileModel> lstUserProfile = new List<UserProfileModel>();
-        private List<Role> lstRoles = new List<Role>();
+
         #endregion
 
         public ActionResult Index()

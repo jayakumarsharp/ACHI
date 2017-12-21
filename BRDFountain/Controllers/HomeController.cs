@@ -1,4 +1,4 @@
-﻿using CRUserManagement.Filters;
+﻿using BRDFountain.Filters;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -7,12 +7,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using log4net;
-using CRUserManagement.CommonClass;
-using CRUserManagement.Models;
 using System.Data.SqlClient;
 using WebMatrix.WebData;
 
-namespace CRUserManagement.Controllers
+namespace BRDFountain.Controllers
 {
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class HomeController : Controller
@@ -28,11 +26,7 @@ namespace CRUserManagement.Controllers
 
         private int errorCode = 0;
         private string errorDesc = string.Empty;
-        GeneralClasses generalClassObj = new GeneralClasses();
         //private MenuItemModel menuItemObj = new MenuItemModel();
-        private List<UserProfileModel> lstUserProfile = new List<UserProfileModel>();
-        //private List<MenuItemModel> lstMenuItmes = new List<MenuItemModel>();
-        private List<Role> lstRoles = new List<Role>();
         #endregion
 
         public ActionResult Index()

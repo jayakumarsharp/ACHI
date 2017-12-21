@@ -1,6 +1,6 @@
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\CRMManagement.dll.config
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\CRMManagement.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\CRMManagement.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\ACHI.dll.config
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\ACHI.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\ACHI.pdb
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\log4net.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
@@ -32,5 +32,6 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.Razor.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.Deployment.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\bin\System.Web.WebPages.Razor.xml
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\CRMManagement.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\CRMManagement.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\ACHI.csprojResolveAssemblyReference.cache
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\ACHI.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\ACHI\obj\Debug\ACHI.pdb

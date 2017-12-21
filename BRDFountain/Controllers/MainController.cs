@@ -219,6 +219,14 @@ namespace CRMManagement.Controllers
             return View();
         }
 
+
+        [SessionTimeout]
+        public ActionResult MasterPage()
+        {
+            return View();
+        }
+
+
         #endregion View displays
 
 
@@ -825,6 +833,633 @@ namespace CRMManagement.Controllers
             return Json(ls, JsonRequestBehavior.AllowGet);
         }
 
+
+
+
+
+
+
+
+        #region FTAApplicationCode
+
+        public JsonResult GetAllFTAApplicationCode(string FTAApplicationCodeId)
+        {
+            List<FTAApplicationCodeMaster> lst = _dbOperations.GetFTAApplicationCodeList(FTAApplicationCodeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAApplicationCode(FTAApplicationCodeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAApplicationCode(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAApplicationCode(FTAApplicationCodeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAApplicationCode(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAApplicationCode(string FTAApplicationCodeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAApplicationCode(FTAApplicationCodeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAApplicationCode
+
+
+
+
+        #region FTAStrategyCode
+
+        public JsonResult GetAllFTAStrategyCode(string FTAStrategyCodeId)
+        {
+            List<FTAStrategyCodeMaster> lst = _dbOperations.GetFTAStrategyCodeList(FTAStrategyCodeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAStrategyCode(FTAStrategyCodeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAStrategyCode(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAStrategyCode(FTAStrategyCodeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAStrategyCode(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAStrategyCode(string FTAStrategyCodeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAStrategyCode(FTAStrategyCodeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAStrategyCode
+
+
+
+
+        #region FTAStrategyOwner
+
+        public JsonResult GetAllFTAStrategyOwner(string FTAStrategyOwnerId)
+        {
+            List<FTAStrategyOwnerMaster> lst = _dbOperations.GetFTAStrategyOwnerList(FTAStrategyOwnerId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAStrategyOwner(FTAStrategyOwnerMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAStrategyOwner(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAStrategyOwner(FTAStrategyOwnerMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAStrategyOwner(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAStrategyOwner(string FTAStrategyOwnerId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAStrategyOwner(FTAStrategyOwnerId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAStrategyOwner
+        #region DiscretionaryCode
+
+        public JsonResult GetAllDiscretionaryCode(string DiscretionaryCodeId)
+        {
+            List<DiscretionaryCodeMaster> lst = _dbOperations.GetDiscretionaryCodeList(DiscretionaryCodeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddDiscretionaryCode(DiscretionaryCodeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddDiscretionaryCode(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyDiscretionaryCode(DiscretionaryCodeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyDiscretionaryCode(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteDiscretionaryCode(string DiscretionaryCodeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteDiscretionaryCode(DiscretionaryCodeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion DiscretionaryCode
+
+
+
+        #region BusinessSuffix
+
+        public JsonResult GetAllBusinessSuffix(string BusinessSuffixId)
+        {
+            List<BusinessSuffixMaster> lst = _dbOperations.GetBusinessSuffixList(BusinessSuffixId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessSuffix(BusinessSuffixMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessSuffix(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyBusinessSuffix(BusinessSuffixMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyBusinessSuffix(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteBusinessSuffix(string BusinessSuffixId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessSuffix(BusinessSuffixId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessSuffix
+
+
+
+
+        #region FTAShortCode
+
+        public JsonResult GetAllFTAShortCode(string FTAShortCodeId)
+        {
+            List<FTAShortCodeMaster> lst = _dbOperations.GetFTAShortCodeList(FTAShortCodeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAShortCode(FTAShortCodeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAShortCode(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAShortCode(FTAShortCodeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAShortCode(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAShortCode(string FTAShortCodeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAShortCode(FTAShortCodeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAShortCode
+
+
+
+
+        #region ParentID
+
+        public JsonResult GetAllParentID(string ParentIDId)
+        {
+            List<ParentIDMaster> lst = _dbOperations.GetParentIDList(ParentIDId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddParentID(ParentIDMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddParentID(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyParentID(ParentIDMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyParentID(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteParentID(string ParentIDId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteParentID(ParentIDId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion ParentID
+
+
+
+
+        #region ChildID
+
+        public JsonResult GetAllChildID(string ChildIDId)
+        {
+            List<ChildIDMaster> lst = _dbOperations.GetChildIDList(ChildIDId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddChildID(ChildIDMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddChildID(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyChildID(ChildIDMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyChildID(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteChildID(string ChildIDId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteChildID(ChildIDId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion ChildID
+
+
+
+        #region BusinessLine
+
+        public JsonResult GetAllBusinessLine(string BusinessLineId)
+        {
+            List<BusinessLineMaster> lst = _dbOperations.GetBusinessLineList(BusinessLineId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessLine(BusinessLineMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessLine(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyBusinessLine(BusinessLineMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyBusinessLine(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteBusinessLine(string BusinessLineId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessLine(BusinessLineId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessLine
+
+
+
+        #region FTAApplicationName
+
+        public JsonResult GetAllFTAApplicationName(string FTAApplicationNameId)
+        {
+            List<FTAApplicationNameMaster> lst = _dbOperations.GetFTAApplicationNameList(FTAApplicationNameId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAApplicationName(FTAApplicationNameMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAApplicationName(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAApplicationName(FTAApplicationNameMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAApplicationName(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAApplicationName(string FTAApplicationNameId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAApplicationName(FTAApplicationNameId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAApplicationName
+
+
+
+        #region FTAApplicationOwner
+
+        public JsonResult GetAllFTAApplicationOwner(string FTAApplicationOwnerId)
+        {
+            List<FTAApplicationOwnerMaster> lst = _dbOperations.GetFTAApplicationOwnerList(FTAApplicationOwnerId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAApplicationOwner(FTAApplicationOwnerMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAApplicationOwner(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAApplicationOwner(FTAApplicationOwnerMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAApplicationOwner(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAApplicationOwner(string FTAApplicationOwnerId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAApplicationOwner(FTAApplicationOwnerId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAApplicationOwner
+
+
+
+
+        #region FTAStrategyName
+
+        public JsonResult GetAllFTAStrategyName(string FTAStrategyNameId)
+        {
+            List<FTAStrategyNameMaster> lst = _dbOperations.GetFTAStrategyNameList(FTAStrategyNameId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAStrategyName(FTAStrategyNameMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAStrategyName(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyFTAStrategyName(FTAStrategyNameMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyFTAStrategyName(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteFTAStrategyName(string FTAStrategyNameId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAStrategyName(FTAStrategyNameId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAStrategyName
+
+
+
+
+        #region ApplicationCategory
+
+        public JsonResult GetAllApplicationCategory(string ApplicationCategoryId)
+        {
+            List<ApplicationCategoryMaster> lst = _dbOperations.GetApplicationCategoryList(ApplicationCategoryId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddApplicationCategory(ApplicationCategoryMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddApplicationCategory(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyApplicationCategory(ApplicationCategoryMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyApplicationCategory(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteApplicationCategory(string ApplicationCategoryId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteApplicationCategory(ApplicationCategoryId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion ApplicationCategory
+
+
+
+
+        #region Strategytype
+
+        public JsonResult GetAllStrategytype(string StrategytypeId)
+        {
+            List<StrategytypeMaster> lst = _dbOperations.GetStrategytypeList(StrategytypeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddStrategytype(StrategytypeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddStrategytype(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyStrategytype(StrategytypeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyStrategytype(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteStrategytype(string StrategytypeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteStrategytype(StrategytypeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Strategytype
+
+
+
+
+        #region Venuetype
+
+        public JsonResult GetAllVenuetype(string VenuetypeId)
+        {
+            List<VenuetypeMaster> lst = _dbOperations.GetVenuetypeList(VenuetypeId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddVenuetype(VenuetypeMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddVenuetype(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyVenuetype(VenuetypeMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyVenuetype(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteVenuetype(string VenuetypeId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteVenuetype(VenuetypeId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Venuetype
+
+
+
+
+        #region Capacity
+
+        public JsonResult GetAllCapacity(string CapacityId)
+        {
+            List<CapacityMaster> lst = _dbOperations.GetCapacityList(CapacityId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddCapacity(CapacityMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddCapacity(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyCapacity(CapacityMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyCapacity(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteCapacity(string CapacityId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteCapacity(CapacityId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Capacity
+
+
+
+
+        #region PriorityScore
+
+        public JsonResult GetAllPriorityScore(string PriorityScoreId)
+        {
+            List<PriorityScoreMaster> lst = _dbOperations.GetPriorityScoreList(PriorityScoreId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddPriorityScore(PriorityScoreMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddPriorityScore(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyPriorityScore(PriorityScoreMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyPriorityScore(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeletePriorityScore(string PriorityScoreId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeletePriorityScore(PriorityScoreId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion PriorityScore
+
+
+        
 
     }
 }

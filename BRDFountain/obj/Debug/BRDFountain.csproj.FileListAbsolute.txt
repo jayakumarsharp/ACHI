@@ -1,6 +1,6 @@
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\CRMManagement.dll.config
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\CRMManagement.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\CRMManagement.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.dll.config
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.pdb
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\log4net.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
@@ -33,5 +33,5 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\System.Web.WebPages.x
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\System.Web.WebPages.Deployment.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\System.Web.WebPages.Razor.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.csprojResolveAssemblyReference.cache
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\CRMManagement.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\CRMManagement.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.pdb

@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CRMManagement</RootNamespace>
-    <AssemblyName>CRMManagement</AssemblyName>
+    <RootNamespace>ACHI</RootNamespace>
+    <AssemblyName>ACHI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -157,9 +157,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\UserProfileModel.cs" />
     <Compile Include="plugins\ng-file-upload\demo\C#\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
@@ -1071,20 +1068,13 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Home\ChangePasswordDisplay.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\LoginDisplay.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
-    <Content Include="Views\UserManagement\Index.cshtml" />
-    <Content Include="Views\UserManagement\ResetPassword.cshtml" />
-    <Content Include="Views\UserManagement\_AjaxUsersList.cshtml" />
-    <Content Include="Views\UserManagement\_CreateUser.cshtml" />
-    <Content Include="Views\UserManagement\_EditUser.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\UserManagement\_UpdatePassword.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Main\ModelAlgoManagement.cshtml" />
     <Content Include="Views\Main\ChangeManagement.cshtml" />
@@ -1109,6 +1099,7 @@
     <Folder Include="bower_components\bootstrap\dist\fonts\Filters\" />
     <Folder Include="js\directives\" />
     <Folder Include="js\models\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
