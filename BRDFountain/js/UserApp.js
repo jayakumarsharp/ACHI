@@ -161,13 +161,12 @@
         }).error(function (error) {
             $scope.Error = error;
         });
-
-        ApiCall.MakeApiCall("GetAllBusinessSector?BusinessSectorId=", 'GET', '').success(function (data) {
-            console.log(data);
-            $scope.BusinessSectorMasterList = data;
+        ApiCall.MakeApiCall("GetAllBusinessLine?BusinessLineId=", 'GET', '').success(function (data) {
+            $scope.BusinessLineList = data;
         }).error(function (error) {
             $scope.Error = error;
-        })
+        });
+      
         ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
             console.log(data);
             $scope.CountryMasterList = data;

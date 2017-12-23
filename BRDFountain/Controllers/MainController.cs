@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -229,13 +230,10 @@ namespace CRMManagement.Controllers
 
         #endregion View displays
 
-
         public ActionResult Logout()
         {
             return RedirectToAction("LoginDisplay", "Home");
         }
-
-
         public string getloggedusername()
         {
             return Convert.ToString(Session["UserName"]);
@@ -278,7 +276,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion TransferSetting
-
 
         #region Strategy
 
@@ -340,6 +337,14 @@ namespace CRMManagement.Controllers
             string errordesc = "";
             int errorcode = 0;
             _dbOperations.UpdateStrategyVersiondata(strategy, out errorcode, out errordesc);
+
+
+            //var diffs = SimpleComparer.Differences(current, original);
+
+            //foreach (var diff in diffs)
+            //{
+            //    Console.WriteLine("'{0}' changed from {1} to {2}", diff.Item1, diff.Item3, diff.Item2);
+            //}
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -418,7 +423,6 @@ namespace CRMManagement.Controllers
 
         #endregion Strategy
 
-
         #region OnboardingTask
 
 
@@ -468,8 +472,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion OnboardingTask
-
-
 
         #region Roles
 
@@ -583,9 +585,9 @@ namespace CRMManagement.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUserbyFilter(string CountryId, string RegionId, string BusinessSectorId)
+        public JsonResult GetUserbyFilter(string RegionId, string BusinessLineId)
         {
-            List<UserMaster> lst = _dbOperations.GetUserbyFilter(CountryId, RegionId, BusinessSectorId);
+            List<UserMaster> lst = _dbOperations.GetUserbyFilter(RegionId, BusinessLineId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
@@ -835,11 +837,6 @@ namespace CRMManagement.Controllers
 
 
 
-
-
-
-
-
         #region FTAApplicationCode
 
         public JsonResult GetAllFTAApplicationCode(string FTAApplicationCodeId)
@@ -873,8 +870,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion FTAApplicationCode
-
-
 
 
         #region FTAStrategyCode
@@ -911,9 +906,6 @@ namespace CRMManagement.Controllers
 
         #endregion FTAStrategyCode
 
-
-
-
         #region FTAStrategyOwner
 
         public JsonResult GetAllFTAStrategyOwner(string FTAStrategyOwnerId)
@@ -947,6 +939,7 @@ namespace CRMManagement.Controllers
         }
 
         #endregion FTAStrategyOwner
+
         #region DiscretionaryCode
 
         public JsonResult GetAllDiscretionaryCode(string DiscretionaryCodeId)
@@ -980,8 +973,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion DiscretionaryCode
-
-
 
         #region BusinessSuffix
 
@@ -1017,9 +1008,6 @@ namespace CRMManagement.Controllers
 
         #endregion BusinessSuffix
 
-
-
-
         #region FTAShortCode
 
         public JsonResult GetAllFTAShortCode(string FTAShortCodeId)
@@ -1053,9 +1041,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion FTAShortCode
-
-
-
 
         #region ParentID
 
@@ -1091,9 +1076,6 @@ namespace CRMManagement.Controllers
 
         #endregion ParentID
 
-
-
-
         #region ChildID
 
         public JsonResult GetAllChildID(string ChildIDId)
@@ -1127,8 +1109,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion ChildID
-
-
 
         #region BusinessLine
 
@@ -1164,8 +1144,6 @@ namespace CRMManagement.Controllers
 
         #endregion BusinessLine
 
-
-
         #region FTAApplicationName
 
         public JsonResult GetAllFTAApplicationName(string FTAApplicationNameId)
@@ -1199,8 +1177,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion FTAApplicationName
-
-
 
         #region FTAApplicationOwner
 
@@ -1236,9 +1212,6 @@ namespace CRMManagement.Controllers
 
         #endregion FTAApplicationOwner
 
-
-
-
         #region FTAStrategyName
 
         public JsonResult GetAllFTAStrategyName(string FTAStrategyNameId)
@@ -1272,9 +1245,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion FTAStrategyName
-
-
-
 
         #region ApplicationCategory
 
@@ -1310,9 +1280,6 @@ namespace CRMManagement.Controllers
 
         #endregion ApplicationCategory
 
-
-
-
         #region Strategytype
 
         public JsonResult GetAllStrategytype(string StrategytypeId)
@@ -1346,9 +1313,6 @@ namespace CRMManagement.Controllers
         }
 
         #endregion Strategytype
-
-
-
 
         #region Venuetype
 
@@ -1384,9 +1348,6 @@ namespace CRMManagement.Controllers
 
         #endregion Venuetype
 
-
-
-
         #region Capacity
 
         public JsonResult GetAllCapacity(string CapacityId)
@@ -1421,45 +1382,6 @@ namespace CRMManagement.Controllers
 
         #endregion Capacity
 
-
-
-
-        #region PriorityScore
-
-        public JsonResult GetAllPriorityScore(string PriorityScoreId)
-        {
-            List<PriorityScoreMaster> lst = _dbOperations.GetPriorityScoreList(PriorityScoreId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AddPriorityScore(PriorityScoreMaster taskInfo)
-        {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddPriorityScore(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult ModifyPriorityScore(PriorityScoreMaster opp)
-        {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyPriorityScore(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult DeletePriorityScore(string PriorityScoreId)
-        {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeletePriorityScore(PriorityScoreId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion PriorityScore
-
-
-        
 
     }
 }
@@ -1620,51 +1542,14 @@ public class Strategy
 {
     public int Id { get; set; }
     public string RefNumber { get; set; }
-    public string Name { get; set; }
-    public string Type { get; set; }
-    public string ApplicationId { get; set; }
-    public string AppId { get; set; }
-    public string AppName { get; set; }
-    public string BusinessSector { get; set; }
-    public string BusinessSectorName { get; set; }
     public string Country { get; set; }
     public string CountryName { get; set; }
     public string Region { get; set; }
     public string RegionName { get; set; }
-    public string ProductType { get; set; }
-    public string ProductTypeName { get; set; }
-    public string Ranking { get; set; }
-    public string Objective { get; set; }
     public string Description { get; set; }
-    public string RiskRating { get; set; }
-    public string BusinessImpact { get; set; }
-    public string ExchangeDetails { get; set; }
-    public string DetailsOfChanges { get; set; }
-    public string ChangesBusinessImpact { get; set; }
-    public string SupportingDocument { get; set; }
-    public string DateChangeInitiated { get; set; }
-    public string DateChangeImplemented { get; set; }
-    public string ChangesCompletionStatus { get; set; }
-    public string AdditionalParam1 { get; set; }
-    public string AdditionalParam2 { get; set; }
-    public string AdditionalParam3 { get; set; }
-    public string AdditionalParam4 { get; set; }
-    public string AdditionalParam5 { get; set; }
-    public string AdditionalParam6 { get; set; }
-    public string AdditionalParam7 { get; set; }
-    public string AdditionalParam8 { get; set; }
-    public string AdditionalParam9 { get; set; }
-    public string AdditionalParam10 { get; set; }
-    public string AdditionalParam11 { get; set; }
-    public string AdditionalParam12 { get; set; }
-    public string AdditionalParam13 { get; set; }
-    public string Attribute1 { get; set; }
-    public string Attribute2 { get; set; }
-    public string Attribute3 { get; set; }
-    public string Attribute4 { get; set; }
+
     public string NoOfApprover { get; set; }
     public string Version { get; set; }
-
     public string FinalSignOff { get; set; }
     public string SignOffDate { get; set; }
     public string SignoffBy { get; set; }
@@ -1674,6 +1559,43 @@ public class Strategy
     public string LastModifiedDate { get; set; }
     public string LastModifiedBy { get; set; }
     public string Page { get; set; }
+    public int FTAApplicationCodeId { get; set; }
+    public string FTAApplicationCode { get; set; }
+    public int BusinessSuffixId { get; set; }
+    public string BusinessSuffix { get; set; }
+    public int ChildIDValue { get; set; }
+    public string ChildID { get; set; }
+    public int FTAStrategyNameId { get; set; }
+    public string FTAStrategyName { get; set; }
+    public int StrategytypeId { get; set; }
+    public string Strategytype { get; set; }
+    public string GOLiveDate { get; set; }
+    public int FTAStrategyCodeId { get; set; }
+    public string FTAStrategyCode { get; set; }
+    public int FTAShortCodeId { get; set; }
+    public string FTAShortCode { get; set; }
+    public int BusinessLineId { get; set; }
+    public string BusinessLine { get; set; }
+    public int FTAApplicationNameId { get; set; }
+    public string FTAApplicationName { get; set; }
+    public int FTAStrategyOwnerId { get; set; }
+    public string FTAStrategyOwner { get; set; }
+    public int ApplicationCategoryId { get; set; }
+    public string ApplicationCategory { get; set; }
+    public string DecomissionedDate { get; set; }
+    public int DiscretionaryCodeId { get; set; }
+    public string DiscretionaryCode { get; set; }
+    public int ParentIDValue { get; set; }
+    public string ParentID { get; set; }
+    public int FTAApplicationOwnerId { get; set; }
+    public string FTAApplicationOwner { get; set; }
+    public string PriorityScore { get; set; }
+    public string Priority { get; set; }
+    public int CapacityId { get; set; }
+    public string Capacity { get; set; }
+    public int VenueTypeId { get; set; }
+    public string VenueType { get; set; }
+
 }
 
 
@@ -1921,4 +1843,35 @@ public class FTAApplicationCodeMaster
     public string Id { get; set; }
     public string FTAApplicationCode { get; set; }
 
+}
+
+
+public static class SimpleComparer
+{
+    // Item1: property name, Item2 current, Item3 original
+    public static List<Tuple<string, object, object>> Differences<T>(T current, T original)
+    {
+        var diffs = new List<Tuple<string, object, object>>();
+
+        MethodInfo areEqualMethod = typeof(SimpleComparer).GetMethod("AreEqual", BindingFlags.Static | BindingFlags.NonPublic);
+
+        foreach (PropertyInfo prop in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+        {
+            object x = prop.GetValue(current);
+            object y = prop.GetValue(original);
+            bool areEqual = (bool)areEqualMethod.MakeGenericMethod(prop.PropertyType).Invoke(null, new object[] { x, y });
+
+            if (!areEqual)
+            {
+                diffs.Add(Tuple.Create(prop.Name, x, y));
+            }
+        }
+
+        return diffs;
+    }
+
+    private static bool AreEqual<T>(T x, T y)
+    {
+        return EqualityComparer<T>.Default.Equals(x, y);
+    }
 }

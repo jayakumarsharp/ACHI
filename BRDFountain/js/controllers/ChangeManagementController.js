@@ -192,11 +192,11 @@
     $scope.GetCurrencyConversionForId = function (id) {
         StrategyService.GetDatabyId(id).success(function (data) {
             $scope.currency = data[0];
-            $scope.selectModel.Application = $scope.GetRoleFromUserID($scope.currency.ApplicationId, "ApplicationMasterList")
-            $scope.selectModel.Country = $scope.GetRoleFromUserID($scope.currency.Country, "CountryMasterList")
-            $scope.selectModel.ProductType = $scope.GetRoleFromUserID($scope.currency.ProductType, "ProductMasterList")
-            $scope.selectModel.BusinessSector = $scope.GetRoleFromUserID($scope.currency.BusinessSector, "BusinessSectorMasterList")
-            $scope.selectModel.Region = $scope.GetRoleFromUserID($scope.currency.Region, "RegionMasterList")
+            $scope.selectModel.Application = getdynamicobjectgetdynamicobject($scope.currency.ApplicationId, "ApplicationMasterList")
+            $scope.selectModel.Country = getdynamicobject($scope.currency.Country, "CountryMasterList")
+            $scope.selectModel.ProductType = getdynamicobject($scope.currency.ProductType, "ProductMasterList")
+            $scope.selectModel.BusinessSector = getdynamicobject($scope.currency.BusinessSector, "BusinessSectorMasterList")
+            $scope.selectModel.Region = getdynamicobject($scope.currency.Region, "RegionMasterList")
 
             $('#currencyModel').modal('show');
         }).error(function (data) {
@@ -204,40 +204,10 @@
         });
     };
 
-    $scope.GetRoleFromUserID = function (userId, type) {
-        if ("BusinessSectorMasterList" == type) {
-            for (var i = 0; i < $scope.BusinessSectorMasterList.length; i++) {
-                if ($scope.BusinessSectorMasterList[i].Id == userId) {
-                    return $scope.BusinessSectorMasterList[i];
-                }
-            }
-        }
-        else if ("RegionMasterList" == type) {
-            for (var i = 0; i < $scope.RegionMasterList.length; i++) {
-                if ($scope.RegionMasterList[i].Id == userId) {
-                    return $scope.RegionMasterList[i];
-                }
-            }
-        }
-        if ("ProductMasterList" == type) {
-            for (var i = 0; i < $scope.ProductMasterList.length; i++) {
-                if ($scope.ProductMasterList[i].Id == userId) {
-                    return $scope.ProductMasterList[i];
-                }
-            }
-        }
-        if ("CountryMasterList" == type) {
-            for (var i = 0; i < $scope.CountryMasterList.length; i++) {
-                if ($scope.CountryMasterList[i].Id == userId) {
-                    return $scope.CountryMasterList[i];
-                }
-            }
-        }
-        if ("ApplicationMasterList" == type) {
-            for (var i = 0; i < $scope.ApplicationMasterList.length; i++) {
-                if ($scope.ApplicationMasterList[i].Id == userId) {
-                    return $scope.ApplicationMasterList[i];
-                }
+    var getdynamicobject = function (userId, type) {
+        for (var i = 0; i < $scope[type].length; i++) {
+            if ($scope[type][i].Id == userId) {
+                return $scope[type][i];
             }
         }
     };

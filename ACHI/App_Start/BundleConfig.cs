@@ -66,7 +66,8 @@ namespace ACHI.App_Start
             //    "~/Content/jquery.jqGrid/ui.jqgrid.css",
             //    "~/Content/jquery.jqGrid/ui.jqgrid.css"
             //    ));
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
+            
         }
     }
 }

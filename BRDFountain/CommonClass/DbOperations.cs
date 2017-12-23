@@ -88,7 +88,7 @@ public class DbOperations
                     FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                     Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                 }
-                
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
@@ -159,44 +159,50 @@ public class DbOperations
     public List<TransferSetting> GetTransfersettingIDbyuser(string username)
     {
         List<TransferSetting> lst = new List<TransferSetting>();
-        string query = "sp_gettransfersettingbyuser";
-
-        if (this.OpenConnection() == true)
+        string query = "sp_getdelegatesettingbyuser";
+        try
         {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Owner", username));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_Owner", username));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new TransferSetting
-                               {
-                                   TransferFrom = Convert.ToString(row["DurationFrom"]),
-                                   TransferTo = Convert.ToString(row["DurationTo"]),
-                                   OwnerUser = Convert.ToString(row["Owneruser"]),
-                                   Transferuser = Convert.ToString(row["TransferTo"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   Id = Convert.ToString(row["Id"])
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new TransferSetting
+                                   {
+                                       TransferFrom = Convert.ToString(row["DurationFrom"]),
+                                       TransferTo = Convert.ToString(row["DurationTo"]),
+                                       OwnerUser = Convert.ToString(row["Owneruser"]),
+                                       Transferuser = Convert.ToString(row["TransferTo"]),
+                                       IsActive = Convert.ToString(row["IsActive"]),
+                                       Id = Convert.ToString(row["Id"])
 
-                               }).ToList();
+                                   }).ToList();
 
+                        }
                     }
+
+                    cmd.ExecuteNonQuery();
                 }
-
-                cmd.ExecuteNonQuery();
+                //close connection
+                this.CloseConnection();
             }
-            //close connection
-            this.CloseConnection();
-        }
 
-        return lst;
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
 
     }
 
@@ -457,7 +463,7 @@ public class DbOperations
                                    Status = Convert.ToString(row["Status"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"]),
-                                   OriginalApprover= Convert.ToString(row["OriginalApprover"])
+                                   OriginalApprover = Convert.ToString(row["OriginalApprover"])
                                }).ToList();
 
                     }
@@ -652,95 +658,98 @@ public class DbOperations
 
         }
     }
-    
+
     public List<Strategy> GetStrategyData()
     {
         List<Strategy> lst = new List<Strategy>();
 
         string query = "SP_GetStrategy";
-
-        if (this.OpenConnection() == true)
+        try
         {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
 
-                               select new Strategy
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   AppId = Convert.ToString(row["AppId"]),
-                                   AppName = Convert.ToString(row["ApplicationName"]),
-                                   Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   Country = Convert.ToString(row["Country"]),
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
-                                   FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   Name = Convert.ToString(row["Name"]),
-                                   NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   Objective = Convert.ToString(row["Objective"]),
-                                   ProductType = Convert.ToString(row["ProductType"]),
-                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   Ranking = Convert.ToString(row["Ranking"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Region = Convert.ToString(row["Region"]),
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   RiskRating = Convert.ToString(row["RiskRating"]),
-                                   SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   Type = Convert.ToString(row["Type"]),
-                                   Version = Convert.ToString(row["Version"]),
-                               }).ToList();
+                                   select new Strategy
+                                   {
+                                       Id = Convert.ToInt32(row["Id"]),
+                                       RefNumber = Convert.ToString(row["RefNumber"]),
+                                       FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
+                                       DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
+                                       BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
+                                       BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                       ParentID = Convert.ToString(row["ParentId"]),
+                                       ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                       ChildID = Convert.ToString(row["ChildId"]),
+                                       ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
+                                       BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
+                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
+                                       Strategytype = Convert.ToString(row["StrategyType"]),
+                                       VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
+                                       VenueType = Convert.ToString(row["VenueType"]),
+                                       Capacity = Convert.ToString(row["Capacity"]),
+                                       CapacityId = Convert.ToInt32(row["CapacityId"]),
+                                       Country = Convert.ToString(row["CountryId"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       Description = Convert.ToString(row["Description"]),
+                                       FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                       IsActive = Convert.ToString(row["IsActive"]),
+                                       LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                       LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                       NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                       Region = Convert.ToString(row["RegionId"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Version = Convert.ToString(row["Version"]),
+                                       Priority = Convert.ToString(row["Priority"]),
+                                       PriorityScore = Convert.ToString(row["PriorityScore"]),
+                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
+                                       GOLiveDate = Convert.ToString(row["GoLiveDate"]),
 
+                                   }).ToList();
+
+                        }
                     }
+
                 }
-
-                cmd.ExecuteNonQuery();
+                //close connection
+                this.CloseConnection();
             }
-            //close connection
-            this.CloseConnection();
+
+            return lst;
         }
-
-        return lst;
-
+        catch (MySqlException ex)
+        {
+            return null;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
     public List<Strategy> GetStrategyDatabyStrategyId(string StrategyNumber)
@@ -767,57 +776,57 @@ public class DbOperations
 
                                select new Strategy
                                {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   AppId = Convert.ToString(row["AppId"]),
-                                   AppName = Convert.ToString(row["ApplicationName"]),
-                                   Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   Country = Convert.ToString(row["Country"]),
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
-                                   FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   Name = Convert.ToString(row["Name"]),
-                                   NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   Objective = Convert.ToString(row["Objective"]),
-                                   ProductType = Convert.ToString(row["ProductType"]),
-                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   Ranking = Convert.ToString(row["Ranking"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Region = Convert.ToString(row["Region"]),
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   RiskRating = Convert.ToString(row["RiskRating"]),
-                                   SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   Type = Convert.ToString(row["Type"]),
+                                   //Id = Convert.ToInt32(row["Id"]),
+                                   //AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
+                                   //AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
+                                   //AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
+                                   //AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
+                                   //AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
+                                   //AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
+                                   //AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
+                                   //AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
+                                   //AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
+                                   //AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
+                                   //AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
+                                   //AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
+                                   //AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
+                                   //ApplicationId = Convert.ToString(row["ApplicationId"]),
+                                   //AppId = Convert.ToString(row["AppId"]),
+                                   //AppName = Convert.ToString(row["ApplicationName"]),
+                                   //Attribute1 = Convert.ToString(row["Attribute1"]),
+                                   //Attribute2 = Convert.ToString(row["Attribute2"]),
+                                   //Attribute3 = Convert.ToString(row["Attribute3"]),
+                                   //Attribute4 = Convert.ToString(row["Attribute4"]),
+                                   //BusinessImpact = Convert.ToString(row["BusinessImpact"]),
+                                   //BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   //BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
+                                   //ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
+                                   //ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
+                                   //Country = Convert.ToString(row["Country"]),
+                                   //CountryName = Convert.ToString(row["CountryName"]),
+                                   //CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                   //CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   //DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
+                                   //DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
+                                   //Description = Convert.ToString(row["Description"]),
+                                   //DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
+                                   //ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
+                                   //FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                   //IsActive = Convert.ToString(row["IsActive"]),
+                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                   //Name = Convert.ToString(row["Name"]),
+                                   //NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                   //Objective = Convert.ToString(row["Objective"]),
+                                   //ProductType = Convert.ToString(row["ProductType"]),
+                                   //ProductTypeName = Convert.ToString(row["ProductTypeName"]),
+                                   //Ranking = Convert.ToString(row["Ranking"]),
+                                   ////RefNumber = Convert.ToString(row["RefNumber"]),
+                                   //Region = Convert.ToString(row["Region"]),
+                                   //RegionName = Convert.ToString(row["RegionName"]),
+                                   //RiskRating = Convert.ToString(row["RiskRating"]),
+                                   //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
+                                   //Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
                                }).ToList();
 
@@ -842,7 +851,6 @@ public class DbOperations
 
         if (this.OpenConnection() == true)
         {
-
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -859,57 +867,56 @@ public class DbOperations
                                select new Strategy
                                {
                                    Id = Convert.ToInt32(row["Id"]),
-                                   AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   AppId = Convert.ToString(row["AppId"]),
-                                   AppName = Convert.ToString(row["ApplicationName"]),
-                                   Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   Country = Convert.ToString(row["Country"]),
+                                   RefNumber = Convert.ToString(row["RefNumber"]),
+                                   FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                   FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                   FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                   DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
+                                   DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
+                                   BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
+                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                   ParentID = Convert.ToString(row["ParentId"]),
+                                   ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                   ChildID = Convert.ToString(row["ChildId"]),
+                                   ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
+                                   BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
+                                   BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                   FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
+                                   FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                   ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
+                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                   FTAStrategyOwnerId = Convert.ToInt32(row["FTAStrategyOwnerId"]),
+                                   FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                   FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                   StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
+                                   Strategytype = Convert.ToString(row["StrategyType"]),
+                                   VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
+                                   VenueType = Convert.ToString(row["VenueType"]),
+                                   Capacity = Convert.ToString(row["Capacity"]),
+                                   CapacityId = Convert.ToInt32(row["CapacityId"]),
+                                   Country = Convert.ToString(row["CountryId"]),
                                    CountryName = Convert.ToString(row["CountryName"]),
                                    CreatedBy = Convert.ToString(row["CreatedBy"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
                                    Description = Convert.ToString(row["Description"]),
-                                   DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
                                    FinalSignOff = Convert.ToString(row["FinalSignOff"]),
                                    IsActive = Convert.ToString(row["IsActive"]),
                                    LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                    LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   Name = Convert.ToString(row["Name"]),
                                    NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   Objective = Convert.ToString(row["Objective"]),
-                                   ProductType = Convert.ToString(row["ProductType"]),
-                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   Ranking = Convert.ToString(row["Ranking"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Region = Convert.ToString(row["Region"]),
+                                   Region = Convert.ToString(row["RegionId"]),
                                    RegionName = Convert.ToString(row["RegionName"]),
-                                   RiskRating = Convert.ToString(row["RiskRating"]),
-                                   SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
+                                   Priority = Convert.ToString(row["Priority"]),
+                                   PriorityScore = Convert.ToString(row["PriorityScore"]),
+                                   DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
+                                   GOLiveDate = Convert.ToString(row["GoLiveDate"]),
+
                                }).ToList();
 
                     }
@@ -950,56 +957,56 @@ public class DbOperations
                                select new Strategy
                                {
                                    Id = Convert.ToInt32(row["Id"]),
-                                   AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   AppId = Convert.ToString(row["AppId"]),
-                                   AppName = Convert.ToString(row["ApplicationName"]),
-                                   Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   Country = Convert.ToString(row["Country"]),
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
-                                   FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   Name = Convert.ToString(row["Name"]),
-                                   NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   Objective = Convert.ToString(row["Objective"]),
-                                   ProductType = Convert.ToString(row["ProductType"]),
-                                   ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   Ranking = Convert.ToString(row["Ranking"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Region = Convert.ToString(row["Region"]),
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   RiskRating = Convert.ToString(row["RiskRating"]),
-                                   SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   Type = Convert.ToString(row["Type"]),
+                                   //AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
+                                   //AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
+                                   //AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
+                                   //AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
+                                   //AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
+                                   //AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
+                                   //AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
+                                   //AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
+                                   //AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
+                                   //AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
+                                   //AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
+                                   //AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
+                                   //AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
+                                   //ApplicationId = Convert.ToString(row["ApplicationId"]),
+                                   //AppId = Convert.ToString(row["AppId"]),
+                                   //AppName = Convert.ToString(row["ApplicationName"]),
+                                   //Attribute1 = Convert.ToString(row["Attribute1"]),
+                                   //Attribute2 = Convert.ToString(row["Attribute2"]),
+                                   //Attribute3 = Convert.ToString(row["Attribute3"]),
+                                   //Attribute4 = Convert.ToString(row["Attribute4"]),
+                                   //BusinessImpact = Convert.ToString(row["BusinessImpact"]),
+                                   //BusinessSector = Convert.ToString(row["BusinessSector"]),
+                                   //BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
+                                   //ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
+                                   //ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
+                                   //Country = Convert.ToString(row["Country"]),
+                                   //CountryName = Convert.ToString(row["CountryName"]),
+                                   //CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                   //CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   //DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
+                                   //DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
+                                   //Description = Convert.ToString(row["Description"]),
+                                   //DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
+                                   //ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
+                                   //FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                   //IsActive = Convert.ToString(row["IsActive"]),
+                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                   //Name = Convert.ToString(row["Name"]),
+                                   //NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                   //Objective = Convert.ToString(row["Objective"]),
+                                   //ProductType = Convert.ToString(row["ProductType"]),
+                                   //ProductTypeName = Convert.ToString(row["ProductTypeName"]),
+                                   //Ranking = Convert.ToString(row["Ranking"]),
+                                   ////RefNumber = Convert.ToString(row["RefNumber"]),
+                                   //Region = Convert.ToString(row["Region"]),
+                                   //RegionName = Convert.ToString(row["RegionName"]),
+                                   //RiskRating = Convert.ToString(row["RiskRating"]),
+                                   //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
+                                   //Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
                                }).ToList();
 
@@ -1022,50 +1029,45 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-
+            long lastTimeStamp = DateTime.UtcNow.Ticks;
+            DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateTime DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            _StrategyInfo.RefNumber = Convert.ToString(lastTimeStamp);
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
-                cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", _StrategyInfo.BusinessSector));
                 cmd.Parameters.Add(new MySqlParameter("i_CountryId", _StrategyInfo.Country));
                 cmd.Parameters.Add(new MySqlParameter("i_RegionId", _StrategyInfo.Region));
-                cmd.Parameters.Add(new MySqlParameter("i_ProductTypeId", _StrategyInfo.ProductType));
-                cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
-                cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
                 cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
-                cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
-                //cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", _StrategyInfo.FTAApplicationCodeId));
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffixId", _StrategyInfo.BusinessSuffixId));
+                cmd.Parameters.Add(new MySqlParameter("i_ChildID", _StrategyInfo.ChildIDValue));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", _StrategyInfo.FTAStrategyNameId));
+                cmd.Parameters.Add(new MySqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
+                cmd.Parameters.Add(new MySqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", _StrategyInfo.FTAStrategyCodeId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCodeId));
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
+                cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
+                cmd.Parameters.Add(new MySqlParameter("i_DecomissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
+                cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentIDValue));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
+                cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", _StrategyInfo.PriorityScore));
+                cmd.Parameters.Add(new MySqlParameter("i_Priority", _StrategyInfo.Priority));
+                cmd.Parameters.Add(new MySqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
+                cmd.Parameters.Add(new MySqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
 
                 if (this.OpenConnection() == true)
                 {
-
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
                 //close connection
+                errordesc = "success-" + _StrategyInfo.RefNumber;
             }
 
 
@@ -1095,41 +1097,41 @@ public class DbOperations
 
             using (MySqlCommand cmd = new MySqlCommand("sp_update_Strategy", connection))
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_id", _StrategyInfo.Id));
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
-                cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
-                cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
-                cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
-                cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
-                cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
-                cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
-                cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
-                cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
+                // cmd.CommandType = CommandType.StoredProcedure;
+                // cmd.Parameters.Add(new MySqlParameter("i_id", _StrategyInfo.Id));
+                //// cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
+                // cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
+                // cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
+                // cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
+                // cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
+                // cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
+                // cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
+                // cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
+                // cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
+                // cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
+                // cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
+                // cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
+                // cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
+                // cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
                 cmd.Parameters.Add(new MySqlParameter("i_Page", _StrategyInfo.Page));
-                cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
+                //cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
                 cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
                 cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
@@ -1163,7 +1165,7 @@ public class DbOperations
     {
         try
         {
-            int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber) + 1;
+            // int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber) + 1;
             //Get_StrategyLatestversionById
             errorcode = 0;
             errordesc = "success";
@@ -1171,44 +1173,44 @@ public class DbOperations
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy_Version", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
-                cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
-                cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
-                cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
-                cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
-                cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
-                cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
-                cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
-                cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
-                cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", version));
+                //  cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
+                //cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
+                //cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
+                //cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
+                //cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
+                //cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
+                //cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
+                //cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
+                //cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
+                //cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
+                //cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
+                //cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
+                //cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
+                //cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
+                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
+                //cmd.Parameters.Add(new MySqlParameter("i_Version", version));
 
-                // cmd.Parameters.Add(new MySqlParameter("i_DateChangeImplemented", _StrategyInfo.DateChangeImplemented));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
-                cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
+                //// cmd.Parameters.Add(new MySqlParameter("i_DateChangeImplemented", _StrategyInfo.DateChangeImplemented));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
+                //cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
 
                 //Date change Initiated
                 //Date change implemented
-                cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
+                // cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
                 cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
                 cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
@@ -1218,7 +1220,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
-                    errordesc = "success|" + Convert.ToString(version);
+                    errordesc = "success|";// + Convert.ToString(version);
                 }
                 //close connection
             }
@@ -1240,8 +1242,8 @@ public class DbOperations
     }
 
     #endregion Strategy
-    
-    
+
+
 
     #region Role
 
@@ -1716,7 +1718,7 @@ public class DbOperations
         {
         }
     }
-    public List<UserMaster> GetUserbyFilter(string CountryId, string RegionId, string BusinessSectorId)
+    public List<UserMaster> GetUserbyFilter(string RegionId, string BusinessSectorId)
     {
 
         try
@@ -1731,7 +1733,6 @@ public class DbOperations
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new MySqlParameter("i_regionId", RegionId));
-                    cmd.Parameters.Add(new MySqlParameter("i_countryId", CountryId));
                     cmd.Parameters.Add(new MySqlParameter("i_businesssectorId", BusinessSectorId));
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
@@ -1750,10 +1751,8 @@ public class DbOperations
                                        RoleId = Convert.ToString(row["RoleId"]),
                                        RoleName = Convert.ToString(row["RoleName"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
-                                       CountryName = Convert.ToString(row["CountryName"]),
-                                       BusinessSector = Convert.ToString(row["Name"]),
+                                       BusinessSector = Convert.ToString(row["BusinessLine"]),
                                        BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
-                                       CountryId = Convert.ToString(row["CountryId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
 
@@ -1807,7 +1806,7 @@ public class DbOperations
                                    RoleName = Convert.ToString(row["RoleName"]),
                                    RegionName = Convert.ToString(row["RegionName"]),
                                    CountryName = Convert.ToString(row["CountryName"]),
-                                   BusinessSector = Convert.ToString(row["Name"]),
+                                   BusinessSector = Convert.ToString(row["BusinessLine"]),
                                    BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                    CountryId = Convert.ToString(row["CountryId"]),
                                    RegionId = Convert.ToString(row["RegionId"]),
@@ -1858,7 +1857,7 @@ public class DbOperations
                                        RoleName = Convert.ToString(row["RoleName"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        CountryName = Convert.ToString(row["CountryName"]),
-                                       BusinessSector = Convert.ToString(row["Name"]),
+                                       BusinessSector = Convert.ToString(row["BusinessLine"]),
                                        BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                        CountryId = Convert.ToString(row["CountryId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
@@ -2996,7 +2995,7 @@ public class DbOperations
 
     }
     #endregion Application
-    
+
     //new code start here
 
     #region FTAApplicationCode

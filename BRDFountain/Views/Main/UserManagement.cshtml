@@ -47,7 +47,7 @@
                                     </div>
 
                                     <div class="col-xs-4">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
+                                        <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em" required>
                                             <option value="">- Select Business Sector -</option>
                                         </select>
                                     </div>
@@ -181,7 +181,7 @@
                                 <div class="form-group">
                                     <label for="SBU" class="col-sm-4 control-label">Business Sector</label>
                                     <div class="col-sm-6" style="margin-top:6px">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em">
                                             <option value="">- Select BusinessSector -</option>
                                         </select>
                                     </div>
@@ -271,7 +271,7 @@
                                 <div class="form-group">
                                     <label for="SBU" class="col-sm-4 control-label">Business Sector</label>
                                     <div class="col-sm-6" style="margin-top:6px">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em">
                                             <option value="">- Select BusinessSector -</option>
                                         </select>
                                     </div>
