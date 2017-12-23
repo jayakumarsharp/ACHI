@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,12 +9,12 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace CRMManagement.Controllers
+namespace BRDFountain.Controllers
 {
     public class MainController : Controller
     {
         private DbOperations _dbOperations = new DbOperations();
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainController));
         //
         // GET: /Main/
         //[SessionTimeout]
@@ -232,6 +233,7 @@ namespace CRMManagement.Controllers
 
         public ActionResult Logout()
         {
+            Session["MenuList"] = null;
             return RedirectToAction("LoginDisplay", "Home");
         }
         public string getloggedusername()
@@ -337,14 +339,6 @@ namespace CRMManagement.Controllers
             string errordesc = "";
             int errorcode = 0;
             _dbOperations.UpdateStrategyVersiondata(strategy, out errorcode, out errordesc);
-
-
-            //var diffs = SimpleComparer.Differences(current, original);
-
-            //foreach (var diff in diffs)
-            //{
-            //    Console.WriteLine("'{0}' changed from {1} to {2}", diff.Item1, diff.Item3, diff.Item2);
-            //}
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -413,11 +407,21 @@ namespace CRMManagement.Controllers
         }
 
 
-        public JsonResult UpdateStrategy(Strategy Strategy)
+        public JsonResult UpdateStrategy(List<Strategy> Strategy)
         {
             string errordesc = "";
             int errorcode = 0;
-            _dbOperations.UpdateStrategydata(Strategy, out errorcode, out errordesc);
+
+            var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
+
+            foreach (var diff in diffs)
+            {
+                Console.WriteLine("'{0}' changed from {1} to {2}", diff.Item1, diff.Item3, diff.Item2);
+            }
+            //_dbOperations.UpdateStrategydata(Strategy[0], out errorcode, out errordesc);
+
+            //  _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
+
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 

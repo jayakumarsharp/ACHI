@@ -744,10 +744,16 @@ public class DbOperations
         }
         catch (MySqlException ex)
         {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
             return null;
         }
         catch (Exception ex)
         {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
             return null;
         }
     }
@@ -846,90 +852,105 @@ public class DbOperations
     public List<Strategy> GetStrategyDatabyId(string StrategyNumber)
     {
         List<Strategy> lst = new List<Strategy>();
-
-        string query = "SP_GetStrategyById";
-
-        if (this.OpenConnection() == true)
+        try
         {
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            string query = "SP_GetStrategyById";
+
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
 
-                               select new Strategy
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
-                                   FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
-                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                   FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
-                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                   DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
-                                   DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
-                                   BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
-                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
-                                   ParentID = Convert.ToString(row["ParentId"]),
-                                   ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
-                                   ChildID = Convert.ToString(row["ChildId"]),
-                                   ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
-                                   BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
-                                   BusinessLine = Convert.ToString(row["BusinessLine"]),
-                                   FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
-                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                   FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
-                                   FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
-                                   ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
-                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                   FTAStrategyOwnerId = Convert.ToInt32(row["FTAStrategyOwnerId"]),
-                                   FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
-                                   FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
-                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                   StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
-                                   Strategytype = Convert.ToString(row["StrategyType"]),
-                                   VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
-                                   VenueType = Convert.ToString(row["VenueType"]),
-                                   Capacity = Convert.ToString(row["Capacity"]),
-                                   CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                   Country = Convert.ToString(row["CountryId"]),
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   Description = Convert.ToString(row["Description"]),
-                                   FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   IsActive = Convert.ToString(row["IsActive"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   Region = Convert.ToString(row["RegionId"]),
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   Priority = Convert.ToString(row["Priority"]),
-                                   PriorityScore = Convert.ToString(row["PriorityScore"]),
-                                   DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
-                                   GOLiveDate = Convert.ToString(row["GoLiveDate"]),
+                                   select new Strategy
+                                   {
+                                       Id = Convert.ToInt32(row["Id"]),
+                                       RefNumber = Convert.ToString(row["RefNumber"]),
+                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                       FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
+                                       DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
+                                       BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
+                                       BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                       ParentID = Convert.ToString(row["ParentId"]),
+                                       ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                       ChildID = Convert.ToString(row["ChildId"]),
+                                       ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
+                                       BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
+                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       FTAStrategyOwnerId = Convert.ToInt32(row["FTAStrategyOwnerId"]),
+                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                       FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
+                                       Strategytype = Convert.ToString(row["StrategyType"]),
+                                       VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
+                                       VenueType = Convert.ToString(row["VenueType"]),
+                                       Capacity = Convert.ToString(row["Capacity"]),
+                                       CapacityId = Convert.ToInt32(row["CapacityId"]),
+                                       Country = Convert.ToString(row["CountryId"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       Description = Convert.ToString(row["Description"]),
+                                       FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                       IsActive = Convert.ToString(row["IsActive"]),
+                                       LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                       LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                       NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                       Region = Convert.ToString(row["RegionId"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Version = Convert.ToString(row["Version"]),
+                                       Priority = Convert.ToString(row["Priority"]),
+                                       PriorityScore = Convert.ToString(row["PriorityScore"]),
+                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
+                                       GOLiveDate = Convert.ToString(row["GoLiveDate"]),
 
-                               }).ToList();
+                                   }).ToList();
 
+                        }
                     }
+
+                    cmd.ExecuteNonQuery();
                 }
-
-                cmd.ExecuteNonQuery();
+                //close connection
+                this.CloseConnection();
             }
-            //close connection
-            this.CloseConnection();
+
+            return lst;
         }
-
-        return lst;
-
+        catch (MySqlException ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
+        }
+        catch (Exception ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
+        }
     }
 
     public List<Strategy> GetStrategyLatestDatabyId(string StrategyNumber)
@@ -1052,7 +1073,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
-                cmd.Parameters.Add(new MySqlParameter("i_DecomissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
                 cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentIDValue));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
