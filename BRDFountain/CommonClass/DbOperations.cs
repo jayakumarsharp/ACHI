@@ -663,7 +663,7 @@ public class DbOperations
     {
         List<Strategy> lst = new List<Strategy>();
 
-        string query = "SP_GetStrategy";
+        string query = "SP_GetAllStrategy";
         try
         {
             if (this.OpenConnection() == true)
