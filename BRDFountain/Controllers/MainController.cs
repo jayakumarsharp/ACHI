@@ -330,7 +330,8 @@ namespace BRDFountain.Controllers
         {
             string errordesc = "";
             int errorcode = 0;
-            _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
+            strategy.Version = 1;
+            _dbOperations.InsertStrategydata(strategy, false, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -414,14 +415,23 @@ namespace BRDFountain.Controllers
 
             var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
 
-            foreach (var diff in diffs)
+            var data = diffs.FindAll(x => x.Item1.Equals("CountryName") || x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("FTAApplicationCode") || x.Item1.Equals("ChildIDValue")
+            || x.Item1.Equals("FTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("FTAStrategyCode") || x.Item1.Equals("FTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("FTAApplicationName") || x.Item1.Equals("FTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
+            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("FTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity"));
+            string Changedata = "";
+            if (data.Count() > 0)
             {
-                Console.WriteLine("'{0}' changed from {1} to {2}", diff.Item1, diff.Item3, diff.Item2);
+                foreach (var diff in data)
+                {
+                    Changedata += diff.Item1 + " - " + diff.Item2 + " - Changed to " + diff.Item3;
+                }
+
+                Strategy[0].RefNumber = Strategy[1].RefNumber;
+                Strategy[0].Version = Strategy[1].Version + 1;
+                _dbOperations.InsertStrategydata(Strategy[0], true, out errorcode, out errordesc);
+                _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata);
             }
             //_dbOperations.UpdateStrategydata(Strategy[0], out errorcode, out errordesc);
-
-            //  _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
-
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -1553,7 +1563,7 @@ public class Strategy
     public string Description { get; set; }
 
     public string NoOfApprover { get; set; }
-    public string Version { get; set; }
+    public int Version { get; set; }
     public string FinalSignOff { get; set; }
     public string SignOffDate { get; set; }
     public string SignoffBy { get; set; }

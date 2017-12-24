@@ -61,9 +61,9 @@
     }
     function actionsStatus(data, type, full, meta) {
 
-        if (data == "Y")
+        if (data == "True")
             return '<a  class="dta-act">Approved</a>';
-        else if (data == "N")
+        else if (data == "False")
             return '<a  class="dta-act-not">Not Approved</a>';
         else
             return '<a  class="dta-sign">Pending</a>';
@@ -164,7 +164,7 @@
                     console.log(data[i])
                     data[i].Ver = "Version - " + data[i].Version;
                     data[i].Version = data[i].Version;
-                    if (data[i].Status == 'N' || data[i].Status == 'Y')
+                    if (data[i].Status == 'True' || data[i].Status == 'False')
                         $scope.CompletedGriddata.push(data[i])
                     else
                         $scope.PendingGriddata.push(data[i]);

@@ -270,10 +270,8 @@ public class DbOperations
                     cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
                     cmd.Parameters.Add(new MySqlParameter("i_Version", version));
                     cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
-
                     if (this.OpenConnection() == true)
                     {
-
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -724,14 +722,12 @@ public class DbOperations
                                        NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
-                                       Version = Convert.ToString(row["Version"]),
+                                       Version = Convert.ToInt32(row["Version"]),
                                        Priority = Convert.ToString(row["Priority"]),
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
                                        DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
-
                                    }).ToList();
-
                         }
                     }
 
@@ -833,7 +829,7 @@ public class DbOperations
                                    //RiskRating = Convert.ToString(row["RiskRating"]),
                                    //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    //Type = Convert.ToString(row["Type"]),
-                                   Version = Convert.ToString(row["Version"]),
+                                   Version = Convert.ToInt32(row["Version"]),
                                }).ToList();
 
                     }
@@ -918,7 +914,7 @@ public class DbOperations
                                        NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
-                                       Version = Convert.ToString(row["Version"]),
+                                       Version = Convert.ToInt32(row["Version"]),
                                        Priority = Convert.ToString(row["Priority"]),
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
                                        DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
@@ -1028,7 +1024,7 @@ public class DbOperations
                                    //RiskRating = Convert.ToString(row["RiskRating"]),
                                    //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
                                    //Type = Convert.ToString(row["Type"]),
-                                   Version = Convert.ToString(row["Version"]),
+                                   Version = Convert.ToInt32(row["Version"]),
                                }).ToList();
 
                     }
@@ -1044,7 +1040,7 @@ public class DbOperations
 
     }
 
-    public void InsertStrategydata(Strategy _StrategyInfo, out int errorcode, out string errordesc)
+    public void InsertStrategydata(Strategy _StrategyInfo, bool isUpdate, out int errorcode, out string errordesc)
     {
         try
         {
@@ -1053,7 +1049,8 @@ public class DbOperations
             long lastTimeStamp = DateTime.UtcNow.Ticks;
             DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             DateTime DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            _StrategyInfo.RefNumber = Convert.ToString(lastTimeStamp);
+            if (!isUpdate)
+                _StrategyInfo.RefNumber = Convert.ToString(lastTimeStamp);
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1063,35 +1060,34 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", _StrategyInfo.FTAApplicationCodeId));
                 cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffixId", _StrategyInfo.BusinessSuffixId));
-                cmd.Parameters.Add(new MySqlParameter("i_ChildID", _StrategyInfo.ChildIDValue));
+                cmd.Parameters.Add(new MySqlParameter("i_ChildID", _StrategyInfo.ChildID));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", _StrategyInfo.FTAStrategyNameId));
                 cmd.Parameters.Add(new MySqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
                 cmd.Parameters.Add(new MySqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", _StrategyInfo.FTAStrategyCodeId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCodeId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCode));
                 cmd.Parameters.Add(new MySqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
                 cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
-                cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentIDValue));
+                cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentID));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
                 cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", _StrategyInfo.PriorityScore));
                 cmd.Parameters.Add(new MySqlParameter("i_Priority", _StrategyInfo.Priority));
                 cmd.Parameters.Add(new MySqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
                 cmd.Parameters.Add(new MySqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", _StrategyInfo.Version));
+
 
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
-                errordesc = "success-" + _StrategyInfo.RefNumber;
+                errordesc = "success-" + _StrategyInfo.RefNumber + "|" + _StrategyInfo.Version;
             }
-
-
         }
         catch (MySqlException e)
         {
@@ -1104,6 +1100,41 @@ public class DbOperations
         {
             errorcode = -1;
             errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+
+    public void insertStrategyVersionChange(string RefNumber, int Version, string Changedesc)
+    {
+        try
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_strategyVersionLog", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
+                cmd.Parameters.Add(new MySqlParameter("i_Version", Version));
+                cmd.Parameters.Add(new MySqlParameter("i_ChangeDesc", Changedesc));
+
+
+                if (this.OpenConnection() == true)
+                {
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //close connection
+            }
+        }
+        catch (MySqlException e)
+        {
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
             this.CloseConnection();
 
         }
@@ -1263,7 +1294,6 @@ public class DbOperations
     }
 
     #endregion Strategy
-
 
 
     #region Role

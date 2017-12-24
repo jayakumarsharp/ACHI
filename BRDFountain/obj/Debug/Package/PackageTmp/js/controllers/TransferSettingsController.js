@@ -41,12 +41,10 @@
 
     $scope.getallcurrencyconversions = function () {
         StrategyService.GetTransfersetting().success(function (data) {
-            //console.log(data);
             if (data !== null && data.length > 0) {
-                console.log(data);
                 $scope.status = true;
-                $scope.TransferTo = data[0].TransferTo;
-                $scope.TransferFrom = data[0].TransferFrom;
+                $scope.TransferTo = moment(data[0].TransferTo, 'DD-MM-YYYY HH:mm:ss').format('MM/DD/YYYY');
+                $scope.TransferFrom = moment(data[0].TransferFrom, 'DD-MM-YYYY HH:mm:ss').format('MM/DD/YYYY');
                 $scope.Transferuser = data[0].Transferuser;
             }
             else {

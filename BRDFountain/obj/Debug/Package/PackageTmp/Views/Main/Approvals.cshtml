@@ -10,7 +10,7 @@
             <div class="tab-pane" ng-if="tab1">
 
                 <div class="page_status">
-                    <a href="#" ng-click="GetAlldata('Pending')" style="margin: 0 -5px;">
+                    <a ng-click="GetAlldata('Pending')" style="margin: 0 -5px;">
                         <div class="status_pending" ng-class="{'active':showMyApproval }">
                             <div class="number">
                                 {{PendingGriddata.length}}
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="#" ng-click="GetAlldata('Completed')">
+                    <a ng-click="GetAlldata('Completed')">
                         <div class="status_completed" ng-class="{'active':!showMyApproval }">
                             <div class="number">
                                 {{CompletedGriddata.length}}
@@ -76,7 +76,7 @@
             <div class="tab-pane" ng-if="tab2">
 
                 <div class="page_status">
-                    <a href="#" ng-click="GetDelegatedApprovalAlldata('Pending')" style="margin: 0 -5px;">
+                    <a ng-click="GetDelegatedApprovalAlldata('Pending')" style="margin: 0 -5px;">
                         <div class="status_pending" ng-class="{'active':showMyDelegateApproved }">
                             <div class="number">
                                 {{DelegatedPendingGriddata.length}}
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                     </a>
-                    <a href="#" ng-click="GetDelegatedApprovalAlldata('Completed')">
+                    <a ng-click="GetDelegatedApprovalAlldata('Completed')">
                         <div class="status_completed" ng-class="{'active':!showMyDelegateApproved }">
                             <div class="number">
                                 {{DelegatedCompletedGriddata.length}}

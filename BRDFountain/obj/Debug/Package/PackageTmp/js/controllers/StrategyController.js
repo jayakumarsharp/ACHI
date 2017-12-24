@@ -33,8 +33,6 @@
         PriorityScore: '',
         Priority: '',
         Capacity: {},
-        Strategytype: {},
-
     };
 
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
@@ -47,7 +45,7 @@
         DTColumnBuilder.newColumn('FTAShortCode').withTitle('FTA Short Code'),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('FTAApplicationName').withTitle('FTA Application Name'),
-        DTColumnBuilder.newColumn('FTAStrategyName').withTitle('FTA Strategy Name'),
+        DTColumnBuilder.newColumn('FTAStrategyCode').withTitle('FTA Strategy Name'),
         DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
         DTColumnBuilder.newColumn('FTAApplicationOwner').withTitle('FTA Owner'),
         //DTColumnBuilder.newColumn('StrategyStatus').withTitle('Strategy Status'),
@@ -141,11 +139,11 @@
         }).error(function (error) {
             $scope.Error = error;
         })
-        ApiCall.MakeApiCall("GetAllFTAShortCode?FTAShortCodeId=", 'GET', '').success(function (data) {
-            $scope.FTAShortCodeList = data;
-        }).error(function (error) {
-            $scope.Error = error;
-        })
+        //ApiCall.MakeApiCall("GetAllFTAShortCode?FTAShortCodeId=", 'GET', '').success(function (data) {
+        //    $scope.FTAShortCodeList = data;
+        //}).error(function (error) {
+        //    $scope.Error = error;
+        //})
 
         ApiCall.MakeApiCall("GetAllParentID?ParentIDId=", 'GET', '').success(function (data) {
             $scope.ParentIDList = data;
@@ -240,7 +238,7 @@
     $scope.InsertStrategy = function () {
         console.log($scope.selectModel);
         var currency = {};
-        if ($scope.listB_Estimation.length > 0) {
+        if ($scope.listB_Estimation.length > 0 && $scope.listB_Estimation.length == 1) {
             currency.Country = $scope.selectModel.Country.Id;
             currency.Region = $scope.selectModel.Region.Id;
             currency.FTAApplicationCodeId = $scope.selectModel.FTAApplicationCode.Id;
@@ -250,7 +248,7 @@
             currency.StrategytypeId = $scope.selectModel.Strategytype.Id;
             currency.GOLiveDate = $scope.selectModel.GOLiveDate;
             currency.FTAStrategyCodeId = $scope.selectModel.FTAStrategyCode.Id;
-            currency.FTAShortCodeId = $scope.selectModel.FTAShortCode;
+            currency.FTAShortCode = $scope.selectModel.FTAShortCode;
             currency.BusinessLineId = $scope.selectModel.BusinessLine.Id
             currency.FTAApplicationNameId = $scope.selectModel.FTAApplicationName.Id
             currency.FTAStrategyOwnerId = $scope.selectModel.FTAStrategyOwner.Id
@@ -267,13 +265,16 @@
             if (currency != null) {
                 StrategyService.InsertStrategy(currency).success(function (data) {
                     var splitdata = data.split('-');
-                    if (splitdata[0] == "success") {
-                        $scope.listB_Estimation[0].RefNumber = splitdata[1];
-                        $scope.listB_Estimation[0].Version = 1;
-                        $scope.showaction = false;
-                        StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
-                            toaster.pop('success', "Success", "Model/Algo added successfully", null);
-                        });
+                    if (splitdata.length > 0) {
+                        if (splitdata[0] == "success") {
+                            var internalsplit = splitdata[1].split('|')
+                            $scope.listB_Estimation[0].RefNumber = internalsplit[0];
+                            $scope.listB_Estimation[0].Version = internalsplit[1];
+                            $scope.showaction = false;
+                            StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+                                toaster.pop('success', "Success", "Model/Algo added successfully", null);
+                            });
+                        }
                         $('#currencyModel').modal('hide');
                     }
                     else
@@ -285,7 +286,7 @@
             }
         }
         else
-            toaster.pop('warning', "Warning", "Please select approvers", null);
+            toaster.pop('warning', "Warning", "Please select one approver", null);
     };
 
     $scope.Availableusers = [];
@@ -313,7 +314,9 @@
             $scope.selectModel.Strategytype = getdynamicobject($scope.selectModel.StrategytypeId, "StrategytypeList")
             $scope.selectModel.Venuetype = getdynamicobject($scope.selectModel.VenueTypeId, "VenuetypeList")
             $scope.selectModel.Capacity = getdynamicobject($scope.selectModel.CapacityId, "CapacityList")
-            $scope.selectModel.ChildID = getdynamicobject($scope.selectModel.ChildID, "CapacityList")
+            $scope.selectModel.ChildID = getdynamicobject($scope.selectModel.ChildID, "ChildIDList")
+            $scope.selectModel.GOLiveDate = moment($scope.selectModel.GOLiveDate, 'DD-MM-YYYY HH:mm:ss').format('MM/DD/YYYY');
+            $scope.selectModel.DecomissionedDate = moment($scope.selectModel.DecomissionedDate, 'DD-MM-YYYY HH:mm:ss').format('MM/DD/YYYY');
 
             $scope.activateTab(0);
             for (var i = 0; i < $scope.pageList.length; i++) {
@@ -389,82 +392,82 @@
         model.FTAStrategyName = $scope.selectModel.FTAStrategyName.FTAStrategyName;
         model.StrategytypeId = $scope.selectModel.Strategytype.Id;
         model.Strategytype = $scope.selectModel.Strategytype.Strategytype;
-
         model.GOLiveDate = $scope.selectModel.GOLiveDate;
         model.FTAStrategyCodeId = $scope.selectModel.FTAStrategyCode.Id;
         model.FTAStrategyCode = $scope.selectModel.FTAStrategyCode.FTAStrategyCode;
-        model.FTAShortCodeId = $scope.selectModel.FTAShortCode;
-        model.BusinessLineId = $scope.selectModel.BusinessLine.Id
-        model.BusinessLine = $scope.selectModel.BusinessLine.BusinessLine
+        model.FTAShortCode = $scope.selectModel.FTAShortCode;
+        model.BusinessLineId = $scope.selectModel.BusinessLine.Id;
+        model.BusinessLine = $scope.selectModel.BusinessLine.BusinessLine;
         model.FTAApplicationNameId = $scope.selectModel.FTAApplicationName.Id
-        model.FTAApplicationName = $scope.selectModel.FTAApplicationName.FTAApplicationName
+        model.FTAApplicationName = $scope.selectModel.FTAApplicationName.FTAApplicationName;
         model.FTAStrategyOwnerId = $scope.selectModel.FTAStrategyOwner.Id;
         model.FTAStrategyOwner = $scope.selectModel.FTAStrategyOwner.FTAStrategyOwner;
-
-        model.ApplicationCategoryId = $scope.selectModel.ApplicationCategory.Id
+        model.ApplicationCategoryId = $scope.selectModel.ApplicationCategory.Id;
         model.ApplicationCategory = $scope.selectModel.ApplicationCategory.ApplicationCategory;
         model.VenuetypeId = $scope.selectModel.Venuetype.Id;
         model.Venuetype = $scope.selectModel.Venuetype.Venuetype;
-        model.DecomissionedDate = $scope.selectModel.DecomissionedDate
-        model.DiscretionaryCodeId = $scope.selectModel.DiscretionaryCode.Id
+        model.DecomissionedDate = $scope.selectModel.DecomissionedDate;
+        model.DiscretionaryCodeId = $scope.selectModel.DiscretionaryCode.Id;
         model.DiscretionaryCode = $scope.selectModel.DiscretionaryCode.DiscretionaryCode;
 
-        model.ParentID = $scope.selectModel.ParentID.Id
-        model.ParentIDValue = $scope.selectModel.ParentID.ParentID
-        model.FTAApplicationOwnerId = $scope.selectModel.FTAApplicationOwner.Id
-        model.FTAApplicationOwner = $scope.selectModel.FTAStrategyOwner.FTAApplicationOwner;
+        model.ParentID = $scope.selectModel.ParentID.Id;
+        model.ParentIDValue = $scope.selectModel.ParentID.ParentID;
+        model.FTAApplicationOwnerId = $scope.selectModel.FTAApplicationOwner.Id;
+        model.FTAApplicationOwner = $scope.selectModel.FTAApplicationOwner.FTAApplicationOwner;
         model.PriorityScore = $scope.selectModel.PriorityScore;
         model.Priority = $scope.selectModel.Priority;
         model.CapacityId = $scope.selectModel.Capacity.Id
         model.Capacity = $scope.selectModel.Capacity.Capacity
 
-        if ($scope.listB_Estimation.length > 0) {
+        if ($scope.listB_Estimation.length > 0 && $scope.listB_Estimation.length == 1) {
 
             var array = [];
             array.push(model);
             array.push($scope.Prevvalue);
-
-
             StrategyService.UpdateStrategy(array).success(function (data) {
-                if (data == "success") {
+                var splitdata = data.split('-');
+                if (splitdata.length > 0) {
+                    if (splitdata[0] == "success") {
+                        var internalsplit = splitdata[1].split('|')
+                        $scope.listB_Estimation[0].RefNumber = internalsplit[0];
+                        $scope.listB_Estimation[0].Version = internalsplit[1];
+                        if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
+                            $scope.listB_Estimation[0].RefNumber = model.RefNumber;
+                            $scope.listB_Estimation[0].Version = model.Version;
+                            StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
 
-                    if ($scope.listB_Estimation != null && $scope.listB_Estimation.length > 0) {
-                        $scope.listB_Estimation[0].RefNumber = model.RefNumber;
-                        $scope.listB_Estimation[0].Version = model.Version;
+                            });
+                        }
 
-                        StrategyService.InsertStrategyApprover($scope.listB_Estimation).success(function (data) {
+                        var temp = [];
+                        for (var j = 0; j < $scope.Availableusers.length; j++) {
+                            var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
+                            if (delId < 0)
+                                temp.push($scope.Availableusers[j])
+                        }
 
-                        });
+                        if (temp.length > 0) {
+                            StrategyService.DeleteStrategyApprover(temp).success(function (data) {
+
+                            });
+                        }
+                        $scope.showaction = false;
+                        $scope.editMode = false;
+                        $('#currencyModel').modal('hide');
+
+                        toaster.pop('success', "Success", "Model/Algo updated successfully", null);
+                        $scope.getallalgodata()
                     }
-
-                    var temp = [];
-                    for (var j = 0; j < $scope.Availableusers.length; j++) {
-                        var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.Availableusers[j].Approver);
-                        if (delId < 0)
-                            temp.push($scope.Availableusers[j])
-                    }
-
-                    if (temp.length > 0) {
-                        StrategyService.DeleteStrategyApprover(temp).success(function (data) {
-
-                        });
-                    }
-                    $scope.showaction = false;
-                    $scope.editMode = false;
-                    $('#currencyModel').modal('hide');
-
-                    toaster.pop('success', "Success", "Model/Algo updated successfully", null);
-                    $scope.getallalgodata()
+                    else
+                        $scope.errorinfo = data;
                 }
-                else
-                    $scope.errorinfo = data;
                 getallgriddata();
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
             });
         }
         else
-            toaster.pop('warning', "Warning", "Please select approvers", null);
+            toaster.pop('warning', "Warning", "Please select one approver", null);
     };
 
     var formatDate = function (indate) {
@@ -622,9 +625,9 @@
     $scope.bToA_Estimation = function () {
         console.log('b to a');
         for (var i = 0; i < $scope.selectedB_Estimation.length; i++) {
-            var moveId = arrayObjectEstimationProductIndexOf($scope.EstimationProduct, $scope.selectedB_Estimation[i]);
+            var moveId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.selectedB_Estimation[i]);
             if (moveId != -1) {
-                $scope.listA_Estimation.push($scope.EstimationProduct[moveId]);
+                $scope.listA_Estimation.push($scope.listB_Estimation[moveId]);
             }
             var delId = arrayObjectEstimationProductIndexOf($scope.listB_Estimation, $scope.selectedB_Estimation[i]);
             $scope.listB_Estimation.splice(delId, 1);
