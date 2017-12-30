@@ -1,4 +1,4 @@
-﻿ReportApp.controller('RoleController', ['$scope', '$rootScope', '$window', '$location', 'RoleFactory', 'reportFactory', 'UserFactory', 'ApiCall', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('RoleController', ['$scope', '$rootScope', '$window', '$location', 'RoleFactory', 'reportFactory', 'UserFactory', 'ApiCall', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -14,7 +14,7 @@
     }
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="EditRole(' + data + ')"><img src="../images/edit.png"></a>';
+        return '<a  ng-click="EditRole(' + data + ')"><img src="images/edit.png"></a>';
         //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -129,12 +129,12 @@
         RoleFactory.GetRole(data).success(function (data) {
 
             $scope.role = data[0];
-             $scope.editMode = true;
-        $scope.GetLists();
-        $('#AddEditRole').modal('show');
+            $scope.editMode = true;
+            $scope.GetLists();
+            $('#AddEditRole').modal('show');
         });
-       // console.log('editing role: ' + $scope.role.RoleName)
-       
+        // console.log('editing role: ' + $scope.role.RoleName)
+
     };
 
     $scope.GetRoleRightMapping = function (roleId) {
@@ -438,41 +438,42 @@
     $scope.IsPageReadOnly();
 }]);
 
-ReportApp.factory('RoleFactory',['$http', function ($http) {
+ReportApp.factory('RoleFactory', ['$http', function ($http) {
+    var URL = 'Main/';
     var RoleFactory = {
         GetRoles: function () {
-            return $http.get('roles?roleId=');
+            return $http.get(URL + 'roles?roleId=');
         },
         GetRole: function (roleId) {
-            return $http.get('roles?roleId=' + roleId);
+            return $http.get(URL + 'roles?roleId=' + roleId);
         },
         GetUserRoles: function (roleId) {
-            return $http.get('GetUserRoles?roleId=' + roleId);
+            return $http.get(URL + 'GetUserRoles?roleId=' + roleId);
         },
         GetRights: function () {
-            return $http.get('GetRights?right=');
+            return $http.get(URL + 'GetRights?right=');
         },
         GetUser: function (userid) {
-            return $http.get('getusers?userId=' + userid);
+            return $http.get(URL + 'getusers?userId=' + userid);
         },
         GetRoleRightMappings: function () {
-            return $http.get('GetRoleRightMappings?roleId=');
+            return $http.get(URL + 'GetRoleRightMappings?roleId=');
         },
         AddRole: function (role) {
-            return $http.post('AddRole', role);
+            return $http.post(URL + 'AddRole', role);
         },
         AddRoleRightMapping: function (roleright) {
-            return $http.post('AddRoleRightMapping', roleright);
+            return $http.post(URL + 'AddRoleRightMapping', roleright);
         },
         ModifyRoleRight: function (roleright) {
-            return $http.post('ModifyRoleRight', roleright);
+            return $http.post(URL + 'ModifyRoleRight', roleright);
         },
         DeleteRole: function (roleright) {
-            return $http.post('DeleteRole', roleright);
+            return $http.post(URL + 'DeleteRole', roleright);
         },
 
         GetRoleRightMapping: function (roleId) {
-            return $http.get('GetRoleRightMapping?roleId=' + roleId);
+            return $http.get(URL + 'GetRoleRightMapping?roleId=' + roleId);
         }
 
     };
@@ -481,19 +482,20 @@ ReportApp.factory('RoleFactory',['$http', function ($http) {
 
 
 
-ReportApp.factory('reportFactory',['$http', function ($http, $q) {
+ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
+    var URL = 'Main/';
     var AuthFactory = {
         Logout: function (userId) {
-            return $http.post('Logout/', { userId: userId });
+            return $http.post(URL + 'Logout/', { userId: userId });
         },
         GetMenuList: function (userId) {
-            return $http.get('GetmenuList?userId=' + userId);
+            return $http.get(URL + 'GetmenuList?userId=' + userId);
         },
         GetRightsList: function (userId) {
-            return $http.get('GetUserRights/?userId=' + userId);
+            return $http.get(URL + 'GetUserRights/?userId=' + userId);
         },
         GetUser: function (userId) {
-            return $http.get('GetUser?userId=' + userId);
+            return $http.get(URL + 'GetUser?userId=' + userId);
         }
     };
     return AuthFactory;

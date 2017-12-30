@@ -1,6 +1,6 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
 <div ng-controller="StrategyController">
-    <div ng-include="'ConfirmModal'"></div>
+    <div ng-include="'Main/ConfirmModal'"></div>
     <div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;" ng-show="!showaction">
         <h4>Strategy Management   </h4>
         <div class="row pull-right">
@@ -12,12 +12,12 @@
     </div>
     <div ng-show="showaction">
         <div class="col-lg-8 col-md-6 main-content basic-page sidebar">
-            <h4 style="margin-bottom:8px !important;" ng-hide="editMode">Add Strategy </h4>
-            <h4 style="margin-bottom:8px !important;" ng-show="editMode">Edit Strategy</h4>
+            <h4 style="margin-bottom:1px !important;" ng-hide="editMode">Add Strategy </h4>
+            <h4 style="margin-bottom:1px !important;" ng-show="editMode">Edit Strategy</h4>
             <div class="row">
                 <div class="box-body">
                     <div class="row">
-                        <div ng-include="'ShowApplicationDetails'"></div>
+                        <div ng-include="'Main/ShowApplicationDetails'"></div>
                     </div>
                 </div>
             </div>
@@ -35,8 +35,7 @@
             </ol>
         </div>
     </div>
-    <div ng-include="'ViewApprovals'"></div>
-    <div ng-include="'ConfirmModal'"></div>
+    <div ng-include="'Main/ViewApprovals'"></div>
 </div>
 
 <style>

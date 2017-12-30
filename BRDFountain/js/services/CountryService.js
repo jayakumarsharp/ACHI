@@ -1,6 +1,6 @@
 ﻿'use strict';
-ReportApp.factory('CountryService', ['$http',function ($http) {
-    var CountryServiceURI = BaseURL;
+ReportApp.factory('CountryService', ['$http', function ($http) {
+    var CountryServiceURI = BaseURL + 'Main/';
     var CountryServiceFactory = {};
 
     CountryServiceFactory.GetAllCountry = function () {

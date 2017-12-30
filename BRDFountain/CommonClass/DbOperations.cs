@@ -683,10 +683,10 @@ public class DbOperations
                                    {
                                        Id = Convert.ToInt32(row["Id"]),
                                        RefNumber = Convert.ToString(row["RefNumber"]),
+                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
                                        FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
                                        FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
                                        FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
-                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
                                        FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
                                        DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
                                        DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
@@ -700,10 +700,14 @@ public class DbOperations
                                        BusinessLine = Convert.ToString(row["BusinessLine"]),
                                        FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
                                        FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                       FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       FTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
                                        ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       FTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
                                        Strategytype = Convert.ToString(row["StrategyType"]),
                                        VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
@@ -715,7 +719,7 @@ public class DbOperations
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
-                                       FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                       SignOff = Convert.ToString(row["SignOff"]),
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
@@ -727,6 +731,15 @@ public class DbOperations
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
                                        DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
+                                       BusinessId = Convert.ToInt32(row["BusinessId"]),
+                                       Business = Convert.ToString(row["business"]),
+                                       FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
+                                       FTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
+                                       BusinessMappingId = Convert.ToString(row["BusinessMappingId"]),
+                                       ThirdPartyAppId = Convert.ToInt32(row["ThirdPartyAppId"]),
+                                       ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
+
+
                                    }).ToList();
                         }
                     }
@@ -888,12 +901,12 @@ public class DbOperations
                                        BusinessLine = Convert.ToString(row["BusinessLine"]),
                                        FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
                                        FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                       FTAApplicationOwnerId = Convert.ToInt32(row["FTAApplicationOwnerId"]),
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       FTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
                                        ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                       FTAStrategyOwnerId = Convert.ToInt32(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                       FTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
                                        FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
                                        FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
@@ -907,7 +920,7 @@ public class DbOperations
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
-                                       FinalSignOff = Convert.ToString(row["FinalSignOff"]),
+                                       SignOff = Convert.ToString(row["SignOff"]),
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
@@ -919,9 +932,14 @@ public class DbOperations
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
                                        DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
-
+                                       BusinessId = Convert.ToInt32(row["BusinessId"]),
+                                       Business = Convert.ToString(row["business"]),
+                                       FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
+                                       FTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
+                                       BusinessMappingId = Convert.ToString(row["BusinessMappingId"]),
+                                       ThirdPartyAppId = Convert.ToInt32(row["ThirdPartyAppId"]),
+                                       ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
                                    }).ToList();
-
                         }
                     }
 
@@ -1040,17 +1058,17 @@ public class DbOperations
 
     }
 
-    public void InsertStrategydata(Strategy _StrategyInfo, bool isUpdate, out int errorcode, out string errordesc)
+    public void InsertStrategydata(Strategy _StrategyInfo, out int errorcode, out string errordesc)
     {
         try
         {
             errorcode = 0;
             errordesc = "success";
-            long lastTimeStamp = DateTime.UtcNow.Ticks;
+
             DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             DateTime DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            if (!isUpdate)
-                _StrategyInfo.RefNumber = Convert.ToString(lastTimeStamp);
+
+
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1079,14 +1097,24 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
                 cmd.Parameters.Add(new MySqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
                 cmd.Parameters.Add(new MySqlParameter("i_Version", _StrategyInfo.Version));
+                cmd.Parameters.Add(new MySqlParameter("i_SignOff", _StrategyInfo.SignOff));
 
+                cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", _StrategyInfo.ThirdPartyAppId));
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessId", _StrategyInfo.BusinessId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationMappingId", _StrategyInfo.FTAApplicationMappingId));
+                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyMappingId", _StrategyInfo.FTAStrategyMappingId));
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
 
+                cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                     this.CloseConnection();
                 }
-                errordesc = "success-" + _StrategyInfo.RefNumber + "|" + _StrategyInfo.Version;
+                //if (errordesc == "success")
+                //    errordesc = "success-" + _StrategyInfo.RefNumber + "|" + _StrategyInfo.Version;
             }
         }
         catch (MySqlException e)
@@ -1094,7 +1122,6 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
         }
         catch (Exception e)
         {
@@ -1104,8 +1131,6 @@ public class DbOperations
 
         }
     }
-
-
     public void insertStrategyVersionChange(string RefNumber, int Version, string Changedesc)
     {
         try
@@ -1137,6 +1162,64 @@ public class DbOperations
         {
             this.CloseConnection();
 
+        }
+    }
+
+
+    public List<StrategyVersionLog> GetStrategyVersionLog(string id)
+    {
+        List<StrategyVersionLog> lst = new List<StrategyVersionLog>();
+
+        string query = "sp_get_strategyVersionLog";
+        try
+        {
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_Id", id));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+
+                                   select new StrategyVersionLog
+                                   {
+                                       Id = Convert.ToInt32(row["Id"]),
+                                       RefNumber = Convert.ToString(row["RefNumber"]),
+                                       ChangeDesc = Convert.ToString(row["ChangeDesc"]),
+                                       FTAShortCode = Convert.ToString(row["FTAShortCode"]),
+                                       Version = Convert.ToString(row["Version"]),
+                                   }).ToList();
+                        }
+                    }
+
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (MySqlException ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
+        }
+        catch (Exception ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
         }
     }
 
@@ -3493,12 +3576,12 @@ public class DbOperations
 
     #endregion BusinessSuffix
 
-    #region FTAShortCode
+    #region Business
 
-    public List<FTAShortCodeMaster> GetFTAShortCodeList(string TaskTypeId)
+    public List<BusinessMaster> GetBusinessList(string TaskTypeId)
     {
-        List<FTAShortCodeMaster> lst = new List<FTAShortCodeMaster>();
-        string query = "sp_getallFTAShortCode";
+        List<BusinessMaster> lst = new List<BusinessMaster>();
+        string query = "sp_getallBusiness";
 
         if (this.OpenConnection() == true)
         {
@@ -3515,9 +3598,9 @@ public class DbOperations
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         lst = (from DataRow row in dt.Rows
-                               select new FTAShortCodeMaster
+                               select new BusinessMaster
                                {
-                                   FTAShortCode = Convert.ToString(row["FTAShortCode"]),
+                                   Business = Convert.ToString(row["Business"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }
@@ -3532,15 +3615,15 @@ public class DbOperations
         return lst;
     }
 
-    public void AddFTAShortCode(FTAShortCodeMaster opp, out int errorcode, out string errordesc)
+    public void AddBusiness(BusinessMaster opp, out int errorcode, out string errordesc)
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAShortCode", connection))
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", opp.FTAShortCode));
+            cmd.Parameters.Add(new MySqlParameter("i_Business", opp.Business));
 
             if (this.OpenConnection() == true)
             {
@@ -3555,16 +3638,16 @@ public class DbOperations
 
     }
 
-    public void ModifyFTAShortCode(FTAShortCodeMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyBusiness(BusinessMaster Opp, out int errorcode, out string errordesc)
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAShortCodemaster", connection))
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", Opp.FTAShortCode));
+            cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
 
             if (this.OpenConnection() == true)
             {
@@ -3579,11 +3662,11 @@ public class DbOperations
 
     }
 
-    public void DeleteFTAShortCode(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteBusiness(string TaskTypeId, out int errorcode, out string errordesc)
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAShortCode", connection))
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
@@ -3602,7 +3685,7 @@ public class DbOperations
 
     }
 
-    #endregion FTAShortCode
+    #endregion Business
 
     #region ParentID
 
@@ -5046,6 +5129,500 @@ public class DbOperations
     }
 
     #endregion PriorityScore
+
+
+    #region BusinessMapping
+
+    public List<BusinessMappingMaster> GetBusinessMappingList(string TaskTypeId)
+    {
+        List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
+        string query = "sp_getbusinessmapping";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessMappingMaster
+                               {
+                                   Business = Convert.ToString(row["Business"]),
+                                   BusinessId = Convert.ToString(row["BusinessId"]),
+                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                   BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessMapping(BusinessMappingMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_addbusinessmapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
+            cmd.Parameters.Add(new MySqlParameter("i_businessid", opp.BusinessId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    //public void ModifyBusinessMapping(BusinessMaster Opp, out int errorcode, out string errordesc)
+    //{
+    //    errorcode = 0;
+    //    errordesc = "success";
+    //    using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.Clear();
+    //        cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+    //        cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
+
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+    //            cmd.ExecuteNonQuery();
+    //            this.CloseConnection();
+    //        }
+    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+    //    }
+
+    //}
+
+    public void DeleteBusinessMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessMapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessMapping
+
+    #region FTAApplicationMapping
+
+    public List<FTAApplicationMappingMaster> GetFTAApplicationMappingList(string TaskTypeId)
+    {
+        List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+        string query = "sp_getFTAApplicationMapping";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAApplicationMappingMaster
+                               {
+                                   ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                   ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                   ChildId = Convert.ToString(row["ChildId"]),
+                                   ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                   FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                   FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAApplicationMapping(FTAApplicationMappingMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_addFTAApplicationMapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+            cmd.Parameters.Add(new MySqlParameter("i_ChildId", opp.ChildId));
+            cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    //public void ModifyFTAApplicationMapping(BusinessMaster Opp, out int errorcode, out string errordesc)
+    //{
+    //    errorcode = 0;
+    //    errordesc = "success";
+    //    using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.Clear();
+    //        cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+    //        cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
+
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+    //            cmd.ExecuteNonQuery();
+    //            this.CloseConnection();
+    //        }
+    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+    //    }
+
+    //}
+
+    public void DeleteFTAApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_deleteFTAApplicationMapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAApplicationMapping
+
+    #region FTAStrategyMapping
+
+    public List<FTAStrategyMappingMaster> GetFTAStrategyMappingList(string TaskTypeId)
+    {
+        List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+        string query = "sp_getFTAStrategyMapping";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAStrategyMappingMaster
+                               {
+                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                   FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                   FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddFTAStrategyMapping(FTAStrategyMappingMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_addFTAStrategyMapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
+            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+
+
+    public void DeleteFTAStrategyMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyMapping", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion FTAStrategyMapping
+
+
+
+
+    public List<ThirdPartyApp> GetThirdPartyAppList(string TaskTypeId)
+    {
+        List<ThirdPartyApp> lst = new List<ThirdPartyApp>();
+        string query = "sp_getAllThirdPartyAppType";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new ThirdPartyApp
+                               {
+                                   Value = Convert.ToString(row["ThirdPartyAppName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public List<BusinessMappingMaster> GetBusinessMappingListbyId(string Id)
+    {
+        List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
+        string query = "sp_getbusinessmappingbyId";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessMappingMaster
+                               {
+                                   Business = Convert.ToString(row["Business"]),
+                                   BusinessId = Convert.ToString(row["BusinessId"]),
+                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                   BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public List<FTAApplicationMappingMaster> GetFTAApplicationMappingListbyId(string Id)
+    {
+        List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+        string query = "sp_getFTAApplicationMappingbyId";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAApplicationMappingMaster
+                               {
+                                   ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                   ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                   ChildId = Convert.ToString(row["ChildId"]),
+                                   ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                   FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                   FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public List<FTAStrategyMappingMaster> GetFTAStrategyMappingListbyId(string Id)
+    {
+        List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+        string query = "sp_getFTAStrategyMappingbyId";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new FTAStrategyMappingMaster
+                               {
+                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                   FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                   FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
 
 }
 

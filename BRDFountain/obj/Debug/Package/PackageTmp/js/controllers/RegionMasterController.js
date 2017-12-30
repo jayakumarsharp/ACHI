@@ -18,7 +18,7 @@
     }
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="../images/edit.png"></a>';
+        return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="images/edit.png"></a>';
     }
     $scope.editMode = false;
     $scope.IsReadOnly = false;

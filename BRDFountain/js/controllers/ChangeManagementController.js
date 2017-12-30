@@ -41,8 +41,8 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        return '<a class="test" ><img src="../images/edit.png"></a>' +
-        '&nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="../images/eyeicon.png"></a>';
+        return '<a class="test" ><img src="images/edit.png"></a>' +
+        '&nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
 
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {

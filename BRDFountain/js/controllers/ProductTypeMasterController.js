@@ -20,7 +20,7 @@
 
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetProductMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
+        return '<a  ng-click="GetProductMasterById(' + data + ')"><img src="images/edit.png"></a> ';
     }
     $scope.Showadd = function () {
         $scope.showAddwindow = true;

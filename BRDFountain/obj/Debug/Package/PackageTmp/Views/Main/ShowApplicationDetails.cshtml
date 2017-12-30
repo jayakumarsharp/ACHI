@@ -4,34 +4,55 @@
         <div class="col-md-4">
             <div class="box-body">
                 <div class="form-group">
-                    <label>FTA Application Code</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-change="userfilter1()" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplicationCode" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplication Code -</option>
+                    <label>FTA Application Name</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationName" ng-change="userfilter3()" ng-options="item.FTAApplicationName for item in FTAApplicationNameList" title="Select FTAApplicationName" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationName -</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Business Suffix</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessSuffix" ng-change="userfilter1()" ng-options="item.BusinessSuffix for item in BusinessSuffixList" title="Select BusinessSuffix" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Business Suffix-</option>
+                    <label>FTAApplication Suffix</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ThirdPartyApp" ng-options="item.Value for item in ThirdPartyList" title="Select FTAApplicationSuffix" disabled style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ThirdParty-</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>FTA Strategy Name</label>
+                    <select class="form-control" name="ddlProduct" ng-model="selectModel.FTAStrategyName" ng-options="item.FTAStrategyName for item in FTAStrategyNameList" ng-change="userfilter4()" title="Select FTAStrategyName" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAStrategy Name -</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Child ID</label>
-                    <select class="form-control" name="ddlApp" ng-model="selectModel.ChildID" ng-options="item.ChildID for item in ChildIDList" title="Select ChildID" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select ChildID -</option>
-                    </select>
+                    <label>FTA Short Code</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.FTAShortCode">
 
                 </div>
                 <div class="form-group">
-                    <label>Country </label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Country" ng-options="item.CountryName for item in CountryMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Country -</option>
+                    <label>Region</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Region" ng-change="userfilter(false)" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Region -</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Strategy type</label>
+                    <select class="form-control" ng-model="selectModel.Strategytype" ng-options="item.Strategytype for item in StrategytypeList" ng-change="userfilter2()" title="Select Strategy Type" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Strategy type -</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label>FTA Application Owner</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.UserName for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationOwner -</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>FTA Strategy Name</label>
-                    <select class="form-control" name="ddlProduct" ng-model="selectModel.FTAStrategyName" ng-options="item.FTAStrategyName for item in FTAStrategyNameList" title="Select FTAStrategyName" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAStrategy Name -</option>
+                    <label>Application Category</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ApplicationCategory -</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -39,11 +60,58 @@
                     <input type="file" file-model="Thanksuploadfile" />
 
                 </div>
+
+            </div>
+        </div>
+        @*First Box end*@
+        @*Second Box start*@
+        <div class="col-md-4">
+            <div class="box-body">
                 <div class="form-group">
-                    <label>Strategy type</label>
-                    <select class="form-control" ng-model="selectModel.Strategytype" ng-options="item.Strategytype for item in StrategytypeList" ng-change="userfilter2()" title="Select Strategy Type" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Strategy type -</option>
+                    <label>FTA Application Code</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-change="userfilter1()" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplicationCode" disabled style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplication Code -</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Business</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Business" ng-options="item.Business for item in BusinessList" ng-change="userfilter5()" title="Select Business" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Business -</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FTA Strategy Code</label>
+                    <select class="form-control" ng-model="selectModel.FTAStrategyCode" ng-change="userfilter1()" ng-options="item.FTAStrategyCode for item in FTAStrategyCodeList" title="Select FTAStrategyCode" disabled style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAStrategy Code -</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Business Line</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessLine" ng-options="item.BusinessLine for item in BusinessLineList" ng-change="userfilter(false)" title="Select BusinessLine" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select BusinessLine-</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Country </label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Country" ng-options="item.CountryName for item in CountryMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Country -</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Capacity</label>
+                    <select class="form-control" name="ddlCapacity" ng-model="selectModel.Capacity" ng-options="item.Capacity for item in CapacityList" ng-change="userfilter2()" title="Select Capacity" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Capacity -</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
+
                 </div>
                 <div class="form-group">
                     <label>Go-Live date</label>
@@ -56,64 +124,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        @*First Box end*@
-        @*Second Box start*@
-        <div class="col-md-4">
-            <div class="box-body">
-                <div class="form-group">
-                    <label>FTA Strategy Code</label>
-                    <select class="form-control" ng-model="selectModel.FTAStrategyCode" ng-change="userfilter1()" ng-options="item.FTAStrategyCode for item in FTAStrategyCodeList" title="Select FTAStrategyCode" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAStrategy Code -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>FTA Short Code</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.FTAShortCode">
 
-                </div>
 
                 <div class="form-group">
-                    <label>Business Line</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessLine" ng-options="item.BusinessLine for item in BusinessLineList" ng-change="userfilter()" title="Select BusinessLine" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select BusinessLine-</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>FTA Application Name</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationName" ng-options="item.FTAApplicationName for item in FTAApplicationNameList" title="Select FTAApplicationName" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplicationName -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>FTA Strategy Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.FTAStrategyOwner for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAStrategyOwner -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Application Category</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select ApplicationCategory -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Venue type</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Venuetype" ng-options="item.Venuetype for item in VenuetypeList" ng-change="userfilter2()" title="Select Region" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Venuetype-</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Decommissioned Date</label>
-                    <div class="col-lg-12">
-                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate" required>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
+                    <label>Decommissioned Evidence</label>
+                    <input type="file" file-model="Thanksuploadfile" />
                 </div>
 
             </div>
@@ -123,6 +138,20 @@
         @*3rd Box start*@
         <div class="col-md-4">
             <div class="box-body">
+                <div class="form-group">
+                    <label>Child ID</label>
+                    <select class="form-control" name="ddlApp" ng-model="selectModel.ChildID" ng-options="item.ChildID for item in ChildIDList" title="Select ChildID" disabled style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ChildID -</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Business Suffix</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessSuffix" ng-change="userfilter1()" ng-options="item.BusinessSuffix for item in BusinessSuffixList" title="Select BusinessSuffix" disabled style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Business Suffix-</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>Discretionary Code</label>
                     <select class="form-control" name="ddlSBU" ng-model="selectModel.DiscretionaryCode" ng-change="userfilter1()" ng-options="item.DiscretionaryCode for item in DiscretionaryCodeList" title="Select DiscretionaryCode" style="width:100%;font-size: 0.8em" required>
@@ -137,42 +166,38 @@
                         <option value="">- Select ParentID-</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label>Region</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Region" ng-change="userfilter()" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Region -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>FTA Application Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.FTAApplicationOwner for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplicationOwner -</option>
+                    <label>FTA Strategy Owner</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.UserName for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAStrategyOwner -</option>
                     </select>
                 </div>
 
+
+                <div class="form-group">
+                    <label>Venue type</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Venuetype" ng-options="item.Venuetype for item in VenuetypeList" ng-change="userfilter2()" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select Venuetype-</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>Priority Score</label>
                     <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
                 </div>
-                <div class="form-group">
-                    <label>Priority</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
-
-                </div>
-                <div class="form-group">
-                    <label>Capacity</label>
-                    <select class="form-control" name="ddlCapacity" ng-model="selectModel.Capacity" ng-options="item.Capacity for item in CapacityList" ng-change="userfilter2()" title="Select Capacity" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Capacity -</option>
-                    </select>
-                </div>
-
 
                 <div class="form-group">
-                    <label>Decommissioned Evidence</label>
-                    <input type="file" file-model="Thanksuploadfile" />
-
+                    <label>Decommissioned Date</label>
+                    <div class="col-lg-12">
+                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate" required>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
+
+
 
                 @*FTA Owner Attestation*@
 
@@ -195,75 +220,73 @@
 <div ng-show="pageList[1].Page">
     <form novalidate role="form" name="form2">
 
-        @*<div class="col-md-12">
-                <div class="box-body">
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" rows="5" id="comment" placeholder="Enter the description"></textarea>
-                    </div>
-
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">
-                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                        SIGN OFF
-                    </label>
+        <div class="col-md-12">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="5" id="comment" ng-model="selectModel.Description" placeholder="Enter the description"></textarea>
                 </div>
 
-            </div>*@
-
-        <div class="col-lg-12">
-            <div class="form-group  row ">
-                <div class="col-sm-5" style="margin-left:15px;">
-                    <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
-                        <a href="javascript:;" class="list-group-item active grouppadding">
-                            Available Approvers
-                            <input style="color:black;margin-left:5px;" ng-model="search.Approver" />
-                        </a>
-                        <span ng-repeat="right in listA_Estimation | filter:{Approver: search.Approver}">
-                            <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                {{right.Approver}}
-                                <input ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Approver)" name="selectedA_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                            </a>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-md-1 v-center text-center">
-                    <br />
-                    <br />
-                    <br /><br />
-                    <div class="btn-group-vertical">
-                        @*<button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="AlltoA_Estimation()" id="btnAllA_Estimation"><i class="fa fa-angle-double-left"></i></button>*@
-                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
-                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
-                        @*<button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="AlltoB_Estimation()" id="btnAllB_Estimation"><i class="fa fa-angle-double-right"></i></button>*@
-                    </div>
-                </div>
-                <div class="col-sm-5">
-                    <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
-                        <a href="javascript:;" class="list-group-item active grouppadding">
-                            Selected Approver(s)
-                            <input style="color:black;margin-left:5px;" ng-model="search.rApprover" />
-                        </a>
-                        <span ng-repeat="right in listB_Estimation | filter:search.rApprover">
-                            @*| orderBy:'right.productApprover'*@
-                            <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                {{right.Approver}}
-                                <input id="{{right.Approver}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Approver)" name="selectedB_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                            </a>
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="checkbox" ng-if="ShowSignOff">
+                <label>
+                    <input type="checkbox" value="" ng-model="selectModel.SignOff">
+                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                    SIGN OFF
+                </label>
+            </div>
+
         </div>
+
+        @*<div class="col-lg-12">
+                <div class="form-group  row ">
+                    <div class="col-sm-5" style="margin-left:15px;">
+                        <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
+                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                Available Approvers
+                                <input style="color:black;margin-left:5px;" ng-model="search.Approver" />
+                            </a>
+                            <span ng-repeat="right in listA_Estimation | filter:{Approver: search.Approver}">
+                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                    {{right.Approver}}
+                                    <input ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Approver)" name="selectedA_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 v-center text-center">
+                        <br />
+                        <br />
+                        <br /><br />
+                        <div class="btn-group-vertical">
+                            <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
+                            <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
+                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                Selected Approver(s)
+                                <input style="color:black;margin-left:5px;" ng-model="search.rApprover" />
+                            </a>
+                            <span ng-repeat="right in listB_Estimation | filter:search.rApprover">
+
+                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                    {{right.Approver}}
+                                    <input id="{{right.Approver}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Approver)" name="selectedB_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
     </form>
     <div class="form-group col-lg-12">
         <div class="col-sm-offset-2 col-sm-10">
             <span>
                 <input type="button" value="Prev" ng-click="activateTab(0)" class="btn btn-primary" />
             </span>&nbsp;
-           
+
             <span ng-show="!editMode">
                 <input type="button" value="Save" ng-disabled="adduserform.$invalid" ng-click="InsertStrategy(currency)" class="btn btn-primary" />
             </span>&nbsp;

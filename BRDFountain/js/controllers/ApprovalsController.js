@@ -52,18 +52,15 @@
         DTColumnBuilder.newColumn('CreatedDate').withTitle('Created Date')
     ];
 
-    function createdRow(row, data, dataIndex) {
-        $compile(angular.element(row).contents())($scope);
-    }
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a   class="test"><img src="../images/edit.png"></a>';
+        return '<a   class="test"><img src="images/edit.png"></a>';
     }
     function actionsStatus(data, type, full, meta) {
 
-        if (data == "True")
+        if (data == "Y")
             return '<a  class="dta-act">Approved</a>';
-        else if (data == "False")
+        else if (data == "N")
             return '<a  class="dta-act-not">Not Approved</a>';
         else
             return '<a  class="dta-sign">Pending</a>';
@@ -164,7 +161,7 @@
                     console.log(data[i])
                     data[i].Ver = "Version - " + data[i].Version;
                     data[i].Version = data[i].Version;
-                    if (data[i].Status == 'True' || data[i].Status == 'False')
+                    if (data[i].Status == 'Y' || data[i].Status == 'N')
                         $scope.CompletedGriddata.push(data[i])
                     else
                         $scope.PendingGriddata.push(data[i]);
@@ -184,8 +181,6 @@
 
     $scope.PendingGriddata = [];
     $scope.CompletedGriddata = [];
-
-
     $scope.GetDelegatedApprovalAlldata = function (opt) {
         StrategyService.Get_ApprovaltransferByuser().success(function (data) {
             $timeout(function () {
@@ -201,7 +196,6 @@
                         $scope.DelegatedPendingGriddata.push(data[i])
 
                 }
-
                 $scope.dtOptionspendingDelegates.data = $scope.DelegatedPendingGriddata;
                 $scope.dtOptionscompleteDelegates.data = $scope.DelegatedCompletedGriddata;
                 if (opt == 'Completed')

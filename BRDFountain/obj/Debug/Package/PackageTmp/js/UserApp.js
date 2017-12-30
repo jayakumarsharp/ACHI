@@ -1,4 +1,4 @@
-﻿ReportApp.controller('UserController',['$scope', '$rootScope', '$window','$location', 'UserFactory', 'reportFactory', '$timeout', 'ApiCall', 'RoleFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('UserController', ['$scope', '$rootScope', '$window', '$location', 'UserFactory', 'reportFactory', '$timeout', 'ApiCall', 'RoleFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $window, $location, UserFactory, reportFactory, $timeout, ApiCall, RoleFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
@@ -35,8 +35,8 @@
     }
     function actionsHtml1(data, type, full, meta) {
         $scope.data = data;
-        return '<a  class="test" ><img src="../images/edit.png"></a>' +
-            '&nbsp;<a  class="view"><img style="width:24px;height:24px;" src="../images/eyeicon.png"></a>';
+        return '<a  class="test" ><img src="images/edit.png"></a>' +
+            '&nbsp;<a  class="view"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
 
     function actionsHtml(data, type, full, meta) {
@@ -166,7 +166,7 @@
         }).error(function (error) {
             $scope.Error = error;
         });
-      
+
         ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
             console.log(data);
             $scope.CountryMasterList = data;
@@ -490,42 +490,43 @@
     $scope.IsPageReadOnly();
 }]);
 
-ReportApp.factory('UserFactory', ['$http',function ($http) {
+ReportApp.factory('UserFactory', ['$http', function ($http) {
+    var Url = 'Main/';
     var UserFactory = {
         GetUsers: function () {
-            return $http.get('getusers?userid=');
+            return $http.get(Url + 'getusers?userid=');
         },
 
         GetADUsers: function () {
-            return $http.get('getADuser');
+            return $http.get(Url + 'getADuser');
         },
 
         GetUser: function (userid) {
-            return $http.get('getusers?userid=' + userid);
+            return $http.get(Url + 'getusers?userid=' + userid);
         },
 
         AddUser: function (user) {
-            return $http.post('CreateUser', user);
+            return $http.post(Url + 'CreateUser', user);
         },
         CreateTempUser: function (user) {
-            return $http.post('CreateTempUser', user);
+            return $http.post(Url + 'CreateTempUser', user);
         },
         ModifyUser: function (user) {
-            return $http.post('ModifyUser', user);
+            return $http.post(Url + 'ModifyUser', user);
         },
         DeleteUser: function (user) {
-            return $http.post('DeleteUser', user);
+            return $http.post(Url + 'DeleteUser', user);
         },
 
         getloggedusername: function () {
-            return $http.get('getloggedusername');
+            return $http.get(Url + 'getloggedusername');
         },
         GetUserRoles: function (userId) {
-            return $http.get('GetUserRoles/?UserId=' + userId);
+            return $http.get(Url + 'GetUserRoles/?UserId=' + userId);
         },
 
         GetInactiveUsers: function () {
-            return $http.get(Userurl + '/GetInactiveUsers');
+            return $http.get(Url + '/GetInactiveUsers');
         },
 
 

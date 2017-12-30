@@ -5,7 +5,7 @@
 @Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }))
 <div ng-app="LoginApp" ng-controller="LoginController" class="container">
     <div class="login-logo">
-        <h1>COBA</h1>
+        <h1>BRD Fountain</h1>
     </div>
     <!-- /.login-logo -->
     <div id="signin-form" @*class="login-box-body"*@>
@@ -45,7 +45,6 @@
 <script src="~/Assert/angular-animate.min.js"></script>
 @*<script src="~/Assert/toaster.js"></script>*@
 <script src="~/plugins/iCheck/icheck.min.js"></script>
-@*<script src="~/js/custom.js"></script>*@
 <script src="~/js/animate.js"></script>
 <script src="~/js/loginApp.js"></script>
 
@@ -73,7 +72,7 @@
         }
 
     .login-page, .register-page {
-        background: url('../../ACHI/images/coba-bg.png') no-repeat -440px -360px;
+        background: url('images/bg.jpg') no-repeat -440px -360px;
     }
     /*body {
         height: 95%;

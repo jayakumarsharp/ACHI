@@ -13,7 +13,7 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        return '<a  ng-click="GetApplicationMasterById(' + data + ')"><img src="../images/edit.png"></a>';
+        return '<a  ng-click="GetApplicationMasterById(' + data + ')"><img src="images/edit.png"></a>';
         //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';

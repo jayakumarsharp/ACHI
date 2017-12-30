@@ -136,12 +136,36 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
-        public ActionResult FTAShortCode()
+        public ActionResult Business()
         {
             return View();
         }
 
+        [SessionTimeout]
+        public ActionResult MappingMaster()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult FTAApplicationMapping()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult FTAStrategyMapping()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult BusinessMapping()
+        {
+            return View();
+        }
 
         [SessionTimeout]
         public ActionResult ParentID()
@@ -331,7 +355,10 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errorcode = 0;
             strategy.Version = 1;
-            _dbOperations.InsertStrategydata(strategy, false, out errorcode, out errordesc);
+            long lastTimeStamp = DateTime.UtcNow.Ticks;
+            strategy.RefNumber = Convert.ToString(lastTimeStamp);
+            _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
+            _dbOperations.insertStrategyVersionChange(strategy.RefNumber, 1, "Version Created");
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -417,18 +444,19 @@ namespace BRDFountain.Controllers
 
             var data = diffs.FindAll(x => x.Item1.Equals("CountryName") || x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("FTAApplicationCode") || x.Item1.Equals("ChildIDValue")
             || x.Item1.Equals("FTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("FTAStrategyCode") || x.Item1.Equals("FTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("FTAApplicationName") || x.Item1.Equals("FTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
-            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("FTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity"));
+            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("FTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
+            || x.Item1.Equals("Description") || x.Item1.Equals("SignOff"));
             string Changedata = "";
             if (data.Count() > 0)
             {
                 foreach (var diff in data)
                 {
-                    Changedata += diff.Item1 + " - " + diff.Item2 + " - Changed to " + diff.Item3;
+                    Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
                 }
 
                 Strategy[0].RefNumber = Strategy[1].RefNumber;
                 Strategy[0].Version = Strategy[1].Version + 1;
-                _dbOperations.InsertStrategydata(Strategy[0], true, out errorcode, out errordesc);
+                _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
                 _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata);
             }
             //_dbOperations.UpdateStrategydata(Strategy[0], out errorcode, out errordesc);
@@ -1022,39 +1050,39 @@ namespace BRDFountain.Controllers
 
         #endregion BusinessSuffix
 
-        #region FTAShortCode
+        #region Business
 
-        public JsonResult GetAllFTAShortCode(string FTAShortCodeId)
+        public JsonResult GetAllBusiness(string BusinessId)
         {
-            List<FTAShortCodeMaster> lst = _dbOperations.GetFTAShortCodeList(FTAShortCodeId);
+            List<BusinessMaster> lst = _dbOperations.GetBusinessList(BusinessId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAShortCode(FTAShortCodeMaster taskInfo)
+        public JsonResult AddBusiness(BusinessMaster taskInfo)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.AddFTAShortCode(taskInfo, out errocode, out errordesc);
+            _dbOperations.AddBusiness(taskInfo, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ModifyFTAShortCode(FTAShortCodeMaster opp)
+        public JsonResult ModifyBusiness(BusinessMaster opp)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.ModifyFTAShortCode(opp, out errocode, out errordesc);
+            _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult DeleteFTAShortCode(string FTAShortCodeId)
+        public JsonResult DeleteBusiness(string BusinessId)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.DeleteFTAShortCode(FTAShortCodeId, out errocode, out errordesc);
+            _dbOperations.DeleteBusiness(BusinessId, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        #endregion FTAShortCode
+        #endregion Business
 
         #region ParentID
 
@@ -1396,6 +1424,143 @@ namespace BRDFountain.Controllers
 
         #endregion Capacity
 
+        public JsonResult GetAllThirdPartyAppList(string Id)
+        {
+            List<ThirdPartyApp> lst = _dbOperations.GetThirdPartyAppList(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetAllBusinessMappingbyId(string Id)
+        {
+            List<BusinessMappingMaster> lst = _dbOperations.GetBusinessMappingListbyId(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllFTAStrategyMappingbyId(string Id)
+        {
+            List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingListbyId(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllFTAApplicationMappingbyId(string Id)
+        {
+            List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingListbyId(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #region BusinessMapping
+
+        public JsonResult GetAllBusinessMapping(string BusinessId)
+        {
+            List<BusinessMappingMaster> lst = _dbOperations.GetBusinessMappingList(BusinessId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessMapping(BusinessMappingMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessMapping(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        //public JsonResult ModifyBusiness(BusinessMaster opp)
+        //{
+        //    string errordesc = "";
+        //    int errocode = 0;
+        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
+        //    return Json("", JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult DeleteBusinessMapping(string BusinessId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessMapping(BusinessId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessMapping
+
+
+        #region FTAStrategyMapping
+
+
+        public JsonResult GetStrategyVersionLog(string Id)
+        {
+            List<StrategyVersionLog> lst = _dbOperations.GetStrategyVersionLog(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetAllFTAStrategyMapping(string FTAStrategyId)
+        {
+            List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingList(FTAStrategyId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAStrategyMapping(FTAStrategyMappingMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAStrategyMapping(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        //public JsonResult ModifyBusiness(BusinessMaster opp)
+        //{
+        //    string errordesc = "";
+        //    int errocode = 0;
+        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
+        //    return Json("", JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult DeleteFTAStrategyMapping(string Id)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAStrategyMapping(Id, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAStrategyMapping
+
+
+
+        #region FTAApplicationMapping
+
+        public JsonResult GetAllFTAApplicationMapping(string BusinessId)
+        {
+            List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingList(BusinessId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddFTAApplicationMapping(FTAApplicationMappingMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddFTAApplicationMapping(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        //public JsonResult ModifyBusiness(BusinessMaster opp)
+        //{
+        //    string errordesc = "";
+        //    int errocode = 0;
+        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
+        //    return Json("", JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult DeleteFTAApplicationMapping(string Id)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteFTAApplicationMapping(Id, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion FTAApplicationMapping
+
 
     }
 }
@@ -1429,6 +1594,18 @@ public class TransferSetting
     public string TransferTo { get; set; }
     public string IsActive { get; set; }
 }
+
+
+public class StrategyVersionLog
+{
+    public int Id { get; set; }
+    public string RefNumber { get; set; }
+    public string Version { get; set; }
+    public string ChangeDesc { get; set; }
+    public string FTAShortCode { get; set; }
+
+}
+
 
 
 public class StrategyDetails
@@ -1564,7 +1741,7 @@ public class Strategy
 
     public string NoOfApprover { get; set; }
     public int Version { get; set; }
-    public string FinalSignOff { get; set; }
+    public string SignOff { get; set; }
     public string SignOffDate { get; set; }
     public string SignoffBy { get; set; }
     public string IsActive { get; set; }
@@ -1592,7 +1769,7 @@ public class Strategy
     public string BusinessLine { get; set; }
     public int FTAApplicationNameId { get; set; }
     public string FTAApplicationName { get; set; }
-    public int FTAStrategyOwnerId { get; set; }
+    public string FTAStrategyOwnerId { get; set; }
     public string FTAStrategyOwner { get; set; }
     public int ApplicationCategoryId { get; set; }
     public string ApplicationCategory { get; set; }
@@ -1601,7 +1778,7 @@ public class Strategy
     public string DiscretionaryCode { get; set; }
     public int ParentIDValue { get; set; }
     public string ParentID { get; set; }
-    public int FTAApplicationOwnerId { get; set; }
+    public string FTAApplicationOwnerId { get; set; }
     public string FTAApplicationOwner { get; set; }
     public string PriorityScore { get; set; }
     public string Priority { get; set; }
@@ -1609,6 +1786,14 @@ public class Strategy
     public string Capacity { get; set; }
     public int VenueTypeId { get; set; }
     public string VenueType { get; set; }
+
+    public int ThirdPartyAppId { get; set; }
+    public string ThirdPartyValue { get; set; }
+    public int BusinessId { get; set; }
+    public string Business { get; set; }
+    public string FTAApplicationMappingId { get; set; }
+    public string FTAStrategyMappingId { get; set; }
+    public string BusinessMappingId { get; set; }
 
 }
 
@@ -1763,10 +1948,10 @@ public class BusinessSuffixMaster
     public string BusinessSuffix { get; set; }
 
 }
-public class FTAShortCodeMaster
+public class BusinessMaster
 {
     public string Id { get; set; }
-    public string FTAShortCode { get; set; }
+    public string Business { get; set; }
 
 }
 
@@ -1859,7 +2044,46 @@ public class FTAApplicationCodeMaster
 
 }
 
+public class ThirdPartyApp
+{
+    public string Id { get; set; }
+    public string Value { get; set; }
 
+}
+
+
+public class BusinessMappingMaster
+{
+    public string Id { get; set; }
+    public string BusinessId { get; set; }
+    public string Business { get; set; }
+    public string BusinessSuffixId { get; set; }
+    public string BusinessSuffix { get; set; }
+
+}
+
+public class FTAStrategyMappingMaster
+{
+    public string Id { get; set; }
+    public string FTAStrategyNameId { get; set; }
+    public string FTAStrategyName { get; set; }
+    public string FTAStrategyCodeId { get; set; }
+    public string FTAStrategyCode { get; set; }
+
+}
+
+public class FTAApplicationMappingMaster
+{
+    public string Id { get; set; }
+    public string ThirdPartyAppId { get; set; }
+    public string ThirdPartyAppName { get; set; }
+    public string ChildId { get; set; }
+    public string ChildIdValue { get; set; }
+    public string FTAApplicationCodeId { get; set; }
+    public string FTAApplicationCode { get; set; }
+    public string FTAApplicationNameId { get; set; }
+    public string FTAApplicationName { get; set; }
+}
 public static class SimpleComparer
 {
     // Item1: property name, Item2 current, Item3 original
