@@ -343,49 +343,100 @@ namespace BRDFountain.Controllers
 
         public JsonResult InsertStrategy(Strategy strategy)
         {
-            string mailbox = @"D:/Docs/";
-            string filepath = mailbox + "/" + strategy.RefNumber + "/";
-
-            bool exists = System.IO.Directory.Exists(@filepath);
-            if (!exists)
-                System.IO.Directory.CreateDirectory(@filepath);
-            if (Request.Files.Count > 0)
+            try
             {
-                foreach (string file in Request.Files)
+                string mailbox = @"D:/Docs/";
+                string filepath = mailbox + "/" + strategy.RefNumber + "/";
+                string errordesc = "";
+                int errorcode = 0;
+                strategy.Version = 1;
+                strategy.RefNumber = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                List<StrategyApprover> lstfiles = new List<StrategyApprover>();
+                bool exists = System.IO.Directory.Exists(@filepath);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(@filepath);
+                if (Request.Files.Count > 0)
                 {
-                    var fileContent = Request.Files[file];
-                    if (fileContent != null && fileContent.ContentLength > 0)
+                    StrategyApprover files = null;
+                    foreach (string file in Request.Files)
                     {
-                        filepath = filepath + fileContent.FileName;
-                        if (!System.IO.File.Exists(filepath))
+                        files = new StrategyApprover();
+                        var fileContent = Request.Files[file];
+                        if (Request.Files.AllKeys[0].Contains("Systemflowfilelist"))
                         {
-                            FileStream fileStream = System.IO.File.Create(filepath, (int)fileContent.InputStream.Length);
-                            byte[] bytesInStream = new byte[fileContent.InputStream.Length];
-                            fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
-                            fileStream.Write(bytesInStream, 0, bytesInStream.Length);
-                            fileStream.Close();
+                            files.Status = "S";
+                            if (strategy.ExistingSystemflowfile != null)
+                                strategy.ExistingSystemflowfile += "," + fileContent.FileName;
+                            else
+                                strategy.ExistingSystemflowfile = fileContent.FileName;
+                        }
+                        else
+                        {
+                            files.Status = "D";
                             if (strategy.ExistingDecommissionedfile != null)
                                 strategy.ExistingDecommissionedfile += "," + fileContent.FileName;
                             else
                                 strategy.ExistingDecommissionedfile = fileContent.FileName;
                         }
-                        else
-                            return Json("File already exists", JsonRequestBehavior.AllowGet);
-                    }
-                }
-            }
+                        if (fileContent != null && fileContent.ContentLength > 0)
+                        {
+                            files.Comments = Convert.ToString(Guid.NewGuid()) + "." + Path.GetExtension(fileContent.FileName).Substring(1);
+                            files.Approver = fileContent.FileName;
+                            files.Version = strategy.Version.ToString();
+                            files.RefNumber = strategy.RefNumber;
+                            filepath = filepath + files.Comments;
+                            if (!System.IO.File.Exists(filepath))
+                            {
+                                FileStream fileStream = System.IO.File.Create(filepath, (int)fileContent.InputStream.Length);
+                                byte[] bytesInStream = new byte[fileContent.InputStream.Length];
+                                fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
+                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                                fileStream.Close();
 
-                string errordesc = "";
-            int errorcode = 0;
-            strategy.Version = 1;
-            long lastTimeStamp = DateTime.UtcNow.Ticks;
-            strategy.RefNumber = Convert.ToString(lastTimeStamp);
-            _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
-            _dbOperations.insertStrategyVersionChange(strategy.RefNumber, 1, "Version Created");
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                                return Json("File already exists", JsonRequestBehavior.AllowGet);
+                        }
+                        lstfiles.Add(files);
+                    }
+                    _dbOperations.InsertStrategyApprover(lstfiles, lstfiles[0].RefNumber, lstfiles[0].Version, out errorcode, out errordesc);
+                }
+                _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
+                _dbOperations.insertStrategyVersionChange(strategy.RefNumber, 1, "Version Created");
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
 
+        public FileResult DownLoadFile(string FileName, string RefNumber, string Version)
+        {
+            try
+            {
+                log.InfoFormat("Called DownLoadFile method with param FileName {0}", FileName);
+                string mailbox = @"D:/Docs/";
+                string filepath = mailbox + "/" + RefNumber + "/";
+                string filePath1 = filepath + FileName;
+
+                if (!System.IO.File.Exists(filePath1))
+                {
+                    throw new Exception();
+                }
+
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath1);
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filePath1);
+
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DownLoadFile {0}", ex);
+                return null;
+            }
+        }
 
 
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
@@ -476,8 +527,74 @@ namespace BRDFountain.Controllers
                 _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
                 _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata);
             }
-            //_dbOperations.UpdateStrategydata(Strategy[0], out errorcode, out errordesc);
+
             return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateStrategyFile(Strategy strategy)
+        {
+            try
+            {
+                string mailbox = @"D:/Docs/";
+                string filepath = mailbox + "/" + strategy.RefNumber + "/";
+                string errordesc = "";
+                int errorcode = 0;
+                List<StrategyApprover> lstfiles = new List<StrategyApprover>();
+                bool exists = System.IO.Directory.Exists(@filepath);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(@filepath);
+                if (Request.Files.Count > 0)
+                {
+                    StrategyApprover files = null;
+                    foreach (string file in Request.Files)
+                    {
+                        files = new StrategyApprover();
+                        var fileContent = Request.Files[file];
+                        if (Request.Files.AllKeys[0].Contains("Systemflowfilelist"))
+                        {
+                            files.Status = "S";
+                            if (strategy.ExistingSystemflowfile != null)
+                                strategy.ExistingSystemflowfile += "," + fileContent.FileName;
+                            else
+                                strategy.ExistingSystemflowfile = fileContent.FileName;
+                        }
+                        else
+                        {
+                            files.Status = "D";
+                            if (strategy.ExistingDecommissionedfile != null)
+                                strategy.ExistingDecommissionedfile += "," + fileContent.FileName;
+                            else
+                                strategy.ExistingDecommissionedfile = fileContent.FileName;
+                        }
+                        if (fileContent != null && fileContent.ContentLength > 0)
+                        {
+                            files.Comments = Convert.ToString(Guid.NewGuid()) + "." + Path.GetExtension(fileContent.FileName).Substring(1);
+                            files.Approver = fileContent.FileName;
+                            files.Version = strategy.Version.ToString();
+                            files.RefNumber = strategy.RefNumber;
+                            filepath = filepath + files.Comments;
+                            if (!System.IO.File.Exists(filepath))
+                            {
+                                FileStream fileStream = System.IO.File.Create(filepath, (int)fileContent.InputStream.Length);
+                                byte[] bytesInStream = new byte[fileContent.InputStream.Length];
+                                fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
+                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                                fileStream.Close();
+
+                            }
+                            else
+                                return Json("File already exists", JsonRequestBehavior.AllowGet);
+                        }
+                        lstfiles.Add(files);
+                    }
+                    _dbOperations.InsertStrategyApprover(lstfiles, lstfiles[0].RefNumber, lstfiles[0].Version, out errorcode, out errordesc);
+                }
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
         #endregion Strategy
@@ -1744,7 +1861,6 @@ public class StrategyApprover
     public string OriginalApprover { get; set; }
     public string Type { get; set; }
 }
-
 
 
 public class Strategy

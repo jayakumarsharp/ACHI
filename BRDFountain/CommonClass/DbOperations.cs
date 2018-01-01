@@ -269,7 +269,10 @@ public class DbOperations
                     cmd.Parameters.Clear();
                     cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
                     cmd.Parameters.Add(new MySqlParameter("i_Version", version));
-                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+                    cmd.Parameters.Add(new MySqlParameter("i_systemfile", s.Approver));
+                    cmd.Parameters.Add(new MySqlParameter("i_OrignalFile", s.Comments));
+                    cmd.Parameters.Add(new MySqlParameter("i_status", s.Status));
+                    
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -277,22 +280,6 @@ public class DbOperations
                     }
 
                 }
-                //StringBuilder sCommand = new StringBuilder("INSERT INTO tbl_StrategyApproval (RefNumber, Version,Approver) VALUES ");
-                //List<string> Rows = new List<string>();
-                //for (int i = 0; i < lst.Count; i++)
-                //{
-                //    Rows.Add(string.Format("('{0}','{1}','{2}')", MySqlHelper.EscapeString(RefNumber), MySqlHelper.EscapeString("1"), MySqlHelper.EscapeString(lst[i].Approver)));
-                //}
-                //sCommand.Append(string.Join(",", Rows));
-                //sCommand.Append(";");
-                //connection.Open();
-
-                //using (MySqlCommand myCmd = new MySqlCommand(sCommand.ToString(), connection))
-                //{
-                //    myCmd.CommandType = CommandType.Text;
-                //    myCmd.ExecuteNonQuery();
-                //    this.CloseConnection();
-                //}
             }
         }
         catch (MySqlException e)
@@ -1073,21 +1060,7 @@ public class DbOperations
         }
     }
 
-    //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)
-    //{
-    //    object[] outParamList = new object[0];
-    //    List<SqlParameter> paramList = new List<SqlParameter>();
-    //    paramList.Add(_sqlDb.CreateParameter("@i_RoleName", SqlDbType.VarChar, 50, ParameterDirection.Input, roleName));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorCode", SqlDbType.Int, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorDescription", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_MenusList", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    executeStatus = _sqlDb.ExecuteNonQuery(StaticClass.GetRightsForRole, CommandType.StoredProcedure, paramList, out outParamList);
-    //    errorCode = Convert.ToInt32(Convert.ToString(outParamList[0]));
-    //    errorDesc = Convert.ToString(outParamList[1]);
-    //    string menuRights = Convert.ToString(outParamList[2]);
-    //    return menuRights;
-    //}
-
+   
     private bool OpenConnection()
     {
         try

@@ -69,7 +69,7 @@
     function activeStatus(data, type, full, meta) {
         var date1 = moment(data, 'MM/DD/YYYY');
         var currentdate = moment();
-        
+
         if (currentdate < date1)
             return '<a  class="dta-act">Active</a>';
         else
@@ -237,35 +237,21 @@
         , SignOff: $scope.selectModel.SignOff
         };
         if (currency != null) {
-            //StrategyService.InsertStrategy(currency).success(function (data) {
 
-            //    StrategyService.HideLoader();
-            //    if (data == 'success') {
-            //        toaster.pop('success', "Success", "Model/Algo added successfully", null);
-            //        $scope.showaction = false;
-            //    }
-            //    else
-            //        toaster.pop('warning', "Warning", data, null);
-
-
-            //    getallgriddata();
-            //}).error(function (data) {
-            //    $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
-            //});
-
-            currency.Systemflowfile = $scope.selectModel.Systemflowfile[0].name;
-            currency.Decommissionedfile = $scope.selectModel.Decommissionedfile[0].name;
-            currency.file1list = $scope.selectModel.Systemflowfile;
-            currency.file2list = $scope.selectModel.Decommissionedfile;
-
+            if ($scope.selectModel.Systemflowfile) {
+                currency.Systemflowfile = $scope.selectModel.Systemflowfile[0].name;
+                currency.Systemflowfilelist = $scope.selectModel.Systemflowfile;
+            }
+            if ($scope.selectModel.Decommissionedfile) {
+                currency.Decommissionedfile = $scope.selectModel.Decommissionedfile[0].name;
+                currency.Decommissionedfilelist = $scope.selectModel.Decommissionedfile;
+            }
             Upload.upload({
                 url: 'Main/InsertStrategy', //webAPI exposed to upload the file
                 data: currency//{ Id: $scope.ecurrency.Id, TaskComments: $scope.ecurrency.TaskComments, ClientNumber: $scope.ecurrency.ClientNumber, ExisitingFiles: $scope.ecurrency.TaskAttachment, obj: $scope.file }//pass file as data, should be user ng-model
             }).then(function (resp) { //upload function returns a promise
                 if (resp.data.error_code === 0) { //validate success
-                    console.log(resp.data)
-
-
+                    console.log(resp.data);
                 } else {
                     $window.alert('an error occured');
                 }
@@ -324,11 +310,29 @@
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
+
+        StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
+            $scope.UploadedSList = [];
+            $scope.UploadedDList = [];
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].Status == "S")
+                        $scope.UploadedSList.push(data[i]);
+                    else
+                        $scope.UploadedDList.push(data[i]);
+                }
+            }
+
+        });
+
         $timeout(function () {
             StrategyService.HideLoader();
         }, 500)
     };
 
+    $scope.openpopup = function (type) {
+        $('#viewFiles').modal('show');
+    }
 
     var getdynamicobject = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
@@ -388,20 +392,58 @@
         var array = [];
         array.push(model);
         array.push($scope.Prevvalue);
+
         StrategyService.UpdateStrategy(array).success(function (data) {
             $scope.showaction = false;
             $scope.editMode = false;
-            $('#currencyModel').modal('hide');
+
             toaster.pop('success', "Success", "Model/Algo updated successfully", null);
+            model.RefNumber = $scope.Prevvalue.RefNumber;
+            if (data == "") {
+                model.Version = $scope.Prevvalue.Version;
+            }
+            else if (data == "success")
+                model.Version = parseInt($scope.Prevvalue.Version) + 1;
 
+            var hasfile = false;
+            if ($scope.selectModel.Systemflowfile) {
+                hasfile = true;
+                model.Systemflowfilelist = $scope.selectModel.Systemflowfile;
+            }
+            if ($scope.selectModel.Decommissionedfile) {
+                hasfile = true;
+                model.Decommissionedfilelist = $scope.selectModel.Decommissionedfile;
+            }
+            if (hasfile) {
+                Upload.upload({
+                    url: 'Main/UpdateStrategyFile', //webAPI exposed to upload the file
+                    data: model,
+                }).then(function (resp) { //upload function returns a promise
+                    if (resp.data.error_code === 0) { //validate success
+                        console.log(resp.data);
+                    } else {
+                        $window.alert('an error occured');
+                    }
+                }, function (resp) { //catch error
+                    console.log('Error status: ' + resp.status);
+                    $window.alert('Error status: ' + resp.status);
+                }, function (evt) {
+                    console.log(evt);
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.data.name);
+                    $scope.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
+                });
+
+            }
             $scope.getallalgodata()
-
             getallgriddata();
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
 
+
     };
+
     $scope.showconfirm = function (data) {
         $scope.Id = data;
         $('#confirmModal').modal('show');
@@ -410,7 +452,6 @@
     $scope.cancel = function () {
         $scope.currency = {};
         $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
-        //$('#currencyModel').modal('hide');
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
     };

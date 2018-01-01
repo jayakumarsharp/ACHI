@@ -2055,7 +2055,6 @@
     <Content Include="js\controllers\PriorityScoreMasterController.js" />
     <Content Include="js\controllers\ProductTypeMasterController.js" />
     <Content Include="js\controllers\RegionMasterController.js" />
-    <Content Include="js\controllers\ChangeManagementController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\StrategytypeMasterController.js" />
     <Content Include="js\controllers\SystemFlowMasterController.js" />

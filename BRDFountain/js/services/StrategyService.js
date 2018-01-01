@@ -32,7 +32,6 @@ ReportApp.factory('StrategyService', ['$http', function ($http) {
         return result;
     }
 
-
     StrategyServiceFactory.InsertStrategyApprover = function (currencysheet) {
         return $http.post(StrategyServiceURI + 'InsertStrategyApprover', currencysheet);
     }
