@@ -12,20 +12,20 @@
 
                     <div class="btns-b" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
 
-                        <div class="form-group">
-                            <label>FTAStrategy</label>
-                            <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyCode" ng-options="item.FTAStrategyCode for item in FTAStrategyCodeList" title="Select FTAStrategyCode" style="width:100%;font-size: 0.8em" required>
-                                <option value="">- Select FTAStrategy Code-</option>
-                            </select>
-                        </div>
 
                         <div class="form-group">
-                            <label>FTAStrategy Suffix</label>
+                            <label>FTA Strategy Name</label>
                             <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyName" ng-options="item.FTAStrategyName for item in FTAStrategyNameList" title="Select FTAStrategyName" style="width:100%;font-size: 0.8em" required>
                                 <option value="">- Select FTAStrategy Name-</option>
                             </select>
                         </div>
 
+                        <div class="form-group">
+                            <label>FTA Strategy Code</label>
+                            <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyCode" ng-options="item.FTAStrategyCode for item in FTAStrategyCodeList" title="Select FTAStrategyCode" style="width:100%;font-size: 0.8em" required>
+                                <option value="">- Select FTAStrategy Code-</option>
+                            </select>
+                        </div>
 
                         <button data-ng-show="editMode" data-ng-click="UpdateFTAStrategyMaster(FTAStrategyMaster)" class="col-md-2 col-md-offset-1 btn btn-primary">Update</button>
                         <button data-ng-show="!editMode" data-ng-click="add(selectModel)" class="col-md-2 col-md-offset-1 btn btn-primary">Add </button>

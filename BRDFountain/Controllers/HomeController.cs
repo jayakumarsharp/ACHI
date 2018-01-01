@@ -177,6 +177,7 @@ namespace BRDFountain.Controllers
         public RedirectToRouteResult Logout()
         {
             //WebSecurity.Logout();
+            Session["MenuList"] = null;
             FormsAuthentication.SignOut();
             Session["UserName"] = null;
             return RedirectToAction("LoginDisplay", "Home");

@@ -56,17 +56,20 @@
         if (BusinessMaster != null) {
             if (BusinessMaster.Business.Business && BusinessMaster.BusinessSuffix.BusinessSuffix) {
                 var input = { BusinessId: BusinessMaster.Business.Id, BusinessSuffixId: BusinessMaster.BusinessSuffix.Id };
-
                 ApiCall.MakeApiCall("AddBusinessMapping", 'POST', input).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.BusinessMaster = null;
-                        $scope.GetAllBusinessMaster();
-                        $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Business added successfully', null);
+                        if (data == "success") {
+                            $scope.BusinessMaster = null;
+                            $scope.GetAllBusinessMaster();
+                            $scope.editMode = false;
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Business added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Business ! " + data.ExceptionMessage;
@@ -95,12 +98,16 @@
 
     $scope.delete = function (id) {
         ApiCall.MakeApiCall("DeleteBusinessMapping?BusinessId=" + id, 'GET', '').success(function (data) {
-            $scope.BusinessMaster = null;
-            $scope.editMode = false;
-            $scope.GetAllBusinessMaster();
-            $('#confirmModal').modal('hide');
-            $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'Business deleted successfully', null);
+            if (data == "success") {
+                $scope.BusinessMaster = null;
+                $scope.editMode = false;
+                $scope.GetAllBusinessMaster();
+                $('#confirmModal').modal('hide');
+                $scope.showAddwindow = false;
+                toaster.pop('success', "Success", 'Business deleted successfully', null);
+            }
+            else
+                toaster.pop('warning', "Warning", data, null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });

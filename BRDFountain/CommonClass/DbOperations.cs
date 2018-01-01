@@ -477,7 +477,6 @@ public class DbOperations
 
     }
 
-
     public List<StrategyApprover> Get_StrategyApprovalByuser(string userid)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
@@ -572,7 +571,6 @@ public class DbOperations
 
     }
 
-
     //selected user for particular strategy
     public List<StrategyApprover> Get_StrategyApprovalById(string StrategyNumber, string Version)
     {
@@ -661,7 +659,7 @@ public class DbOperations
     {
         List<Strategy> lst = new List<Strategy>();
 
-        string query = "SP_GetAllStrategy";
+        string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,FTAStrategyCodeId,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId,PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,C.CountryName,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore, SignOff,SignOffDate,SignoffBy,LastModifiedDate ,LastModifiedBy,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,DATE_FORMAT(S.DecomissionedDate, '%m/%d/%Y') DecomissionedDate,DATE_FORMAT(S.GoLiveDate, '%m/%d/%Y') GoLiveDate from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id  JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_country_master C on S.CountryId = C.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id right JOIN (SELECT  MAX(Id) as Id FROM tbl_strategy GROUP BY REfnumber) t2  ON S.ID = t2.Id";
         try
         {
             if (this.OpenConnection() == true)
@@ -669,7 +667,7 @@ public class DbOperations
 
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.TableDirect;
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -765,97 +763,6 @@ public class DbOperations
             this.CloseConnection();
             return null;
         }
-    }
-
-    public List<Strategy> GetStrategyDatabyStrategyId(string StrategyNumber)
-    {
-        List<Strategy> lst = new List<Strategy>();
-
-        string query = "SP_GetStrategyByRefnumber";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new Strategy
-                               {
-                                   //Id = Convert.ToInt32(row["Id"]),
-                                   //AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   //AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   //AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   //AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   //AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   //AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   //AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   //AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   //AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   //AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   //AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   //AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   //AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   //ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   //AppId = Convert.ToString(row["AppId"]),
-                                   //AppName = Convert.ToString(row["ApplicationName"]),
-                                   //Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   //Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   //Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   //Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   //BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   //BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   //BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   //ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   //ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   //Country = Convert.ToString(row["Country"]),
-                                   //CountryName = Convert.ToString(row["CountryName"]),
-                                   //CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   //CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   //DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   //DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
-                                   //Description = Convert.ToString(row["Description"]),
-                                   //DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   //ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
-                                   //FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   //IsActive = Convert.ToString(row["IsActive"]),
-                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   //Name = Convert.ToString(row["Name"]),
-                                   //NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   //Objective = Convert.ToString(row["Objective"]),
-                                   //ProductType = Convert.ToString(row["ProductType"]),
-                                   //ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   //Ranking = Convert.ToString(row["Ranking"]),
-                                   ////RefNumber = Convert.ToString(row["RefNumber"]),
-                                   //Region = Convert.ToString(row["Region"]),
-                                   //RegionName = Convert.ToString(row["RegionName"]),
-                                   //RiskRating = Convert.ToString(row["RiskRating"]),
-                                   //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   //Type = Convert.ToString(row["Type"]),
-                                   Version = Convert.ToInt32(row["Version"]),
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
     }
 
     public List<Strategy> GetStrategyDatabyId(string StrategyNumber)
@@ -930,8 +837,8 @@ public class DbOperations
                                        Version = Convert.ToInt32(row["Version"]),
                                        Priority = Convert.ToString(row["Priority"]),
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
-                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
-                                       GOLiveDate = Convert.ToString(row["GoLiveDate"]),
+                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate1"]),
+                                       GOLiveDate = Convert.ToString(row["GoLiveDate1"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
                                        FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
@@ -965,97 +872,6 @@ public class DbOperations
             this.CloseConnection();
             return null;
         }
-    }
-
-    public List<Strategy> GetStrategyLatestDatabyId(string StrategyNumber)
-    {
-        List<Strategy> lst = new List<Strategy>();
-
-        string query = "SP_GetStrategyById";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_StrategyNumber", StrategyNumber));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-
-                               select new Strategy
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   //AdditionalParam1 = Convert.ToString(row["AdditionalParam1"]),
-                                   //AdditionalParam10 = Convert.ToString(row["AdditionalParam10"]),
-                                   //AdditionalParam11 = Convert.ToString(row["AdditionalParam11"]),
-                                   //AdditionalParam12 = Convert.ToString(row["AdditionalParam12"]),
-                                   //AdditionalParam13 = Convert.ToString(row["AdditionalParam13"]),
-                                   //AdditionalParam2 = Convert.ToString(row["AdditionalParam2"]),
-                                   //AdditionalParam3 = Convert.ToString(row["AdditionalParam3"]),
-                                   //AdditionalParam4 = Convert.ToString(row["AdditionalParam4"]),
-                                   //AdditionalParam5 = Convert.ToString(row["AdditionalParam5"]),
-                                   //AdditionalParam6 = Convert.ToString(row["AdditionalParam6"]),
-                                   //AdditionalParam7 = Convert.ToString(row["AdditionalParam7"]),
-                                   //AdditionalParam8 = Convert.ToString(row["AdditionalParam8"]),
-                                   //AdditionalParam9 = Convert.ToString(row["AdditionalParam9"]),
-                                   //ApplicationId = Convert.ToString(row["ApplicationId"]),
-                                   //AppId = Convert.ToString(row["AppId"]),
-                                   //AppName = Convert.ToString(row["ApplicationName"]),
-                                   //Attribute1 = Convert.ToString(row["Attribute1"]),
-                                   //Attribute2 = Convert.ToString(row["Attribute2"]),
-                                   //Attribute3 = Convert.ToString(row["Attribute3"]),
-                                   //Attribute4 = Convert.ToString(row["Attribute4"]),
-                                   //BusinessImpact = Convert.ToString(row["BusinessImpact"]),
-                                   //BusinessSector = Convert.ToString(row["BusinessSector"]),
-                                   //BusinessSectorName = Convert.ToString(row["BusinessSectorName"]),
-                                   //ChangesBusinessImpact = Convert.ToString(row["ChangesBusinessImpact"]),
-                                   //ChangesCompletionStatus = Convert.ToString(row["ChangesCompletionStatus"]),
-                                   //Country = Convert.ToString(row["Country"]),
-                                   //CountryName = Convert.ToString(row["CountryName"]),
-                                   //CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   //CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   //DateChangeInitiated = Convert.ToString(row["DateChangeInitiated"]),
-                                   //DateChangeImplemented = Convert.ToString(row["DateChangeImplemented"]),
-                                   //Description = Convert.ToString(row["Description"]),
-                                   //DetailsOfChanges = Convert.ToString(row["DetailsOfChanges"]),
-                                   //ExchangeDetails = Convert.ToString(row["ExchangeDetails"]),
-                                   //FinalSignOff = Convert.ToString(row["FinalSignOff"]),
-                                   //IsActive = Convert.ToString(row["IsActive"]),
-                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   //Name = Convert.ToString(row["Name"]),
-                                   //NoOfApprover = Convert.ToString(row["NoOfApprover"]),
-                                   //Objective = Convert.ToString(row["Objective"]),
-                                   //ProductType = Convert.ToString(row["ProductType"]),
-                                   //ProductTypeName = Convert.ToString(row["ProductTypeName"]),
-                                   //Ranking = Convert.ToString(row["Ranking"]),
-                                   ////RefNumber = Convert.ToString(row["RefNumber"]),
-                                   //Region = Convert.ToString(row["Region"]),
-                                   //RegionName = Convert.ToString(row["RegionName"]),
-                                   //RiskRating = Convert.ToString(row["RiskRating"]),
-                                   //SupportingDocument = Convert.ToString(row["SupportingDocument"]),
-                                   //Type = Convert.ToString(row["Type"]),
-                                   Version = Convert.ToInt32(row["Version"]),
-                               }).ToList();
-
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-            //close connection
-            this.CloseConnection();
-        }
-
-        return lst;
-
     }
 
     public void InsertStrategydata(Strategy _StrategyInfo, out int errorcode, out string errordesc)
@@ -1196,6 +1012,7 @@ public class DbOperations
                                        ChangeDesc = Convert.ToString(row["ChangeDesc"]),
                                        FTAShortCode = Convert.ToString(row["FTAShortCode"]),
                                        Version = Convert.ToString(row["Version"]),
+                                       CreatedDateTime= Convert.ToString(row["CreatedDate"])
                                    }).ToList();
                         }
                     }
@@ -1223,159 +1040,7 @@ public class DbOperations
         }
     }
 
-    public void UpdateStrategydata(Strategy _StrategyInfo, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-
-            using (MySqlCommand cmd = new MySqlCommand("sp_update_Strategy", connection))
-            {
-                // cmd.CommandType = CommandType.StoredProcedure;
-                // cmd.Parameters.Add(new MySqlParameter("i_id", _StrategyInfo.Id));
-                //// cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                // cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
-                // cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                // cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                // cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
-                // cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
-                // cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
-                // cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
-                // cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
-                // cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
-                // cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                // cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
-                // cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
-                // cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
-                cmd.Parameters.Add(new MySqlParameter("i_Page", _StrategyInfo.Page));
-                //cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
-                cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
-                cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
-                cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
-
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
-    public void UpdateStrategyVersiondata(Strategy _StrategyInfo, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            // int version = GetStrategyLatestVersionIDbyId(_StrategyInfo.RefNumber) + 1;
-            //Get_StrategyLatestversionById
-            errorcode = 0;
-            errordesc = "success";
-
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy_Version", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                //  cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                //cmd.Parameters.Add(new MySqlParameter("i_Name", _StrategyInfo.Name));
-                //cmd.Parameters.Add(new MySqlParameter("i_Type", _StrategyInfo.Type));
-                //cmd.Parameters.Add(new MySqlParameter("i_ApplicationId", _StrategyInfo.ApplicationId));
-                //cmd.Parameters.Add(new MySqlParameter("i_BusinessSector", _StrategyInfo.BusinessSector));
-                //cmd.Parameters.Add(new MySqlParameter("i_Country", _StrategyInfo.Country));
-                //cmd.Parameters.Add(new MySqlParameter("i_Region", _StrategyInfo.Region));
-                //cmd.Parameters.Add(new MySqlParameter("i_ProductType", _StrategyInfo.ProductType));
-                //cmd.Parameters.Add(new MySqlParameter("i_Ranking", _StrategyInfo.Ranking));
-                //cmd.Parameters.Add(new MySqlParameter("i_Objective", _StrategyInfo.Objective));
-                //cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                //cmd.Parameters.Add(new MySqlParameter("i_RiskRating", _StrategyInfo.RiskRating));
-                //cmd.Parameters.Add(new MySqlParameter("i_BusinessImpact", _StrategyInfo.BusinessImpact));
-                //cmd.Parameters.Add(new MySqlParameter("i_ExchangeDetails", _StrategyInfo.ExchangeDetails));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam1", _StrategyInfo.AdditionalParam1));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam2", _StrategyInfo.AdditionalParam2));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam3", _StrategyInfo.AdditionalParam3));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam4", _StrategyInfo.AdditionalParam4));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam5", _StrategyInfo.AdditionalParam5));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam6", _StrategyInfo.AdditionalParam6));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam7", _StrategyInfo.AdditionalParam7));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam8", _StrategyInfo.AdditionalParam8));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam9", _StrategyInfo.AdditionalParam9));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam10", _StrategyInfo.AdditionalParam10));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam11", _StrategyInfo.AdditionalParam11));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam12", _StrategyInfo.AdditionalParam12));
-                //cmd.Parameters.Add(new MySqlParameter("i_AdditionalParam13", _StrategyInfo.AdditionalParam13));
-                //cmd.Parameters.Add(new MySqlParameter("i_Version", version));
-
-                //// cmd.Parameters.Add(new MySqlParameter("i_DateChangeImplemented", _StrategyInfo.DateChangeImplemented));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute1", _StrategyInfo.Attribute1));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute2", _StrategyInfo.Attribute2));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute3", _StrategyInfo.Attribute3));
-                //cmd.Parameters.Add(new MySqlParameter("i_Attribute4", _StrategyInfo.Attribute4));
-
-                //Date change Initiated
-                //Date change implemented
-                // cmd.Parameters.Add(new MySqlParameter("i_DetailsOfChanges", _StrategyInfo.DetailsOfChanges));
-                cmd.Parameters.Add(new MySqlParameter("i_SignOffDate", _StrategyInfo.SignOffDate));
-                cmd.Parameters.Add(new MySqlParameter("i_SignoffBy", _StrategyInfo.SignoffBy));
-                cmd.Parameters.Add(new MySqlParameter("i_IsActive", _StrategyInfo.IsActive));
-
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                    errordesc = "success|";// + Convert.ToString(version);
-                }
-                //close connection
-            }
-        }
-        catch (MySqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-
-        }
-    }
-
+   
     #endregion Strategy
 
 
@@ -5184,15 +4849,16 @@ public class DbOperations
             cmd.Parameters.Add(new MySqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
             cmd.Parameters.Add(new MySqlParameter("i_businessid", opp.BusinessId));
 
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+
         }
 
     }
@@ -5230,16 +4896,15 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
     }
@@ -5304,43 +4969,19 @@ public class DbOperations
             cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
             cmd.Parameters.Add(new MySqlParameter("i_ChildId", opp.ChildId));
             cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
-
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
     }
 
-    //public void ModifyFTAApplicationMapping(BusinessMaster Opp, out int errorcode, out string errordesc)
-    //{
-    //    errorcode = 0;
-    //    errordesc = "success";
-    //    using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
-    //    {
-    //        cmd.CommandType = CommandType.StoredProcedure;
-    //        cmd.Parameters.Clear();
-    //        cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-    //        cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
 
-    //        if (this.OpenConnection() == true)
-    //        {
-    //            // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
-    //            cmd.ExecuteNonQuery();
-    //            this.CloseConnection();
-    //        }
-    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
-    //    }
-
-    //}
 
     public void DeleteFTAApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
@@ -5351,16 +4992,14 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
     }
@@ -5419,16 +5058,14 @@ public class DbOperations
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
             cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
-
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
     }
@@ -5444,16 +5081,14 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-
+            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
+                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
     }

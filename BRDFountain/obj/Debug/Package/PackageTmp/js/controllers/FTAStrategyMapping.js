@@ -59,12 +59,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.FTAStrategyMaster = null;
-                        $scope.GetAllFTAStrategyMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.FTAStrategyMaster = null;
+                            $scope.GetAllFTAStrategyMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'FTAStrategy added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'FTAStrategy added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding FTAStrategy ! " + data.ExceptionMessage;
@@ -93,12 +97,16 @@
 
     $scope.delete = function (id) {
         ApiCall.MakeApiCall("DeleteFTAStrategyMapping?Id=" + id, 'GET', '').success(function (data) {
-            $scope.FTAStrategyMaster = null;
-            $scope.editMode = false;
-            $scope.GetAllFTAStrategyMaster();
-            $('#confirmModal').modal('hide');
-            $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'FTAStrategy deleted successfully', null);
+            if (data == "success") {
+                $scope.FTAStrategyMaster = null;
+                $scope.editMode = false;
+                $scope.GetAllFTAStrategyMaster();
+                $('#confirmModal').modal('hide');
+                $scope.showAddwindow = false;
+                toaster.pop('success', "Success", 'FTAStrategy deleted successfully', null);
+            }
+            else
+                toaster.pop('warning', "Warning", data, null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });

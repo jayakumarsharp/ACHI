@@ -64,7 +64,7 @@ font-family: 'Oswald', sans-serif;*/
 .left-sidebar {
     position: absolute;
     height: 100%;
-    width: 17%;
+    width: 16%;
     padding-bottom: 50px;
     background: rgba(21,155,188,1);
     background: -moz-linear-gradient(top, rgba(21,155,188,1) 0%, rgba(21,155,188,1) 74%, rgba(23,166,152,1) 100%);
@@ -83,7 +83,7 @@ font-family: 'Oswald', sans-serif;*/
     display: block;
     height: 100%;
     position: absolute;
-    left: 16%;
+    left: 17%;
 }
 
 footer {
@@ -1290,3 +1290,15 @@ table.dataTable thead .sorting_asc {
     text-align: right;
     white-space: nowrap;
 }
+
+
+
+
+.table {
+    width: 100% !important;
+}
+
+/*.main-content {
+    padding: 0px;
+    padding-left: 2%;
+}*/

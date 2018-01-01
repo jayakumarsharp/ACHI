@@ -41,13 +41,10 @@
                         <option value="">- Select Strategy type -</option>
                     </select>
                 </div>
-
-
                 <div class="form-group">
-                    <label>FTA Application Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.UserName for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplicationOwner -</option>
-                    </select>
+                    <label>Priority</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
+
                 </div>
                 <div class="form-group">
                     <label>Application Category</label>
@@ -57,7 +54,18 @@
                 </div>
                 <div class="form-group">
                     <label>System Flow</label>
-                    <input type="file" file-model="Thanksuploadfile" />
+
+                    <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Systemflowfile" multiple name="file" />
+
+                    <i ng-show="upload_form.file.$error.required">*required</i><br>
+                    <i ng-show="upload_form.file.$error.maxSize">
+                        File too large
+                        {{file.size / 1000000|number:1}}MB: max 20M
+                    </i>
+
+                    <p>{{progress}}</p>
+
+
 
                 </div>
 
@@ -109,9 +117,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Priority</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
-
+                    <label>Priority Score</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
                 </div>
                 <div class="form-group">
                     <label>Go-Live date</label>
@@ -128,7 +135,16 @@
 
                 <div class="form-group">
                     <label>Decommissioned Evidence</label>
-                    <input type="file" file-model="Thanksuploadfile" />
+                    <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Decommissionedfile" multiple name="file" />
+
+                    <i ng-show="upload_form.file.$error.required">*required</i><br>
+                    <i ng-show="upload_form.file.$error.maxSize">
+                        File too large
+                        {{file.size / 1000000|number:1}}MB: max 20M
+                    </i>
+
+                    <p>{{progress}}</p>
+
                 </div>
 
             </div>
@@ -168,7 +184,7 @@
                 </div>
                 <div class="form-group">
                     <label>FTA Strategy Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.UserName for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.userId for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
                         <option value="">- Select FTAStrategyOwner -</option>
                     </select>
                 </div>
@@ -181,9 +197,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Priority Score</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
+                    <label>FTA Application Owner</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.userId for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationOwner -</option>
+                    </select>
                 </div>
+
 
                 <div class="form-group">
                     <label>Decommissioned Date</label>
@@ -228,58 +247,29 @@
                 </div>
 
             </div>
-            <div class="checkbox" ng-if="ShowSignOff">
-                <label>
-                    <input type="checkbox" value="" ng-model="selectModel.SignOff">
-                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                    SIGN OFF
-                </label>
+            @*<div class="checkbox" ng-if="ShowSignOff">
+                    <label>
+                        <input type="checkbox" value="" ng-model="selectModel.SignOff">
+                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                        SIGN OFF
+                    </label>
+                </div>*@
+
+            <div class="col-sm-12 col-sm-offset-3" style="margin-top:6px;margin-bottom:10px;" ng-if="ShowSignOff">
+                <label class="mt-checkbox mt-checkbox-outline col-sm-2"></label>
+                <div class="btn-group">
+                    <span>
+                        <button type="button" ng-click="selectModel.SignOff='True'" class="btn" ng-class="{'btn-success': selectModel.SignOff== 'True' }">SIGN OFF</button>
+                    </span>&nbsp;
+
+
+
+                </div>
             </div>
 
         </div>
 
-        @*<div class="col-lg-12">
-                <div class="form-group  row ">
-                    <div class="col-sm-5" style="margin-left:15px;">
-                        <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
-                            <a href="javascript:;" class="list-group-item active grouppadding">
-                                Available Approvers
-                                <input style="color:black;margin-left:5px;" ng-model="search.Approver" />
-                            </a>
-                            <span ng-repeat="right in listA_Estimation | filter:{Approver: search.Approver}">
-                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                    {{right.Approver}}
-                                    <input ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Approver)" name="selectedA_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-1 v-center text-center">
-                        <br />
-                        <br />
-                        <br /><br />
-                        <div class="btn-group-vertical">
-                            <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
-                            <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
-                            <a href="javascript:;" class="list-group-item active grouppadding">
-                                Selected Approver(s)
-                                <input style="color:black;margin-left:5px;" ng-model="search.rApprover" />
-                            </a>
-                            <span ng-repeat="right in listB_Estimation | filter:search.rApprover">
 
-                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
-                                    {{right.Approver}}
-                                    <input id="{{right.Approver}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Approver)" name="selectedB_Estimation[]" value="{{right.Approver}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
     </form>
     <div class="form-group col-lg-12">
         <div class="col-sm-offset-2 col-sm-10">

@@ -41,13 +41,10 @@
                         <option value="">- Select Strategy type -</option>
                     </select>
                 </div>
-
-
                 <div class="form-group">
-                    <label>FTA Application Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.UserName for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplicationOwner -</option>
-                    </select>
+                    <label>Priority</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
+
                 </div>
                 <div class="form-group">
                     <label>Application Category</label>
@@ -109,9 +106,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Priority</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
-
+                    <label>Priority Score</label>
+                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
                 </div>
                 <div class="form-group">
                     <label>Go-Live date</label>
@@ -168,7 +164,7 @@
                 </div>
                 <div class="form-group">
                     <label>FTA Strategy Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.UserName for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.userId for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
                         <option value="">- Select FTAStrategyOwner -</option>
                     </select>
                 </div>
@@ -181,9 +177,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Priority Score</label>
-                    <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
+                    <label>FTA Application Owner</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.userId for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationOwner -</option>
+                    </select>
                 </div>
+
 
                 <div class="form-group">
                     <label>Decommissioned Date</label>

@@ -51,15 +51,13 @@
 
                     <div ng-if="ViewListdata">
                         <table class="table table-responsive">
-                            @*<thead>
+                            <thead>
                                     <tr>
-                                        <th>RefNumber</th>
-                                        <th>Approver</th>
-                                        <th>Status</th>
-                                        <th>Comments</th>
-                                        <th>ApprovedDate </th>
+                                        <th>Version</th>
+                                        <th>Log</th>
+                                        <th>DateTime</th>
                                     </tr>
-                                </thead>*@
+                                </thead>
                             <tbody>
                                 <tr ng-repeat="data in Listdata">
 
@@ -67,6 +65,9 @@
 
                                     <td>
                                         {{data.ChangeDesc}}
+                                    </td>
+                                    <td>
+                                        {{data.CreatedDateTime}}
                                     </td>
 
                                 </tr>

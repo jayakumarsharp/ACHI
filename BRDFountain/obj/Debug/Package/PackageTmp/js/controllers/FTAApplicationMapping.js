@@ -72,12 +72,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.FTAApplicationMaster = null;
-                        $scope.GetAllFTAApplicationMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.FTAApplicationMaster = null;
+                            $scope.GetAllFTAApplicationMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'FTAApplication added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'FTAApplication added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding FTAApplication ! " + data.ExceptionMessage;
@@ -106,12 +110,16 @@
 
     $scope.delete = function (id) {
         ApiCall.MakeApiCall("DeleteFTAApplicationMapping?Id=" + id, 'GET', '').success(function (data) {
-            $scope.FTAApplicationMaster = null;
-            $scope.editMode = false;
-            $scope.GetAllFTAApplicationMaster();
-            $('#confirmModal').modal('hide');
-            $scope.showAddwindow = false;
-            toaster.pop('success', "Success", 'FTAApplication deleted successfully', null);
+            if (data == "success") {
+                $scope.FTAApplicationMaster = null;
+                $scope.editMode = false;
+                $scope.GetAllFTAApplicationMaster();
+                $('#confirmModal').modal('hide');
+                $scope.showAddwindow = false;
+                toaster.pop('success', "Success", 'FTAApplication deleted successfully', null);
+            }
+            else
+                toaster.pop('warning', "Warning", data, null);
         }).error(function (data) {
             $scope.error = "An Error has occured while deleting user! " + data.ExceptionMessage;
         });

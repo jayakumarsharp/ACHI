@@ -1,6 +1,6 @@
 ﻿'use strict';
 ReportApp.factory('StrategyService', ['$http', function ($http) {
-    var StrategyServiceURI = BaseURL+'Main/';
+    var StrategyServiceURI = BaseURL + 'Main/';
     var StrategyServiceFactory = {};
 
 
@@ -14,7 +14,6 @@ ReportApp.factory('StrategyService', ['$http', function ($http) {
         var result = $http.get(StrategyServiceURI + 'GetDelegatedApprovalByuser');
         return result;
     }
-
 
     StrategyServiceFactory.GetAllCurrencyConversion = function () {
         var result = $http.get(StrategyServiceURI + 'GetData');
@@ -93,3 +92,91 @@ ReportApp.factory('StrategyService', ['$http', function ($http) {
     return StrategyServiceFactory;
 }]);
 
+
+
+ReportApp.service('apiService', function ($http) {
+
+    var URl = 'Main/';
+    this.GetAllApplication =
+         function () {
+             var response = $http.get(URl + 'GetAllApplication?ApplicationId=');
+             return response;
+         };
+    this.GetAllBusinessSector = function () {
+        var response = $http.get(URl + 'GetAllBusinessSector?BusinessSectorId=');
+        return response;
+    };
+    this.GetAllCountry = function () {
+        var response = $http.get(URl + 'GetAllCountry?CountryId=');
+        return response;
+    };
+    this.GetAllProductType = function () {
+        var response = $http.get(URl + 'GetAllProductType?ProductTypeId=');
+        return response;
+    };
+    this.GetAllFTAApplicationCode = function () {
+        var response = $http.get(URl + 'GetAllFTAApplicationCode?FTAApplicationCodeId=');
+        return response;
+    };
+    this.GetAllThirdPartyAppList = function () {
+        var response = $http.get(URl + 'GetAllThirdPartyAppList?Id=');
+        return response;
+    };
+    this.GetAllBusiness = function () {
+        var response = $http.get(URl + 'GetAllBusiness?BusinessId=');
+        return response;
+    };
+    this.GetAllFTAStrategyCode = function () {
+        var response = $http.get(URl + 'GetAllFTAStrategyCode?FTAStrategyCodeId=');
+        return response;
+    };
+    this.GetAllDiscretionaryCode = function () {
+        var response = $http.get(URl + 'GetAllDiscretionaryCode?DiscretionaryCodeId=');
+        return response;
+    };
+    this.GetAllBusinessSuffix = function () {
+        var response = $http.get(URl + 'GetAllBusinessSuffix?BusinessSuffixId=');
+        return response;
+    };
+    this.GetAllParentID = function () {
+        var response = $http.get(URl + 'GetAllParentID?ParentIDId=');
+        return response;
+    };
+    this.GetAllChildID = function () {
+        var response = $http.get(URl + 'GetAllChildID?ChildIDId=');
+        return response;
+    };
+
+    this.GetAllBusinessLine = function () {
+        var response = $http.get(URl + 'GetAllBusinessLine?BusinessLineId=');
+        return response;
+    };
+    this.GetAllApplicationCategory = function () {
+        var response = $http.get(URl + 'GetAllApplicationCategory?ApplicationCategoryId=');
+        return response;
+    };
+    this.GetAllFTAApplicationName = function () {
+        var response = $http.get(URl + 'GetAllFTAApplicationName?FTAApplicationNameId=');
+        return response;
+    };
+    this.GetAllFTAStrategyName = function () {
+        var response = $http.get(URl + 'GetAllFTAStrategyName?FTAStrategyNameId=');
+        return response;
+    };
+    this.GetAllVenuetype = function () {
+        var response = $http.get(URl + 'GetAllVenuetype?VenuetypeId=');
+        return response;
+    };
+    this.GetAllStrategytype = function () {
+        var response = $http.get(URl + 'GetAllStrategytype?StrategytypeId=');
+        return response;
+    };
+    this.GetAllCapacity = function () {
+        var response = $http.get(URl + 'GetAllCapacity?CapacityId=');
+        return response;
+    };
+    this.GetAllRegion = function () {
+        var response = $http.get(URl + 'GetAllRegion?RegionId=');
+        return response;
+    };
+});

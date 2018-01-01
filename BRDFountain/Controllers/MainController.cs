@@ -255,11 +255,7 @@ namespace BRDFountain.Controllers
 
         #endregion View displays
 
-        public ActionResult Logout()
-        {
-            Session["MenuList"] = null;
-            return RedirectToAction("LoginDisplay", "Home");
-        }
+
         public string getloggedusername()
         {
             return Convert.ToString(Session["UserName"]);
@@ -319,11 +315,6 @@ namespace BRDFountain.Controllers
         }
 
 
-        public JsonResult GetStrategyDatabyStrategyId(string Strategynumber)
-        {
-            List<Strategy> lst = _dbOperations.GetStrategyDatabyStrategyId(Strategynumber);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
 
         public JsonResult GetStrategyApprovalByuser()
         {
@@ -352,7 +343,39 @@ namespace BRDFountain.Controllers
 
         public JsonResult InsertStrategy(Strategy strategy)
         {
-            string errordesc = "";
+            string mailbox = @"D:/Docs/";
+            string filepath = mailbox + "/" + strategy.RefNumber + "/";
+
+            bool exists = System.IO.Directory.Exists(@filepath);
+            if (!exists)
+                System.IO.Directory.CreateDirectory(@filepath);
+            if (Request.Files.Count > 0)
+            {
+                foreach (string file in Request.Files)
+                {
+                    var fileContent = Request.Files[file];
+                    if (fileContent != null && fileContent.ContentLength > 0)
+                    {
+                        filepath = filepath + fileContent.FileName;
+                        if (!System.IO.File.Exists(filepath))
+                        {
+                            FileStream fileStream = System.IO.File.Create(filepath, (int)fileContent.InputStream.Length);
+                            byte[] bytesInStream = new byte[fileContent.InputStream.Length];
+                            fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
+                            fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                            fileStream.Close();
+                            if (strategy.ExistingDecommissionedfile != null)
+                                strategy.ExistingDecommissionedfile += "," + fileContent.FileName;
+                            else
+                                strategy.ExistingDecommissionedfile = fileContent.FileName;
+                        }
+                        else
+                            return Json("File already exists", JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+                string errordesc = "";
             int errorcode = 0;
             strategy.Version = 1;
             long lastTimeStamp = DateTime.UtcNow.Ticks;
@@ -362,13 +385,7 @@ namespace BRDFountain.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveNewversionStrategy(Strategy strategy)
-        {
-            string errordesc = "";
-            int errorcode = 0;
-            _dbOperations.UpdateStrategyVersiondata(strategy, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-        }
+
 
 
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
@@ -1463,7 +1480,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.AddBusinessMapping(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult ModifyBusiness(BusinessMaster opp)
@@ -1479,7 +1496,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.DeleteBusinessMapping(BusinessId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         #endregion BusinessMapping
@@ -1504,7 +1521,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.AddFTAStrategyMapping(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult ModifyBusiness(BusinessMaster opp)
@@ -1520,7 +1537,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.DeleteFTAStrategyMapping(Id, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         #endregion FTAStrategyMapping
@@ -1540,7 +1557,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.AddFTAApplicationMapping(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult ModifyBusiness(BusinessMaster opp)
@@ -1556,7 +1573,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.DeleteFTAApplicationMapping(Id, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         #endregion FTAApplicationMapping
@@ -1603,6 +1620,7 @@ public class StrategyVersionLog
     public string Version { get; set; }
     public string ChangeDesc { get; set; }
     public string FTAShortCode { get; set; }
+    public string CreatedDateTime { get; set; }
 
 }
 
@@ -1794,6 +1812,11 @@ public class Strategy
     public string FTAApplicationMappingId { get; set; }
     public string FTAStrategyMappingId { get; set; }
     public string BusinessMappingId { get; set; }
+    public string Systemflowfile { get; set; }
+    public string Decommissionedfile { get; set; }
+
+    public string ExistingSystemflowfile { get; set; }
+    public string ExistingDecommissionedfile { get; set; }
 
 }
 
