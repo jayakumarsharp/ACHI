@@ -322,18 +322,15 @@
                         $scope.UploadedDList.push(data[i]);
                 }
             }
-
         });
 
         $timeout(function () {
             StrategyService.HideLoader();
         }, 500)
     };
-
     $scope.openpopup = function (type) {
         $('#viewFiles').modal('show');
     }
-
     var getdynamicobject = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
             if ($scope[type][i].Id == userId) {
@@ -341,7 +338,6 @@
             }
         }
     };
-
     var getdynamicobjectuserfilter = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
             if ($scope[type][i].userId == userId) {
@@ -360,6 +356,10 @@
             $scope.Error = error;
         })
     };
+
+    $scope.DownlaodFile = function (id, ref) {
+        StrategyService.DownLoadFile(id, ref).success(function (data) { });
+    }
 
     $scope.UpdateStrategy = function (model) {
         var model = {

@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('StrategyService', ['$http', function ($http) {
+ReportApp.factory('StrategyService', ['$http','$window', function ($http,$window) {
     var StrategyServiceURI = BaseURL + 'Main/';
     var StrategyServiceFactory = {};
 
@@ -75,7 +75,11 @@ ReportApp.factory('StrategyService', ['$http', function ($http) {
     StrategyServiceFactory.Get_ApprovaltransferByuser = function () {
         return $http.get(StrategyServiceURI + 'Get_ApprovaltransferByuser');
     }
-
+    StrategyServiceFactory.DownLoadFile = function (ReferenceCode, refnumber) {
+        url = StrategyServiceURI + 'DownLoadFile?FileName=' + ReferenceCode + '&RefNumber=' + refnumber;
+        //var s= $http.get(url);
+        $window.open(url);
+    }
 
     //TransferSettings
 
