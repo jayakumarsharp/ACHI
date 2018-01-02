@@ -47,10 +47,15 @@
 
                 </div>
                 <div class="form-group">
-                    <label>Application Category</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select ApplicationCategory -</option>
-                    </select>
+                    <label>Decommissioned Date</label>
+                    <div class="col-lg-12">
+                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate" required>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>System Flow &nbsp;<span ng-click="openpopup()" class="label label-success pull-right">{{UploadedSList.length}}</span></label>
@@ -103,9 +108,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Country </label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.Country" ng-options="item.CountryName for item in CountryMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select Country -</option>
+                    <label>FTA Application Owner</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.userId for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationOwner -</option>
                     </select>
                 </div>
 
@@ -196,27 +201,21 @@
                         <option value="">- Select Venuetype-</option>
                     </select>
                 </div>
+
+
                 <div class="form-group">
-                    <label>FTA Application Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.userId for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplicationOwner -</option>
+                    <label>Application Category</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ApplicationCategory -</option>
                     </select>
                 </div>
 
-
                 <div class="form-group">
-                    <label>Decommissioned Date</label>
-                    <div class="col-lg-12">
-                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate" required>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
+                    <label>Country</label>
+                    <multiselect placeholder="Select country..." ms-model="multiselect.selected" ms-config="multiselect.config" ms-change="assignUsers()"
+                                 ms-options="multiselect.options">
+                    </multiselect>
                 </div>
-
-
 
                 @*FTA Owner Attestation*@
 
@@ -230,7 +229,7 @@
     <div class="form-group col-lg-12">
         <div class="col-sm-offset-2 col-sm-10">
             <span>
-                <input type="button" value="Next" ng-click="activateTab(1)" class="btn btn-primary" />
+                <input type="button" value="Next" ng-disabled="addform.$invalid" ng-click="activateTab(1)" class="btn btn-primary" />
             </span>&nbsp;
             <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
         </div>
@@ -248,10 +247,15 @@
 
             </div>
             @*<div class="checkbox" ng-if="ShowSignOff">
+                        <label>
+                            <input type="checkbox" value="" ng-model="selectModel.SignOff">
+                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                            SIGN OFF
+                        </label>
+                    </div><div class="checkbox" ng-if="ShowSignOff">
                     <label>
                         <input type="checkbox" value="" ng-model="selectModel.SignOff">
                         <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                        SIGN OFF
                     </label>
                 </div>*@
 
@@ -261,15 +265,9 @@
                     <span>
                         <button type="button" ng-click="selectModel.SignOff='True'" class="btn" ng-class="{'btn-success': selectModel.SignOff== 'True' }">SIGN OFF</button>
                     </span>&nbsp;
-
-
-
                 </div>
             </div>
-
         </div>
-
-
     </form>
     <div class="form-group col-lg-12">
         <div class="col-sm-offset-2 col-sm-10">
@@ -352,3 +350,59 @@
         </div>
     </div>
 </div>
+
+<style>
+    .multiselect .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        display: block;
+        float: none;
+        max-height: 60px !important;
+        overflow: auto;
+    }
+
+    .multiselect-labels a .fa {
+        color: #ccc;
+    }
+
+        .multiselect-labels a .fa:hover {
+            color: #fff;
+        }
+
+    .multiselect-labels .label {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+        padding: 4px 6px;
+        font-size: 14px;
+    }
+
+    .multiselect .dropdown-menu > li > a {
+        white-space: normal;
+    }
+
+    .multiselect .caret {
+        border: none !important;
+    }
+
+    .dropdown-menu label.radio input[type=radio] {
+        visibility: hidden;
+    }
+
+    .dropdown-menu label.radio {
+        padding-left: 10px;
+    }
+
+    .missed-call-bottom .multiselect-native-select .btn-group button,
+    .missed-call-bottom .multiselect-native-select .btn-group {
+        min-width: 100%;
+    }
+
+    span.multiselect-native-select {
+        min-width: 100% !important;
+    }
+
+    .multiselect-native-select .multiselect-container {
+        min-width: 100% !important;
+    }
+</style>

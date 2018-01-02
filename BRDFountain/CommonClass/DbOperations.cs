@@ -272,7 +272,7 @@ public class DbOperations
                     cmd.Parameters.Add(new MySqlParameter("i_systemfile", s.Approver));
                     cmd.Parameters.Add(new MySqlParameter("i_OrignalFile", s.Comments));
                     cmd.Parameters.Add(new MySqlParameter("i_status", s.Status));
-                    
+
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -645,8 +645,8 @@ public class DbOperations
     public List<Strategy> GetStrategyData()
     {
         List<Strategy> lst = new List<Strategy>();
-
-        string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,FTAStrategyCodeId,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId,PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,C.CountryName,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore, SignOff,SignOffDate,SignoffBy,LastModifiedDate ,LastModifiedBy,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,DATE_FORMAT(S.DecomissionedDate, '%m/%d/%Y') DecomissionedDate,DATE_FORMAT(S.GoLiveDate, '%m/%d/%Y') GoLiveDate from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id  JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_country_master C on S.CountryId = C.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id right JOIN (SELECT  MAX(Id) as Id FROM tbl_strategy GROUP BY REfnumber) t2  ON S.ID = t2.Id";
+        //JOIN tbl_country_master C on S.CountryId = C.id 
+        string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,FTAStrategyCodeId,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId,PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore, SignOff,SignOffDate,SignoffBy,LastModifiedDate ,LastModifiedBy,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,DATE_FORMAT(S.DecomissionedDate, '%m/%d/%Y') DecomissionedDate,DATE_FORMAT(S.GoLiveDate, '%m/%d/%Y') GoLiveDate from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id  JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id right JOIN (SELECT  MAX(Id) as Id FROM tbl_strategy GROUP BY REfnumber) t2  ON S.ID = t2.Id";
         try
         {
             if (this.OpenConnection() == true)
@@ -700,7 +700,7 @@ public class DbOperations
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
                                        Country = Convert.ToString(row["CountryId"]),
-                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       //CountryName = Convert.ToString(row["CountryName"]),
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
@@ -757,14 +757,14 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
         try
         {
-            string query = "SP_GetStrategyById";
+            string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,FTAStrategyCodeId,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId, PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore,SignOff, SignOffDate, SignoffBy, LastModifiedDate, LastModifiedBy, BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,DATE_FORMAT(DecomissionedDate, '%m/%d/%Y') DecomissionedDate1,DATE_FORMAT(GoLiveDate, '%m/%d/%Y') as GoLiveDate1 from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC  On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id  WHERE S.Id = " + StrategyNumber;
 
             if (this.OpenConnection() == true)
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
+                    cmd.CommandType = CommandType.TableDirect;
+                    //cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -810,7 +810,7 @@ public class DbOperations
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
                                        Country = Convert.ToString(row["CountryId"]),
-                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       //CountryName = Convert.ToString(row["CountryName"]),
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
@@ -999,7 +999,7 @@ public class DbOperations
                                        ChangeDesc = Convert.ToString(row["ChangeDesc"]),
                                        FTAShortCode = Convert.ToString(row["FTAShortCode"]),
                                        Version = Convert.ToString(row["Version"]),
-                                       CreatedDateTime= Convert.ToString(row["CreatedDate"])
+                                       CreatedDateTime = Convert.ToString(row["CreatedDate"])
                                    }).ToList();
                         }
                     }
@@ -1027,7 +1027,7 @@ public class DbOperations
         }
     }
 
-   
+
     #endregion Strategy
 
 
@@ -1060,7 +1060,7 @@ public class DbOperations
         }
     }
 
-   
+
     private bool OpenConnection()
     {
         try

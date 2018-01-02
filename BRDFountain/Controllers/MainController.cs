@@ -19,7 +19,7 @@ namespace BRDFountain.Controllers
         // GET: /Main/
         //[SessionTimeout]
 
-        #region PArtial Views
+        #region Partial Views
         public ActionResult ShowApplicationDetails()
         {
             return PartialView();
@@ -254,7 +254,6 @@ namespace BRDFountain.Controllers
 
 
         #endregion View displays
-
 
         public string getloggedusername()
         {
@@ -510,13 +509,14 @@ namespace BRDFountain.Controllers
 
             var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
 
-            var data = diffs.FindAll(x => x.Item1.Equals("CountryName") || x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("FTAApplicationCode") || x.Item1.Equals("ChildIDValue")
+            var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("FTAApplicationCode") || x.Item1.Equals("ChildIDValue")
             || x.Item1.Equals("FTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("FTAStrategyCode") || x.Item1.Equals("FTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("FTAApplicationName") || x.Item1.Equals("FTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
             || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("FTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
             || x.Item1.Equals("Description") || x.Item1.Equals("SignOff"));
             string Changedata = "";
             if (data.Count() > 0)
             {
+                //x.Item1.Equals("CountryName") ||
                 foreach (var diff in data)
                 {
                     Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
@@ -915,8 +915,6 @@ namespace BRDFountain.Controllers
         #endregion ProductType
 
 
-
-
         #region Application
 
         public JsonResult GetAllApplication(string ApplicationId)
@@ -950,8 +948,6 @@ namespace BRDFountain.Controllers
         }
 
         #endregion Application
-
-
 
         #region BusinessSector
 
@@ -987,8 +983,6 @@ namespace BRDFountain.Controllers
 
         #endregion BusinessSector
 
-
-
         public JsonResult getADuser()
         {
             List<UserMaster> ls = new List<UserMaster>();
@@ -1010,8 +1004,6 @@ namespace BRDFountain.Controllers
 
             return Json(ls, JsonRequestBehavior.AllowGet);
         }
-
-
 
         #region FTAApplicationCode
 
@@ -1563,26 +1555,21 @@ namespace BRDFountain.Controllers
             List<ThirdPartyApp> lst = _dbOperations.GetThirdPartyAppList(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
-
         public JsonResult GetAllBusinessMappingbyId(string Id)
         {
             List<BusinessMappingMaster> lst = _dbOperations.GetBusinessMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult GetAllFTAStrategyMappingbyId(string Id)
         {
             List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult GetAllFTAApplicationMappingbyId(string Id)
         {
             List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
 
         #region BusinessMapping
 

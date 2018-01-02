@@ -18,12 +18,12 @@ namespace BRDFountain.App_Start
                         "~/Lib/bootstrap-datetimepicker.js",
                         "~/Lib/jquery.dataTables.min.js",
                         "~/Lib/angular.min.js",
+                        "~/Lib/underscore-min.js",
                         "~/Lib/angulardatatabes.js",
                         "~/Assert/angular-animate.min.js",
                          "~/Assert/toaster.js",
                          "~/plugins/ng-file-upload/dist/ng-file-upload.min.js",
                          "~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"
-
                     ));
             
             const string ANGULAR_APP_ROOT = "~/js/";
