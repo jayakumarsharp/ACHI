@@ -59,21 +59,14 @@
                 </div>
                 <div class="form-group">
                     <label>System Flow &nbsp;<span ng-click="openpopup()" class="label label-success pull-right">{{UploadedSList.length}}</span></label>
-
                     <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Systemflowfile" multiple name="file" />
-
-                    <i ng-show="upload_form.file.$error.required">*required</i><br>
+                    @*<i ng-show="upload_form.file.$error.required">*required</i><br>
                     <i ng-show="upload_form.file.$error.maxSize">
                         File too large
                         {{file.size / 1000000|number:1}}MB: max 20M
                     </i>
-
-                    <p>{{progress}}</p>
-
-
-
+                    <p>{{progress}}</p>*@
                 </div>
-
             </div>
         </div>
         @*First Box end*@
@@ -136,22 +129,16 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="form-group">
                     <label>Decommissioned Evidence &nbsp;<span ng-click="openpopup()" class="label label-success pull-right">{{UploadedDList.length}}</span></label>
                     <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Decommissionedfile" multiple name="file" />
-
-                    <i ng-show="upload_form.file.$error.required">*required</i><br>
+                    @*<i ng-show="upload_form.file.$error.required">*required</i><br>
                     <i ng-show="upload_form.file.$error.maxSize">
                         File too large
                         {{file.size / 1000000|number:1}}MB: max 20M
                     </i>
-
-                    <p>{{progress}}</p>
-
+                    <p>{{progress}}</p>*@
                 </div>
-
             </div>
         </div>
         @*Second Box end*@
@@ -229,7 +216,7 @@
     <div class="form-group col-lg-12">
         <div class="col-sm-offset-2 col-sm-10">
             <span>
-                <input type="button" value="Next" ng-disabled="addform.$invalid" ng-click="activateTab(1)" class="btn btn-primary" />
+                <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(1)" class="btn btn-primary" />
             </span>&nbsp;
             <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
         </div>
@@ -316,7 +303,7 @@
                                     <td>
                                         {{data.Comments}}
                                     </td>
-                                    <td></td>
+                                    <td><a ng-click="DownlaodFile(data.Comments,data.RefNumber)">download</a></td>
                                 </tr>
                             </tbody>
                         </table>

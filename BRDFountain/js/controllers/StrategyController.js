@@ -251,14 +251,17 @@
                 currency.Decommissionedfilelist = $scope.selectModel.Decommissionedfile;
             }
             Upload.upload({
-                url: 'Main/InsertStrategy', //webAPI exposed to upload the file
-                data: currency//{ Id: $scope.ecurrency.Id, TaskComments: $scope.ecurrency.TaskComments, ClientNumber: $scope.ecurrency.ClientNumber, ExisitingFiles: $scope.ecurrency.TaskAttachment, obj: $scope.file }//pass file as data, should be user ng-model
-            }).then(function (resp) { //upload function returns a promise
-                if (resp.data.error_code === 0) { //validate success
-                    console.log(resp.data);
-                } else {
-                    $window.alert('an error occured');
+                url: 'Main/InsertStrategy',
+                data: currency
+            }).then(function (data) {
+                StrategyService.HideLoader();
+                if (data.data == 'success') {
+                    toaster.pop('success', "Success", "Model/Algo added successfully", null);
+                    $scope.showaction = false;
                 }
+                else
+                    toaster.pop('warning', "Warning", data.data, null);
+                getallgriddata();
             }, function (resp) { //catch error
                 console.log('Error status: ' + resp.status);
                 $window.alert('Error status: ' + resp.status);
@@ -269,9 +272,7 @@
                 $scope.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
             });
         }
-        //}
-        //else
-        //    toaster.pop('warning', "Warning", "Please select one approver", null);
+
     };
 
     $scope.Availableusers = [];
@@ -369,6 +370,7 @@
     }
 
     $scope.UpdateStrategy = function (model) {
+        StrategyService.ShowLoader();
         var model = {
             Page: "S",
             Country: JSON.stringify($scope.multiselect.selected),
@@ -426,11 +428,7 @@
                     url: 'Main/UpdateStrategyFile', //webAPI exposed to upload the file
                     data: model,
                 }).then(function (resp) { //upload function returns a promise
-                    if (resp.data.error_code === 0) { //validate success
-                        console.log(resp.data);
-                    } else {
-                        $window.alert('an error occured');
-                    }
+
                 }, function (resp) { //catch error
                     console.log('Error status: ' + resp.status);
                     $window.alert('Error status: ' + resp.status);
@@ -442,8 +440,10 @@
                 });
 
             }
+            StrategyService.HideLoader();
             $scope.getallalgodata()
             getallgriddata();
+
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });

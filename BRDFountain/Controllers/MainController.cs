@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -344,12 +345,12 @@ namespace BRDFountain.Controllers
         {
             try
             {
-                string mailbox = @"D:/Docs/";
-                string filepath = mailbox + "/" + strategy.RefNumber + "/";
-                string errordesc = "";
-                int errorcode = 0;
                 strategy.Version = 1;
                 strategy.RefNumber = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                string mailbox = ConfigurationManager.AppSettings["FilePath"];
+                string filepath = mailbox + "/" + strategy.RefNumber + "/";
+                string errordesc = "";
+                int errorcode = 0;                
                 List<StrategyApprover> lstfiles = new List<StrategyApprover>();
                 bool exists = System.IO.Directory.Exists(@filepath);
                 if (!exists)
@@ -417,7 +418,7 @@ namespace BRDFountain.Controllers
             try
             {
                 log.InfoFormat("Called DownLoadFile method with param FileName {0}", FileName);
-                string mailbox = @"D:/Docs/";
+                string mailbox = ConfigurationManager.AppSettings["FilePath"];
                 string filepath = mailbox + "/" + RefNumber + "/";
                 string filePath1 = filepath + FileName;
 
@@ -535,7 +536,7 @@ namespace BRDFountain.Controllers
         {
             try
             {
-                string mailbox = @"D:/Docs/";
+                string mailbox = ConfigurationManager.AppSettings["FilePath"];
                 string filepath = mailbox + "/" + strategy.RefNumber + "/";
                 string errordesc = "";
                 int errorcode = 0;
