@@ -1696,26 +1696,1047 @@ public class DbOperations
 
     #endregion MapTask
 
-    public void AddRightsForRoles(string roleName, string menuRights, out int errorCode, out string errorDesc)
+
+
+    #region Roles
+
+    public List<Roles> GetRoles(string roleId)
     {
+        List<Roles> lst = new List<Roles>();
+        string query = "Sp_GetRoles";
 
-        errorDesc = "";
-        errorCode = 0;
-        string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
-
-        //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
-            MySqlCommand cmd = new MySqlCommand(query, connection);
 
-            //Execute command
-            cmd.ExecuteNonQuery();
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new Roles
+                               {
+                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                   id = Convert.ToString(row["id"]),
+                                   ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                   ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                   RoleName = Convert.ToString(row["RoleName"])
+                               }).ToList();
 
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
             //close connection
             this.CloseConnection();
         }
+
+        return lst;
     }
+    public void GetUserRoles(string roleId)
+    {
+
+        try
+        {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToString(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+            //return lst;
+            //models.User.findAll({ where: { RoleId: roleId } })
+            //   .then(function(userroles) { deferred.resolve(userroles); })
+            //   .catch (function (err) { deferred.reject(err) });
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public List<RightMaster> GetRights(string roleId)
+    {
+        List<RightMaster> lst = new List<RightMaster>();
+        string query = "Sp_GetRights";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new RightMaster
+                               {
+                                   Icon = Convert.ToString(row["Icon"]),
+                                   MenuName = Convert.ToString(row["MenuName"]),
+                                   Path = Convert.ToString(row["Path"]),
+                                   RightID = Convert.ToString(row["RightID"]),
+                                   RightName = Convert.ToString(row["RightName"]),
+                                   ShowMenu = Convert.ToString(row["ShowMenu"])
+                               }).ToList();
+
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+
+
+    }
+
+    public int AddRole(string role, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_role", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_role", role));
+
+            if (this.OpenConnection() == true)
+            {
+                cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    //done
+    public void ModifyRoleRight(RoleRightMapping roleright)
+    {
+        try
+        {
+            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright.id));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            {
+                foreach (RightMaster s in roleright.Rights)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.id));
+                    if (this.OpenConnection() == true)
+                    {
+
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+        }
+    }
+
+    //done
+    public void AddRoleRightMapping(RoleRightMapping roleright, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            {
+                foreach (RightMaster s in roleright.Rights)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.RoleID));
+                    if (this.OpenConnection() == true)
+                    {
+
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+
+    }
+
+    public void DeleteRole(string roleright)
+    {
+        try
+        {
+            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("SP_DeleteRole", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_id", roleright));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+        }
+    }
+    public List<RoleRightMapping> GetRoleRightMapping(string roleId)
+    {
+        List<RoleRightMapping> lst = new List<RoleRightMapping>();
+        try
+        {
+            string query = "SP_GetRoleRights";
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RoleRightMapping
+                                   {
+                                       RightID = Convert.ToString(row["RightID"]),
+                                       RoleID = Convert.ToString(row["RoleID"]),
+                                   }).ToList();
+                        }
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    #endregion Roles
+
+
+    #region Users
+
+
+    public void GetAllEmail()
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    public void GetUserProfile(string userId)
+    {
+        try
+        {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToString(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+
+
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public List<UserMaster> GetUserbyFilter(string RegionId, string BusinessSectorId)
+    {
+
+        try
+        {
+            List<UserMaster> lst = new List<UserMaster>();
+            string query = "sp_getusersbycondition";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_regionId", RegionId));
+                    cmd.Parameters.Add(new MySqlParameter("i_businesssectorId", BusinessSectorId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new UserMaster
+                                   {
+                                       Id = Convert.ToString(row["Id"]),
+                                       userId = Convert.ToString(row["Userid"]),
+                                       UserName = Convert.ToString(row["username"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       RoleId = Convert.ToString(row["RoleId"]),
+                                       RoleName = Convert.ToString(row["RoleName"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       BusinessSector = Convert.ToString(row["BusinessLine"]),
+                                       BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                       RegionId = Convert.ToString(row["RegionId"]),
+                                       Status = Convert.ToString(row["Status"]),
+
+
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+
+    public List<UserMaster> GetUser(string userId)
+    {
+        List<UserMaster> lst = new List<UserMaster>();
+        string query = "sp_getusers";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new UserMaster
+                               {
+                                   Id = Convert.ToString(row["Id"]),
+                                   userId = Convert.ToString(row["Userid"]),
+                                   UserName = Convert.ToString(row["username"]),
+                                   EmailId = Convert.ToString(row["EmailId"]),
+                                   RoleId = Convert.ToString(row["RoleId"]),
+                                   RoleName = Convert.ToString(row["RoleName"]),
+                                   RegionName = Convert.ToString(row["RegionName"]),
+                                   CountryName = Convert.ToString(row["CountryName"]),
+                                   BusinessSector = Convert.ToString(row["BusinessLine"]),
+                                   BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                   CountryId = Convert.ToString(row["CountryId"]),
+                                   RegionId = Convert.ToString(row["RegionId"]),
+                                   Status = Convert.ToString(row["Status"]),
+                                   Password = Convert.ToString(row["Password"]),
+                                   IsADUser = Convert.ToString(row["IsADUser"]),
+
+                               }).ToList();
+
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+        return lst;
+    }
+    public List<UserMaster> GetUsersByRoles(string Roleid)
+    {
+        try
+        {
+            List<UserMaster> lst = new List<UserMaster>();
+            string query = "Sp_getRolesbyuserassigned";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleid", Roleid));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new UserMaster
+                                   {
+                                       userId = Convert.ToString(row["Userid"]),
+                                       UserName = Convert.ToString(row["username"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       RoleId = Convert.ToString(row["RoleId"]),
+                                       RoleName = Convert.ToString(row["RoleName"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       BusinessSector = Convert.ToString(row["BusinessLine"]),
+                                       BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                       CountryId = Convert.ToString(row["CountryId"]),
+                                       RegionId = Convert.ToString(row["RegionId"]),
+                                       Status = Convert.ToString(row["Status"]),
+
+
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
+
+        }
+        catch (MySqlException e)
+        {
+
+            this.CloseConnection();
+            return null;
+        }
+    }
+    public void CreateTempUser(UserMaster user, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "No"));
+
+                if (this.OpenConnection() == true)
+                {
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+    public void CreateUser(UserMaster user, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
+            {
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "Yes"));
+                cmd.Parameters.Add(new MySqlParameter("i_password", ""));
+                if (this.OpenConnection() == true)
+                {
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+    public void ModifyUser(UserMaster user, out int errorcode, out string errordesc)
+    {
+
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_updateuser", connection))
+            {
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_status", user.Status));
+
+                if (this.OpenConnection() == true)
+                {
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+
+    }
+    public void DeleteUser(string user)
+    {
+        try
+        {
+            //    logger.info('Deleting user ' + user.userId);
+            //    this.GetUser(user.userId)
+            //        .then(function(userdtl) {
+            //        models.sequelize.transaction().then(function(t) {
+            //            if (t != null && t != undefined)
+            //            {
+            //                // models.UserRoles.destroy({ where: { userId: user.userId }, truncate: false },{transaction:t})
+            //                //    .then(function(userrole){
+            //                logger.info('Deleting user 123');
+            //                models.User.destroy({ where: { userId: user.userId }, truncate: false }, { transaction: t })
+            //                            .then(function(user) {
+            //                    t.commit(); deferred.resolve(user);
+            //                })
+            //                            .catch (function (destroyError) {
+            //    logger.info('destroy ' + destroyError)
+            //                                 t.rollback(); deferred.reject(destroyError);
+            //})
+            //                        // })
+            //                        // .catch(function(userRoleError){
+            //                        // logger.info('userRoleError ' + userRoleError)
+            //                        // t.rollback(); deferred.reject(userRoleError);
+            //                        // });            
+            //                    }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void ChangePassword(string user)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'days').format('L LT');
+            //var hash_parts = Utility.UtilityModel.create_password(user.newpassword);
+            //var hashedpwd = hash_parts.method + "$" + hash_parts.salt + "$" + hash_parts.hash;
+
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    var currenthashedpwd = userdtl.Password;
+
+            //    var checkStatus = Utility.UtilityModel.check_password(currenthashedpwd, user.oldPassword);
+            //    if (checkStatus.status === true)
+            //    {
+            //        logger.info('password matched for user ' + user.userId);
+            //        models.UserPasswordHistory.findAll({ where: { userId: user.userId }, limit: 5, order: 'CreatedDate DESC' })
+            //                .then(function(userPasswords) {
+            //            logger.info(userPasswords);
+            //            for (var i = 0; i > userPasswords.length; i++)
+            //            {
+            //                var verifyPassword = Utility.UtilityModel.check_password(userPasswords[i].Password, user.newpassword);
+            //                if (verifyPassword.status === true)
+            //                {
+            //                    deferred.reject({ error: 1001, errorMsg: 'last 5 Password can not be used' });
+            //        }
+            //    }
+
+            //    models.sequelize.transaction().then(function(t) {
+            //        if (t != null && t != undefined)
+            //        {
+            //            var userExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //            var passwordExpiryDate = moment(dbdate).add(30, 'days').format('L LT');
+            //            var userBlockDate = moment(dbdate).add(30, 'days').format('L LT');
+
+            //            models.User.update({
+            //                Password: hashedpwd, UserExpiryDate: userExpiryDate,
+            //                                PasswordExpiryDate: passwordExpiryDate, UserBlockDate: userBlockDate, AttemptedTries: 0,
+            //                                ModifiedDate: createdDate, ModifiedBy: '', ApprovedDate: createdDate, Approvedby: '',
+            //                                MakerComment: '', CheckerComment: ''
+            //                                }, { where: { userId: user.userId } }, { transaction: t })
+            //                                .then(function(userupdatedtl) {
+            //                models.UserPasswordHistory.create({
+            //                    SessionTokenId: user.sessionId, UserId: user.userId,
+            //                                        Password: hashedpwd, CreatedDate: createdDate
+            //                                        }, { transaction: t })
+            //                                        .then(function(pass) { t.commit(); deferred.resolve(userdtl); })
+            //                                        .catch (function (passError) {
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void UserLogin(string user)
+    {
+        try
+        {
+
+            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
+            //var createdDate = moment.utc(curentdate).toDate();
+            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
+            //// var dbdate = new Date();
+            //// var createdDate = moment(dbdate).format('L LT');
+
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    if (userdtl != null && userdtl != undefined)
+            //    {
+            //        if (userdtl.Status != 'Inactive')
+            //        {
+            //            var currenthashedpwd = userdtl.Password;
+            //            // var verifyPwd = Utility.UtilityModel.check_password(currenthashedpwd,user.password);
+            //            Utility.UtilityModel.Authenticate(user.userId, user.password).then(function(data) {
+            //                logger.info('check ' + data);
+            //                if (data === true)
+            //                {
+            //                    logger.info('password matched for user ' + user.userId);
+            //                    var expireAt = moment().add(90000, 'seconds').format('L LT');
+            //                    var token = Utility.UtilityModel.generateToken(user, 90000);
+            //                    logger.info(token.length);
+            //                    models.sequelize.transaction().then(function(t) {
+            //                        if (t != null && t != undefined)
+            //                        {
+            //                            models.UserSession.create({
+            //                                SessionTokenId: token, UserId: user.userId, Tokendetail: token,
+            //                                    CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
+            //                                    }, { transaction: t })
+            //                                    .then(function(userSession) {
+            //                                models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                            .then(function(userupdate) {
+            //                                    t.commit();
+            //                                    deferred.resolve({
+            //                                        token: token, expires: expireAt, user:
+            //                                        {
+            //                                            userId: userdtl.userId,
+            //                                                        UserName: userdtl.UserName, EmailId: userdtl.EmailId, MobileNumber: userdtl.MobileNumber,
+            //                                                        CustomData: userdtl.CustomData, Status: userdtl.Status, UserExpiryDate: userdtl.UserExpiryDate,
+            //                                                        PasswordExpiryDate: userdtl.PasswordExpiryDate, UserBlockDate: userdtl.UserBlockDate,
+            //                                                        AttemptedTries: userdtl.AttemptedTries, LastUsedDate: userdtl.LastUsedDate,
+            //                                                        CreatedDate: userdtl.CreatedDate, CreatedBy: userdtl.CreatedBy,
+            //                                                        ModifiedDate: userdtl.ModifiedDate, ModifiedBy: userdtl.ModifiedBy, ApprovedDate: userdtl.ModifiedBy,
+            //                                                        Approvedby: userdtl.Approvedby, MakerComment: userdtl.MakerComment,
+            //                                                        CheckerComment: userdtl.CheckerComment
+            //                                                        }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+    public void UserLogout(string user)
+    {
+        try
+        {
+            //var dbdate = new Date();
+            //var createdDate = moment(dbdate).add(30, 'day').format('L LT');
+            //this.GetUser(user.userId)
+            //    .then(function(userdtl) {
+            //    models.sequelize.transaction().then(function(t) {
+            //        if (t != null && t != undefined)
+            //        {
+            //            models.UserSession.update({ LogoutDate: createdDate },
+            //                        { where: { userId: user.userId, SessionTokenId: user.token, LogoutDate: null } }, { transaction: t })
+            //                        .then(function(userSession) {
+            //                models.User.update({ LastUsedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                .then(function(userupdate) {
+            //                    t.commit();
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public List<RightMaster> GetMenuList(string userId)
+    {
+        try
+        {
+
+            List<RightMaster> lst = new List<RightMaster>();
+            string query = "sp_getmenuforuser";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RightMaster
+                                   {
+                                       Icon = Convert.ToString(row["Icon"]),
+                                       MenuName = Convert.ToString(row["MenuName"]),
+                                       Path = Convert.ToString(row["Path"]),
+                                       RightID = Convert.ToString(row["RightID"]),
+                                       ShowMenu = Convert.ToString(row["ShowMenu"])
+
+                                   }).ToList();
+
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
+
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    public List<RightMaster> GetRightsList(string userId)
+    {
+        try
+        {
+
+            List<RightMaster> lst = new List<RightMaster>();
+            string query = "SP_GetRightForUser";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RightMaster
+                                   {
+                                       RightName = Convert.ToString(row["RightName"]),
+                                       Path = Convert.ToString(row["Path"]),
+                                   }).ToList();
+                        }
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+                //close connection
+                this.CloseConnection();
+            }
+            return lst;
+
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    public void GetUserSessionInfo(string createdDate)
+    {
+        try
+        {
+            //sequelize.query('Select UserId, CreatedDate from TBL_USER_SESSION where CONVERT(date, CreatedDate) = :CreatedOn',
+            //        {
+            //    replacements: { CreatedOn: createdDate },
+            //        type: sequelize.QueryTypes.SELECT
+            //    }).then(function(response) {
+            //    logger.info('success');
+            //    logger.info('response: ' + response);
+            //    deferred.resolve(response);
+            //}).error(function(err) {
+            //    logger.info('failure: ' + err);
+            //    deferred.reject(err);
+            //});
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+
+    public void GetInactiveUsers()
+    {
+        try
+        {
+            //models.User.findAll({ where: { Status: 'Inactive' } }).then(function(users) {
+            //    deferred.resolve(users);
+            //}).catch (function (err) { logger.info('GetInactiveUsers error: ' + err); deferred.reject(err) });
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    public void ADFSUserLogin(string email)
+    {
+        try
+        {
+
+            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
+            //var createdDate = moment.utc(curentdate).toDate();
+            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
+            //// var dbdate = new Date();
+            //// var createdDate = moment(dbdate).format('L LT');
+
+            //models.User.findOne({ where: { EmailId: email } })
+            //    .then(function(user) {
+            //    if (user != null && user != undefined)
+            //    {
+            //        if (user.Status != 'Inactive')
+            //        {
+
+            //            var expireAt = moment().add(90000, 'seconds').format('L LT');
+            //            var token = Utility.UtilityModel.generateToken(user, 90000);
+            //            logger.info(token.length);
+            //            models.sequelize.transaction().then(function(t) {
+            //                if (t != null && t != undefined)
+            //                {
+            //                    models.UserSession.create({
+            //                        SessionTokenId: token, UserId: user.userId, Tokendetail: token,
+            //                            CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
+            //                            }, { transaction: t })
+            //                            .then(function(userSession) {
+            //                        models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
+            //                                    .then(function(userupdate) {
+            //                            t.commit();
+            //                            deferred.resolve({
+            //                                token: token, expires: expireAt, user:
+            //                                {
+            //                                    userId: user.userId,
+            //                                                UserName: user.UserName, EmailId: user.EmailId, MobileNumber: user.MobileNumber,
+            //                                                CustomData: user.CustomData, Status: user.Status, UserExpiryDate: user.UserExpiryDate,
+            //                                                PasswordExpiryDate: user.PasswordExpiryDate, UserBlockDate: user.UserBlockDate,
+            //                                                AttemptedTries: user.AttemptedTries, LastUsedDate: user.LastUsedDate,
+            //                                                CreatedDate: user.CreatedDate, CreatedBy: user.CreatedBy,
+            //                                                ModifiedDate: user.ModifiedDate, ModifiedBy: user.ModifiedBy, ApprovedDate: user.ModifiedBy,
+            //                                                Approvedby: user.Approvedby, MakerComment: user.MakerComment,
+            //                                                CheckerComment: user.CheckerComment
+            //                                                }
+            //                            });
+            //                        })
+            //                                    .catch (function (userupdateerror) {
+            //t.rollback();
+            //logger.info(userupdateerror);
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+
+    #endregion Users
 
     //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)
     //{
@@ -1782,3 +2803,35 @@ public class DbOperations
 
 
 
+
+
+
+public static class EncryptLib
+{
+
+    public static string EncodePasswordToBase64(string password)
+    {
+        try
+        {
+            byte[] encData_byte = new byte[password.Length];
+            encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
+            string encodedData = Convert.ToBase64String(encData_byte);
+            return encodedData;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error in base64Encode" + ex.Message);
+        }
+    } //this function Convert to Decord your Password
+    public static string DecodeFrom64(string encodedData)
+    {
+        System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+        System.Text.Decoder utf8Decode = encoder.GetDecoder();
+        byte[] todecode_byte = Convert.FromBase64String(encodedData);
+        int charCount = utf8Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+        char[] decoded_char = new char[charCount];
+        utf8Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+        string result = new String(decoded_char);
+        return result;
+    }
+}

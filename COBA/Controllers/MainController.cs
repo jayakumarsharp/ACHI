@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace CRMManagement.Controllers
@@ -265,6 +266,170 @@ namespace CRMManagement.Controllers
 
         #endregion Email
 
+        public string getloggedusername()
+        {
+            return Convert.ToString(Session["UserName"]);
+        }
+
+        #region Roles
+
+        public JsonResult GetUserRoles(string userId)
+        {
+            if (userId != "")
+            {
+                if (Session["MenuList"] != null)
+                {
+                    List<RightMaster> ls = Session["MenuList"] as List<RightMaster>;
+                    return Json(ls, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    List<RightMaster> lst = _dbOperations.GetMenuList(userId);
+                    Session["MenuList"] = lst;
+                    return Json(lst, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+                return null;
+        }
+        public JsonResult GetUsersByRoles(string Roleid)
+        {
+            List<UserMaster> lst = _dbOperations.GetUsersByRoles(Roleid);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetUserRights(string userId)
+        {
+            List<RightMaster> lst = _dbOperations.GetRightsList(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetRoleRightMappings(string roleId)
+        {
+            _dbOperations.GetRoleRightMapping(roleId);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetRoleRightMapping(string roleId)
+        {
+            List<RoleRightMapping> lst = _dbOperations.GetRoleRightMapping(roleId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult roles(string roleId)
+        {
+            List<Roles> lst = _dbOperations.GetRoles(roleId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetRights(string right)
+        {
+            List<RightMaster> lst = _dbOperations.GetRights(right);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult AddRole(RoleRightMapping obj)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            int id = _dbOperations.AddRole(obj.selectedRole, out errocode, out errordesc);
+            return Json(id, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddRoleRightMapping([FromBody]RoleRightMapping obj)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddRoleRightMapping(obj, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyRoleRight([FromBody]RoleRightMapping obj)
+        {
+            _dbOperations.ModifyRoleRight(obj);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteRole(RoleRightMapping obj)
+        {
+
+            _dbOperations.DeleteRole(obj.id);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Roles
+
+        #region User
+
+        public JsonResult getusers(string userid)
+        {
+            List<UserMaster> lst = _dbOperations.GetUser(userid);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult profile(string userId)
+        {
+            _dbOperations.GetUserProfile(userId);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetUserSessionInfo(string createdOn)
+        {
+            _dbOperations.GetUserSessionInfo(createdOn);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetInactiveUsers()
+        {
+            _dbOperations.GetInactiveUsers();
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUserbyFilter(string RegionId, string BusinessLineId)
+        {
+            List<UserMaster> lst = _dbOperations.GetUserbyFilter(RegionId, BusinessLineId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult email()
+        {
+            _dbOperations.GetAllEmail();
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CreateUser(UserMaster user)
+        {
+
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.CreateUser(user, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        public JsonResult CreateTempUser(UserMaster user)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.CreateTempUser(user, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyUser(UserMaster user)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyUser(user, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteUser(string user)
+        {
+
+            _dbOperations.DeleteUser(user);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        #endregion User
 
     }
 }
@@ -581,5 +746,85 @@ public class Client
     public string SignoffBy { get; set; }
     public string IsActive { get; set; }
     public int Id{ get; set; }
+
+}
+
+
+
+public class ADUserMaster
+{
+    public string Userid { get; set; }
+    public string UserName { get; set; }
+    public string EmailId { get; set; }
+}
+public class UserMaster
+{
+    public string ApprovedDate { get; set; }
+    public string Approvedby { get; set; }
+    public int AttemptedTries { get; set; }
+    public string BusinessSectorId { get; set; }
+    public string BusinessSector { get; set; }
+    public string RegionId { get; set; }
+    public string RegionName { get; set; }
+    public string CountryId { get; set; }
+    public string CountryName { get; set; }
+    public string RoleId { get; set; }
+    public string RoleName { get; set; }
+    public string CheckerComment { get; set; }
+    public string CreatedBy { get; set; }
+    public string CreatedDate { get; set; }
+    public string CustomData { get; set; }
+    public string EmailId { get; set; }
+    public string FirstWorkingDate { get; set; }
+    public string IsADUser { get; set; }
+    public string LastAuthenticatedDate { get; set; }
+    public string LastUsedDate { get; set; }
+    public string LastWorkingDate { get; set; }
+    public int LocationId { get; set; }
+    public string MakerComment { get; set; }
+    public string MobileNumber { get; set; }
+    public string ModifiedBy { get; set; }
+    public string ModifiedDate { get; set; }
+    public string Password { get; set; }
+    public string PasswordExpiryDate { get; set; }
+    public string Status { get; set; }
+    public string UserBlockDate { get; set; }
+    public string UserExpiryDate { get; set; }
+    public string UserImage { get; set; }
+    public string UserName { get; set; }
+    public string userId { get; set; }
+    public string Id { get; set; }
+}
+
+public class Roles
+{
+    public string CreatedBy { get; set; }
+    public string CreatedDate { get; set; }
+    public string ModifiedBy { get; set; }
+    public string ModifiedDate { get; set; }
+    public string RoleName { get; set; }
+    public string id { get; set; }
+}
+
+
+
+public class RoleRightMapping
+{
+    public string id { get; set; }
+    public string RoleID { get; set; }
+    public string RightID { get; set; }
+    public string selectedRole { get; set; }
+    public List<RightMaster> Rights { get; set; }
+}
+
+public class RightMaster
+{
+    public string Icon { get; set; }
+    public string MenuName { get; set; }
+    public string Path { get; set; }
+    public string RightID { get; set; }
+    public string RightName { get; set; }
+    public string ShowMenu { get; set; }
+    public string id { get; set; }
 
 }

@@ -1,9 +1,94 @@
-﻿<div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;">
-    <section class="content-header" style="padding-bottom:10px;">
-        <h4>            Reports</h4>
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+<div ng-controller="ReportsController">
+    <div ng-include="'Main/ConfirmModal'"></div>
+    <div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;" ng-show="!showaction">
+        <h4>Strategy Report   </h4>
 
-    </section>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Region</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.Region" ng-options="item.RegionName for item in RegionMasterList" ng-change="userfilter(false)"  title="Select Region" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select Region -</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>FTA Application Code</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplicationCode" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select FTAApplication Code -</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>FTA Strategy Code</label>
+                <select class="form-control" ng-model="selectModel.FTAStrategyCode" ng-options="item.FTAStrategyCode for item in FTAStrategyCodeList" title="Select FTAStrategyCode"  style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select FTAStrategy Code -</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Business Line</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.BusinessLine"  ng-options="item.BusinessLine for item in BusinessLineList" ng-change="userfilter(false)"  title="Select BusinessLine" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select BusinessLine-</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <label>Venue type</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.Venuetype" ng-options="item.Venuetype for item in VenuetypeList" title="Select Region" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select Venuetype-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Country </label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.Country" ng-options="item.CountryName for item in CountryMasterList" title="Select Country" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select Country -</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>FTA Strategy Owner</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.userId for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select FTAStrategyOwner -</option>
+                </select>
+            </div>
 
 
-
+            <div class="form-group">
+                <label>Application Category</label>
+                <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
+                    <option value="">- Select ApplicationCategory -</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12 pull-right">
+            <button data-ng-click="showreport()" class="btn btn-primary">Generate Report</button>
+        </div>
+        <div class="col-md-10 data-table">
+            <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive"></table>
+        </div>
+    </div>
+   
 </div>
+
+<style>
+    .disabled {
+        cursor: not-allowed;
+    }
+
+    .basic-page .form-control {
+        height: 36px;
+        padding: 0px 9px;
+    }
+
+    table tr {
+        font-size: 14px;
+    }
+</style>
+
+

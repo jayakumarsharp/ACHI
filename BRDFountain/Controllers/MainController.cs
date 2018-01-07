@@ -94,6 +94,12 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+        [SessionTimeout]
+        public ActionResult Reports()
+        {
+            return View();
+        }
+
 
         [SessionTimeout]
         public ActionResult ModelAlgoManagement()
@@ -314,7 +320,11 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-
+        public JsonResult GetStrategyReport(StrategyReportFilter filter)
+        {
+            List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult GetStrategyApprovalByuser()
         {
@@ -350,7 +360,7 @@ namespace BRDFountain.Controllers
                 string mailbox = ConfigurationManager.AppSettings["FilePath"];
                 string filepath = mailbox + "/" + strategy.RefNumber + "/";
                 string errordesc = "";
-                int errorcode = 0;                
+                int errorcode = 0;
                 List<StrategyApprover> lstfiles = new List<StrategyApprover>();
                 bool exists = System.IO.Directory.Exists(@filepath);
                 if (!exists)
@@ -1851,10 +1861,25 @@ public class StrategyApprover
 }
 
 
+public class StrategyReportFilter
+{
+    public string Region { get; set; }
+    public string FTAApplicationCode { get; set; }
+    public string FTAStrategyCode { get; set; }
+    public string BusinessLine { get; set; }
+    public string Country { get; set; }
+    public string FTAStrategyOwner { get; set; }
+    public string SystemFlow { get; set; }
+    public string ApplicationCategory { get; set; }
+
+}
+
 public class Strategy
 {
     public int Id { get; set; }
     public string RefNumber { get; set; }
+
+    public string CountryId { get; set; }
     public string Country { get; set; }
     public string CountryName { get; set; }
     public string Region { get; set; }
