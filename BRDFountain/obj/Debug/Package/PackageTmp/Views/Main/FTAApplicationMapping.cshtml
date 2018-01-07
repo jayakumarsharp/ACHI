@@ -1,0 +1,63 @@
+﻿
+<div class="col-lg-8 col-md-6 main-content full-width basic-page sidebar">
+    <h4>      Manage FTAApplication Mapping </h4>
+    <div class="row">
+        <div ng-controller="FTAApplicationMappingController" class="nav-tabs-custom">
+            <div ng-include="'Main/ConfirmModal'"></div>
+            <div class="row pull-right">
+                <button ng-show="!showAddwindow" data-ng-click="Showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
+            </div>
+            <div ng-show="showAddwindow" class="sec-one">
+                <div class="col-md-6 col-md-offset-2 row">
+
+                    <div class="btns-b" ng-class="{'has-error':inputTask.$invalid && !inputTask.$pristine }">
+
+                        <div class="form-group">
+                            <label>FTAApplication</label>
+                            <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationName" ng-options="item.FTAApplicationName for item in FTAApplicationNameList" title="Select FTAApplication" style="width:100%;font-size: 0.8em" required>
+                                <option value="">- Select FTAApplication Name-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>FTAApplicationCode</label>
+                            <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplication Code" style="width:100%;font-size: 0.8em" required>
+                                <option value="">- Select FTAApplication Code-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>ChildID </label>
+                            <select class="form-control" name="ddlSBU" ng-model="selectModel.ChildID" ng-options="item.ChildID for item in ChildIDList" title="Select FTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
+                                <option value="">- Select FTAApplication Suffix-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>FTAApplication Suffix</label>
+                            <select class="form-control" name="ddlSBU" ng-model="selectModel.ThirdPartyApp" ng-options="item.Value for item in ThirdPartyList" title="Select FTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
+                                <option value="">- Select ThirdParty-</option>
+                            </select>
+                        </div>
+
+
+                        <button data-ng-show="editMode" data-ng-click="UpdateFTAApplicationMaster(FTAApplicationMaster)" class="col-md-2 col-md-offset-1 btn btn-primary">Update</button>
+                        <button data-ng-show="!editMode" data-ng-click="add(selectModel)" class="col-md-2 col-md-offset-1 btn btn-primary">Add </button>
+                        <button data-ng-click="Confirmcancel()" class="col-md-2 btn btn-primary cancel">Cancel </button>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-show="!showAddwindow" class="col-md-12 data-table" style="width:70%;margin-left:14%;">
+
+                <div class="row">
+
+                    <table class="table table-responsive" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
