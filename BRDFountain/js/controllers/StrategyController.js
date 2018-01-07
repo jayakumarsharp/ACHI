@@ -219,7 +219,7 @@
         StrategyService.ShowLoader();
         var idlist = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            idlist = $scope.multiselect.selected[i].id + ',';
+            idlist += $scope.multiselect.selected[i].id + ',';
         }
         var currency = {
             //Country: $scope.selectModel.Country.Id
@@ -377,7 +377,7 @@
         StrategyService.ShowLoader();
         var idlist = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            idlist = $scope.multiselect.selected[i].id + ',';
+            idlist += $scope.multiselect.selected[i].id + ',';
         }
         var model = {
             Page: "S",

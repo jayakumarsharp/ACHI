@@ -4,39 +4,39 @@
     $scope.errorinfo = '';
     $scope.Strategydata = [];
     $scope.editMode = false;
-    $scope.showaction = false;
+    $scope.showfilter = true;
     $scope.IsReadOnly = true;
     $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.currency = {};
 
-    $scope.selectModel = {
-        Country: {},
-        Region: {},
-        FTAApplicationCode: {},
-        BusinessSuffix: {},
-        ChildID: {},
-        FTAStrategyName: {},
-        Strategytype: {},
-        GOLiveDate: '',
-        FTAStrategyCode: {},
-        FTAShortCode: {},
-        BusinessLine: {},
-        FTAApplicationName: {},
-        FTAStrategyOwner: {},
-        ApplicationCategory: {},
-        Venuetype: {},
-        DecomissionedDate: {},
-        DiscretionaryCode: {},
-        ParentID: {},
-        FTAApplicationOwner: {},
-        PriorityScore: '',
-        Priority: '',
-        Capacity: {},
-    };
+    function reset() {
+        $scope.selectModel = {
+            Country: {},
+            Region: {},
+            FTAApplicationCode: {},
+            BusinessSuffix: {},
+            ChildID: {},
+            FTAStrategyName: {},
+            Strategytype: {},
+            GOLiveDate: '',
+            FTAStrategyCode: {},
+            FTAShortCode: {},
+            BusinessLine: {},
+            FTAApplicationName: {},
+            FTAStrategyOwner: {},
+            ApplicationCategory: {},
+            Venuetype: {},
+            DecomissionedDate: {},
+            DiscretionaryCode: {},
+            ParentID: {},
+            FTAApplicationOwner: {},
+            PriorityScore: '',
+            Priority: '',
+            Capacity: {},
+        };
 
-    $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
-
+    }
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
         .withOption('rowCallback', rowCallback);
@@ -102,25 +102,8 @@
         });
         return nRow;
     }
-
-    $scope.activateTab = function (tabid) {
-        for (var i = 0; i < $scope.pageList.length; i++) {
-            $scope.pageList[i].Page = false;
-        }
-        $scope.pageList[tabid].Page = true;
-        $scope.pageList[tabid].IsValid = true;
-    }
-
-    function getallgriddata() {
-        StrategyService.GetAllCurrencyConversion().success(function (data) {
-            $scope.data = data;
-            $scope.dtOptions.data = $scope.data;
-        });
-    }
-
     $scope.getallalgodata = function () {
         StrategyService.ShowLoader();
-        getallgriddata();
         var URl = 'Main/';
         let GetAllApplication = apiService.GetAllApplication();
         let GetAllBusinessSector = apiService.GetAllBusinessSector();
@@ -188,55 +171,76 @@
             $scope.CapacityList = resp[18].data;
             $scope.RegionMasterList = resp[19].data;
 
-            binddata($scope.CountryMasterList);
+            //binddata($scope.CountryMasterList);
         });
         $timeout(function () {
             StrategyService.HideLoader();
         }, 1000)
 
     };
+    $scope.getallalgodata();
+    $scope.activateTab = function (tabid) {
+        for (var i = 0; i < $scope.pageList.length; i++) {
+            $scope.pageList[i].Page = false;
+        }
+        $scope.pageList[tabid].Page = true;
+        $scope.pageList[tabid].IsValid = true;
+    }
 
-    $scope.showadd = function () {
-        StrategyService.ShowLoader();
-        $scope.showaction = true;
-        $timeout(function () {
-            $scope.errorinfo = '';
-            $scope.StrategyActive = false;
-            $scope.IsSignOff = false;
-        }, 100);
-        $scope.editMode = false;
-        $scope.ShowSignOff = false;
-        $scope.selectModel = { Application: "", Country: "", ProductType: "", BusinessSector: "", Region: "" };
-        $scope.activateTab(0);
-        $('#currencyModel').modal('show');
-        $timeout(function () {
-            StrategyService.HideLoader();
-        }, 500)
+    $scope.removefilter = function () {
+        reset();
     };
 
+    $scope.showfiltercondition = function () {
+        $scope.showfilter = true;
+    };
+    $scope.Export = function () {
+
+    };
     $scope.showreport = function () {
-        console.log($scope.selectModel);
-        StrategyService.ShowLoader();
+        $scope.showfilter = false;
         //var idlist = '';
         //for (var i = 0; i < $scope.multiselect.selected.length; i++) {
         //    idlist = $scope.multiselect.selected[i].id + ',';
         //}
-        var currency = {
-            //Country: $scope.selectModel.Country.Id
-            //CountryId: idlist,
-            Country: $scope.selectModel.Country.Id, Region: $scope.selectModel.Region.Id,
-            FTAApplicationCodeId: $scope.selectModel.FTAApplicationCode.Id,
-            FTAStrategyCodeId: $scope.selectModel.FTAStrategyCode.Id,
-            BusinessLineId: $scope.selectModel.BusinessLine.Id,
-            FTAStrategyOwnerId: $scope.selectModel.FTAStrategyOwner.userId,
-            ApplicationCategoryId: $scope.selectModel.ApplicationCategory.Id, VenuetypeId: $scope.selectModel.Venuetype.Id
-        };
-     
-        GetStrategyReport
+        var currency = { Country: '', Region: '', FTAApplicationCode: '', FTAStrategyCode: '', BusinessLine: '', FTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
+        if ($scope.selectModel) {
+            StrategyService.ShowLoader();
+            if ($scope.selectModel.Country)
+                currency.Country = $scope.selectModel.Country.Id
+            if ($scope.selectModel.Region)
+                currency.Region = $scope.selectModel.Region.Id;
+            if ($scope.selectModel.FTAApplicationCode)
+                currency.FTAApplicationCode = $scope.selectModel.FTAApplicationCode.Id;
+            if ($scope.selectModel.FTAStrategyCode)
+                currency.FTAStrategyCode = $scope.selectModel.FTAStrategyCode.Id;
+            if ($scope.selectModel.BusinessLine)
+                currency.BusinessLine = $scope.selectModel.BusinessLine.Id;
+            if ($scope.selectModel.FTAStrategyOwner)
+                currency.FTAStrategyOwner = $scope.selectModel.FTAStrategyOwner.userId;
+            if ($scope.selectModel.ApplicationCategory)
+                currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
+            if ($scope.selectModel.Venuetype)
+                currency.VenuetypeId = $scope.selectModel.Venuetype.Id
+
+            ApiCall.MakeApiCall("GetStrategyReport", 'POST', currency).success(function (data) {
+                if (data.Error != undefined) {
+                    toaster.pop('error', "Error", data.Error, null);
+                } else {
+                    $scope.data = data;
+                    $scope.dtOptions.data = $scope.data;
+                    StrategyService.HideLoader();
+                }
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
+            });
+        }
+        else
+            toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
+
 
     };
 
-    $scope.Availableusers = [];
 
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
         $scope.showaction = true;
@@ -329,93 +333,6 @@
     $scope.DownlaodFile = function (id, ref) {
         StrategyService.DownLoadFile(id, ref).success(function (data) { });
     }
-
-    $scope.UpdateStrategy = function (model) {
-        StrategyService.ShowLoader();
-        var idlist = '';
-        for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            idlist = $scope.multiselect.selected[i].id + ',';
-        }
-        var model = {
-            Page: "S",
-            CountryId: idlist,
-            Country: JSON.stringify($scope.multiselect.selected),
-            Region: $scope.selectModel.Region.Id, FTAApplicationCodeId: $scope.selectModel.FTAApplicationCode.Id,
-            FTAApplicationCode: $scope.selectModel.FTAApplicationCode.FTAApplicationCode, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id,
-            BusinessSuffix: $scope.selectModel.BusinessSuffix.BusinessSuffix, ChildID: $scope.selectModel.ChildID.Id,
-            ChildIDValue: $scope.selectModel.ChildID.ChildID, FTAStrategyNameId: $scope.selectModel.FTAStrategyName.Id,
-            FTAStrategyName: $scope.selectModel.FTAStrategyName.FTAStrategyName, StrategytypeId: $scope.selectModel.Strategytype.Id,
-            Strategytype: $scope.selectModel.Strategytype.Strategytype, GOLiveDate: $scope.selectModel.GOLiveDate,
-            FTAStrategyCodeId: $scope.selectModel.FTAStrategyCode.Id, FTAStrategyCode: $scope.selectModel.FTAStrategyCode.FTAStrategyCode,
-            FTAShortCode: $scope.selectModel.FTAShortCode, BusinessLineId: $scope.selectModel.BusinessLine.Id,
-            BusinessLine: $scope.selectModel.BusinessLine.BusinessLine, FTAApplicationNameId: $scope.selectModel.FTAApplicationName.Id,
-            FTAApplicationName: $scope.selectModel.FTAApplicationName.FTAApplicationName, FTAStrategyOwnerId: $scope.selectModel.FTAStrategyOwner.userId,
-            ApplicationCategoryId: $scope.selectModel.ApplicationCategory.Id, ApplicationCategory: $scope.selectModel.ApplicationCategory.ApplicationCategory,
-            VenuetypeId: $scope.selectModel.Venuetype.Id, Venuetype: $scope.selectModel.Venuetype.Venuetype,
-            DecomissionedDate: $scope.selectModel.DecomissionedDate, DiscretionaryCodeId: $scope.selectModel.DiscretionaryCode.Id,
-            DiscretionaryCode: $scope.selectModel.DiscretionaryCode.DiscretionaryCode, ParentID: $scope.selectModel.ParentID.Id,
-            ParentIDValue: $scope.selectModel.ParentID.ParentID, FTAApplicationOwnerId: $scope.selectModel.FTAApplicationOwner.userId,
-            PriorityScore: $scope.selectModel.PriorityScore, Priority: $scope.selectModel.Priority,
-            CapacityId: $scope.selectModel.Capacity.Id, Capacity: $scope.selectModel.Capacity.Capacity,
-            BusinessId: $scope.selectModel.Business.Id, Business: $scope.selectModel.Business.Business,
-            ThirdPartyAppId: $scope.selectModel.ThirdPartyApp.Id, ThirdPartyValue: $scope.selectModel.ThirdPartyApp.Value,
-            FTAApplicationMappingId: $scope.selectModel.FTAApplicationMappingId, FTAStrategyMappingId: $scope.selectModel.FTAStrategyMappingId,
-            BusinessMappingId: $scope.selectModel.BusinessMappingId, Description: $scope.selectModel.Description,
-            SignOff: $scope.selectModel.SignOff, FTAStrategyOwner: $scope.selectModel.FTAStrategyOwner.userId,
-            FTAApplicationOwner: $scope.selectModel.FTAApplicationOwner.userId
-        };
-        var array = [];
-        array.push(model);
-        array.push($scope.Prevvalue);
-
-        StrategyService.UpdateStrategy(array).success(function (data) {
-            $scope.showaction = false;
-            $scope.editMode = false;
-
-            toaster.pop('success', "Success", "Model/Algo updated successfully", null);
-            model.RefNumber = $scope.Prevvalue.RefNumber;
-            if (data == "") {
-                model.Version = $scope.Prevvalue.Version;
-            }
-            else if (data == "success")
-                model.Version = parseInt($scope.Prevvalue.Version) + 1;
-
-            var hasfile = false;
-            if ($scope.selectModel.Systemflowfile) {
-                hasfile = true;
-                model.Systemflowfilelist = $scope.selectModel.Systemflowfile;
-            }
-            if ($scope.selectModel.Decommissionedfile) {
-                hasfile = true;
-                model.Decommissionedfilelist = $scope.selectModel.Decommissionedfile;
-            }
-            if (hasfile) {
-                Upload.upload({
-                    url: 'Main/UpdateStrategyFile', //webAPI exposed to upload the file
-                    data: model,
-                }).then(function (resp) { //upload function returns a promise
-
-                }, function (resp) { //catch error
-                    console.log('Error status: ' + resp.status);
-                    $window.alert('Error status: ' + resp.status);
-                }, function (evt) {
-                    console.log(evt);
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage + '% ' + evt.config.data.name);
-                    $scope.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
-                });
-
-            }
-            StrategyService.HideLoader();
-            $scope.getallalgodata()
-            getallgriddata();
-
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-
-
-    };
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;
@@ -622,8 +539,7 @@
         });
     };
 
-    $scope.GetRightsList();
-    $scope.getallalgodata();
+    // $scope.GetRightsList();
 
     $scope.multiselect = {
         selected: [],
@@ -658,8 +574,6 @@
         }
         binddata(stacklist);
     }
-
-
     function binddata(list) {
         $scope.multiselect.options = list.map(function (item) {
             return {
@@ -668,7 +582,6 @@
             };
         });
     }
-
 
 }]);
 

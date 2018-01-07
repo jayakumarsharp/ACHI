@@ -876,12 +876,12 @@ public class DbOperations
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_Region", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_Country", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", filter.FTAApplicationCode));
+                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", filter.FTAStrategyCode));
+                    cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", filter.BusinessLine));
+                    cmd.Parameters.Add(new MySqlParameter("i_Region", filter.Region));
+                    cmd.Parameters.Add(new MySqlParameter("i_Country", filter.Country));
+                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", filter.FTAStrategyOwner));
+                    cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
                     using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -942,8 +942,8 @@ public class DbOperations
                                        Version = Convert.ToInt32(row["Version"]),
                                        Priority = Convert.ToString(row["Priority"]),
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
-                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate1"]),
-                                       GOLiveDate = Convert.ToString(row["GoLiveDate1"]),
+                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
+                                       GOLiveDate = Convert.ToString(row["GoLiveDate"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
                                        FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
@@ -954,13 +954,9 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
-
             return lst;
         }
         catch (MySqlException ex)
