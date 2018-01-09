@@ -339,11 +339,8 @@ namespace BRDFountain.Controllers
                 string[] columns = { "RegionName", "FTAApplicationCode", "FTAStrategyCode", "FTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "Country", "FTAApplicationOwnerId", "ApplicationCategory", "FTAStrategyOwnerId", "FTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
                 byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "Strategy Report", true, columns);
                 //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
-
                 string mailbox = ConfigurationManager.AppSettings["FilePath"];
                 string filepath = mailbox + "/Report/";
-
-
                 bool exists = System.IO.Directory.Exists(@filepath);
                 if (!exists)
                     System.IO.Directory.CreateDirectory(@filepath);
