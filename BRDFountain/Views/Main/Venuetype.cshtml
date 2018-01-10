@@ -17,12 +17,12 @@
     </div>*@
 
 
-<div class="col-lg-8 col-md-6 main-content full-width basic-page sidebar"   style="width:83%;">
+<div class="col-lg-8 col-md-6 main-content full-width basic-page sidebar" style="width:83%;">
     <h4>      Manage Venue Type  </h4>
     <div class="row">
         <div ng-controller="VenuetypeMasterController" class="nav-tabs-custom">
             <div ng-include="'Main/ConfirmModal'"></div>
-            <div class="row pull-right">
+            <div class="row pull-right" style="margin-right:14%;">
                 <button ng-show="!showAddwindow" data-ng-click="Showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
             </div>
             <div ng-show="showAddwindow" class="sec-one">
@@ -46,7 +46,6 @@
             <div ng-show="!showAddwindow" class="col-md-12 data-table" style="width:70%;margin-left:14%;">
 
                 <div class="row">
-
                     <table class="table table-responsive" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
                 </div>
             </div>

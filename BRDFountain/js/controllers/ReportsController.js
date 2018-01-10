@@ -55,8 +55,8 @@
          DTColumnBuilder.newColumn('SignOff').withTitle('SignOff').renderWith(actionsStatus),
             DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
 
-        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
-            .renderWith(actionsHtml)
+        //DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+        //    .renderWith(actionsHtml)
     ];
 
     function actionsStatus(data, type, full, meta) {
@@ -195,7 +195,7 @@
         $scope.showfilter = true;
     };
     $scope.Export = function () {
-       // StrategyService.DownLoadReportFile('5e08a3bc-e59a-4d7e-9bac-3afb08ad7b1f.xlsx').success(function (data) { });
+        // StrategyService.DownLoadReportFile('5e08a3bc-e59a-4d7e-9bac-3afb08ad7b1f.xlsx').success(function (data) { });
         var currency = { Country: '', Region: '', FTAApplicationCode: '', FTAStrategyCode: '', BusinessLine: '', FTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
         if ($scope.selectModel) {
             StrategyService.ShowLoader();
@@ -221,7 +221,12 @@
                     toaster.pop('error', "Error", data.Error, null);
                 } else {
                     if (data != 'No Records') {
-                        StrategyService.DownLoadReportFile(data);
+                        var url = BaseURL + 'Main/DownLoadReportFile?FileName=' + data;
+                        $scope.downloadurl = url;
+                        setTimeout(function () {
+                            $('#downloadpdf')[0].click();
+                        }, 1000);
+                        //StrategyService.DownLoadReportFile(data);
                     }
                     //$scope.dtOptions.data = $scope.data;
                     StrategyService.HideLoader();
@@ -366,9 +371,6 @@
         })
     };
 
-    $scope.DownlaodFile = function (id, ref) {
-        StrategyService.DownLoadFile(id, ref);
-    }
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;

@@ -4,7 +4,7 @@
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('id').withTitle('ID'),
-        DTColumnBuilder.newColumn('RoleName').withTitle('First name'),
+        DTColumnBuilder.newColumn('RoleName').withTitle('Role Name'),
         DTColumnBuilder.newColumn('id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -19,9 +19,6 @@
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
     }
-
-
-
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};

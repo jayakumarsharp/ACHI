@@ -7,25 +7,18 @@
     <div class="login-logo">
         <h1>BRD Fountain</h1>
     </div>
-    <!-- /.login-logo -->
-    <div id="signin-form" @*class="login-box-body"*@>
-        @*<p class="login-box-msg">Sign in to start your session</p>*@
+    <div id="signin-form">
+      
         <h3>SIGN-IN</h3>
         @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "login-form", data_async = "", data_target = "#rating-modal" }))
         {
             <div class="input-group">
-                <!--form-group has-feedback-->
-                @*<input type="email" class="form-control" placeholder="Email">*@
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                 <input class="form-control" type="text" autocomplete="off" placeholder="Username" name="username" />
-                @*<span class="glyphicon glyphicon-envelope form-control-feedback"></span>*@
             </div>
             <div class="input-group">
-                <!--form-group has-feedback-->
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input class="form-control" type="password" autocomplete="off" placeholder="Password" name="password" />
-                @*<input type="password" class="form-control" placeholder="Password">*@
-                @*<span class="glyphicon glyphicon-lock form-control-feedback"></span>*@
             </div>
             <div class="row">
                 <div class="col-lg-6"></div>
@@ -38,24 +31,22 @@
         }
     </div>
 </div>
-<link href="~/css/toaster.css" rel="stylesheet" />
 <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/Lib/angular.min.js"></script>
 <script src="~/Assert/angular-animate.min.js"></script>
-@*<script src="~/Assert/toaster.js"></script>*@
 <script src="~/plugins/iCheck/icheck.min.js"></script>
 <script src="~/js/animate.js"></script>
 <script src="~/js/loginApp.js"></script>
 
 <style>
-    .login-logo h1 {
+    /*.login-logo h1 {
         font-size: 36px;
         font-weight: bold;
         color: #d2d6de;
         text-align: center;
         margin: 40px 0 60px 0;
-    }
+    }*/
 
     #signin-form {
         max-width: 350px;
@@ -72,7 +63,7 @@
         }
 
     .login-page, .register-page {
-        background: url('images/bg.jpg') no-repeat -440px -360px;
+        background: url('images/bg.jpg') repeat -440px -360px;
     }
     /*body {
         height: 95%;

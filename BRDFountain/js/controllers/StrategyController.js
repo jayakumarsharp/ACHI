@@ -6,9 +6,10 @@
     $scope.editMode = false;
     $scope.showaction = false;
     $scope.IsReadOnly = true;
-    $scope.Currency = [];
     $scope.LegalEntity = [];
     $scope.currency = {};
+    $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
+    $scope.Permissions = { isWrite: false, isRead: false };
 
     $scope.selectModel = {
         Country: {},
@@ -84,7 +85,10 @@
     }
 
     function actionsHtml(data, type, full, meta) {
-        return '<a  class="test"><img src="images/edit.png"></a> &nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+        if ($scope.Permissions.IsWrite || $scope.ApprovalCheck.IsApprove)
+            return '<a class="test"><img src="images/edit.png"></a> &nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+        else
+            return '<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
 
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
@@ -193,7 +197,6 @@
         $timeout(function () {
             StrategyService.HideLoader();
         }, 1000)
-
     };
 
     $scope.showadd = function () {
@@ -205,7 +208,7 @@
             $scope.IsSignOff = false;
         }, 100);
         $scope.editMode = false;
-        $scope.ShowSignOff = false;
+        $scope.ApprovalCheck.ShowSignOff = false;
         $scope.selectModel = { Application: "", Country: "", ProductType: "", BusinessSector: "", Region: "" };
         $scope.activateTab(0);
         $('#currencyModel').modal('show');
@@ -218,13 +221,17 @@
         console.log($scope.selectModel);
         StrategyService.ShowLoader();
         var idlist = '';
+        var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
             idlist += $scope.multiselect.selected[i].id + ',';
+            CountryNames += $scope.multiselect.selected[i].name + ',';
         }
         var currency = {
             //Country: $scope.selectModel.Country.Id
             CountryId: idlist,
-            Country: JSON.stringify($scope.multiselect.selected), Region: $scope.selectModel.Region.Id
+            CountryNameList: CountryNames,
+            Country: JSON.stringify($scope.multiselect.selected),
+            Region: $scope.selectModel.Region.Id
         , FTAApplicationCodeId: $scope.selectModel.FTAApplicationCode.Id, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id
         , ChildID: $scope.selectModel.ChildID.Id, FTAStrategyNameId: $scope.selectModel.FTAStrategyName.Id
         , StrategytypeId: $scope.selectModel.Strategytype.Id, GOLiveDate: $scope.selectModel.GOLiveDate
@@ -283,7 +290,7 @@
 
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
         $scope.showaction = true;
-        $scope.ShowSignOff = false;
+        $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
         binddata($scope.CountryMasterList);
         StrategyService.GetDatabyId(id).success(function (data) {
@@ -375,13 +382,18 @@
 
     $scope.UpdateStrategy = function (model) {
         StrategyService.ShowLoader();
+
+
         var idlist = '';
+        var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
             idlist += $scope.multiselect.selected[i].id + ',';
+            CountryNames += $scope.multiselect.selected[i].name + ',';
         }
         var model = {
             Page: "S",
             CountryId: idlist,
+            CountryNameList: CountryNames,
             Country: JSON.stringify($scope.multiselect.selected),
             Region: $scope.selectModel.Region.Id, FTAApplicationCodeId: $scope.selectModel.FTAApplicationCode.Id,
             FTAApplicationCode: $scope.selectModel.FTAApplicationCode.FTAApplicationCode, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id,
@@ -404,7 +416,8 @@
             ThirdPartyAppId: $scope.selectModel.ThirdPartyApp.Id, ThirdPartyValue: $scope.selectModel.ThirdPartyApp.Value,
             FTAApplicationMappingId: $scope.selectModel.FTAApplicationMappingId, FTAStrategyMappingId: $scope.selectModel.FTAStrategyMappingId,
             BusinessMappingId: $scope.selectModel.BusinessMappingId, Description: $scope.selectModel.Description,
-            SignOff: $scope.selectModel.SignOff, FTAStrategyOwner: $scope.selectModel.FTAStrategyOwner.userId,
+            SignOff: $scope.selectModel.SignOff,
+            FTAStrategyOwner: $scope.selectModel.FTAStrategyOwner.userId,
             FTAApplicationOwner: $scope.selectModel.FTAApplicationOwner.userId
         };
         var array = [];
@@ -466,8 +479,8 @@
     };
 
     $scope.cancel = function () {
-        $scope.currency = {};
-        $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
+        cleardata();
+        binddata($scope.CountryMasterList);
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
     };
@@ -476,19 +489,37 @@
         StrategyService.GetCurrencyConversionbyId(id).success(function (data) {
             $scope.editMode = true;
             $scope.currency = data[0];
-            $('#currencyModel').modal('show');
+            $scope.multiselect.selected = [];
+            $scope.multiselect.options = [];
+            binddata($scope.CountryMasterList);
+            $scope.UploadedSList = [];
+            $scope.UploadedDList = [];
 
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
     };
+
+    function cleardata() {
+        $scope.currency = {};
+        $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
+        $scope.UploadedSList = [];
+        $scope.UploadedDList = [];
+        $scope.multiselect.selected = [];
+        $scope.multiselect.options = [];
+    }
+
+    $scope.checksignoff = function () {
+        if ($scope.selectModel.FTAStrategyOwner.UserName) {
+            if ($scope.userId.toLowerCase() == $scope.selectModel.FTAStrategyOwner.UserName.toLowerCase())
+                $scope.ApprovalCheck.ShowSignOff = true;
+        }
+    }
 
     $scope.userfilter = function (state) {
         try {
             var Region = $scope.selectModel.Region.Id;
             var BusinessLine = $scope.selectModel.BusinessLine.Id;
-
             if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
                 ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
                     $scope.FTAApplicationOwnerList = data;
@@ -496,9 +527,6 @@
                     if (state) {
                         $scope.selectModel.FTAStrategyOwner = getdynamicobjectuserfilter($scope.selectModel.FTAStrategyOwnerId, "FTAStrategyOwnerList")
                         $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwnerId, "FTAApplicationOwnerList")
-                        if ($scope.userId.toLowerCase() == $scope.selectModel.FTAStrategyOwnerId.toLowerCase())
-                            $scope.ShowSignOff = true;
-
                     }
                 }).error(function (error) {
                     $scope.Error = error;
@@ -648,25 +676,38 @@
             $scope.userId = data;
             if (data != '') {
                 reportFactory.GetRightsList($scope.userId).success(function (data) {
-                    var isRead = true;
+                    var isRead = true, isWrite = false, isApprove = false;
                     $scope.IsReadOnly = true;
+                    $scope.IsWrite = false;
+                    $scope.ApprovalCheck.IsApprove = false;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Application Write') {
+                        if (value.RightName == 'FTA Read Only') {
                             isRead = false;
                         }
+                        if (value.RightName == 'FTA Write Access') {
+                            isWrite = true;
+                        }
+                        if (value.RightName == 'FTA Strategy Owner') {
+                            isApprove = true;
+                        }
+
                     })
                     if (!isRead) {
-                        $scope.IsReadOnly = false;
+                        $scope.Permissions.IsReadOnly = false;
                     }
+                    if (isWrite) {
+                        $scope.Permissions.IsWrite = true;
+                    }
+                    if (isApprove) {
+                        $scope.ApprovalCheck.IsApprove = true;
+                    }
+                    $scope.getallalgodata();
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });
             }
         });
     };
-
-    $scope.GetRightsList();
-    $scope.getallalgodata();
 
     $scope.multiselect = {
         selected: [],
@@ -681,12 +722,6 @@
                 return $sce.trustAsHtml(item.name);
             }
         }
-    };
-
-    $scope.displayUsers = function () {
-        return $scope.multiselect.selected.map(function (each) {
-            return each.CountryName;
-        }).join(', ');
     };
 
     function assignUsers() {
@@ -704,6 +739,7 @@
 
 
     function binddata(list) {
+
         $scope.multiselect.options = list.map(function (item) {
             return {
                 name: item.CountryName,
@@ -713,208 +749,8 @@
     }
 
 
+    $scope.GetRightsList();
+
+
 }]);
 
-
-
-ReportApp.directive('multiselect', function () {
-    return {
-        restrict: 'E',
-        scope: {
-            msModel: '=',
-            msOptions: '=',
-            msConfig: '=',
-            msChange: '&'
-        },
-        replace: true,
-        controller: ['$scope',
-            function ($scope) {
-                /* -------------------------------- *
-                 *      Configuration defaults      *
-                 * -------------------------------- */
-                $scope.config = $scope.msConfig;
-                if (typeof ($scope.config) === 'undefined') {
-                    $scope.config = {};
-                }
-                if (typeof ($scope.config.itemTemplate) === 'undefined') {
-                    $scope.config.itemTemplate = function (elem) {
-                        return elem;
-                    };
-                }
-                if (typeof ($scope.config.labelTemplate) === 'undefined') {
-                    $scope.config.labelTemplate = function (elem) {
-                        return elem;
-                    };
-                }
-                if (typeof ($scope.config.modelFormat) === 'undefined') {
-                    $scope.config.modelFormat = function (elem) {
-                        return elem;
-                    };
-                }
-                $scope.$watch('msOptions', function () {
-                    _filterOptions();
-                });
-
-
-
-                /* -------------------------------- *
-                 *          Multiselect setup       *
-                 * -------------------------------- */
-                if ($scope.msModel === null || typeof ($scope.msModel) === 'undefined') {
-                    $scope.msModel = [];
-                }
-                if ($scope.msOptions === null || typeof ($scope.msOptions) === 'undefined') {
-                    $scope.msOptions = [];
-                }
-
-                $scope.multiselect = {
-                    filter: '',
-                    filtered: [],
-                    options: $scope.msOptions,
-                    displayDropdown: true,
-                    deleteSelected: function (index) {
-                        var oldVal = angular.copy($scope.msModel);
-
-                        if ($scope.msModel[index].name == 'ALL') {
-
-                            for (var i = ($scope.msModel.length - 1) ; i < ($scope.msModel.length) ; i--) {
-                                $scope.msModel.splice(i, 1);
-                                if ($scope.msModel.length == 0) {
-                                    i = $scope.msModel.length + 2;
-                                }
-                            }
-                        }
-                        else {
-                            $scope.msModel.splice(index, 1);
-                        }
-
-                        $scope.msChange({
-                            newVal: $scope.msModel,
-                            oldVal: oldVal
-                        });
-
-                        _filterOptions();
-                    },
-                    selectElement: function (index) {
-
-                        var oldVal = angular.copy($scope.msModel);
-
-                        if ($scope.multiselect.filtered[index].name == 'ALL') {
-                            for (var i = 0; i < $scope.multiselect.filtered.length; i++) {
-                                $scope.msModel.push($scope.multiselect.filtered[i]);
-                            }
-
-                        }
-                        else {
-                            $scope.msModel.push($scope.multiselect.filtered[index]);
-                        }
-
-
-                        $scope.msChange({
-                            newVal: $scope.msModel,
-                            oldVal: oldVal
-                        });
-
-                        $scope.multiselect.filter = '';
-
-                        _filterOptions();
-                    },
-                    focusFilter: function () {
-                        $scope.multiselect.currentElement = 0;
-                        if ($scope.config.hideOnBlur) {
-                            $scope.multiselect.displayDropdown = true;
-                        }
-                    },
-                    blurFilter: function () {
-                        $scope.multiselect.currentElement = null;
-                        if ($scope.config.hideOnBlur) {
-                            $scope.multiselect.displayDropdown = false;
-                        }
-                    },
-                    currentElement: null
-                };
-
-                if ($scope.config.hideOnBlur) {
-                    $scope.multiselect.displayDropdown = false;
-                }
-
-                /* -------------------------------- *
-                 *           Helper methods         *
-                 * -------------------------------- */
-
-                var _filterOptions = function () {
-                    if ($scope.msModel === null) {
-                        $scope.multiselect.options = $scope.msOptions;
-                        return;
-                    }
-                    // else if($scope.msModel!=null && $scope.msModel.length>0)
-                    // {
-                    //    if($scope.msModel[0].name=='ALL')
-                    //     {
-                    //         $scope.multiselect.options = $scope.msOptions.filter(function(each){
-                    //             return $scope.msModel=$scope.multiselect.options;
-                    //         });
-
-                    //     }
-                    // }
-
-                    $scope.multiselect.options = $scope.msOptions.filter(function (each) {
-                        return $scope.msModel.indexOf(each) < 0;
-                    });
-                };
-            }
-        ],
-        link: function (scope, element, attrs) {
-            element.on('keydown', function (e) {
-                var code = e.keyCode || e.which;
-                switch (code) {
-                    case 40: // Down arrow
-                        scope.$apply(function () {
-                            scope.multiselect.currentElement++;
-                            if (scope.multiselect.currentElement >= scope.multiselect.filtered.length) {
-                                scope.multiselect.currentElement = 0;
-                            }
-                        });
-                        break;
-                    case 38: // Up arrow
-                        scope.$apply(function () {
-                            scope.multiselect.currentElement--;
-                            if (scope.multiselect.currentElement < 0) {
-                                scope.multiselect.currentElement = scope.multiselect.filtered.length - 1;
-                            }
-                        });
-                        break;
-                    case 13: // Enter
-                        scope.$apply(function () {
-                            scope.multiselect.selectElement(scope.multiselect.currentElement);
-                        });
-                        break;
-                    default:
-                        scope.$apply(function () {
-                            scope.multiselect.currentElement = 0;
-                        });
-                }
-            });
-        },
-        template: function (elem, attrs) {
-            var template = $(elem).find('template');
-            return '<div class="multiselect" id="multi_popover">' +
-                '   <div class="multiselect-labels">' +
-                '       <span class="label label-default multiselect-labels-lg" ng-repeat="element in msModel">' +
-                '           <span ng-bind-html="config.labelTemplate(element)"></span>' +
-                '           <a href="" ng-click="$event.preventDefault(); multiselect.deleteSelected($index)" title="Remove element">' +
-                '               <i class="fa fa-times"></i>' +
-                '           </a>' +
-                '       </span>' +
-                '   </div>' +
-                //'   <input ng-show="multiselect.options.length > 0" placeholder="' + attrs.placeholder + '" type="text" class="form-control" ng-model="multiselect.filter" ng-focus="multiselect.focusFilter()" ng-blur="multiselect.blurFilter()" />' +
-                '   <div ng-show="msModel.length < multiselect.options.length && multiselect.options.length === 0 && !multiselect.options.$resolved"><em>Loading...</em></div>' +
-                '   <ul id="agent_dropdown" class="dropdown-menu" role="menu" ng-show="multiselect.displayDropdown && multiselect.options.length > 0">' +
-                '       <li ng-repeat="element in multiselect.filtered = (multiselect.options | filter:multiselect.filter) track by $index" role="presentation" ng-class="{active: $index == multiselect.currentElement}">' +
-                '           <a href="" role="menuitem" ng-click="$event.preventDefault(); multiselect.selectElement($index)" ng-bind-html="config.itemTemplate(element)"></a>' +
-                '       </li>' +
-                '   </ul>' +
-                '</div>';
-        }
-    };
-});

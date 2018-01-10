@@ -1,12 +1,13 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
 <div ng-controller="StrategyController">
     <div ng-include="'Main/ConfirmModal'"></div>
-    <div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;" ng-show="!showaction">
+    <div class="col-lg-12 col-md-12  main-content basic-page sidebar" style="width:83%;" ng-show="!showaction">
         <h4>Strategy Management   </h4>
-        <div class="row pull-right">
+        
+        <div class="row pull-right" ng-if="Permissions.IsWrite || ApprovalCheck.IsApprove">
             <button data-ng-click="showadd()" class="btn btn-primary">Add Strategy &nbsp;    <i class="fa fa-plus"></i></button>
         </div>
-        <div class="col-md-10 data-table">
+        <div class="col-lg-12 data-table">
             <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive"></table>
         </div>
     </div>

@@ -2595,7 +2595,6 @@
     <Content Include="Views\Main\ViewApprovals.cshtml" />
     <Content Include="Views\Main\UserManagement.cshtml" />
     <Content Include="Views\Main\RoleManagement.cshtml" />
-    <Content Include="Views\Main\TransferSettings.cshtml" />
     <Content Include="Views\Main\BusinessSector.cshtml" />
     <Content Include="Views\Main\ApplicationMaster.cshtml" />
     <Content Include="Views\Main\ConfirmModal.cshtml" />

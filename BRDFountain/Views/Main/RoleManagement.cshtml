@@ -3,11 +3,10 @@
         <div class="box-header with-border">
             <h4> Manage Role   </h4>
         </div>
-        <div class="row pull-right">
+        <div class="row pull-right"  style="margin-right:14%;">
             <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
         </div>
-        <div class="col-md-12 data-table">
-
+        <div class="col-md-12 data-table" style="width:70%;margin-left:14%;">
             <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive"></table>
 
             @*<div class="table-responsive">
@@ -77,9 +76,9 @@
                                     <br /><br /><br />
                                     <div class="btn-group-vertical">
                                         <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="AlltoA()" id="btnAllA"><i class="fa fa-angle-double-left"></i></button>
-                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="bToA()" id="btnA"><i class="fa fa-angle-left"></i></button>
-                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="aToB()" id="btnB"><i class="fa fa-angle-right"></i></button>
-                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;"  ng-click="AlltoB()" id="btnAllB"><i class="fa fa-angle-double-right"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="bToA()" id="btnA"><i class="fa fa-angle-left"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="aToB()" id="btnB"><i class="fa fa-angle-right"></i></button>
+                                        <button class="btn btn-primary" style="min-width: 9px;padding :13px 4px;" ng-click="AlltoB()" id="btnAllB"><i class="fa fa-angle-double-right"></i></button>
                                     </div>
                                 </div>
                                 <!--/col-2-->

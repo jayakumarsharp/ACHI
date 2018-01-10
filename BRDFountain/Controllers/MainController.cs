@@ -268,7 +268,15 @@ namespace BRDFountain.Controllers
 
         public string getloggedusername()
         {
-            return Convert.ToString(Session["UserName"]);
+            try
+            {
+                return Convert.ToString(Session["UserName"]);
+            }
+            catch(Exception e)
+            {
+                log.ErrorFormat("Error in strategy insert {0}", e);
+                return "";
+            }
         }
 
         #region TransferSetting
@@ -336,7 +344,7 @@ namespace BRDFountain.Controllers
             List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
             if (lst.Count > 0)
             {
-                string[] columns = { "RegionName", "FTAApplicationCode", "FTAStrategyCode", "FTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "Country", "FTAApplicationOwnerId", "ApplicationCategory", "FTAStrategyOwnerId", "FTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
+                string[] columns = { "RegionName", "FTAApplicationCode", "FTAStrategyCode", "FTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "FTAApplicationOwnerId", "ApplicationCategory", "FTAStrategyOwnerId", "FTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
                 byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "Strategy Report", true, columns);
                 //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
                 string mailbox = ConfigurationManager.AppSettings["FilePath"];
@@ -388,6 +396,7 @@ namespace BRDFountain.Controllers
         {
             try
             {
+                log.Info("inside method");
                 strategy.Version = 1;
                 strategy.RefNumber = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 string mailbox = ConfigurationManager.AppSettings["FilePath"];
@@ -401,9 +410,11 @@ namespace BRDFountain.Controllers
                 if (Request.Files.Count > 0)
                 {
                     StrategyApprover files = null;
+                 
                     foreach (string file in Request.Files)
                     {
                         files = new StrategyApprover();
+                        files.Uploadedby = getloggedusername();
                         var fileContent = Request.Files[file];
                         if (Request.Files.AllKeys[0].Contains("Systemflowfilelist"))
                         {
@@ -435,22 +446,26 @@ namespace BRDFountain.Controllers
                                 fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
                                 fileStream.Write(bytesInStream, 0, bytesInStream.Length);
                                 fileStream.Close();
-
                             }
                             else
                                 return Json("File already exists", JsonRequestBehavior.AllowGet);
                         }
                         lstfiles.Add(files);
                     }
+                    log.Info("insert approver");
                     _dbOperations.InsertStrategyApprover(lstfiles, lstfiles[0].RefNumber, lstfiles[0].Version, out errorcode, out errordesc);
                 }
+                strategy.CreatedBy = getloggedusername();
+                log.Info("insert strategy");
                 _dbOperations.InsertStrategydata(strategy, out errorcode, out errordesc);
-                _dbOperations.insertStrategyVersionChange(strategy.RefNumber, 1, "Version Created");
+                log.Info("insert strategy completed");
+                _dbOperations.insertStrategyVersionChange(strategy.RefNumber, 1, "Version Created", getloggedusername());
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
 
             }
             catch (Exception e)
             {
+                log.ErrorFormat("Error in strategy insert {0}", e);
                 return Json("error", JsonRequestBehavior.AllowGet);
             }
         }
@@ -593,8 +608,9 @@ namespace BRDFountain.Controllers
 
                 Strategy[0].RefNumber = Strategy[1].RefNumber;
                 Strategy[0].Version = Strategy[1].Version + 1;
+                Strategy[0].CreatedBy = Convert.ToString(Session["UserName"]);
                 _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
-                _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata);
+                _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata, Convert.ToString(Session["UserName"]));
             }
 
             return Json(errordesc, JsonRequestBehavior.AllowGet);
@@ -1794,6 +1810,7 @@ public class StrategyVersionLog
     public string ChangeDesc { get; set; }
     public string FTAShortCode { get; set; }
     public string CreatedDateTime { get; set; }
+    public string Createdby { get; set; }
 
 }
 
@@ -1916,6 +1933,8 @@ public class StrategyApprover
     public string Status { get; set; }
     public string OriginalApprover { get; set; }
     public string Type { get; set; }
+    public string Uploadedby { get; set; }
+    
 }
 
 
@@ -1938,6 +1957,8 @@ public class Strategy
     public string RefNumber { get; set; }
 
     public string CountryId { get; set; }
+    public string CountryNameList { get; set; }
+    
     public string Country { get; set; }
     public string CountryName { get; set; }
     public string Region { get; set; }
@@ -2392,8 +2413,7 @@ public class ExcelExportHelper
                 {
                     workSheet.Column(columnIndex).AutoFit();
                 }
-
-
+                
                 columnIndex++;
             }
 
