@@ -93,7 +93,7 @@
             <div class="user_set">
                 <img src="~/images/User/1.jpg" class="user_img" />
                 <div class="user_online"></div>
-                <div class="user_name">Shivakumar</div>
+                <div class="user_name">@Convert.ToString(Session["UserName"]) </div>
             </div>
             <div class="action_set">
                 <a href="#">
@@ -104,7 +104,7 @@
                 </a>
             </div>
             <div class="log_out">
-                <a href="#">
+                <a href="@Url.Action("Logout", "Home")">
                     <div class="txt">Logout</div>
                     <div class="btn_logout">
                         <img src="~/images/logout.svg" />
@@ -231,6 +231,11 @@
 
     <script src="../js/ReportApp.js"></script>
     <script src="../js/HomeApp.js"></script>
+    <script src="~/js/RoleApp.js"></script>
+    <script src="~/js/UserApp.js"></script>
+    <script src="~/js/controllers/BusinessSector.js"></script>
+    <script src="~/js/controllers/CountryMasterController.js"></script>
+    <script src="~/js/controllers/RegionMasterController.js"></script>
     <script src="../js/controllers/ClientController.js"></script>
     <script src="../js/controllers/TaskController.js"></script>
     <script src="~/js/controllers/OnboardingTaskController.js"></script>

@@ -1,25 +1,24 @@
-﻿var RoleApp = angular.module('roleApp', ['ngRoute']);
-RoleApp.config(['$routeProvider', '$locationProvider',
-    function ($routeProvider, $locationProvider) {
-
-        var UserInfo = window.sessionStorage.getItem('userAuth');
-
-        if (UserInfo != undefined || UserInfo != null) {
-
-            $routeProvider
-                .when('/Users/ViewRole', {
-                    controller: 'RoleController', templateUrl: 'js/views/Users/ViewRole.html'
-                })
-                .when('/Users/AddRole', {
-                    controller: 'RoleController', templateUrl: 'js/views/Users/AddEditRole.html'
-                })
-                .otherwise({ redirectTo: '/Roles' });
-       }
-
-       $locationProvider.html5Mode(true).hashPrefix('*');
-    }]);
-
-RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, toaster) {
+﻿ReportApp.controller('RoleController', ['$scope', '$rootScope', '$window', '$location', 'RoleFactory', 'reportFactory', 'UserFactory', 'ApiCall', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $window, $location, RoleFactory, reportFactory, UserFactory, ApiCall, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.data = [];
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('id').withTitle('ID'),
+        DTColumnBuilder.newColumn('RoleName').withTitle('Role Name'),
+        DTColumnBuilder.newColumn('id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        // Recompiling so we can bind Angular directive to the DT
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="EditRole(' + data + ')"><img src="images/edit.png"></a>';
+        //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
     $scope.Error = {};
     $scope.role = {};
     $scope.Role = {};
@@ -36,16 +35,27 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     //$scope.DisplayMessage = '';
 
     $scope.IsPageReadOnly = function () {
-        var isRead = true;
-        $scope.IsReadOnly = true;
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName == 'Role Management Write') {
-                isRead = false;
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Role Management Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
             }
-        })
-        if (!isRead) {
-            $scope.IsReadOnly = false;
-        }
+
+        });
+
     },
         $scope.GetAllRights = function () {
             $scope.Rights = [];
@@ -60,7 +70,8 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
 
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
-            $scope.Roles = data;
+            $scope.data = data;
+            $scope.dtOptions.data = $scope.data;
         }).error(function (error) {
             //alert('Get all roles error');
             $scope.Error = error;
@@ -74,8 +85,6 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
             $scope.Error = error;
         })
     };
-
-
     $scope.ViewRole = function (roleId) {
         $scope.rolename = {};
         $scope.rightnames = [];
@@ -111,11 +120,13 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     };
 
     $scope.EditRole = function (data) {
-        $scope.role = data;
-        console.log('editing role: ' + $scope.role.RoleName)
-        $scope.editMode = true;
-        $scope.GetLists();
-        $('#AddEditRole').modal('show');
+        RoleFactory.GetRole(data).success(function (data) {
+            $scope.role = data[0];
+            $scope.editMode = true;
+            $scope.GetLists();
+            $('#AddEditRole').modal('show');
+        });
+
     };
 
     $scope.GetRoleRightMapping = function (roleId) {
@@ -156,13 +167,9 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
         if (currentRole != null && currentRole.selectedRole != null && $scope.listB.length > 0) {
             currentRole.Rights = $scope.listB;
             RoleFactory.AddRole(currentRole).success(function (data) {
-
-                currentRole.RoleID = data.id;
-
+                currentRole.RoleID = data;
                 $scope.role = currentRole;
-
                 RoleFactory.AddRoleRightMapping(currentRole).success(function (data) {
-
                     $scope.addMode = false;
                     //currentRole.UserId = data;
                     //$scope.users.push(currentRole);
@@ -182,38 +189,35 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
         }
         else {
             toaster.pop('warning', "Warning", "Select the Rights", null);
-            //alert('Select the Rights');
-            // $('#messageModal').modal('show');
         }
     };
 
 
     $scope.ModifyRoleRight = function (data) {
-        RoleFactory.GetUser($rootScope.UserInfo.user.userId).success(function (userrole) {
-            if (userrole.RoleId == data.id) {
-                $scope.EditedRole = data;
-                $('#roleChange').modal('show');
-            }
-            else {
-                $scope.role = data;
-                $scope.role.Rights = $scope.listB;
-                RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
+        //RoleFactory.GetUser($rootScope.UserInfo.user.userId).success(function (userrole) {
+        //    if (userrole.RoleId == data.id) {
+        //        $scope.EditedRole = data;
+        //        $('#roleChange').modal('show');
+        //    }
+        //    else {
+        $scope.role = data;
+        $scope.role.Rights = $scope.listB;
+        RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
+            $scope.GetAllRoles();
+            //reset form
+            $scope.role = {};
+            //     toaster.pop('success', "Success", "Role modified successfully", null);
+            $('#AddEditRole').modal('hide');
+            $scope.listA = [];
+            $scope.listB = [];
 
-                    $scope.GetAllRoles();
-                    //reset form
-                    $scope.role = {};
-                    toaster.pop('success', "Success", "Role modified successfully", null);
-                    $('#AddEditRole').modal('hide');
-                    $scope.listA = [];
-                    $scope.listB = [];
-
-                }).error(function (error) {
-                    console.log('Error modifying Role-right: ' + error);
-                });
-            }
         }).error(function (error) {
-            console.log('Error getting user roles: ' + error);
+            console.log('Error modifying Role-right: ' + error);
         });
+        //}
+        //}).error(function (error) {
+        //    console.log('Error getting user roles: ' + error);
+        //});
     };
     $scope.ModifySelfUser = function () {
         $('#roleChange').modal('hide');
@@ -246,30 +250,37 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     }
     $scope.delete = function () {
         var currentRole = $scope.RoleRight;
-        RoleFactory.GetUserRoles(currentRole.id).success(function (userrole) {
-            if (userrole.length > 0) {
-                //$scope.DisplayMessage = 'SThis role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.';
-                //$('#messageModal').modal('show');
-                //alert('This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.');
-                toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+        ApiCall.MakeApiCall("GetUsersByRoles?Roleid=" + currentRole.id, 'GET', '').success(function (data) {
+            console.log(data);
+            if (data.length > 0) {
                 $('#confirmModal').modal('hide');
+                alert('Role is associated with users!.. please remove dependencies.')
             }
             else {
-                RoleFactory.DeleteRole(currentRole).success(function () {
-                    $scope.GetAllRoles();
-                    $scope.RoleRight = null;
-                    toaster.pop('success', "Success", "Role deleted successfully", null);
-                    $('#confirmModal').modal('hide');
+                RoleFactory.GetUserRoles(currentRole.id).success(function (userrole) {
+                    if (userrole.length > 0) {
+                        toaster.pop('warning', "Warning", "This role cannot be deleted as there are users mapped to it. Please remove the mappings and then delete.", null);
+                        $('#confirmModal').modal('hide');
+                    }
+                    else {
+                        RoleFactory.DeleteRole(currentRole).success(function () {
+                            $scope.GetAllRoles();
+                            $scope.RoleRight = null;
+                            toaster.pop('success', "Success", "Role deleted successfully", null);
+                            $('#confirmModal').modal('hide');
+
+                        }).error(function (error) {
+                            console.log('Error occurred when deleting Role');
+                        });
+                    }
 
                 }).error(function (error) {
-                    console.log('Error occurred when deleting Role');
+                    console.log('Error occurred when fetching User - Role mapping');
                 });
             }
-
         }).error(function (error) {
-            console.log('Error occurred when fetching User - Role mapping');
-        });
-
+            $scope.Error = error;
+        })
     };
 
     //---Dual list control---//
@@ -277,10 +288,8 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     // init
     $scope.selectedA = [];
     $scope.selectedB = [];
-
     $scope.listA = [];
     $scope.listB = [];
-
     $scope.checkedA = false;
     $scope.checkedB = false;
 
@@ -300,14 +309,16 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
             RoleFactory.GetRoleRightMapping($scope.role.id).success(function (data) {
                 for (i = 0; i < data.length; i++) {
                     var rightName = $scope.GetRightName(data[i].RightID);
-                    for(var j = 0; j < $scope.listB.length; j++){
-                        if(data[j].RightID == $scope.listB[j].RightID){
-                            $scope.listB.splice(j,1);
-                        }
+                    if (rightName != '') {
+                        //for (var j = 0; j < $scope.listB.length; j++) {
+                        //    if (data[j].RightID == $scope.listB[j].RightID) {
+                        //        $scope.listB.splice(j, 1);
+                        //    }
+                        //}
+                        $scope.listB.push({ 'RightID': data[i].RightID, 'RightName': rightName });
+                        var delId = arrayObjectIndexOf(unselectedRights, data[i].RightID);
+                        unselectedRights.splice(delId, 1);
                     }
-                    $scope.listB.push({ 'RightID': data[i].RightID, 'RightName': rightName });
-                    var delId = arrayObjectIndexOf(unselectedRights, data[i].RightID);
-                    unselectedRights.splice(delId, 1);
                 }
             });
             $scope.listA = unselectedRights;
@@ -405,46 +416,67 @@ RoleApp.controller('RoleController', function ($scope, $rootScope, $window, $loc
     $scope.GetAllRights();
     $scope.GetRoleRightMappings();
     $scope.IsPageReadOnly();
-});
+}]);
 
-RoleApp.factory('RoleFactory', function ($http) {
-    var RoleUrl = BaseURL + 'Roles';
-    var Userurl = BaseURL + 'users';
+ReportApp.factory('RoleFactory', ['$http', function ($http) {
+    var URL = 'Main/';
     var RoleFactory = {
         GetRoles: function () {
-            return $http.get(RoleUrl + '/roles');
+            return $http.get(URL + 'roles?roleId=');
         },
         GetRole: function (roleId) {
-            return $http.get(RoleUrl + '/?roleId=' + roleId);
+            return $http.get(URL + 'roles?roleId=' + roleId);
         },
         GetUserRoles: function (roleId) {
-            return $http.get(RoleUrl + '/GetUserRoles/?roleId=' + roleId);
+            return $http.get(URL + 'GetUserRoles?roleId=' + roleId);
         },
         GetRights: function () {
-            return $http.get(RoleUrl + '/right');
+            return $http.get(URL + 'GetRights?right=');
         },
         GetUser: function (userid) {
-            return $http.get(Userurl + '/?userId=' + userid);
-        },
-        AddRole: function (role) {
-            return $http.post(RoleUrl + '/AddRole', role);
-        },
-        AddRoleRightMapping: function (roleright) {
-            return $http.post(RoleUrl + '/AddRoleRightMapping', roleright);
-        },
-        ModifyRoleRight: function (roleright) {
-            return $http.post(RoleUrl + '/ModifyRoleRight', roleright);
-        },
-        DeleteRole: function (roleright) {
-            return $http.post(RoleUrl + '/DeleteRole', roleright);
+            return $http.get(URL + 'getusers?userId=' + userid);
         },
         GetRoleRightMappings: function () {
-            return $http.get(RoleUrl + '/GetRoleRightMappings');
+            return $http.get(URL + 'GetRoleRightMappings?roleId=');
         },
+        AddRole: function (role) {
+            return $http.post(URL + 'AddRole', role);
+        },
+        AddRoleRightMapping: function (roleright) {
+            return $http.post(URL + 'AddRoleRightMapping', roleright);
+        },
+        ModifyRoleRight: function (roleright) {
+            return $http.post(URL + 'ModifyRoleRight', roleright);
+        },
+        DeleteRole: function (roleright) {
+            return $http.post(URL + 'DeleteRole', roleright);
+        },
+
         GetRoleRightMapping: function (roleId) {
-            return $http.get(RoleUrl + '/GetRoleRightMapping?roleId=' + roleId);
+            return $http.get(URL + 'GetRoleRightMapping?roleId=' + roleId);
         }
 
     };
     return RoleFactory;
-});
+}]);
+
+
+
+ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
+    var URL = 'Main/';
+    var AuthFactory = {
+        Logout: function (userId) {
+            return $http.post(URL + 'Logout/', { userId: userId });
+        },
+        GetMenuList: function (userId) {
+            return $http.get(URL + 'GetmenuList?userId=' + userId);
+        },
+        GetRightsList: function (userId) {
+            return $http.get(URL + 'GetUserRights/?userId=' + userId);
+        },
+        GetUser: function (userId) {
+            return $http.get(URL + 'GetUser?userId=' + userId);
+        }
+    };
+    return AuthFactory;
+}]);

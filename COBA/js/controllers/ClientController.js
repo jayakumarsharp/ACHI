@@ -29,7 +29,7 @@
     $scope.getallcurrencyconversions();
    
     $scope.dtOptions = DTOptionsBuilder.fromSource()
-      .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+      .withPaginationType('full_numbers').withOption('createdRow', createdRow).withOption('rowCallback', rowCallback);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
         DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
@@ -44,15 +44,16 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
+        return '<a  class="test"><img src="images/edit.png"></a> ';
     }
-
-
-
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.test', nRow).unbind('click');
+        $('.test', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetCurrencyConversionForId(aData.ClientNumber);
+            });
+        });
+    }
     //$scope.CurrencyGrid = {
     //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
     //    paginationPageSize: 10,
@@ -146,7 +147,7 @@
                 $scope.IsSignOff = true;
             else
                 $scope.IsSignOff = false;
-
+            $scope.showaction = true;
             $('#currencyModel').modal('show');
 
         }).error(function (data) {

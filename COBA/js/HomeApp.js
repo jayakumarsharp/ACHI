@@ -1,8 +1,6 @@
 ﻿var HomeApp = angular.module('homeApp', ['ngRoute']);
 
-
-
-HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams, $location, $window, OppFactory, reportFactory, UserFactory, toaster, $timeout, EstimationApplicationMasterService, Opportunityservice) {
+HomeApp.controller('HomeController', ['$scope', '$rootScope', '$routeParams', '$location', '$window', 'OppFactory', 'reportFactory', 'UserFactory', 'toaster', '$timeout', 'EstimationApplicationMasterService', 'Opportunityservice', function ($scope, $rootScope, $routeParams, $location, $window, OppFactory, reportFactory, UserFactory, toaster, $timeout, EstimationApplicationMasterService, Opportunityservice) {
     $scope.Ishome = false;
     $scope.view360imgPath = View360ImagesPath;
     $scope.MyType = 0;
@@ -1248,7 +1246,7 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
         $location.path("StayTravel/" + oppId + "/" + groupId);
     };
 
-     $scope.RedirectToTandE = function (oppId, groupId) {
+    $scope.RedirectToTandE = function (oppId, groupId) {
         $('#View360').modal('hide');
         $location.path("TandE/" + oppId + "/" + groupId);
     };
@@ -1417,13 +1415,6 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
     $scope.ShowPricing();
     $scope.IsUserSCHead();
 
-    $rootScope.$on("toggle", function () {
-        //jay
-        $timeout(function () {
-            $scope.gridOptions.api.sizeColumnsToFit();
-        }, 1000);
-    });
-
 
     $scope.gridOptions = {
         columnDefs: columnDefs,
@@ -1442,9 +1433,9 @@ HomeApp.controller('HomeController', function ($scope, $rootScope, $routeParams,
     };
     //End angular grid
 
-});
+}]);
 
-HomeApp.factory('OppFactory', function ($http) {
+HomeApp.factory('OppFactory', ['$http',function ($http) {
     var Homeurl = BaseURL + 'home';
     var Authurl = BaseURL + 'auth';
     var Mailurl = BaseURL + 'Mail';
@@ -1511,6 +1502,6 @@ HomeApp.factory('OppFactory', function ($http) {
         },
     };
     return OppFactory;
-});
+}]);
 
 

@@ -1671,8 +1671,11 @@
     <Content Include="img\RoleManagement_icon.png" />
     <Content Include="img\search-icon.jpg" />
     <Content Include="js\Config.js" />
+    <Content Include="js\controllers\BusinessSector.js" />
+    <Content Include="js\controllers\CountryMasterController.js" />
     <Content Include="js\controllers\EmailsController.js" />
     <Content Include="js\controllers\MapTaskController.js" />
+    <Content Include="js\controllers\RegionMasterController.js" />
     <Content Include="js\controllers\TaskController.js" />
     <Content Include="js\controllers\ClientController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
