@@ -1,6 +1,7 @@
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.dll.config
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\BRDFountain.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\EPPlus.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\log4net.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
@@ -34,6 +35,3 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\System.Web.WebPages.D
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\System.Web.WebPages.Razor.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.pdb
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\EPPlus.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\bin\EPPlus.xml
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\BRDFountain\obj\Debug\BRDFountain.csprojResolveAssemblyReference.cache
