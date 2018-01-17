@@ -1,5 +1,6 @@
-﻿ReportApp.controller('TaskController', function ($scope, $rootScope, TaskService, $timeout) {
+﻿ReportApp.controller('TaskController', function ($scope, $rootScope, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
+    $scope.showaction = false;
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
@@ -21,7 +22,7 @@
 
         TaskService.GetAllTask().success(function (data) {
             console.log(data)
-            $scope.CurrencyGrid.data=data;;
+            $scope.dtOptions.data = data;;
         })
     };
     $scope.getallcurrencyconversions();
@@ -31,38 +32,60 @@
         }, 1000);
     });
 
-    var columnDefs = [{  name: 'Id' },
-        {  name: 'Name' },
-        //{ headerName: 'Description', name: 'Description', width: 440 },
-        //{
-        //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
-        //        if (params.data.IsSignOff == "Y")
-        //            return "<i class='fa fa-check btn-success btn-circle'></i>"
-        //        else
-        //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
-        //    }
-        //},
-        {
-            headerName: 'IsActive', name: 'IsActive'
-            ,cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
+    //var columnDefs = [{ name: 'Id' },
+    //    { name: 'Name' },
+    //    //{ headerName: 'Description', name: 'Description', width: 440 },
+    //    //{
+    //    //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
+    //    //        if (params.data.IsSignOff == "Y")
+    //    //            return "<i class='fa fa-check btn-success btn-circle'></i>"
+    //    //        else
+    //    //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
+    //    //    }
+    //    //},
+    //    {
+    //        headerName: 'IsActive', name: 'IsActive'
+    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+    //    },
 
-        {
-            name: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-            
-        }
+    //    {
+    //        name: 'Action'
+    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+
+    //    }
+    //];
+
+
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+    .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+        DTColumnBuilder.newColumn('Name').withTitle('Name'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
     ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
 
 
-    $scope.CurrencyGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: columnDefs,
-        
-    };
+
+    //$scope.CurrencyGrid = {
+    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
+    //    paginationPageSize: 10,
+    //    columnDefs: columnDefs,
+
+    //};
 
     $scope.showadd = function () {
+        $scope.showaction = true;
         $timeout(function () {
             $scope.TaskActive = false;
             $scope.IsSignOff = false;
@@ -100,6 +123,7 @@
                     $scope.editMode = false;
                     //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                     $('#currencyModel').modal('hide');
+                    $scope.showaction = false;
                     $scope.getallcurrencyconversions()
                 }
                 else
@@ -152,6 +176,7 @@
                 $scope.editMode = false;
                 //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
+                $scope.showaction = false;
                 $scope.getallcurrencyconversions()
             }
             else
@@ -183,6 +208,7 @@
         $scope.currency = {};
         $scope.ecurrency = {};
         $('#currencyModel').modal('hide');
+        $scope.showaction = false;
     };
 
     $scope.updatecancel = function (data) {

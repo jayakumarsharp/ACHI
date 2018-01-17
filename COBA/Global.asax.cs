@@ -1,5 +1,6 @@
 ﻿using COBA.App_Start;
 using COBA.Filters;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -30,6 +31,7 @@ namespace COBA
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
                 //WebSecurity.InitializeDatabaseConnection("CDRConn", "TBL_UserMaster", "UserId", "UserName", autoCreateTables: true);
                 log4net.Config.XmlConfigurator.Configure();
+                BundleTable.Bundles.ForEach(x => x.Transforms.Clear());
 
             }
             //catch (SqlException ex1)

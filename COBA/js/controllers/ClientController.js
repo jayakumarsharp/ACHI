@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ClientController', function ($scope, $rootScope, ClientService, $timeout) {
+﻿ReportApp.controller('ClientController', function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
 
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
@@ -22,46 +22,67 @@
 
         ClientService.GetAllCurrencyConversion().success(function (data) {
             console.log(data);
-            $scope.CurrencyGrid.data = data;
+            $scope.dtOptions.data = data
         })
     };
 
     $scope.getallcurrencyconversions();
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
+   
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+      .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+        DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
+        DTColumnBuilder.newColumn('ObligorName').withTitle('ObligorName'),
+        DTColumnBuilder.newColumn('OriginalLender').withTitle('OriginalLender'),
+        DTColumnBuilder.newColumn('LCompanyName').withTitle('LCompanyName'),
+        DTColumnBuilder.newColumn('BCompanyName').withTitle('BCompanyName'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
 
-    $scope.CurrencyGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        //enableFiltering: true,
-        //angularCompileRows: true,
-        columnDefs: [{ name: 'Id' },
-        { name: 'ClientNumber' },
-        { name: 'ObligorName' },
-        { name: 'OriginalLender' },
-        { name: 'LCompanyName' },
-        { name: 'BCompanyName' },
-        {
-            name: 'IsSignOff', width: 70,
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsSignOff=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsSignOff=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
-        {
-            name: 'IsActive',
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
-        {
-            field: 'Action', width: 70
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.ClientNumber)" ><i class="fa fa-edit" ></i></a ></div>'
+
+
+    //$scope.CurrencyGrid = {
+    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
+    //    paginationPageSize: 10,
+    //    //enableFiltering: true,
+    //    //angularCompileRows: true,
+    //    columnDefs: [{ name: '' },
+    //    { name: '' },
+    //    { name: '' },
+    //    { name: '' },
+    //    { name: '' },
+    //    { name: '' },
+    //    {
+    //        name: 'IsSignOff', width: 70,
+    //        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsSignOff=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsSignOff=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+    //    },
+    //    {
+    //        name: 'IsActive',
+    //        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+    //    },
+    //    {
+    //        field: 'Action', width: 70
+    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.ClientNumber)" ><i class="fa fa-edit" ></i></a ></div>'
             
-        }
-        ],
+    //    }
+    //    ],
 
-    };
-
+    //};
+    $scope.showaction = false;
     $scope.showadd = function () {
+        $scope.showaction = true;
         $timeout(function () {
             $scope.errorinfo = '';
             $scope.ClientActive = false;
@@ -79,7 +100,7 @@
     $scope.GetAllCurrency = function () {
         ClientService.GetAllCurrency().success(function (data) {
             //$scope.Currency = data;
-            $scope.CurrencyGrid.data = data;
+            $scope.dtOptions.data = data
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -100,6 +121,7 @@
             ClientService.InsertClient(currency).success(function (data) {
                 if (data == "success") {
                     $scope.GetAllCurrency();
+                    $scope.showaction = false;
                     $('#currencyModel').modal('hide');
                 }
                 else
@@ -183,6 +205,7 @@
     $scope.cancel = function () {
         $scope.currency = {};
         $scope.ecurrency = {};
+        $scope.showaction = false;
         $('#currencyModel').modal('hide');
     };
 

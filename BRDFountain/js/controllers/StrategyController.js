@@ -6,41 +6,17 @@
     $scope.editMode = false;
     $scope.showaction = false;
     $scope.IsReadOnly = true;
-    $scope.LegalEntity = [];
     $scope.currency = {};
     $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
     $scope.Permissions = { isWrite: false, isRead: false };
-
     $scope.selectModel = {
-        Country: {},
-        Region: {},
-        FTAApplicationCode: {},
-        BusinessSuffix: {},
-        ChildID: {},
-        FTAStrategyName: {},
-        Strategytype: {},
-        GOLiveDate: '',
-        FTAStrategyCode: {},
-        FTAShortCode: {},
-        BusinessLine: {},
-        FTAApplicationName: {},
-        FTAStrategyOwner: {},
-        ApplicationCategory: {},
-        Venuetype: {},
-        DecomissionedDate: {},
-        DiscretionaryCode: {},
-        ParentID: {},
-        FTAApplicationOwner: {},
-        PriorityScore: '',
-        Priority: '',
-        Capacity: {},
+        Country: {}, Region: {}, FTAApplicationCode: {}, BusinessSuffix: {}, ChildID: {}, FTAStrategyName: {}, Strategytype: {}, GOLiveDate: '', FTAStrategyCode: {}, FTAShortCode: {}, BusinessLine: {}, FTAApplicationName: {}, FTAStrategyOwner: {}, ApplicationCategory: {}, Venuetype: {}, DecomissionedDate: {}, DiscretionaryCode: {}, ParentID: {}, FTAApplicationOwner: {}, PriorityScore: '', Priority: '', Capacity: {},
     };
-
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
-
     $scope.dtOptions = DTOptionsBuilder.fromSource()
-        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
-        .withOption('rowCallback', rowCallback);
+    .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+    .withOption('rowCallback', rowCallback);
+
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID'),
         DTColumnBuilder.newColumn('FTAShortCode').withTitle('FTA Short Code'),
@@ -63,8 +39,10 @@
     function actionsStatus(data, type, full, meta) {
         if (data == "True")
             return '<a  class="dta-act">SignOff</a>';
-        else
-            return '<a  class="dta-act-not">Pending</a>';
+        else {
+            return '<a  class="test2 dta-act-not">Pending</a>';
+        }
+
     }
 
     function activeStatus(data, type, full, meta) {
@@ -80,13 +58,14 @@
         $('#confirmModal').modal('show');
     }
 
+
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
     }
 
     function actionsHtml(data, type, full, meta) {
         if ($scope.Permissions.IsWrite || $scope.ApprovalCheck.IsApprove)
-            return '<a class="test"><img src="images/edit.png"></a> &nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+            return '<a class="test"><img src="images/edit.png"></a> &nbsp;<a class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
         else
             return '<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
@@ -95,15 +74,22 @@
         $('.test', nRow).unbind('click');
         $('.test', nRow).bind('click', function () {
             $scope.$apply(function () {
-                $scope.GetCurrencyConversionForId(aData.Id, aData.Version, aData.RefNumber);
+                $scope.GetCurrencyConversionForId(aData.Id, aData.Version, aData.RefNumber, true);
             });
         });
         $('.test1', nRow).unbind('click');
         $('.test1', nRow).bind('click', function () {
             $scope.$apply(function () {
-                $scope.GetCurrencyConversionForIdView(aData.RefNumber, aData.Version);
+                $scope.GetChangeLog(aData.RefNumber, aData.Version);
             });
         });
+        $('.test2', nRow).unbind('click');
+        $('.test2', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetCurrencyConversionForId(aData.Id, aData.Version, aData.RefNumber, false);
+            });
+        });
+
         return nRow;
     }
 
@@ -126,10 +112,7 @@
         StrategyService.ShowLoader();
         getallgriddata();
         var URl = 'Main/';
-        let GetAllApplication = apiService.GetAllApplication();
-        let GetAllBusinessSector = apiService.GetAllBusinessSector();
         let GetAllCountry = apiService.GetAllCountry();
-        let GetAllProductType = apiService.GetAllProductType()
         let GetAllFTAApplicationCode = apiService.GetAllFTAApplicationCode()
         let GetAllThirdPartyAppList = apiService.GetAllThirdPartyAppList()
         let GetAllBusiness = apiService.GetAllBusiness()
@@ -148,10 +131,7 @@
         let GetAllRegion = apiService.GetAllRegion()
 
         $q.all([
-         GetAllApplication,
-        GetAllBusinessSector,
         GetAllCountry,
-        GetAllProductType,
         GetAllFTAApplicationCode,
         GetAllThirdPartyAppList,
         GetAllBusiness,
@@ -168,29 +148,25 @@
         GetAllStrategytype,
         GetAllCapacity,
         GetAllRegion
-
         ]).then(function (resp) {
             console.log(resp)
-            $scope.ApplicationMasterList = resp[0].data;
-            $scope.BusinessSectorMasterList = resp[1].data;
-            $scope.CountryMasterList = resp[2].data;
-            $scope.ProductMasterList = resp[3].data;
-            $scope.FTAApplicationCodeList = resp[4].data;
-            $scope.ThirdPartyList = resp[5].data;
-            $scope.BusinessList = resp[6].data;
-            $scope.FTAStrategyCodeList = resp[7].data;
-            $scope.DiscretionaryCodeList = resp[8].data;
-            $scope.BusinessSuffixList = resp[9].data;
-            $scope.ParentIDList = resp[10].data;
-            $scope.ChildIDList = resp[11].data;
-            $scope.BusinessLineList = resp[12].data;
-            $scope.ApplicationCategoryList = resp[13].data;
-            $scope.FTAApplicationNameList = resp[14].data;
-            $scope.FTAStrategyNameList = resp[15].data;
-            $scope.VenuetypeList = resp[16].data;
-            $scope.StrategytypeList = resp[17].data;
-            $scope.CapacityList = resp[18].data;
-            $scope.RegionMasterList = resp[19].data;
+            $scope.CountryMasterList = resp[0].data;
+            $scope.FTAApplicationCodeList = resp[1].data;
+            $scope.ThirdPartyList = resp[2].data;
+            $scope.BusinessList = resp[3].data;
+            $scope.FTAStrategyCodeList = resp[4].data;
+            $scope.DiscretionaryCodeList = resp[5].data;
+            $scope.BusinessSuffixList = resp[6].data;
+            $scope.ParentIDList = resp[7].data;
+            $scope.ChildIDList = resp[8].data;
+            $scope.BusinessLineList = resp[9].data;
+            $scope.ApplicationCategoryList = resp[10].data;
+            $scope.FTAApplicationNameList = resp[11].data;
+            $scope.FTAStrategyNameList = resp[12].data;
+            $scope.VenuetypeList = resp[13].data;
+            $scope.StrategytypeList = resp[14].data;
+            $scope.CapacityList = resp[15].data;
+            $scope.RegionMasterList = resp[16].data;
 
             binddata($scope.CountryMasterList);
         });
@@ -252,7 +228,6 @@
         , SignOff: $scope.selectModel.SignOff
         };
         if (currency != null) {
-
             if ($scope.selectModel.Systemflowfile) {
                 currency.Systemflowfile = $scope.selectModel.Systemflowfile[0].name;
                 currency.Systemflowfilelist = $scope.selectModel.Systemflowfile;
@@ -283,18 +258,23 @@
                 $scope.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
             });
         }
-
     };
 
     $scope.Availableusers = [];
+    $scope.setsignoff = function () {
+        if ($scope.selectModel.SignOff == 'True')
+            $scope.selectModel.SignOff = 'False'
+        else
+            $scope.selectModel.SignOff = 'True'
+    }
 
-    $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
+    $scope.GetCurrencyConversionForId = function (id, Version, RefNumber, actiontype) {
         $scope.showaction = true;
+        $scope.editMode = true;
         $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
         binddata($scope.CountryMasterList);
         StrategyService.GetDatabyId(id).success(function (data) {
-            $scope.editMode = true;
             $scope.selectModel = data[0];
             $scope.selectModel.GOLiveDate = $scope.selectModel.GOLiveDate;
             $scope.selectModel.DecomissionedDate = $scope.selectModel.DecomissionedDate;
@@ -325,7 +305,19 @@
             for (var i = 0; i < $scope.pageList.length; i++) {
                 $scope.pageList[i].IsValid = true;
             }
-            assignUsers();
+            //assignUsers();
+            binddata($scope.CountryMasterList);
+            if (actiontype) {
+                $scope.showaction = true;
+                $scope.AllowSignOff = false;
+            }
+            else {
+                $scope.showaction = false;
+                $scope.AllowSignOff = true;
+                if ($scope.ApprovalCheck.IsApprove || $scope.userId.toLowerCase() == $scope.selectModel.FTAStrategyOwnerId.toLowerCase()) {
+                    $('#confirm').modal('show');
+                }
+            }
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
@@ -347,6 +339,7 @@
             StrategyService.HideLoader();
         }, 500)
     };
+
     $scope.openpopup = function (type) {
         $('#viewFiles').modal('show');
     }
@@ -364,7 +357,8 @@
             }
         }
     };
-    $scope.GetCurrencyConversionForIdView = function (id, Version) {
+
+    $scope.GetChangeLog = function (id, Version) {
         $scope.ViewData = [];
         $scope.ViewListdata = false;
         $('#viewApprovals').modal('show');
@@ -382,8 +376,6 @@
 
     $scope.UpdateStrategy = function (model) {
         StrategyService.ShowLoader();
-
-
         var idlist = '';
         var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
@@ -420,6 +412,8 @@
             FTAStrategyOwner: $scope.selectModel.FTAStrategyOwner.userId,
             FTAApplicationOwner: $scope.selectModel.FTAApplicationOwner.userId
         };
+        if ($scope.AllowSignOff)
+            model.SignOff = 'True';
         var array = [];
         array.push(model);
         array.push($scope.Prevvalue);
@@ -427,8 +421,8 @@
         StrategyService.UpdateStrategy(array).success(function (data) {
             $scope.showaction = false;
             $scope.editMode = false;
-
             toaster.pop('success', "Success", "Model/Algo updated successfully", null);
+            $('#confirm').modal('hide');
             model.RefNumber = $scope.Prevvalue.RefNumber;
             if (data == "") {
                 model.Version = $scope.Prevvalue.Version;
@@ -485,20 +479,6 @@
         $('#confirmModal').modal('hide');
     };
 
-    $scope.updatecancel = function (data) {
-        StrategyService.GetCurrencyConversionbyId(id).success(function (data) {
-            $scope.editMode = true;
-            $scope.currency = data[0];
-            $scope.multiselect.selected = [];
-            $scope.multiselect.options = [];
-            binddata($scope.CountryMasterList);
-            $scope.UploadedSList = [];
-            $scope.UploadedDList = [];
-
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-    };
 
     function cleardata() {
         $scope.currency = {};
@@ -690,7 +670,6 @@
                         if (value.RightName == 'FTA Strategy Owner') {
                             isApprove = true;
                         }
-
                     })
                     if (!isRead) {
                         $scope.Permissions.IsReadOnly = false;
@@ -725,21 +704,11 @@
     };
 
     function assignUsers() {
-        $scope.assignedUsers = [];
         var msUsers = $scope.multiselect.selected;
-        var stacklist = $scope.CountryMasterList;
-        for (index = 0; index < $scope.multiselect.selected.length; index++) {
-            var remove = _.findWhere(stacklist, {
-                Id: $scope.multiselect.selected[index].id
-            })
-            stacklist = _.without(stacklist, remove)
-        }
-        binddata(stacklist);
+        binddata($scope.CountryMasterList);
     }
 
-
     function binddata(list) {
-
         $scope.multiselect.options = list.map(function (item) {
             return {
                 name: item.CountryName,

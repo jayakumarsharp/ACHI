@@ -16,6 +16,35 @@ namespace CRMManagement.Controllers
         //
         // GET: /Main/
 
+        [SessionTimeout]
+        public ActionResult Country()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult BusinessSector()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult RoleManagement()
+        {
+            return View();
+        }
+        [SessionTimeout]
+        public ActionResult UserManagement()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult Region()
+        {
+            return View();
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -165,7 +194,7 @@ namespace CRMManagement.Controllers
         {
             string mailbox = @"D:/EMail/inbox";
             string filepath = mailbox + "/" + ClientNumber + "/";
-            
+
             bool exists = System.IO.Directory.Exists(@filepath);
             if (!exists)
                 System.IO.Directory.CreateDirectory(@filepath);
@@ -196,7 +225,7 @@ namespace CRMManagement.Controllers
 
                 string errordesc = "success";
                 int errocode = 0;
-                _dbOperations.UpdateOnboardingTaskdata(Id, ExisitingFiles,TaskComments, out errocode, out errordesc);
+                _dbOperations.UpdateOnboardingTaskdata(Id, ExisitingFiles, TaskComments, out errocode, out errordesc);
 
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
@@ -431,6 +460,137 @@ namespace CRMManagement.Controllers
         }
         #endregion User
 
+
+
+        #region Country
+
+        public JsonResult GetAllCountry(string CountryId)
+        {
+            List<CountryMaster> lst = _dbOperations.GetCountryList(CountryId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddCountry(CountryMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddCountry(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyCountry(CountryMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyCountry(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteCountry(string CountryId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteCountry(CountryId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Country
+
+
+        #region Region
+
+        public JsonResult GetAllRegion(string RegionId)
+        {
+            List<RegionMaster> lst = _dbOperations.GetRegionList(RegionId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddRegion(RegionMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddRegion(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyRegion(RegionMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyRegion(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteRegion(string RegionId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteRegion(RegionId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion Region
+        
+
+
+        #region BusinessSector
+
+        public JsonResult GetAllBusinessSector(string BusinessSectorId)
+        {
+            List<BusinessSector> lst = _dbOperations.GetBusinessSectorList(BusinessSectorId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessSector(BusinessSector taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessSector(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyBusinessSector(BusinessSector opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyBusinessSector(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteBusinessSector(string BusinessSectorId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessSector(BusinessSectorId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessSector
+
+
+
+        public JsonResult getADuser()
+        {
+            List<UserMaster> ls = new List<UserMaster>();
+            ls.Add(new UserMaster { userId = "John", EmailId = "John@coba.com", UserName = "John Albert" });
+            ls.Add(new UserMaster { userId = "Daniel", EmailId = "Daniel@coba.com", UserName = "Daniel" });
+            ls.Add(new UserMaster { userId = "Sivakumar", EmailId = "Sivakumar@coba.com", UserName = "SivaKumar" });
+            ls.Add(new UserMaster { userId = "George", EmailId = "George@coba.com", UserName = "George" });
+            ls.Add(new UserMaster { userId = "Oliver", EmailId = "Oliver@coba.com", UserName = "Oliver" });
+
+
+            List<UserMaster> lst = _dbOperations.GetUser("");
+
+            foreach (UserMaster u in lst)
+            {
+                List<UserMaster> um = ls.Where(le => le.userId == u.userId).ToList();
+                if (um.Count > 0)
+                    ls.Remove(um[0]);
+            }
+
+            return Json(ls, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
 public static class Utilities
@@ -453,6 +613,27 @@ public static class Utilities
 }
 
 
+public class CountryMaster
+{
+    public string Id { get; set; }
+    public string CountryName { get; set; }
+
+}
+
+public class RegionMaster
+{
+    public string Id { get; set; }
+    public string RegionName { get; set; }
+
+}
+
+
+public class BusinessSector
+{
+    public string Id { get; set; }
+    public string BusinessSectorName { get; set; }
+
+}
 public class Emails
 {
     public string IsMappedToTask { get; set; }
@@ -745,7 +926,7 @@ public class Client
     public DateTime SignOffDate { get; set; }
     public string SignoffBy { get; set; }
     public string IsActive { get; set; }
-    public int Id{ get; set; }
+    public int Id { get; set; }
 
 }
 
@@ -827,4 +1008,19 @@ public class RightMaster
     public string ShowMenu { get; set; }
     public string id { get; set; }
 
+}
+
+
+public class SessionTimeoutAttribute : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext filterContext)
+    {
+        HttpContext ctx = HttpContext.Current;
+        if (HttpContext.Current.Session["UserName"] == null)
+        {
+            filterContext.Result = new RedirectResult("~/Home/LoginDisplay");
+            return;
+        }
+        base.OnActionExecuting(filterContext);
+    }
 }

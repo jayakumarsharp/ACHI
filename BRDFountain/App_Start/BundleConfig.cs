@@ -13,7 +13,6 @@ namespace BRDFountain.App_Start
             bundles.Add(new ScriptBundle("~/bundles/defaultscripts").Include(
                      "~/plugins/moment.js",
                         "~/Lib/bootstrap.js",
-                        "~/plugins/moment.js",
                         "~/Lib/jquery-1.11.0.min.js",
                         "~/Lib/bootstrap-datetimepicker.js",
                         "~/Lib/jquery.dataTables.min.js",

@@ -1,32 +1,24 @@
-﻿using BRDFountain.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using log4net;
 using System.Data.SqlClient;
-using WebMatrix.WebData;
+using BRDFountain.Models;
 
 namespace BRDFountain.Controllers
 {
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
-
+        
         #region Private Variables
         private static readonly ILog log = LogManager.GetLogger(typeof(HomeController));
         private DbOperations _dbOperations = new DbOperations();
         private string connString = string.Empty;
-        private int commandTimeout = 0;
 
         private int errorCode = 0;
         private string errorDesc = string.Empty;
-        //private MenuItemModel menuItemObj = new MenuItemModel();
         #endregion
 
         public ActionResult Index()
@@ -134,7 +126,6 @@ namespace BRDFountain.Controllers
                 return "Invalid login detail";
             }
         }
-
 
         /// <summary>
         /// getting logged in user name

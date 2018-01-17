@@ -3,7 +3,7 @@ var ServionImages = '';
 var HostPath = '';
 var urltype = '';
 
-var ReportApp = angular.module('reportApp', ['ui.grid', 'ngFileUpload', 'ui.grid.pagination']);
+var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster', 'datatables']);
 
 //ReportApp.controller('MainController', function ($scope, $rootScope) {
 

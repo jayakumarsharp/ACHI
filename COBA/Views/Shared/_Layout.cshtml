@@ -1,5 +1,5 @@
 ﻿@using System.Web.Optimization;
-@RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/defaultscripts")
 <html style="height: auto; min-height: 100%;">
 <head>
     <base href="/">
@@ -7,291 +7,85 @@
     <title> COBA</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-
-    @*<link href="~/plugins/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="//cdn.rawgit.com/angular-ui/bower-ui-grid/v3.0.6/ui-grid.min.css" type="text/css" />
-        <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
-        <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
-        <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">*@
-    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="~/css/leftmenu.css">
     <link rel="stylesheet" type="text/css" href="~/css/magic-check.css">
     <link rel="stylesheet" type="text/css" href="~/css/jquery.mCustomScrollbar.css">
-    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="~/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
-
-
+    <link href="https://fonts.googleapis.com/css?family=Dosis:400,500,600|Open+Sans:400,600|Oswald" rel="stylesheet">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/toaster.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
+    @*<link rel="stylesheet" type="text/css" href="~/css/style.css">*@
 </head>
-@*<body class="pushmenu-push pushmenu-push-toright">
-        <div class="wrapper" style="height: auto; min-height: 100%;">
-            <header class="main-header">
-                <nav class="navbar navbar-static-top">
-                    <div class="container">
-                        <div class="navbar-header">
-                            <a href="../../index2.html" class="navbar-brand"><b>COBA</b></a>
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                        </div>
-                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-                            <ul class="nav navbar-nav">
-                                <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                                    <a href="Index">
-                                        Dashboard
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-                                <li class='@Html.IsActive("Main", "Clients")'>
-                                    <a href="Clients">
-                                        Clients
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-
-                                <li class='@Html.IsActive("Main", "Tasks")'>
-                                    <a href="Tasks">
-                                        Tasks
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-
-                                <li class='@Html.IsActive("Main", "MapTask")'>
-                                    <a href="MapTask">
-                                        Map Task
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-                                <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
-                                    <a href="OnBoardingTasks">
-                                        OnBoarding Tasks
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-                                <li class='@Html.IsActive("Main", "Emails")'>
-                                    <a href="Emails">
-                                        Emails
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-
-                                <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
-                                    <a href="javascript:;">
-                                        Reports
-                                        <span class="arrow"></span>
-                                    </a>
-                                </li>
-
-                                <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
-                                    <a href="javascript:;">
-                                        <i class="icon-briefcase"></i> Licensing
-                                        <span class="arrow"></span>
-                                    </a>
-
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- /.navbar-collapse -->
-                        <!-- Navbar Right Menu -->
-                        <div class="navbar-custom-menu">
-                            <ul class="nav navbar-nav">
-                                <!-- Messages: style can be found in dropdown.less-->
-                                <!-- /.messages-menu -->
-                                <!-- Notifications Menu -->
-                                <!-- User Account Menu -->
-                                <li class="dropdown user user-menu">
-                                    <!-- Menu Toggle Button -->
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <!-- The user image in the navbar-->
-                                        <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                        <span class="hidden-xs">Alexander Pierce</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <!-- The user image in the menu -->
-                                        <li class="user-header">
-                                            <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                            <p>
-                                                Alexander Pierce - Web Developer
-                                                <small>Member since Nov. 2012</small>
-                                            </p>
-                                        </li>
-                                        <!-- Menu Body -->
-                                        <li class="user-body">
-                                            <div class="row">
-                                                <div class="col-xs-4 text-center">
-                                                    <a href="#">Followers</a>
-                                                </div>
-                                                <div class="col-xs-4 text-center">
-                                                    <a href="#">Sales</a>
-                                                </div>
-                                                <div class="col-xs-4 text-center">
-                                                    <a href="#">Friends</a>
-                                                </div>
-                                            </div>
-                                            <!-- /.row -->
-                                        </li>
-                                        <!-- Menu Footer-->
-                                        <li class="user-footer">
-                                            <div class="pull-left">
-                                                <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                            </div>
-                                            <div class="pull-right">
-                                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </header>
-            <div class="content-wrapper">
-                <div class="container">
-                    <section class="content">
-                        @RenderBody()
-                    </section>
-                </div>
-            </div>
-            <footer class="main-footer">
-                <div class="container">
-                    <div class="pull-right hidden-xs">
-                        <b>Version</b> 1.0.0
-                    </div>
-                    <strong>Copyright &copy; 2017 COBA</strong> All rights
-                    reserved.
-                </div>
-            </footer>
-        </div>
-        <script src="~/plugins/moment.js"></script>
-        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
-        <script src="../../dist/js/adminlte.min.js"></script>
-        <script src="../../dist/js/demo.js"></script>
-
-
-        <script src="~/plugins/bootstrap-datetimepicker.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
-        <script data-require="ui-bootstrap@0.12.1" data-semver="0.12.1" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
-        <script src="//cdn.rawgit.com/angular-ui/bower-ui-grid/v3.0.6/ui-grid.min.js"></script>
-
-        <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload.min.js"></script>
-        <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
-
-        <script src="../js/ReportApp.js"></script>
-
-        <script src="../js/HomeApp.js"></script>
-        <script src="../js/controllers/ClientController.js"></script>
-        <script src="../js/controllers/TaskController.js"></script>
-        <script src="~/js/controllers/OnboardingTaskController.js"></script>
-        <script src="~/js/controllers/MapTaskController.js"></script>
-        <script src="~/js/controllers/EmailsController.js"></script>
-        <script src="~/js/services/ClientService.js"></script>
-        <script src="~/js/services/TaskService.js"></script>
-        <script src="~/js/services/OnboardingTaskService.js"></script>
-        <script src="~/js/services/EmailService.js"></script>
-        <script src="~/js/services/MapTaskService.js"></script>
-
-        <style>
-            .form-control {
-                font-weight: 500;
-            }
-
-            body {
-                font-size: 13px;
-            }
-
-            .whitebg {
-                background: #fff;
-                padding: 12px 20px 15px;
-            }
-
-            .container {
-                width: 99%;
-            }
-
-            .grid {
-                width: 100%;
-                height: 380px;
-            }
-
-            .grid-tooltip {
-                overflow: visible;
-                z-index: 9999999;
-                float: left;
-            }
-
-            .ui-grid-header-cell-wrapper {
-                height: 8% !important;
-            }
-
-            .btn-outline {
-                background-color: transparent;
-                color: inherit;
-                transition: all .5s;
-            }
-
-            .btn-outline-info {
-                color: #5bc0de;
-                background-image: none;
-                background-color: transparent;
-                border-color: #3c8dbc;
-            }
-
-                .btn-outline-info:hover {
-                    color: #fff;
-                    background-color: #5bc0de;
-                    border-color: #3c8dbc;
-                }
-
-            .ui-grid-cell-contents > a {
-                font-size: 15px;
-                margin-left: 25%;
-                color: #3c8dbc;
-            }
-
-            .navbar-nav > li > a {
-                padding-top: 18px;
-                font-size: 15px;
-            }
-
-            .main-header .navbar {
-                min-height: 55px;
-            }
-        </style>
-    </body>*@
-
-
 <body ng-app="reportApp" ng-controller="MainController" class="pushmenu-push pushmenu-push-toright">
 
     <nav class="pushmenu pushmenu-left pushmenu-open" id="scroll_effect">
         <h3><img src="~/images/logo.svg" width="80px"></h3>
         <div>
             <ul class="links" data-widget="tree">
-                <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span class="icon"><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
+                <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
+                    <a href="Main/Index">
+                        Dashboard
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+                <li class='@Html.IsActive("Main", "Clients")'>
+                    <a href="Main/Clients">
+                        Clients
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class='@Html.IsActive("Main", "Tasks")'>
+                    <a href="Main/Tasks">
+                        Tasks
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class='@Html.IsActive("Main", "MapTask")'>
+                    <a href="Main/MapTask">
+                        Map Task
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+                <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
+                    <a href="Main/OnBoardingTasks">
+                        OnBoarding Tasks
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+                <li class='@Html.IsActive("Main", "Emails")'>
+                    <a href="Main/Emails">
+                        Emails
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
+                    <a href="javascript:;">
+                        Reports
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+
+                <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
+                    <a href="javascript:;">
+                        <i class="icon-briefcase"></i> Licensing
+                        <span class="arrow"></span>
+                    </a>
+
+                </li>
+
+                @*<li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span class="icon"><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>*@
                 @*<li ng-class="{'active': rootname == 'MappingMaster' }"><a href="MappingMaster" ng-click="updatemenuclick('MappingMaster')"> <span class="icon"><i class="fa fa-star-o"></i></span> Mapping Page</a></li>*@
             </ul>
-            <ul class="links">
-                <li><a href="#"><span class="icon"></span>Home</a></li>
-                <li class="active"><a href="#"><span class="icon"></span>Model / Algo Management</a></li>
-                <li><a href="#"><span class="icon"></span>Change Management</a></li>
-                <li><a href="#"><span class="icon"></span>Approvals Management</a></li>
-                <li><a href="#"><span class="icon"></span>Delegate Settings</a></li>
-                <li><a href="#"><span class="icon"></span>User Management</a></li>
-                <li><a href="#"><span class="icon"></span>Role Management</a></li>
-                <li><a href="#"><span class="icon"></span>Country</a></li>
-                <li><a href="#"><span class="icon"></span>Region</a></li>
-                <li><a href="#"><span class="icon"></span>Business Sector</a></li>
-                <li><a href="#"><span class="icon"></span>Application Master</a></li>
-                <li><a href="#"><span class="icon"></span>Product Type</a></li>
-            </ul>
-        </div>
 
+        </div>
     </nav>
     <section class="buttonset">
         <div id="nav_list">MENU</div>
@@ -322,8 +116,8 @@
 
     </section>
     <div class="main">
-        <section class="content">
-            <div class="page_link">
+
+        @*<div class="page_link">
                 <ul class="page_link_left">
                     <li><a href="#" class="active">MY APPROVALS</a></li>
                     <li><a href="#">Delegate request</a></li>
@@ -428,31 +222,14 @@
                 <a href="#" class="page_number">3</a>
                 <a href="#" class="page_number">4</a>
                 <a href="#" class="btn_next">NEXT</a>
-            </div>
-            @RenderBody()
-        </section>
+            </div>*@
+        @RenderBody()
+
     </div>
 
-    <script type="text/javascript" src="~/js/script.js"></script>
-    <script src="~/plugins/moment.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
-    <script src="../../dist/js/adminlte.min.js"></script>
-    <script src="../../dist/js/demo.js"></script>
 
-
-    <script src="~/plugins/bootstrap-datetimepicker.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
-    <script data-require="ui-bootstrap@0.12.1" data-semver="0.12.1" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
-    <script src="//cdn.rawgit.com/angular-ui/bower-ui-grid/v3.0.6/ui-grid.min.js"></script>
-
-    <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload.min.js"></script>
-    <script type="text/javascript" src="~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
 
     <script src="../js/ReportApp.js"></script>
-
     <script src="../js/HomeApp.js"></script>
     <script src="../js/controllers/ClientController.js"></script>
     <script src="../js/controllers/TaskController.js"></script>
@@ -464,5 +241,6 @@
     <script src="~/js/services/OnboardingTaskService.js"></script>
     <script src="~/js/services/EmailService.js"></script>
     <script src="~/js/services/MapTaskService.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
 </body>
 </html>

@@ -1,8 +1,7 @@
-﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout) {
+﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.checked = true;
     $scope.test = { item: 'true' };
-    $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
     $scope.SBU = [];
@@ -24,7 +23,8 @@
 
         EmailService.GetAllTask().success(function (data) {
             console.log(data)
-            $scope.CurrencyList = data;
+
+            $scope.dtOptions.data = data;
             //$scope.CurrencyGrid.api.setRowData(data);
         })
     };
@@ -35,37 +35,76 @@
         }, 1000);
     });
 
-    var columnDefs = [{ headerName: '', hide: true, field: 'Id', width: 1 },
-    { headerName: 'ClientNumber', field: 'ClientNumber', width: 320 },
-    { headerName: 'TaskId', field: 'TaskId', width: 320, hide: true },
-    { headerName: 'EmailSubject', field: 'EmailSubject', width: 320 },
-    { headerName: 'EmailId', field: 'EmailId', width: 320 },
-    { headerName: 'IsActive', field: 'IsActive', width: 320, hide: true },
-    { headerName: 'IsMappedToTask', field: 'IsMappedToTask', width: 320, hide: true },
-    { headerName: 'IsProcessed', field: 'IsProcessed', width: 320 },
-    { headerName: 'CreatedDate', field: 'CreatedDate', width: 320 },
-    { headerName: 'EmailAttachment', field: 'EmailAttachment', width: 320 },
-    { headerName: 'CreatedBy', field: 'CreatedBy', width: 320 },
-    { headerName: 'EmailContent', field: 'EmailContent', width: 320 },
-    { headerName: 'LastModifiedBy', field: 'LastModifiedBy', width: 320, hide: true },
-        { headerName: 'LastModifiedDate', field: 'LastModifiedDate', width: 320, hide: true },
-        { headerName: 'TaskAssignedBy', field: 'TaskAssignedBy', width: 320, hide: true },
-        { headerName: 'TaskAssignedDate', field: 'TaskAssignedDate', width: 320, hide: true },
-        { headerName: 'TaskAttachement', field: 'TaskAttachement', width: 320 },
-        { headerName: 'TaskComments', field: 'TaskComments', width: 320 },
-        { headerName: 'UniqueEmailId', field: 'UniqueEmailId', width: 320, hide: true },
-        //{ headerName: 'Description', field: 'Description', width: 440 },
-        { headerName: 'SignOff Status', field: 'IsSignOff', width: 140 },
-        {
-            headerName: 'Action', width: 200, field: 'abc', cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' }, cellRenderer: function (params) {
-                return "</span><a data-ng-click=\"GetCurrencyConversionForId('" + params.data.Id + "')\" href=\"javascript:;\"> Edit</a>";
-            }
-        }];
+    //var columnDefs = [{ headerName: '', hide: true, field: 'Id', width: 1 },
+    //{ headerName: 'ClientNumber', field: 'ClientNumber', width: 320 },
+    //{ headerName: 'TaskId', field: 'TaskId', width: 320, hide: true },
+    //{ headerName: 'EmailSubject', field: 'EmailSubject', width: 320 },
+    //{ headerName: 'EmailId', field: 'EmailId', width: 320 },
+    //{ headerName: 'IsActive', field: 'IsActive', width: 320, hide: true },
+    //{ headerName: 'IsMappedToTask', field: 'IsMappedToTask', width: 320, hide: true },
+    //{ headerName: 'IsProcessed', field: 'IsProcessed', width: 320 },
+    //{ headerName: 'CreatedDate', field: 'CreatedDate', width: 320 },
+    //{ headerName: 'EmailAttachment', field: 'EmailAttachment', width: 320 },
+    //{ headerName: 'CreatedBy', field: 'CreatedBy', width: 320 },
+    //{ headerName: 'EmailContent', field: 'EmailContent', width: 320 },
+    //{ headerName: 'LastModifiedBy', field: 'LastModifiedBy', width: 320, hide: true },
+    //    { headerName: 'LastModifiedDate', field: 'LastModifiedDate', width: 320, hide: true },
+    //    { headerName: 'TaskAssignedBy', field: 'TaskAssignedBy', width: 320, hide: true },
+    //    { headerName: 'TaskAssignedDate', field: 'TaskAssignedDate', width: 320, hide: true },
+    //    { headerName: 'TaskAttachement', field: 'TaskAttachement', width: 320 },
+    //    { headerName: 'TaskComments', field: 'TaskComments', width: 320 },
+    //    { headerName: 'UniqueEmailId', field: 'UniqueEmailId', width: 320, hide: true },
+    //    //{ headerName: 'Description', field: 'Description', width: 440 },
+    //    { headerName: 'SignOff Status', field: 'IsSignOff', width: 140 },
+    //    {
+    //        headerName: 'Action', width: 200, field: 'abc', cellStyle: { 'text-align': 'center', 'display': 'flex', 'align-items': 'center' }, cellRenderer: function (params) {
+    //            return "</span><a data-ng-click=\"GetCurrencyConversionForId('" + params.data.Id + "')\" href=\"javascript:;\"> Edit</a>";
+    //        }
+    //    }];
+
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+   .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+    //    DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
+    //DTColumnBuilder.newColumn('TaskId').withTitle('TaskId'),
+    DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
+    DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
+    DTColumnBuilder.newColumn('IsActive').withTitle('IsActive'),
+    DTColumnBuilder.newColumn('IsMappedToTask').withTitle('IsMappedToTask'),
+    DTColumnBuilder.newColumn('IsProcessed').withTitle('IsProcessed'),
+    DTColumnBuilder.newColumn('CreatedDate').withTitle('CreatedDate'),
+    //DTColumnBuilder.newColumn('EmailAttachment').withTitle('EmailAttachment'),
+    //DTColumnBuilder.newColumn('CreatedBy').withTitle('CreatedBy'),
+    //DTColumnBuilder.newColumn('EmailContent').withTitle('EmailContent'),
+    //DTColumnBuilder.newColumn('LastModifiedBy').withTitle('LastModifiedBy'),
+    //DTColumnBuilder.newColumn('LastModifiedDate').withTitle('LastModifiedDate'),
+    //DTColumnBuilder.newColumn('TaskAssignedBy').withTitle('TaskAssignedBy'),
+    //DTColumnBuilder.newColumn('TaskAssignedDate').withTitle('TaskAssignedDate'),
+    //DTColumnBuilder.newColumn('TaskAttachement').withTitle('TaskAttachement'),
+    //DTColumnBuilder.newColumn('TaskComments').withTitle('TaskComments'),
+    //DTColumnBuilder.newColumn('UniqueEmailId').withTitle('UniqueEmailId'),
+    ////{ headerName: 'Description').withTitle('Description', width: 440 },
+    //DTColumnBuilder.newColumn('SignOff Status').withTitle('IsSignOff'),
+    //DTColumnBuilder.newColumn('Name').withTitle('Name'),
+    DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable().renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
 
 
-    $scope.CurrencyGrid = {
-        columnDefs: columnDefs,
-    };
+
+    //$scope.CurrencyGrid = {
+    //    columnDefs: columnDefs,
+    //};
 
 
     $scope.getallcurrencyconversions();

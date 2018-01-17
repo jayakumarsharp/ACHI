@@ -161,6 +161,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\FountainModel.cs" />
     <Compile Include="plugins\ng-file-upload\demo\C#\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
@@ -2627,7 +2628,6 @@
     <Folder Include="bower_components\bootstrap\dist\fonts\Filters\" />
     <Folder Include="js\directives\" />
     <Folder Include="js\models\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

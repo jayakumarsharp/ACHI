@@ -2582,9 +2582,7 @@ public class DbOperations
                                    }).ToList();
 
                         }
-                    }
-
-                    cmd.ExecuteNonQuery();
+                    }                  
                 }
                 //close connection
                 this.CloseConnection();
@@ -2594,6 +2592,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            this.CloseConnection();
             return null;
         }
     }
@@ -2737,6 +2736,373 @@ public class DbOperations
 
 
     #endregion Users
+
+
+
+    #region Country
+
+    public List<CountryMaster> GetCountryList(string TaskTypeId)
+    {
+        List<CountryMaster> lst = new List<CountryMaster>();
+        string query = "sp_getallcountry";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new CountryMaster
+                               {
+                                   CountryName = Convert.ToString(row["CountryName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddCountry(CountryMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Country", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_CountryName", opp.CountryName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyCountry(CountryMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_countrymaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_CountryName", Opp.CountryName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteCountry(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_country", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Country
+
+    #region Region
+
+    public List<RegionMaster> GetRegionList(string TaskTypeId)
+    {
+        List<RegionMaster> lst = new List<RegionMaster>();
+        string query = "sp_getallRegion";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new RegionMaster
+                               {
+                                   RegionName = Convert.ToString(row["RegionName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddRegion(RegionMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Region", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_RegionName", opp.RegionName));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+
+    }
+
+    public void ModifyRegion(RegionMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_Regionmaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_RegionName", Opp.RegionName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteRegion(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Region", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion Region
+
+    #region BusinessSector
+
+    public List<BusinessSector> GetBusinessSectorList(string TaskTypeId)
+    {
+        List<BusinessSector> lst = new List<BusinessSector>();
+        string query = "sp_getallBusinessSector";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessSector
+                               {
+                                   BusinessSectorName = Convert.ToString(row["Name"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessSector(BusinessSector opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessSector", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorName", opp.BusinessSectorName));
+
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            }
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
+    public void ModifyBusinessSector(BusinessSector Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessSector", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorName", Opp.BusinessSectorName));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteBusinessSector(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessSector", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessSector
+
+
+
 
     //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)
     //{

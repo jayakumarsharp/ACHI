@@ -1,4 +1,4 @@
-﻿ReportApp.controller('OnboardingTaskController', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window) {
+﻿ReportApp.controller('OnboardingTaskController', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.downloadurl = 'http://localhost/Appserver/inbox/';
     $scope.FileList = [];
     $scope.ManualFileList = [];
@@ -34,44 +34,70 @@
         }, 1000);
     });
 
-    var columnDefs = [{ name: 'Id' },
-    { name: 'ClientNumber' },
-    { name: 'TaskName' },
-    { name: 'EmailSubject' },
-    //{ headerName: 'EmailId', name: 'EmailId', width: 320 },
-    //{ headerName: 'IsActive', name: 'IsActive', width: 320 },
-    //{ headerName: 'IsMappedToTask', name: 'IsMappedToTask', width: 320 },
-    ,
-    
-    //{ headerName: 'CreatedDate', name: 'CreatedDate', width: 320 },
-    { headerName: 'EmailAttachment', name: 'EmailAttachment'},
-    //{ headerName: 'CreatedBy', name: 'CreatedBy', width: 320 },
-    { headerName: 'EmailContent', name: 'EmailContent' },
-    //{ headerName: 'LastModifiedBy', name: 'LastModifiedBy', width: 320, hide: true },
-     //   { headerName: 'LastModifiedDate', name: 'LastModifiedDate', width: 320, hide: true },
-     //   { headerName: 'TaskAssignedBy', name: 'TaskAssignedBy', width: 320, hide: true },
-      //  { headerName: 'TaskAssignedDate', name: 'TaskAssignedDate', width: 320, hide: true },
-        { headerName: 'TaskAttachement', name: 'TaskAttachement' },
-        { headerName: 'TaskComments', name: 'TaskComments'},
-       // { headerName: 'UniqueEmailId', name: 'UniqueEmailId', width: 320, hide: true },
-        //{ headerName: 'Description', name: 'Description', width: 440 },
-        //{ headerName: 'SignOff Status', name: 'IsSignOff', width: 140 },
-         {
-             name: 'IsProcessed',
-             cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsProcessed=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsProcessed=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-         },
-         {
-             field: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+    //var columnDefs = [{ name: 'Id' },
+    //{ name: 'ClientNumber' },
+    //{ name: 'TaskName' },
+    //{ name: 'EmailSubject' },
+    ////{ headerName: 'EmailId', name: 'EmailId', width: 320 },
+    ////{ headerName: 'IsActive', name: 'IsActive', width: 320 },
+    ////{ headerName: 'IsMappedToTask', name: 'IsMappedToTask', width: 320 },
+    //,
 
-         }];
+    ////{ headerName: 'CreatedDate', name: 'CreatedDate', width: 320 },
+    //{ headerName: 'EmailAttachment', name: 'EmailAttachment' },
+    ////{ headerName: 'CreatedBy', name: 'CreatedBy', width: 320 },
+    //{ headerName: 'EmailContent', name: 'EmailContent' },
+    ////{ headerName: 'LastModifiedBy', name: 'LastModifiedBy', width: 320, hide: true },
+    // //   { headerName: 'LastModifiedDate', name: 'LastModifiedDate', width: 320, hide: true },
+    // //   { headerName: 'TaskAssignedBy', name: 'TaskAssignedBy', width: 320, hide: true },
+    //  //  { headerName: 'TaskAssignedDate', name: 'TaskAssignedDate', width: 320, hide: true },
+    //    { headerName: 'TaskAttachement', name: 'TaskAttachement' },
+    //    { headerName: 'TaskComments', name: 'TaskComments' },
+    //   // { headerName: 'UniqueEmailId', name: 'UniqueEmailId', width: 320, hide: true },
+    //    //{ headerName: 'Description', name: 'Description', width: 440 },
+    //    //{ headerName: 'SignOff Status', name: 'IsSignOff', width: 140 },
+    //     {
+    //         name: 'IsProcessed',
+    //         cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsProcessed=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsProcessed=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+    //     },
+    //     {
+    //         field: 'Action'
+    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+
+    //     }];
 
 
-    $scope.CurrencyGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: columnDefs,
-    };
+    //$scope.CurrencyGrid = {
+    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
+    //    paginationPageSize: 10,
+    //    columnDefs: columnDefs,
+    //};
+
+
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+   .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+       DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
+    DTColumnBuilder.newColumn('TaskName').withTitle('TaskName'),
+    DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
+        DTColumnBuilder.newColumn('Name').withTitle('Name'),
+         DTColumnBuilder.newColumn('TaskAttachement').withTitle('TaskAttachement'),
+        DTColumnBuilder.newColumn('TaskComments').withTitle('TaskComments'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
+    ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
+
 
     $scope.getallcurrencyconversions();
 
@@ -89,7 +115,7 @@
 
     $scope.GetAllCurrency = function () {
         OnboardingTaskService.GetAllTask().success(function (data) {
-            $scope.Currency = data;
+            $scope.dtOptions.data = data;
         }).error(function (error) {
             $scope.Error = error;
         });

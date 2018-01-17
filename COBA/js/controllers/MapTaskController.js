@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout) {
+﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
@@ -28,7 +28,7 @@
                 $scope.totaltask = data.length;
             else
                 $scope.totaltask = 0;
-            $scope.CurrencyGrid.data = data;;
+            $scope.dtOptions.data = data;;
         })
     };
 
@@ -43,7 +43,7 @@
             else
                 $scope.Mappedtask = 0;
             if (page)
-                $scope.CurrencyGrid.data = data;;
+                $scope.dtOptions.data = data;;
         })
 
     }
@@ -57,45 +57,63 @@
             else
                 $scope.UnMappedtask = 0;
             if (page)
-                $scope.CurrencyGrid.data = data;;
+                $scope.dtOptions.data = data;
         })
 
     }
 
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
 
-    var columnDefs = [{ name: 'Id' },
-    { name: 'ClientNumber' },
-    { name: 'TaskName' },
-    { name: 'EmailSubject' },
-    { name: 'EmailId' },
+   // var columnDefs = [{ name: 'Id' },
+   // { name: 'ClientNumber' },
+   // { name: 'TaskName' },
+   // { name: 'EmailSubject' },
+   // { name: 'EmailId' },
 
-   {
-       name: 'IsMappedToTask',
-       cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-   },
-        {
-            name: 'IsActive',
-            cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-        },
-        {
-            field: 'Action'
-            , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
+   //{
+   //    name: 'IsMappedToTask',
+   //    cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsMappedToTask=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsMappedToTask=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+   //},
+   //     {
+   //         name: 'IsActive',
+   //         cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
+   //     },
+   //     {
+   //         field: 'Action'
+   //         , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
 
-        }
+   //     }
+   // ];
+
+
+   // $scope.CurrencyGrid = {
+   //     paginationPageSizes: [10, 20, 30, 40, 50, 60],
+   //     paginationPageSize: 10,
+   //     columnDefs: columnDefs,
+
+   // };
+
+    $scope.dtOptions = DTOptionsBuilder.fromSource()
+   .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    $scope.dtColumns = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+        DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
+    DTColumnBuilder.newColumn('TaskName').withTitle('TaskName'),
+    DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
+    DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
+        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml)
     ];
+    function createdRow(row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+    }
+    function actionsHtml(data, type, full, meta) {
+        $scope.data = data;
+        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+        //'   <i class="fa fa-trash-o"></i>' +
+        //'</button>';
+    }
 
-
-    $scope.CurrencyGrid = {
-        paginationPageSizes: [10, 20, 30, 40, 50, 60],
-        paginationPageSize: 10,
-        columnDefs: columnDefs,
-
-    };
 
     $scope.showadd = function () {
         $scope.errorinfo = '';
