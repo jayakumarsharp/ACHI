@@ -2141,6 +2141,7 @@ public class DbOperations
     }
 
 
+
     public List<UserMaster> GetUser(string userId)
     {
         List<UserMaster> lst = new List<UserMaster>();
@@ -2169,12 +2170,12 @@ public class DbOperations
                                    EmailId = Convert.ToString(row["EmailId"]),
                                    RoleId = Convert.ToString(row["RoleId"]),
                                    RoleName = Convert.ToString(row["RoleName"]),
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   BusinessSector = Convert.ToString(row["BusinessLine"]),
-                                   BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
-                                   CountryId = Convert.ToString(row["CountryId"]),
-                                   RegionId = Convert.ToString(row["RegionId"]),
+                                   //RegionName = Convert.ToString(row["RegionName"]),
+                                   //CountryName = Convert.ToString(row["CountryName"]),
+                                   //BusinessSector = Convert.ToString(row["BusinessLine"]),
+                                   //BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                   //CountryId = Convert.ToString(row["CountryId"]),
+                                   //RegionId = Convert.ToString(row["RegionId"]),
                                    Status = Convert.ToString(row["Status"]),
                                    Password = Convert.ToString(row["Password"]),
                                    IsADUser = Convert.ToString(row["IsADUser"]),
@@ -2191,6 +2192,8 @@ public class DbOperations
         }
         return lst;
     }
+
+
     public List<UserMaster> GetUsersByRoles(string Roleid)
     {
         try

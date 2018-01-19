@@ -16,6 +16,14 @@ namespace CRMManagement.Controllers
         //
         // GET: /Main/
 
+
+        [SessionTimeout]
+        public ActionResult BusinessLine()
+        {
+            return View();
+        }
+
+
         [SessionTimeout]
         public ActionResult Country()
         {
@@ -1055,4 +1063,13 @@ public class SessionTimeoutAttribute : ActionFilterAttribute
         }
         base.OnActionExecuting(filterContext);
     }
+}
+
+
+
+public class BusinessLineMaster
+{
+    public string Id { get; set; }
+    public string BusinessLine { get; set; }
+
 }
