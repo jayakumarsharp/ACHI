@@ -3102,6 +3102,116 @@ public class DbOperations
     #endregion BusinessSector
 
 
+    #region BusinessLine
+
+    public List<BusinessLineMaster> GetBusinessLineList(string TaskTypeId)
+    {
+        List<BusinessLineMaster> lst = new List<BusinessLineMaster>();
+        string query = "sp_getallBusinessLine";
+
+        if (this.OpenConnection() == true)
+        {
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new BusinessLineMaster
+                               {
+                                   BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+            }
+            //close connection
+            this.CloseConnection();
+        }
+
+        return lst;
+    }
+
+    public void AddBusinessLine(BusinessLineMaster opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessLine", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", opp.BusinessLine));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void ModifyBusinessLine(BusinessLineMaster Opp, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessLinemaster", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", Opp.BusinessLine));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    public void DeleteBusinessLine(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        errorcode = 0;
+        errordesc = "success";
+        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessLine", connection))
+        {
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+
+            if (this.OpenConnection() == true)
+            {
+                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+    }
+
+    #endregion BusinessLine
 
 
     //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)

@@ -93,8 +93,6 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\System.Web.WebPages.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\System.Web.WebPages.Razor.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\Web.Optimization.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\WebGrease.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\WebMatrix.Data.dll
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\WebMatrix.WebData.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\Newtonsoft.Json.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\System.Web.Optimization.xml
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\COBA\bin\System.Net.Http.Formatting.xml

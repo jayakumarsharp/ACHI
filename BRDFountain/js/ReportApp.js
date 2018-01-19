@@ -318,3 +318,25 @@ ReportApp.directive('multiselect', function () {
         }
     };
 });
+
+
+
+
+ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
+    var URL = 'Main/';
+    var AuthFactory = {
+        Logout: function (userId) {
+            return $http.post(URL + 'Logout/', { userId: userId });
+        },
+        GetMenuList: function (userId) {
+            return $http.get(URL + 'GetmenuList?userId=' + userId);
+        },
+        GetRightsList: function (userId) {
+            return $http.get(URL + 'GetUserRights/?userId=' + userId);
+        },
+        GetUser: function (userId) {
+            return $http.get(URL + 'GetUser?userId=' + userId);
+        }
+    };
+    return AuthFactory;
+}]);

@@ -460,7 +460,39 @@ namespace CRMManagement.Controllers
         }
         #endregion User
 
+        #region BusinessLine
 
+        public JsonResult GetAllBusinessLine(string BusinessLineId)
+        {
+            List<BusinessLineMaster> lst = _dbOperations.GetBusinessLineList(BusinessLineId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBusinessLine(BusinessLineMaster taskInfo)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.AddBusinessLine(taskInfo, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ModifyBusinessLine(BusinessLineMaster opp)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.ModifyBusinessLine(opp, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteBusinessLine(string BusinessLineId)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteBusinessLine(BusinessLineId, out errocode, out errordesc);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion BusinessLine
 
         #region Country
 

@@ -88,6 +88,11 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', '
 }]);
 
 
+ReportApp.factory('_', ['$window', function ($window) {
+    return $window._; // assumes underscore has already been loaded on the page
+}]);
+
+
 ReportApp.directive('datetimepicker', function () {
     return {
         require: '?ngModel',
@@ -215,4 +220,25 @@ ReportApp.service('ApiCall', ['$http', function ($http) {
             //});
         }
     };
+}]);
+
+
+
+ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
+    var URL = 'Main/';
+    var AuthFactory = {
+        Logout: function (userId) {
+            return $http.post(URL + 'Logout/', { userId: userId });
+        },
+        GetMenuList: function (userId) {
+            return $http.get(URL + 'GetmenuList?userId=' + userId);
+        },
+        GetRightsList: function (userId) {
+            return $http.get(URL + 'GetUserRights/?userId=' + userId);
+        },
+        GetUser: function (userId) {
+            return $http.get(URL + 'GetUser?userId=' + userId);
+        }
+    };
+    return AuthFactory;
 }]);

@@ -1595,11 +1595,7 @@
     <Content Include="dist\js\pages\dashboard.js" />
     <Content Include="dist\js\pages\dashboard2.js" />
     <Content Include="DLL\log4net.dll" />
-    <Content Include="DLL\MvcPaging.dll" />
     <Content Include="DLL\MySql.Data.dll" />
-    <Content Include="DLL\Servion.CCA.DatabaseApplicationBlocks.dll" />
-    <Content Include="DLL\WebMatrix.Data.dll" />
-    <Content Include="DLL\WebMatrix.WebData.dll" />
     <Content Include="Global.asax" />
     <Content Include="images\bg.jpg" />
     <Content Include="images\clock.png" />
@@ -1679,7 +1675,6 @@
     <Content Include="js\controllers\TaskController.js" />
     <Content Include="js\controllers\ClientController.js" />
     <Content Include="js\controllers\OnboardingTaskController.js" />
-    <Content Include="js\HomeApp.js" />
     <Content Include="js\html5shiv.js" />
     <Content Include="js\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="js\loginApp.js" />
