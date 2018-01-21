@@ -79,6 +79,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="obj\Debug\TestApplication.csprojResolveAssemblyReference.cache" />
+    <Content Include="Theme 2\25-10-17\.idea\kishan.iml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -87,7 +88,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="addtask.html" />
     <Content Include="bin\Microsoft.AI.Agent.Intercept.dll" />
     <Content Include="bin\Microsoft.AI.DependencyCollector.dll" />
     <Content Include="bin\Microsoft.AI.PerfCounterCollector.dll" />
@@ -97,13 +97,6 @@
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
     <Content Include="bin\TestApplication.dll" />
     <Content Include="bin\TestApplication.pdb" />
-    <Content Include="clien-last.html" />
-    <Content Include="client-manage.html" />
-    <Content Include="client1.html" />
-    <Content Include="client3.html" />
-    <Content Include="client4.html" />
-    <Content Include="client5.html" />
-    <Content Include="client6.html" />
     <Content Include="css\bootstrap-datetimepicker.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
@@ -111,7 +104,6 @@
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\dataTables.bootstrap.min.css" />
     <Content Include="css\font-awesome.min.css" />
-    <Content Include="emails.html" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="images\close.png" />
@@ -131,7 +123,6 @@
     <Content Include="images\rep.png" />
     <Content Include="images\tasks.png" />
     <Content Include="images\user.jpg" />
-    <Content Include="index.html" />
     <Content Include="js\bootstrap-datetimepicker.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
@@ -140,13 +131,72 @@
     <Content Include="js\moment-with-locales.js" />
     <Content Include="js\npm.js" />
     <Content Include="js\responsive-tabs.js" />
-    <Content Include="map-mail.html" />
     <Content Include="obj\Debug\TestApplication.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\TestApplication.dll" />
     <Content Include="obj\Debug\TestApplication.pdb" />
-    <Content Include="onboarding.html" />
-    <Content Include="style.css" />
-    <Content Include="task-manage.html" />
+    <Content Include="Theme 2\25-10-17\.idea\modules.xml" />
+    <Content Include="Theme 2\25-10-17\.idea\workspace.xml" />
+    <Content Include="Theme 2\25-10-17\css\for_bootstrap.css" />
+    <Content Include="Theme 2\25-10-17\css\jquery.mCustomScrollbar.css" />
+    <Content Include="Theme 2\25-10-17\css\leftmenu.css" />
+    <Content Include="Theme 2\25-10-17\css\magic-check.css" />
+    <Content Include="Theme 2\25-10-17\css\mCSB_buttons.png" />
+    <Content Include="Theme 2\25-10-17\css\style.css" />
+    <Content Include="Theme 2\25-10-17\images\delete.svg" />
+    <Content Include="Theme 2\25-10-17\images\edit.svg" />
+    <Content Include="Theme 2\25-10-17\images\export.svg" />
+    <Content Include="Theme 2\25-10-17\images\leftpanel_bg.png" />
+    <Content Include="Theme 2\25-10-17\images\leftpanel_min.png" />
+    <Content Include="Theme 2\25-10-17\images\logo.svg" />
+    <Content Include="Theme 2\25-10-17\images\logout.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\1.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\10.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\10h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\11.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\11h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\12.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\12h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\1h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\2.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\2h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\3.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\3h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\4.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\4h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\5.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\5h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\6.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\6h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\7.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\7h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\8.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\8h.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\9.svg" />
+    <Content Include="Theme 2\25-10-17\images\menu_icon\9h.svg" />
+    <Content Include="Theme 2\25-10-17\images\notification.svg" />
+    <Content Include="Theme 2\25-10-17\images\print.svg" />
+    <Content Include="Theme 2\25-10-17\images\search_icon.svg" />
+    <Content Include="Theme 2\25-10-17\images\settings.svg" />
+    <Content Include="Theme 2\25-10-17\images\sort.jpg" />
+    <Content Include="Theme 2\25-10-17\images\User\1.jpg" />
+    <Content Include="Theme 2\25-10-17\index.html" />
+    <Content Include="Theme 2\25-10-17\js\html5shiv.js" />
+    <Content Include="Theme 2\25-10-17\js\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Theme 2\25-10-17\js\script.js" />
+    <Content Include="Theme1\addtask.html" />
+    <Content Include="Theme1\clien-last.html" />
+    <Content Include="Theme1\client-manage.html" />
+    <Content Include="Theme1\client1.html" />
+    <Content Include="Theme1\client3.html" />
+    <Content Include="Theme1\client4.html" />
+    <Content Include="Theme1\client5.html" />
+    <Content Include="Theme1\client6.html" />
+    <Content Include="Theme1\emails.html" />
+    <Content Include="Theme1\index.html" />
+    <Content Include="Theme1\map-mail.html" />
+    <Content Include="Theme1\onboarding.html" />
+    <Content Include="Theme1\style.css" />
+    <Content Include="Theme1\task-manage.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

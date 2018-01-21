@@ -39,9 +39,9 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "OpportunityReaderService";
-            this.serviceInstaller1.DisplayName = "OpportunityReaderService";
-            this.serviceInstaller1.ServiceName = "OppertunityReaderServiceOppertunityReaderService";
+            this.serviceInstaller1.Description = "EmailReader";
+            this.serviceInstaller1.DisplayName = "EmailReaderService";
+            this.serviceInstaller1.ServiceName = "EmailReaderService";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             this.serviceInstaller1.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
             // 

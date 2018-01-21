@@ -773,14 +773,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
     }
 
@@ -998,14 +998,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
     }
 
@@ -1135,14 +1135,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
     }
 
@@ -1297,7 +1297,7 @@ public class DbOperations
                     }
                 }
                 //Execute command
-            //    cmd.ExecuteNonQuery();
+                //    cmd.ExecuteNonQuery();
             }
             //close connection
             this.CloseConnection();
@@ -1307,9 +1307,9 @@ public class DbOperations
 
     }
 
-    
 
-    public void UpdateOnboardingTaskdata(string Id,string emailattachment,string comments, out int errorcode, out string errordesc)
+
+    public void UpdateOnboardingTaskdata(string Id, string emailattachment, string comments, out int errorcode, out string errordesc)
     {
         try
         {
@@ -1322,7 +1322,7 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_id", Id));
                 cmd.Parameters.Add(new MySqlParameter("i_TaskAttachment", emailattachment));
                 cmd.Parameters.Add(new MySqlParameter("i_comments", comments));
-                
+
                 if (this.OpenConnection() == true)
                 {
                     //Execute command
@@ -1683,14 +1683,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-            
+
         }
     }
 
@@ -2585,7 +2585,7 @@ public class DbOperations
                                    }).ToList();
 
                         }
-                    }                  
+                    }
                 }
                 //close connection
                 this.CloseConnection();
@@ -3215,22 +3215,123 @@ public class DbOperations
     }
 
     #endregion BusinessLine
+    public List<CountryMaster> GetusercountryMapping(string roleId)
+    {
+        List<CountryMaster> lst = new List<CountryMaster>();
+        try
+        {
+            string query = "SP_Getusercountry";
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new CountryMaster
+                                   {
+                                       Id = Convert.ToString(row["Id"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                   }).ToList();
+                        }
+                    }
+                }
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    public List<RegionMaster> GetuserregionMapping(string roleId)
+    {
+        List<RegionMaster> lst = new List<RegionMaster>();
+        try
+        {
+            string query = "SP_Getuserregion";
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RegionMaster
+                                   {
+                                       Id = Convert.ToString(row["Id"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                   }).ToList();
+                        }
+                    }
+                }
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 
 
-    //public string GetRightsForRole(string roleName, out int errorCode, out string errorDesc, out int executeStatus)
-    //{
-    //    object[] outParamList = new object[0];
-    //    List<SqlParameter> paramList = new List<SqlParameter>();
-    //    paramList.Add(_sqlDb.CreateParameter("@i_RoleName", SqlDbType.VarChar, 50, ParameterDirection.Input, roleName));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorCode", SqlDbType.Int, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_ErrorDescription", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    paramList.Add(_sqlDb.CreateParameter("@o_MenusList", SqlDbType.VarChar, 200, ParameterDirection.Output));
-    //    executeStatus = _sqlDb.ExecuteNonQuery(StaticClass.GetRightsForRole, CommandType.StoredProcedure, paramList, out outParamList);
-    //    errorCode = Convert.ToInt32(Convert.ToString(outParamList[0]));
-    //    errorDesc = Convert.ToString(outParamList[1]);
-    //    string menuRights = Convert.ToString(outParamList[2]);
-    //    return menuRights;
-    //}
+    public List<BusinessLineMaster> GetuserbusinessMapping(string roleId)
+    {
+        List<BusinessLineMaster> lst = new List<BusinessLineMaster>();
+        try
+        {
+            string query = "SP_GetuserBusinessSector";
+            if (this.OpenConnection() == true)
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessLineMaster
+                                   {
+                                       Id = Convert.ToString(row["Id"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                   }).ToList();
+                        }
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 
     private bool OpenConnection()
     {

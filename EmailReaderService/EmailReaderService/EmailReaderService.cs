@@ -15,43 +15,51 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Xml.Serialization;
 using System.Xml;
-using EAGetMail;
 using MySql.Data.MySqlClient;
 using System.Globalization;
+using OpenPop.Pop3;
+using OpenPop.Mime;
 
 namespace EmailReaderService
 {
-    public partial class OppertunityReaderService : ServiceBase
+    public partial class EmailReader : ServiceBase
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(OppertunityReaderService));
+        private readonly ILog log = LogManager.GetLogger(typeof(EmailReader));
         string emailCountFile = AppDomain.CurrentDomain.BaseDirectory + "\\emailCountFile.txt";
         private string connString = string.Empty;
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
 
         string strTimeSec = ConfigurationManager.AppSettings["TimeSec"];
         ArrayList messageList = new ArrayList();
         string mailbox = "";
-
-        MailServer oServer = new MailServer(ConfigurationManager.AppSettings["HostName"],
-          ConfigurationManager.AppSettings["MailID"], ConfigurationManager.AppSettings["Password"], ServerProtocol.Imap4);
-        MailClient oClient = new MailClient("TryIt");
+        Pop3Client client = new Pop3Client();
 
         //SqlDatabase dbconnection;
         System.Threading.Thread thread;
-        public OppertunityReaderService()
+        public EmailReader()
         {
-            connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
-            connection = new MySqlConnection(connString);
+            try
+            {
+                connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
+                connection = new MySqlConnection(connString);
 
-            log.Info("Begin Constructor");
-            InitializeComponent();
-            mailbox = @"C:/EMail/inbox";
-            log.Info("End Constructor");
-            OnStart(null);
+                log.Info("Begin Constructor");
+                InitializeComponent();
+                mailbox = @"C:/EMail/inbox";
+                log.Info("End Constructor");
+                //client.Connect(ConfigurationManager.AppSettings["HostName"], 993, true);
+                client.Connect("pop3.live.com", 995, true);
+
+
+                // client.Authenticate(ConfigurationManager.AppSettings["MailID"], ConfigurationManager.AppSettings["Password"]);
+                //client.Authenticate("jayakumar.t@servion.com", "boomathi@1992");
+                client.Authenticate("savvyjayakumar@outlook.com", "Welcome@123");
+                OnStart(null);
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.InnerException);
+            }
         }
         protected override void OnStart(string[] args)
         {
@@ -65,26 +73,23 @@ namespace EmailReaderService
         }
         public void ReadMails()
         {
-            oServer.SSLConnection = true;
-            oServer.Port = 993;
             while (true)
+
             {
                 try
                 {
-                    oClient.Connect(oServer);
-                    Imap4Folder destFolder = getfoldercount();
+                    //Imap4Folder destFolder = getfoldercount();
 
-                    int MessageCount = oClient.GetMailCount();
-                    int TotalMessageCount = MessageCount - 1;
-                    MailInfo[] infos = oClient.GetMailInfos();
+                    int MessageCount = client.GetMessageCount();
 
+                    /// MailInfo[] infos = oClient.GetMailInfos();
+                    List<Message> allMessages = new List<Message>(MessageCount);
                     if (MessageCount > 0)
                     {
-                        MailInfo LastMailinfo = infos[TotalMessageCount];
-                        Mail lastMessage = oClient.GetMail(LastMailinfo);
+                        Message lastMessage = client.GetMessage(MessageCount);
                         if (lastMessage != null)
                         {
-                            var mailReceivedDate = Convert.ToDateTime(lastMessage.ReceivedDate);
+                            var mailReceivedDate = Convert.ToDateTime(lastMessage.Headers.Date);
                             System.TimeSpan diff = DateTime.Now.Subtract(mailReceivedDate);
                             if (diff.TotalMinutes > 60)
                             {
@@ -92,13 +97,13 @@ namespace EmailReaderService
                                 messageList.Clear();
                             }
                         }
-                        for (int i = TotalMessageCount; i >= 0; i--)
+                        for (int i = MessageCount; i > 0; i--)
                         {
                             EmailData objmaildata = new EmailData();
                             log.InfoFormat("MsgCount: {0}  ", i);
-                            MailInfo info = infos[i];
-                            Mail CurrentMessage = oClient.GetMail(info);
-                            var mailReceivedDate = Convert.ToDateTime(CurrentMessage.ReceivedDate);
+                            Message CurrentMessage = client.GetMessage(i);
+                            //  Mail CurrentMessage = oClient.GetMail(info);
+                            var mailReceivedDate = Convert.ToDateTime(CurrentMessage.Headers.Date);
                             System.TimeSpan diff = DateTime.Now.Subtract(mailReceivedDate);
                             if (diff.TotalMinutes > 60)
                             {
@@ -106,10 +111,10 @@ namespace EmailReaderService
                                 break;
                             }
 
-                            string messageId = CurrentMessage.Headers.GetValueOfKey("Message-ID");
+                            string messageId = CurrentMessage.Headers.MessageId;
                             if (!messageList.Contains(messageId))
                             {
-                                string a = CurrentMessage.Subject;
+                                string a = CurrentMessage.Headers.Subject;
                                 objmaildata.ClientNumber = "";
                                 objmaildata.UniqueEmailID = messageId;
 
@@ -122,33 +127,42 @@ namespace EmailReaderService
 
                                 messageList.Add(messageId);
 
-                                string fromEmailID = CurrentMessage.From.Address;
+                                string fromEmailID = CurrentMessage.Headers.From.Address;
                                 objmaildata.CreatedBy = fromEmailID;
                                 objmaildata.EmailID = fromEmailID;
-                                string fileDataHtml = CurrentMessage.HtmlBody;
-                                fileDataHtml = Regex.Replace(fileDataHtml, "&nbsp;", String.Empty);
-                                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                                doc.LoadHtml(fileDataHtml);
+                                // string fileDataHtml = CurrentMessage.MessagePart.GetBodyAsText();
+                                string xml = "";
 
-                                string str = fileDataHtml;
+
+                                MessagePart html = CurrentMessage.FindFirstHtmlVersion();
+                                if (html != null)
+                                {
+                                    xml=html.GetBodyAsText();
+                                }
+
+                                //fileDataHtml = Regex.Replace(fileDataHtml, "&nbsp;", String.Empty);
+                                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                                doc.LoadHtml(xml.ToString());
+
+                                string str = xml.ToString();
                                 string clientmail = fromEmailID.Split('@')[0];
                                 string filepath = mailbox + "/" + objmaildata.ClientNumber + "/";
                                 bool exists = System.IO.Directory.Exists(@filepath);
                                 if (!exists)
                                     System.IO.Directory.CreateDirectory(@filepath);
-                                foreach (EAGetMail.Attachment attachment in CurrentMessage.Attachments)
+                                foreach (MessagePart attachment in CurrentMessage.FindAllAttachments())
                                 {
-                                    attachment.SaveAs(@filepath + attachment.Name, true);
-                                    objmaildata.EmailAttachment = attachment.Name + ",";
+                                    FileInfo file = new FileInfo(@filepath + attachment.ContentDescription);
+                                    attachment.Save(file);
+                                    objmaildata.EmailAttachment = attachment.ContentDescription + ",";
                                 }
-
-                                objmaildata.CreatedDate = CurrentMessage.ReceivedDate;
+                                objmaildata.CreatedDate = CurrentMessage.Headers.DateSent;
                                 objmaildata.IsMappedToTask = "N";
                                 objmaildata.content = str;
-                                objmaildata.Subject = lastMessage.Subject;
+                                objmaildata.Subject = CurrentMessage.Headers.Subject;
 
                                 Inserttaskdata(objmaildata);
-                                oClient.Move(LastMailinfo, destFolder);
+                                //oClient.Move(LastMailinfo, destFolder);
                             }
                         }
                     }
@@ -164,24 +178,24 @@ namespace EmailReaderService
         }
 
 
-        public Imap4Folder getfoldercount()
-        {
-            Imap4Folder Folder = null;
-            Imap4Folder[] folders = oClient.Imap4Folders;
-            int count = folders.Length;
+        //public Imap4Folder getfoldercount()
+        //{
+        //    Imap4Folder Folder = null;
+        //    Imap4Folder[] folders = oClient.Imap4Folders;
+        //    int count = folders.Length;
 
-            for (int i = 0; i < count; i++)
-            {
-                Imap4Folder folder = folders[i];
-                if (String.Compare("Archeive", folder.Name, true) == 0)
-                {
-                    //find "Deleted Items" folder
-                    Folder = folder;
-                    break;
-                }
-            }
-            return Folder;
-        }
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Imap4Folder folder = folders[i];
+        //        if (String.Compare("Archeive", folder.Name, true) == 0)
+        //        {
+        //            //find "Deleted Items" folder
+        //            Folder = folder;
+        //            break;
+        //        }
+        //    }
+        //    return Folder;
+        //}
         private void SendErrorEmail(string senderID)
         {
             try

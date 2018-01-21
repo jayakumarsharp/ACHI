@@ -12,3 +12,18 @@ D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\WinServ_VisioConvert
 D:\Basic IT\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csproj.GenerateResource.Cache
 D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\EAGetMail40.dll
 D:\Basic IT\EmailReaderService\EmailReaderService\bin\Debug\MySql.Data.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\log4net.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\MySql.Data.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\HtmlAgilityPack.xml
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.EmailReader.resources
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csproj.GenerateResource.Cache
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\EmailReader.exe.config
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\EmailReader.exe
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\EmailReader.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.exe
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\OpenPop.dll

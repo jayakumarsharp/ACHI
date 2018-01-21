@@ -545,7 +545,7 @@
                 $scope.selectModel.Priority = 1;
             if (priorityvalue >= 6 && priorityvalue <= 9)
                 $scope.selectModel.Priority = 2;
-            if (priorityvalue >= 5)
+            if (priorityvalue <= 5)
                 $scope.selectModel.Priority = 3;
         }
     }

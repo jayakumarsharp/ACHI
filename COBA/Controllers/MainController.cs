@@ -30,11 +30,7 @@ namespace CRMManagement.Controllers
             return View();
         }
 
-        [SessionTimeout]
-        public ActionResult BusinessSector()
-        {
-            return View();
-        }
+        
 
         [SessionTimeout]
         public ActionResult RoleManagement()
@@ -47,42 +43,51 @@ namespace CRMManagement.Controllers
             return View();
         }
 
+        
         [SessionTimeout]
         public ActionResult Region()
         {
             return View();
         }
 
+        [SessionTimeout]
+
         public ActionResult Index()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult Clients()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult Tasks()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult OnBoardingTasks()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult MapTask()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult Emails()
         {
             return View();
         }
 
+        [SessionTimeout]
         public ActionResult Reports()
         {
             return View();
@@ -302,6 +307,11 @@ namespace CRMManagement.Controllers
         }
 
         #endregion Email
+
+        public ActionResult ConfirmModal()
+        {
+            return PartialView();
+        }
 
         public string getloggedusername()
         {
@@ -570,7 +580,7 @@ namespace CRMManagement.Controllers
         }
 
         #endregion Region
-        
+
 
 
         #region BusinessSector
@@ -608,6 +618,24 @@ namespace CRMManagement.Controllers
         #endregion BusinessSector
 
 
+
+        public JsonResult GetusercountryMapping(string userId)
+        {
+            List<CountryMaster> lst = _dbOperations.GetusercountryMapping(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetuserRegionMapping(string userId)
+        {
+            List<RegionMaster> lst = _dbOperations.GetuserregionMapping(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetBusinessMapping(string userId)
+        {
+            List<BusinessLineMaster> lst = _dbOperations.GetuserbusinessMapping(userId);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult getADuser()
         {
@@ -1073,3 +1101,4 @@ public class BusinessLineMaster
     public string BusinessLine { get; set; }
 
 }
+

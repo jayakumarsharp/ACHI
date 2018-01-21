@@ -1667,7 +1667,7 @@
     <Content Include="img\RoleManagement_icon.png" />
     <Content Include="img\search-icon.jpg" />
     <Content Include="js\Config.js" />
-    <Content Include="js\controllers\BusinessSector.js" />
+    <Content Include="js\controllers\BusinessLineMasterController.js" />
     <Content Include="js\controllers\CountryMasterController.js" />
     <Content Include="js\controllers\EmailsController.js" />
     <Content Include="js\controllers\MapTaskController.js" />
@@ -1922,11 +1922,12 @@
     <Content Include="Views\Main\MapTask.cshtml" />
     <Content Include="Views\Main\Reports.cshtml" />
     <Content Include="Views\Main\Licensing.cshtml" />
-    <Content Include="Views\Main\BusinessSector.cshtml" />
     <Content Include="Views\Main\Country.cshtml" />
     <Content Include="Views\Main\Region.cshtml" />
     <Content Include="Views\Main\RoleManagement.cshtml" />
     <Content Include="Views\Main\UserManagement.cshtml" />
+    <Content Include="Views\Main\BusinessLine.cshtml" />
+    <Content Include="Views\Main\ConfirmModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

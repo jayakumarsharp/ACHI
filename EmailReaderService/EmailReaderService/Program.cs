@@ -17,7 +17,7 @@ namespace EmailReaderService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
-                new OppertunityReaderService() 
+                new EmailReader() 
             };
             ServiceBase.Run(ServicesToRun);
         }

@@ -1,6 +1,6 @@
 ﻿namespace EmailReaderService
 {
-    partial class OppertunityReaderService
+    partial class EmailReader
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "OppertunityReaderService";
+            // 
+            // EmailReader
+            // 
+            this.ServiceName = "EmailReaderService";
+
         }
 
         #endregion

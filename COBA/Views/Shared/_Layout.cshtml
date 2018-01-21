@@ -2,7 +2,8 @@
 @Scripts.Render("~/bundles/defaultscripts")
 <html style="height: auto; min-height: 100%;">
 <head>
-    <base href="/">
+    @*<base href="/">*@
+    <base href="/COBA/">
     <meta charset="utf-8" />
     <title> COBA</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,61 +28,61 @@
         <h3><img src="~/images/logo.svg" width="80px"></h3>
         <div>
             <ul class="links" data-widget="tree">
-                <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                    <a href="Main/Index">
-                        Dashboard
-                        <span class="arrow"></span>
-                    </a>
-                </li>
-                <li class='@Html.IsActive("Main", "Clients")'>
-                    <a href="Main/Clients">
-                        Clients
-                        <span class="arrow"></span>
-                    </a>
-                </li>
+                @*    <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
+                        <a href="Main/Index">
+                            Dashboard
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <li class='@Html.IsActive("Main", "Clients")'>
+                        <a href="Main/Clients">
+                            Clients
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
 
-                <li class='@Html.IsActive("Main", "Tasks")'>
-                    <a href="Main/Tasks">
-                        Tasks
-                        <span class="arrow"></span>
-                    </a>
-                </li>
+                    <li class='@Html.IsActive("Main", "Tasks")'>
+                        <a href="Main/Tasks">
+                            Tasks
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
 
-                <li class='@Html.IsActive("Main", "MapTask")'>
-                    <a href="Main/MapTask">
-                        Map Task
-                        <span class="arrow"></span>
-                    </a>
-                </li>
-                <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
-                    <a href="Main/OnBoardingTasks">
-                        OnBoarding Tasks
-                        <span class="arrow"></span>
-                    </a>
-                </li>
-                <li class='@Html.IsActive("Main", "Emails")'>
-                    <a href="Main/Emails">
-                        Emails
-                        <span class="arrow"></span>
-                    </a>
-                </li>
+                    <li class='@Html.IsActive("Main", "MapTask")'>
+                        <a href="Main/MapTask">
+                            Map Task
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
+                        <a href="Main/OnBoardingTasks">
+                            OnBoarding Tasks
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <li class='@Html.IsActive("Main", "Emails")'>
+                        <a href="Main/Emails">
+                            Emails
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
 
-                <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
-                    <a href="javascript:;">
-                        Reports
-                        <span class="arrow"></span>
-                    </a>
-                </li>
+                    <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
+                        <a href="javascript:;">
+                            Reports
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
 
-                <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
-                    <a href="javascript:;">
-                        <i class="icon-briefcase"></i> Licensing
-                        <span class="arrow"></span>
-                    </a>
+                    <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
+                        <a href="javascript:;">
+                            <i class="icon-briefcase"></i> Licensing
+                            <span class="arrow"></span>
+                        </a>
 
-                </li>
+                    </li>*@
 
-                @*<li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span class="icon"><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>*@
+                <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
                 @*<li ng-class="{'active': rootname == 'MappingMaster' }"><a href="MappingMaster" ng-click="updatemenuclick('MappingMaster')"> <span class="icon"><i class="fa fa-star-o"></i></span> Mapping Page</a></li>*@
             </ul>
 
@@ -95,14 +96,14 @@
                 <div class="user_online"></div>
                 <div class="user_name">@Convert.ToString(Session["UserName"]) </div>
             </div>
-            <div class="action_set">
-                <a href="#">
-                    <img src="~/images/notification.svg" class="btn_bell" />
-                </a>
-                <a href="#">
-                    <img src="~/images/settings.svg" class="btn_setting" />
-                </a>
-            </div>
+            @*<div class="action_set">
+                    <a href="#">
+                        <img src="~/images/notification.svg" class="btn_bell" />
+                    </a>
+                    <a href="#">
+                        <img src="~/images/settings.svg" class="btn_setting" />
+                    </a>
+                </div>*@
             <div class="log_out">
                 <a href="@Url.Action("Logout", "Home")">
                     <div class="txt">Logout</div>
@@ -227,14 +228,14 @@
 
     </div>
 
-    <script src="../js/ReportApp.js"></script>
+    <script src="~/js/ReportApp.js"></script>
     <script src="~/js/RoleApp.js"></script>
     <script src="~/js/UserApp.js"></script>
-    <script src="~/js/controllers/BusinessSector.js"></script>
+    <script src="~/js/controllers/BusinessLineMasterController.js"></script>
     <script src="~/js/controllers/CountryMasterController.js"></script>
     <script src="~/js/controllers/RegionMasterController.js"></script>
-    <script src="../js/controllers/ClientController.js"></script>
-    <script src="../js/controllers/TaskController.js"></script>
+    <script src="~/js/controllers/ClientController.js"></script>
+    <script src="~/js/controllers/TaskController.js"></script>
     <script src="~/js/controllers/OnboardingTaskController.js"></script>
     <script src="~/js/controllers/MapTaskController.js"></script>
     <script src="~/js/controllers/EmailsController.js"></script>
@@ -243,6 +244,6 @@
     <script src="~/js/services/OnboardingTaskService.js"></script>
     <script src="~/js/services/EmailService.js"></script>
     <script src="~/js/services/MapTaskService.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="~/js/script.js"></script>
 </body>
 </html>
