@@ -154,7 +154,7 @@
 
 
     $scope.UpdatecurrencyConversion = function (model) {
-        model.UpdatedBy = $rootScope.UserInfo.user.userId;
+        model.UpdatedBy = '';//$rootScope.UserInfo.user.userId;
         EmailService.UpdatecurrencyConversion(model).success(function (data) {
             $scope.editMode = false;
             toaster.pop('success', "Success", "Currency rate updated successfully", null);

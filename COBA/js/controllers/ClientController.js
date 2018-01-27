@@ -17,6 +17,18 @@
             }
         });
     };
+    $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
+    $scope.activateTab = function (tabid) {
+        for (var i = 0; i < $scope.pageList.length; i++) {
+            $scope.pageList[i].Page = false;
+        }
+        $scope.pageList[tabid].Page = true;
+        $scope.pageList[tabid].IsValid = true;
+    }
+
+    $scope.Confirmcancel = function () {
+        $('#confirmModal').modal('show');
+    }
 
     $scope.getallcurrencyconversions = function () {
 
@@ -27,7 +39,7 @@
     };
 
     $scope.getallcurrencyconversions();
-   
+
     $scope.dtOptions = DTOptionsBuilder.fromSource()
       .withPaginationType('full_numbers').withOption('createdRow', createdRow).withOption('rowCallback', rowCallback);
     $scope.dtColumns = [
@@ -76,7 +88,7 @@
     //    {
     //        field: 'Action', width: 70
     //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.ClientNumber)" ><i class="fa fa-edit" ></i></a ></div>'
-            
+
     //    }
     //    ],
 
@@ -122,6 +134,7 @@
             ClientService.InsertClient(currency).success(function (data) {
                 if (data == "success") {
                     $scope.GetAllCurrency();
+                    $scope.showaction = false;
                     $scope.showaction = false;
                     $('#currencyModel').modal('hide');
                 }
@@ -171,8 +184,9 @@
 
 
     $scope.UpdatecurrencyConversion = function (model) {
-        model.UpdatedBy = $rootScope.UserInfo.user.userId;
-        ClientService.UpdatecurrencyConversion(model).success(function (data) {
+        //  model.UpdatedBy = $rootScope.UserInfo.user.userId;
+        model.UpdatedBy = '';
+        ClientService.UpdateClient(model).success(function (data) {
             if (data == "success") {
                 $scope.editMode = false;
                 //toaster.pop('success', "Success", "Currency rate updated successfully", null);
@@ -207,7 +221,7 @@
         $scope.currency = {};
         $scope.ecurrency = {};
         $scope.showaction = false;
-        $('#currencyModel').modal('hide');
+        $('#confirmModal').modal('hide');
     };
 
     $scope.updatecancel = function (data) {

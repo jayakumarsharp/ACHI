@@ -678,7 +678,7 @@ public class DbOperations
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
                                        BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
                                        ParentID = Convert.ToString(row["ParentId"]),
-                                       ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIdValue"]),
                                        ChildID = Convert.ToString(row["ChildId"]),
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
@@ -791,7 +791,7 @@ public class DbOperations
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
                                        BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
                                        ParentID = Convert.ToString(row["ParentId"]),
-                                       ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIdValue"]),
                                        ChildID = Convert.ToString(row["ChildId"]),
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
@@ -910,7 +910,7 @@ public class DbOperations
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
                                        BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
                                        ParentID = Convert.ToString(row["ParentId"]),
-                                       ParentIDValue = Convert.ToInt32(row["ParentIdValue"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIdValue"]),
                                        ChildID = Convert.ToString(row["ChildId"]),
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
@@ -989,7 +989,9 @@ public class DbOperations
             errordesc = "success";
 
             DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            DateTime DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateTime DecomissionedDate = new DateTime();
+            if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
+                DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
 
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
@@ -1013,7 +1015,10 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
                 cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
-                cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
+                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                else
+                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", ""));
                 cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
                 cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentID));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
@@ -1648,16 +1653,10 @@ public class DbOperations
                                        BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
-
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
             return lst;
@@ -4886,6 +4885,12 @@ public class DbOperations
                                    FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
                                    FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
                                    FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   ParentID = Convert.ToString(row["ParentID"]),
+                                   ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                   ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                   ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                   ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }
@@ -4912,6 +4917,9 @@ public class DbOperations
             cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
             cmd.Parameters.Add(new MySqlParameter("i_ChildId", opp.ChildId));
             cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
+            cmd.Parameters.Add(new MySqlParameter("i_ParentID", opp.ParentID));
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
+            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
             cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
@@ -5148,6 +5156,12 @@ public class DbOperations
                                    FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
                                    FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
                                    FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                   ParentID = Convert.ToString(row["ParentID"]),
+                                   ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                   ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                   ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                   ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }

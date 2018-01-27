@@ -24,15 +24,9 @@
 
         OnboardingTaskService.GetAllTask().success(function (data) {
             console.log(data)
-            $scope.CurrencyGrid.data = data;
+            $scope.dtOptions.data = data;
         })
     };
-
-    $rootScope.$on("toggle", function () {
-        $timeout(function () {
-            $scope.CurrencyGrid.api.sizeColumnsToFit();
-        }, 1000);
-    });
 
     //var columnDefs = [{ name: 'Id' },
     //{ name: 'ClientNumber' },
@@ -81,7 +75,6 @@
        DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
     DTColumnBuilder.newColumn('TaskName').withTitle('TaskName'),
     DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
-        DTColumnBuilder.newColumn('Name').withTitle('Name'),
          DTColumnBuilder.newColumn('TaskAttachement').withTitle('TaskAttachement'),
         DTColumnBuilder.newColumn('TaskComments').withTitle('TaskComments'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
@@ -92,7 +85,7 @@
     }
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
-        return '<a  ng-click="GetVenuetypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        return '<a  ng-click="GetCurrencyConversionForId(' + data + ')"><img src="images/edit.png"></a> ';
         //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
         //'   <i class="fa fa-trash-o"></i>' +
         //'</button>';
@@ -244,16 +237,16 @@
             //uploaddata.Attachment = $scope.file;
             uploaddata.filename = $scope.file[0].name;
             Upload.upload({
-                url: 'UpdateOnboardingTask', //webAPI exposed to upload the file
+                url: 'Main/UpdateOnboardingTask', //webAPI exposed to upload the file
                 data: { Id: $scope.ecurrency.Id, TaskComments: $scope.ecurrency.TaskComments, ClientNumber: $scope.ecurrency.ClientNumber, ExisitingFiles: $scope.ecurrency.TaskAttachment, obj: $scope.file }//pass file as data, should be user ng-model
             }).then(function (resp) { //upload function returns a promise
-                if (resp.data.error_code === 0) { //validate success
-                    console.log(resp.data)
+                //if (resp.data.error_code === 0) { //validate success
+                console.log(resp.data)
 
-
-                } else {
-                    $window.alert('an error occured');
-                }
+                $('#currencyModel').modal('hide');
+                //} else {
+                //  $window.alert('an error occured');
+                //}
             }, function (resp) { //catch error
                 console.log('Error status: ' + resp.status);
                 $window.alert('Error status: ' + resp.status);

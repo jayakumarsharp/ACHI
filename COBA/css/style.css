@@ -74,7 +74,8 @@ body {
 }
 
 section.content {
-    padding: 40px;
+    /*padding: 40px;*/
+    padding: 10px;
     height: 100vh;
     top: 60px;
     position: relative;
@@ -150,115 +151,6 @@ section.content {
         position: relative;
         top: 2px;
     }
-/*-----------------------------------------*/
-.page_status {
-    width: 100%;
-    text-align: center;
-    display: table;
-    margin: 40px 0 30px;
-}
-
-    .page_status .status_pending, .page_status .status_completed {
-        background: white;
-        text-align: center;
-        display: inline-block;
-        padding: 20px 45px;
-        border: 1px solid #ececec;
-        -webkit-transition: all 0.3s ease-out 0s;
-        -moz-transition: all 0.3s ease-out 0s;
-        -o-transition: all 0.3s ease-out 0s;
-        transition: all 0.3s ease-out 0s;
-    }
-
-
-        .page_status .status_pending:hover {
-            box-shadow: inset -5px -10px 0px -5px #3da1ed;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_completed:hover {
-            box-shadow: inset -5px -10px 0px -5px #51cb30;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_pending:hover > .number {
-            color: #3da1ed;
-        }
-
-        .page_status .status_completed:hover > .number {
-            color: #51cb30;
-        }
-
-        .page_status .status_pending:hover > .status_txt, .page_status .status_completed:hover > .status_txt {
-            color: #7b7b7b;
-        }
-
-        .page_status .status_pending.active {
-            box-shadow: inset -5px -10px 0px -5px #3da1ed;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_completed.active {
-            box-shadow: inset -5px -10px 0px -5px #51cb30;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_pending.active > .number {
-            color: #3da1ed;
-        }
-
-        .page_status .status_completed.active > .number {
-            color: #51cb30;
-        }
-
-        .page_status .status_pending.active > .status_txt, .page_status .status_completed.active > .status_txt {
-            color: #7b7b7b;
-        }
-
-
-
-
-        .page_status .status_pending .number, .page_status .status_completed .number, .page_status .status_pending .status_txt, .page_status .status_completed .status_txt {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .page_status .status_pending .number, .page_status .status_completed .number {
-            font-family: 'Oswald', sans-serif;
-            color: #adadad;
-            font-size: 40px;
-            font-weight: 400;
-        }
-
-        .page_status .status_pending .status_txt, .page_status .status_completed .status_txt {
-            color: #adadad;
-            font-size: 16px;
-            text-align: left;
-            margin-left: 15px;
-        }
-
-    .page_status .status_pending {
-    }
-
-        .page_status .status_pending .number {
-        }
-
-        .page_status .status_pending .status_txt {
-        }
-
-    .page_status .status_completed {
-    }
-
-        .page_status .status_completed .number {
-        }
-
-        .page_status .status_completed .status_txt {
-        }
-
 /*-----------------------------------------*/
 
 .page_search {
@@ -490,7 +382,7 @@ span.multiselect-native-select {
             text-transform: uppercase;
             color: #bfbfbf;
             text-decoration: none;
-            font-size: 15px;
+            font-size: 12px;
         }
 
         .sidebar ol li:before {
@@ -1346,7 +1238,7 @@ p {
     width: 100%;
     text-align: center;
     display: table;
-    margin: 40px 0 30px;
+    /*margin: 40px 0 30px;*/
 }
 
     .page_status .status_pending, .page_status .status_completed {
@@ -1451,3 +1343,75 @@ p {
         }
 
 /*-----------------------------------------*/
+
+
+
+.basic-page .form-control {
+    display: block;
+    width: 100%;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 0px solid #ccc;
+    border-radius: 4px;
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    box-shadow: 1px 1px 1px #d8d8d8;
+    outline: none;
+}
+
+.basic-page label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #747474;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.basic-page .form-group {
+    margin-bottom: 21px;
+}
+
+.basic-page .btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    min-width: 150px;
+    padding: 11px 15px;
+    margin-right: 15px;
+    text-transform: uppercase;
+    transition: all 400ms;
+}
+
+
+
+
+.right-sidebar {
+    background: #FFF;
+    width: 20%;
+    padding-top: 7%;
+    height: 100%;
+    right: 0;
+    float: right;
+    position: absolute;
+}
+
+.main-content h4 {
+    text-align: left;
+    font-family: 'Dosis', sans-serif;
+    text-shadow: none;
+    color: #323544;
+    font-size: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    margin-top: 0;
+}

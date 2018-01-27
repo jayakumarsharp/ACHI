@@ -26,7 +26,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-;(function (root, factory) {
+; (function (root, factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         // AMD is used - Register as an anonymous module.
@@ -337,21 +337,29 @@ THE SOFTWARE.
                 picker.widget.removeClass('pull-right');
             }
 
+            var leftval = offset.left;
+            var rightval = offset.right;
+            if ($('.pushmenu-left').offset().left == 0) {
+                if (offset.left != "auto")
+                    leftval = offset.left - 290;
+                else
+                    rightval = rightval + 290;
+            }
             if (placePosition === 'top') {
                 picker.widget.css({
                     position: position,
                     bottom: offset.bottom,
                     top: 'auto',
-                    left: offset.left,
-                    right: offset.right
+                    left: leftval,
+                    right: rightval
                 });
             } else {
                 picker.widget.css({
                     position: position,
                     top: offset.top,
                     bottom: 'auto',
-                    left: offset.left,
-                    right: offset.right
+                    left: leftval,
+                    right: rightval
                 });
             }
         },
@@ -474,7 +482,7 @@ THE SOFTWARE.
                 } else if (prevMonth.year() > year || (prevMonth.year() === year && prevMonth.month() > month)) {
                     clsName += ' new';
                 }
-                if (prevMonth.isSame(moment({y: picker.date.year(), M: picker.date.month(), d: picker.date.date()}))) {
+                if (prevMonth.isSame(moment({ y: picker.date.year(), M: picker.date.month(), d: picker.date.date() }))) {
                     clsName += ' active';
                 }
                 if (isInDisableDates(prevMonth, 'day') || !isInEnableDates(prevMonth)) {
@@ -573,7 +581,7 @@ THE SOFTWARE.
         fillMinutes = function () {
             var table = picker.widget.find('.timepicker .timepicker-minutes table'), html = '', current = 0, i, j, step = picker.options.minuteStepping;
             table.parent().hide();
-            if (step === 1)  {
+            if (step === 1) {
                 step = 5;
             }
             for (i = 0; i < Math.ceil(60 / step / 4) ; i++) {
@@ -803,7 +811,7 @@ THE SOFTWARE.
                 rv = actions[action].apply(picker, arguments);
             stopEvent(e);
             if (!picker.date) {
-                picker.date = moment({y: 1970});
+                picker.date = moment({ y: 1970 });
             }
             set();
             fillTime();
@@ -915,7 +923,7 @@ THE SOFTWARE.
                     'focus': picker.show,
                     'change': change,
                     'click': picker.show,
-                    'blur' : picker.hide
+                    'blur': picker.hide
                 });
             } else {
                 picker.element.off({
@@ -1277,7 +1285,7 @@ THE SOFTWARE.
             if (newDate.isValid()) {
                 picker.date = newDate;
                 set();
-                picker.viewDate = moment({y: picker.date.year(), M: picker.date.month()});
+                picker.viewDate = moment({ y: picker.date.year(), M: picker.date.month() });
                 fillDate();
                 fillTime();
             }
@@ -1367,7 +1375,7 @@ THE SOFTWARE.
         useCurrent: true,
         calendarWeeks: false,
         minuteStepping: 1,
-        minDate: moment({y: 1900}),
+        minDate: moment({ y: 1900 }),
         maxDate: moment().add(100, 'y'),
         showToday: true,
         collapse: true,

@@ -149,9 +149,34 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateClient(Client client)
+        public JsonResult  UpdateClient(Client client)
         {
+            if (client.FirstInterestPaymentDate != "" && client.FirstInterestPaymentDate != null)
+            {
+                DateTime FirstInterestPaymentDate = DateTime.ParseExact(client.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                client.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
 
+            if (client.FirstUtilisationDate != "" && client.FirstUtilisationDate != null)
+            {
+                DateTime FirstUtilisationDate = DateTime.ParseExact(client.FirstUtilisationDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                client.FirstUtilisationDate = FirstUtilisationDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+            if (client.LoanDateAggrmnt != "" && client.LoanDateAggrmnt != null)
+            {
+                DateTime LoanDateAggrmnt = DateTime.ParseExact(client.LoanDateAggrmnt, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                client.LoanDateAggrmnt = LoanDateAggrmnt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+            if (client.ProposedDealCommencementDate != "" && client.ProposedDealCommencementDate != null)
+            {
+                DateTime ProposedDealCommencementDate = DateTime.ParseExact(client.ProposedDealCommencementDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                client.ProposedDealCommencementDate = ProposedDealCommencementDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            string errordesc = "";
+            int errorcode = 0;
+            _dbOperations.Updateclientdata(client, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Client

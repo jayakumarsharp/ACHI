@@ -66,14 +66,12 @@
    .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-    //    DTColumnBuilder.newColumn('ClientNumber').withTitle('ClientNumber'),
-    //DTColumnBuilder.newColumn('TaskId').withTitle('TaskId'),
-    DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
-    DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
-    DTColumnBuilder.newColumn('IsActive').withTitle('IsActive'),
-    DTColumnBuilder.newColumn('IsMappedToTask').withTitle('IsMappedToTask'),
-    DTColumnBuilder.newColumn('IsProcessed').withTitle('IsProcessed'),
-    DTColumnBuilder.newColumn('CreatedDate').withTitle('CreatedDate'),
+    DTColumnBuilder.newColumn('EmailId').withTitle('Email Id'),
+    DTColumnBuilder.newColumn('EmailSubject').withTitle('Subject'),
+    DTColumnBuilder.newColumn('IsActive').withTitle('Active').withOption('width', '3%'),
+    DTColumnBuilder.newColumn('IsMappedToTask').withTitle('IsMappedToTask').withOption('width', '3%'),
+    DTColumnBuilder.newColumn('IsProcessed').withTitle('IsProcessed').withOption('width', '3%'),
+    DTColumnBuilder.newColumn('CreatedDate').withTitle('DateTime'),
     //DTColumnBuilder.newColumn('EmailAttachment').withTitle('EmailAttachment'),
     //DTColumnBuilder.newColumn('CreatedBy').withTitle('CreatedBy'),
     //DTColumnBuilder.newColumn('EmailContent').withTitle('EmailContent'),
@@ -154,7 +152,7 @@
 
 
     $scope.UpdatecurrencyConversion = function (model) {
-        model.UpdatedBy = $rootScope.UserInfo.user.userId;
+        model.UpdatedBy = '';//$rootScope.UserInfo.user.userId;
         EmailService.UpdatecurrencyConversion(model).success(function (data) {
             $scope.editMode = false;
             toaster.pop('success', "Success", "Currency rate updated successfully", null);

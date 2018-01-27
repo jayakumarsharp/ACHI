@@ -791,7 +791,7 @@ public class DbOperations
             errorcode = 0;
             errordesc = "success";
             //create command and assign the query and connection from the constructor
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Client", connection))
+            using (MySqlCommand cmd = new MySqlCommand("sp_update_Client", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new MySqlParameter("i_ClientNumber", _clientInfo.ClientNumber));

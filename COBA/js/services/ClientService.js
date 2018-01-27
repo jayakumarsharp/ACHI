@@ -16,8 +16,8 @@ ReportApp.factory('ClientService', function ($http) {
         return $http.post(ClientServiceURI + 'InsertClient', currencysheet);
     }
 
-    ClientServiceFactory.UpdatecurrencyConversion = function (currencysheet) {
-        return $http.post(ClientServiceURI + 'currency/ModifyCurrencyConversion', currencysheet);
+    ClientServiceFactory.UpdateClient = function (currencysheet) {
+        return $http.post(ClientServiceURI + 'UpdateClient', currencysheet);
     }
 
 

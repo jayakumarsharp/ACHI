@@ -129,7 +129,7 @@
         let GetAllStrategytype = apiService.GetAllStrategytype()
         let GetAllCapacity = apiService.GetAllCapacity()
         let GetAllRegion = apiService.GetAllRegion()
-
+        let GetUsers = UserFactory.GetUser('NA');
         $q.all([
         GetAllCountry,
         GetAllFTAApplicationCode,
@@ -147,7 +147,7 @@
          GetAllVenuetype,
         GetAllStrategytype,
         GetAllCapacity,
-        GetAllRegion
+        GetAllRegion, GetUsers
         ]).then(function (resp) {
             console.log(resp)
             $scope.CountryMasterList = resp[0].data;
@@ -167,7 +167,7 @@
             $scope.StrategytypeList = resp[14].data;
             $scope.CapacityList = resp[15].data;
             $scope.RegionMasterList = resp[16].data;
-
+            $scope.FTAApplicationOwnerList = resp[17].data;
             binddata($scope.CountryMasterList);
         });
         $timeout(function () {
@@ -300,6 +300,7 @@
             $scope.selectModel.ThirdPartyApp = getdynamicobject($scope.selectModel.ThirdPartyAppId, "ThirdPartyList");
             $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
             $scope.selectModel.Description = $scope.selectModel.Description;
+            $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwner, "FTAApplicationOwnerList");
             $scope.userfilter(true);
             $scope.activateTab(0);
             for (var i = 0; i < $scope.pageList.length; i++) {
@@ -343,6 +344,7 @@
     $scope.openpopup = function (type) {
         $('#viewFiles').modal('show');
     }
+
     var getdynamicobject = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
             if ($scope[type][i].Id == userId) {
@@ -463,23 +465,18 @@
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
-
     };
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;
         $('#confirmModal').modal('show');
     };
-
     $scope.cancel = function () {
         cleardata();
         binddata($scope.CountryMasterList);
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
     };
-
-
     function cleardata() {
         $scope.currency = {};
         $scope.selectModel = { Application: {}, Country: {}, ProductType: {}, BusinessSector: {}, Region: {} };
@@ -488,41 +485,38 @@
         $scope.multiselect.selected = [];
         $scope.multiselect.options = [];
     }
-
     $scope.checksignoff = function () {
         if ($scope.selectModel.FTAStrategyOwner.UserName) {
             if ($scope.userId.toLowerCase() == $scope.selectModel.FTAStrategyOwner.UserName.toLowerCase())
                 $scope.ApprovalCheck.ShowSignOff = true;
         }
     }
-
     $scope.userfilter = function (state) {
         try {
             var Region = $scope.selectModel.Region.Id;
             var BusinessLine = $scope.selectModel.BusinessLine.Id;
             if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
                 ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
-                    $scope.FTAApplicationOwnerList = data;
+                    //$scope.FTAApplicationOwnerList = data;
                     $scope.FTAStrategyOwnerList = data;
                     if (state) {
                         $scope.selectModel.FTAStrategyOwner = getdynamicobjectuserfilter($scope.selectModel.FTAStrategyOwnerId, "FTAStrategyOwnerList")
-                        $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwnerId, "FTAApplicationOwnerList")
+                        //$scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwnerId, "FTAApplicationOwnerList")
                     }
+                    //if ($scope.AppOwnername != '')
+                    //    $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.AppOwnername, "FTAApplicationOwnerList");
                 }).error(function (error) {
                     $scope.Error = error;
                 })
             }
             else {
-                $scope.FTAApplicationOwnerList = [];
                 $scope.FTAStrategyOwnerList = [];
             }
         }
         catch (e) {
         }
     }
-
     $scope.userfilter1 = function () {
-        console.log($scope.selectModel)
         if ($scope.selectModel.FTAStrategyCode.FTAStrategyCode && $scope.selectModel.FTAApplicationCode.FTAApplicationCode && $scope.selectModel.DiscretionaryCode.DiscretionaryCode && $scope.selectModel.BusinessSuffix.BusinessSuffix) {
             $scope.selectModel.FTAShortCode = $scope.selectModel.FTAStrategyCode.FTAStrategyCode + $scope.selectModel.FTAApplicationCode.FTAApplicationCode + $scope.selectModel.DiscretionaryCode.DiscretionaryCode + $scope.selectModel.BusinessSuffix.BusinessSuffix;
         }
@@ -531,7 +525,6 @@
     }
 
     $scope.userfilter2 = function () {
-        console.log($scope.selectModel)
         if ($scope.selectModel.Strategytype && $scope.selectModel.Venuetype && $scope.selectModel.Capacity) {
             $scope.selectModel.PriorityScore = parseInt($scope.selectModel.Strategytype.Strategytype) + parseInt($scope.selectModel.Venuetype.Venuetype) + parseInt($scope.selectModel.Capacity.Capacity);
         }
@@ -553,21 +546,23 @@
     $scope.userfilter3 = function () {
         try {
             var Business = $scope.selectModel.FTAApplicationName;
+
             if (Business != "" && Business != undefined) {
                 ApiCall.MakeApiCall("GetAllFTAApplicationMappingbyId?Id=" + Business.Id, 'GET', '').success(function (data) {
-                    console.log(data);
                     if (data.length > 0) {
                         $scope.selectModel.FTAApplicationMappingId = data[0].Id;
                         $scope.selectModel.FTAApplicationCode = getdynamicobject(data[0].FTAApplicationCodeId, "FTAApplicationCodeList")
                         $scope.selectModel.FTAApplicationName = getdynamicobject(data[0].FTAApplicationNameId, "FTAApplicationNameList")
                         $scope.selectModel.ChildID = getdynamicobject(data[0].ChildId, "ChildIDList")
                         $scope.selectModel.ThirdPartyApp = getdynamicobject(data[0].ThirdPartyAppId, "ThirdPartyList");
+                        $scope.selectModel.ApplicationCategory = getdynamicobject(data[0].ApplicationCategoryId, "ApplicationCategoryList");
+                        $scope.selectModel.ParentID = getdynamicobject(data[0].ParentIDValue, "ParentIDList");
+                        $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter(data[0].ApplicationOwnerId, "FTAApplicationOwnerList");
                         $scope.userfilter1();
                     }
                     else {
                         clearfilter3();
                     }
-
                 }).error(function (error) {
                     $scope.Error = error;
                 })
@@ -586,6 +581,9 @@
         //$scope.selectModel.FTAApplicationName = {};
         $scope.selectModel.ChildID = {};
         $scope.selectModel.ThirdPartyApp = {};
+        $scope.selectModel.ApplicationCategory = {};
+        $scope.selectModel.ParentID = {};
+        $scope.selectModel.ApplicationOwnerId = {};
         $scope.userfilter1();
     }
 

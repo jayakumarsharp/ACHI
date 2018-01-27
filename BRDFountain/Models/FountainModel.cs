@@ -227,7 +227,7 @@ namespace BRDFountain.Models
         public string DecomissionedDate { get; set; }
         public int DiscretionaryCodeId { get; set; }
         public string DiscretionaryCode { get; set; }
-        public int ParentIDValue { get; set; }
+        public string ParentIDValue { get; set; }
         public string ParentID { get; set; }
         public string FTAApplicationOwnerId { get; set; }
         public string FTAApplicationOwner { get; set; }
@@ -372,7 +372,7 @@ namespace BRDFountain.Models
         public string BusinessSectorName { get; set; }
 
     }
-    
+
 
 
     public class FTAStrategyCodeMaster
@@ -529,6 +529,16 @@ namespace BRDFountain.Models
         public string FTAApplicationCode { get; set; }
         public string FTAApplicationNameId { get; set; }
         public string FTAApplicationName { get; set; }
+
+        public string ParentID { get; set; }
+        public string ParentIDValue { get; set; }
+
+        public string ApplicationOwnerId { get; set; }
+        public string ApplicationOwner { get; set; }
+
+        public string ApplicationCategoryId { get; set; }
+        public string ApplicationCategory { get; set; }
+
     }
     public static class SimpleComparer
     {
