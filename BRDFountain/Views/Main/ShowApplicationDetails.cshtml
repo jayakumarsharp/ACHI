@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label>Go-Live date </label>
                     <div class="col-lg-12">
-                        <div class='input-group date' datetimepicker ng-model="selectModel.GOLiveDate">
+                        <div class='input-group date' datetimepicker ng-model="selectModel.GOLiveDate" ng-change="changeGoLive(selectModel.GOLiveDate)">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>System Flow &nbsp;<span ng-click="openpopup()" class="label label-success pull-right">{{UploadedSList.length}}</span></label>
+                    <label>System Flow &nbsp;<span ng-click="openpopup(true)" class="label label-success pull-right">{{UploadedSList.length}}</span></label>
                     <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Systemflowfile" multiple name="file" />
                     @*<i ng-show="upload_form.file.$error.required">*required</i><br>
                         <i ng-show="upload_form.file.$error.maxSize">
@@ -129,7 +129,7 @@
                 <div class="form-group">
                     <label>Decommissioned Date</label>
                     <div class="col-lg-12">
-                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate">
+                        <div class='input-group date' datetimepicker ng-model="selectModel.DecomissionedDate" ng-change="changeDecommisiondate(selectModel.DecomissionedDate)">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Decommissioned Evidence &nbsp;<span ng-click="openpopup()" class="label label-success pull-right">{{UploadedDList.length}}</span></label>
+                    <label>Decommissioned Evidence &nbsp;<span ng-click="openpopup(false)" class="label label-success pull-right">{{UploadedDList.length}}</span></label>
                     <input type="file" class="btn btn-sm btn-info btn-rounded" ngf-select ng-model="selectModel.Decommissionedfile" multiple name="file" />
                     @*<i ng-show="upload_form.file.$error.required">*required</i><br>
                         <i ng-show="upload_form.file.$error.maxSize">
@@ -265,7 +265,7 @@
             </span>&nbsp;
 
             <span ng-show="!editMode">
-                <input type="button" value="Save" ng-disabled="adduserform.$invalid" ng-click="InsertStrategy(currency)" class="btn btn-primary" />
+                <input type="button" value="Save" ng-disabled="adduserform.$invalid && selectModel.GOLiveDate ==''" ng-click="InsertStrategy(currency)" class="btn btn-primary" />
             </span>&nbsp;
             <span ng-show="editMode">
                 <input type="button" value="Update" ng-click="UpdateStrategy(currency)" class="btn btn-primary" />
@@ -287,10 +287,10 @@
                 </button>
                 <h4 class="modal-title text-center" id="myModalLabel">Uploaded Files</h4>
             </div>
-            <div class="row">
+            <div class="row" ng-show="Issystemflow">
                 <div style="padding:30px">
 
-                    <div ng-if="UploadedSList.length>0">
+                    <div ng-if="UploadedSList.length>0 ">
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
@@ -316,7 +316,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-show="!Issystemflow">
                 <div style="padding:30px">
                     <div ng-if="UploadedDList.length>0">
                         <table class="table table-responsive">

@@ -66,12 +66,13 @@
    .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-    DTColumnBuilder.newColumn('EmailId').withTitle('Email Id'),
+    DTColumnBuilder.newColumn('EmailId').withTitle('EmailID'),
     DTColumnBuilder.newColumn('EmailSubject').withTitle('Subject'),
-    DTColumnBuilder.newColumn('IsActive').withTitle('Active').withOption('width', '3%'),
-    DTColumnBuilder.newColumn('IsMappedToTask').withTitle('IsMappedToTask').withOption('width', '3%'),
-    DTColumnBuilder.newColumn('IsProcessed').withTitle('IsProcessed').withOption('width', '3%'),
+    //DTColumnBuilder.newColumn('IsActive').withTitle('Active').withOption('width', '3%'),
+
+    //DTColumnBuilder.newColumn('IsProcessed').withTitle('IsProcessed').withOption('width', '3%'),
     DTColumnBuilder.newColumn('CreatedDate').withTitle('DateTime'),
+    DTColumnBuilder.newColumn('IsMappedToTask').withTitle('MappedToTask').renderWith(actionsStatus).withOption('width', '15%'),
     //DTColumnBuilder.newColumn('EmailAttachment').withTitle('EmailAttachment'),
     //DTColumnBuilder.newColumn('CreatedBy').withTitle('CreatedBy'),
     //DTColumnBuilder.newColumn('EmailContent').withTitle('EmailContent'),
@@ -98,7 +99,13 @@
         //'</button>';
     }
     $scope.getallcurrencyconversions();
-
+    function actionsStatus(data, type, full, meta) {
+        if (data == "Y")
+            return '<a  class="dta-act">Yes</a>';
+        else {
+            return '<a  class="test2 dta-act-not">No</a>';
+        }
+    }
     $scope.showadd = function () {
         $timeout(function () {
             $scope.errorinfo = '';

@@ -1670,6 +1670,7 @@
     <Content Include="js\controllers\BusinessLineMasterController.js" />
     <Content Include="js\controllers\CountryMasterController.js" />
     <Content Include="js\controllers\EmailsController.js" />
+    <Content Include="js\controllers\MapClientTaskController.js" />
     <Content Include="js\controllers\MapTaskController.js" />
     <Content Include="js\controllers\RegionMasterController.js" />
     <Content Include="js\controllers\TaskController.js" />
@@ -1928,6 +1929,7 @@
     <Content Include="Views\Main\UserManagement.cshtml" />
     <Content Include="Views\Main\BusinessLine.cshtml" />
     <Content Include="Views\Main\ConfirmModal.cshtml" />
+    <Content Include="Views\Main\MapClientTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

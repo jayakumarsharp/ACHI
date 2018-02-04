@@ -83,7 +83,7 @@
 
                     </li>*@
 
-                <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
+                <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu)"> <span><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
                 @*<li ng-class="{'active': rootname == 'MappingMaster' }"><a href="MappingMaster" ng-click="updatemenuclick('MappingMaster')"> <span class="icon"><i class="fa fa-star-o"></i></span> Mapping Page</a></li>*@
             </ul>
 
@@ -91,6 +91,7 @@
     </nav>
     <section class="buttonset">
         <div id="nav_list">MENU</div>
+        <h1 class="header">{{MenuName}}</h1>
         <div class="set">
             <div class="user_set">
                 <img src="~/images/User/1.jpg" class="user_img" />
@@ -106,7 +107,7 @@
                     </a>
                 </div>*@
             <div class="log_out">
-                <a href="@Url.Action("Logout", "Home")">
+                <a ng-click="clearlogout()" href="@Url.Action("Logout", "Home")">
                     <div class="txt">Logout</div>
                     <div class="btn_logout">
                         <img src="~/images/logout.svg" />
@@ -239,6 +240,7 @@
     <script src="~/js/controllers/TaskController.js"></script>
     <script src="~/js/controllers/OnboardingTaskController.js"></script>
     <script src="~/js/controllers/MapTaskController.js"></script>
+    <script src="~/js/controllers/MapClientTaskController.js"></script>
     <script src="~/js/controllers/EmailsController.js"></script>
     <script src="~/js/services/ClientService.js"></script>
     <script src="~/js/services/TaskService.js"></script>

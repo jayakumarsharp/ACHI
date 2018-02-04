@@ -30,7 +30,7 @@ namespace CRMManagement.Controllers
             return View();
         }
 
-        
+
 
         [SessionTimeout]
         public ActionResult RoleManagement()
@@ -43,7 +43,7 @@ namespace CRMManagement.Controllers
             return View();
         }
 
-        
+
         [SessionTimeout]
         public ActionResult Region()
         {
@@ -98,11 +98,11 @@ namespace CRMManagement.Controllers
             return View();
         }
 
-
-        public ActionResult Logout()
+        public ActionResult MapClientTask()
         {
-            return RedirectToAction("LoginDisplay", "Home");
+            return View();
         }
+
 
         #region Client
 
@@ -149,7 +149,7 @@ namespace CRMManagement.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult  UpdateClient(Client client)
+        public JsonResult UpdateClient(Client client)
         {
             if (client.FirstInterestPaymentDate != "" && client.FirstInterestPaymentDate != null)
             {
@@ -279,6 +279,20 @@ namespace CRMManagement.Controllers
         #region MapTask
 
 
+        public JsonResult GetAllClientTask()
+        {
+            List<MapTasks> lst = _dbOperations.GetClientMapTaskData();
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetClientMappedTask(string type)
+        {
+
+            List<MapTasks> lst = _dbOperations.GetClientMappedTask(type);
+                        return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult Get_Mapped_Mail_Task(string type)
         {
             List<MapTasks> lst = _dbOperations.Get_Mapped_Mail_Task(type);
@@ -304,6 +318,14 @@ namespace CRMManagement.Controllers
             string errordesc = "";
             int errorcode = 0;
             _dbOperations.UpdateMapTaskdata(task, out errorcode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateClientMapTask(MapTasks task)
+        {
+            string errordesc = "";
+            int errorcode = 0;
+            _dbOperations.UpdateclientMapTaskdata(task, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
@@ -501,6 +523,9 @@ namespace CRMManagement.Controllers
             _dbOperations.DeleteUser(user);
             return Json("", JsonRequestBehavior.AllowGet);
         }
+
+
+
         #endregion User
 
         #region BusinessLine
@@ -706,6 +731,15 @@ public static class Utilities
 }
 
 
+
+public class TaskMaster
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+
+}
+
+
 public class CountryMaster
 {
     public string Id { get; set; }
@@ -775,7 +809,7 @@ public class MapTasks
     public string EmailSubject { get; set; }
     public string EmailContent { get; set; }
     public string EmailAttachment { get; set; }
-
+    public List<TaskMaster> TaskmasterList { get; set; }
 }
 
 
@@ -1068,6 +1102,13 @@ public class UserMaster
     public string UserName { get; set; }
     public string userId { get; set; }
     public string Id { get; set; }
+
+
+
+    public List<CountryMaster> CountryList { get; set; }
+    public List<RegionMaster> RegionList { get; set; }
+    public List<BusinessSector> BusinessSectorList { get; set; }
+
 }
 
 public class Roles

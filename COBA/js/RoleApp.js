@@ -5,7 +5,7 @@
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('id').withTitle('ID'),
         DTColumnBuilder.newColumn('RoleName').withTitle('Role Name'),
-        DTColumnBuilder.newColumn('id').withTitle('Actions').notSortable()
+        DTColumnBuilder.newColumn('id').withTitle('Action').notSortable()
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {

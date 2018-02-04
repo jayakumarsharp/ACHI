@@ -8,8 +8,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Map Tasks</h4>
-                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Map Tasks</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Map Task</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Map Task</h4>
                 </div>
                 <div class="modal-body">
 
@@ -115,17 +115,17 @@
     </div>
     <div class="page_status">
         <a ng-click="getallcurrencyconversions()" style="margin: 0 -5px;">
-            <div class="status_pending active">
+            <div class="status_completed" ng-class="{'active': selectedarea ==  'AllTask' }">
                 <div class="number">
                     {{totaltask}}
                 </div>
                 <div class="status_txt">
-                    All Tasks
+                    All Task
                 </div>
             </div>
         </a>
-        <a ng-click="GetMappingTask(true)">
-            <div class="status_completed">
+        <a ng-click="GetMappingTask(true)" >
+            <div class="status_completed" ng-class="{'active': selectedarea ==  'MapTask' }">
                 <div class="number">
                     {{Mappedtask}}
                 </div>
@@ -135,7 +135,7 @@
             </div>
         </a>
         <a ng-click="GetUnMappingTask(true)">
-            <div class="status_completed">
+            <div class="status_completed"  ng-class="{'active': selectedarea ==  'UnMapTask' }">
                 <div class="number">
                     {{UnMappedtask}}
                 </div>
@@ -146,8 +146,10 @@
         </a>
     </div>
 
-    <div class="row">
-        <table class="table table-responsive" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
+    <div class="col-md-12 data-table">
+        <div class="row">
+            <table class="table table-responsive" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
+        </div>
     </div>
 </section>
 

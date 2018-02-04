@@ -1,15 +1,9 @@
 ﻿ReportApp.controller('ClientController', function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
-
     $scope.errorinfo = '';
     $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
-    $scope.Currency = [];
-    $scope.LegalEntity = [];
     $scope.ecurrency = {};
-    $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
             if (value.RightName.contains('Currency Rate Write')) {
@@ -29,17 +23,12 @@
     $scope.Confirmcancel = function () {
         $('#confirmModal').modal('show');
     }
-
-    $scope.getallcurrencyconversions = function () {
-
+    $scope.getclientdata = function () {
         ClientService.GetAllCurrencyConversion().success(function (data) {
             console.log(data);
             $scope.dtOptions.data = data
         })
     };
-
-    $scope.getallcurrencyconversions();
-
     $scope.dtOptions = DTOptionsBuilder.fromSource()
       .withPaginationType('full_numbers').withOption('createdRow', createdRow).withOption('rowCallback', rowCallback);
     $scope.dtColumns = [
@@ -66,33 +55,7 @@
             });
         });
     }
-    //$scope.CurrencyGrid = {
-    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
-    //    paginationPageSize: 10,
-    //    //enableFiltering: true,
-    //    //angularCompileRows: true,
-    //    columnDefs: [{ name: '' },
-    //    { name: '' },
-    //    { name: '' },
-    //    { name: '' },
-    //    { name: '' },
-    //    { name: '' },
-    //    {
-    //        name: 'IsSignOff', width: 70,
-    //        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsSignOff=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsSignOff=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-    //    },
-    //    {
-    //        name: 'IsActive',
-    //        cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-    //    },
-    //    {
-    //        field: 'Action', width: 70
-    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.ClientNumber)" ><i class="fa fa-edit" ></i></a ></div>'
 
-    //    }
-    //    ],
-
-    //};
     $scope.showaction = false;
     $scope.showadd = function () {
         $scope.showaction = true;
@@ -101,8 +64,6 @@
             $scope.ClientActive = false;
             $scope.IsSignOff = false;
         }, 100);
-
-
         $scope.editMode = false;
         $scope.currency = {};
         $scope.ecurrency.CurrencyDescrition = '';
@@ -112,7 +73,6 @@
 
     $scope.GetAllCurrency = function () {
         ClientService.GetAllCurrency().success(function (data) {
-            //$scope.Currency = data;
             $scope.dtOptions.data = data
         }).error(function (error) {
             $scope.Error = error;
@@ -173,7 +133,7 @@
         var crc = { Id: $scope.Id };
         ClientService.DeletecurrencyConversion(crc).success(function (data) {
             $scope.editMode = false;
-            $scope.getallcurrencyconversions();
+            $scope.getclientdata();
             $('#confirmModal').modal('hide');
             toaster.pop('success', "Success", "Currency rate deleted successfully", null);
         }).error(function (data) {
@@ -191,7 +151,7 @@
                 $scope.editMode = false;
                 //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
-                $scope.getallcurrencyconversions()
+                $scope.getclientdata()
             }
             else
                 $scope.errorinfo = data;
@@ -250,7 +210,7 @@
             $scope.ecurrency.CurrencyDescrition = '';
         }
     };
-
+    $scope.getclientdata();
     $scope.GetRightsList();
 
 });

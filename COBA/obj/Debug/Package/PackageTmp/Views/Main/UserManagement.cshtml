@@ -2,13 +2,13 @@
 <section class="content">
 
     <div ng-controller="UserController" class="nav-tabs-custom">
-        <div class="box-header with-border">
-            <h4> User Management   </h4>
-        </div>
+        @*<div class="box-header with-border">
+                <h4> User Management   </h4>
+            </div>*@
 
         <div class="row pull-right">
-            <button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
-            <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-primary">Manual User<i class="fa fa-plus"></i></button>
+            @*<button ng-show="!IsReadOnly" data-ng-click="showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>*@
+            <button ng-show="!IsReadOnly" data-ng-click="showtempadd()" class="btn btn-primary">Add User</button>
         </div>
 
         <section class="content">
@@ -183,7 +183,7 @@
                                 <div class="form-group">
                                     <label for="SBU" class="col-sm-4 control-label">Business Sector</label>
                                     <div class="col-sm-6" style="margin-top:6px">
-                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessSectorName for item in BusinessSectorMasterList" title="Select Country" style="width:100%;font-size: 0.8em">
+                                        <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em">
                                             <option value="">- Select BusinessSector -</option>
                                         </select>
                                     </div>
@@ -271,10 +271,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="SBU" class="col-sm-4 control-label">Business Sector</label>
+                                    <label for="SBU" class="col-sm-4 control-label">Business Line</label>
                                     <div class="col-sm-6" style="margin-top:6px">
                                         <select class="form-control" name="ddlLocation" ng-model="user.BusinessSectorId" ng-options="item.Id as item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em">
-                                            <option value="">- Select BusinessSector -</option>
+                                            <option value="">- Select BusinessLine -</option>
                                         </select>
                                     </div>
                                 </div>

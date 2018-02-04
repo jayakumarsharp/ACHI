@@ -5,7 +5,7 @@
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(), ,
         DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
-        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+        DTColumnBuilder.newColumn('Id').withTitle('Action').notSortable()
             .renderWith(actionsHtml)
     ];
 

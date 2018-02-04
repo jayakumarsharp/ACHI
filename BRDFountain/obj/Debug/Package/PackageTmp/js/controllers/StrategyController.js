@@ -42,17 +42,31 @@
         else {
             return '<a  class="test2 dta-act-not">Pending</a>';
         }
-
     }
 
     function activeStatus(data, type, full, meta) {
-        var date1 = moment(data, 'MM/DD/YYYY');
-        var currentdate = moment();
-
-        if (currentdate < date1)
-            return '<a  class="dta-act">Active</a>';
+        var GOLiveDate = moment(full.GOLiveDate, 'MM/DD/YYYY');
+        if (full.DecomissionedDate)
+            var DecomissionedDate = moment(full.DecomissionedDate, 'MM/DD/YYYY');
         else
-            return '<a  class="dta-act-not">InActive</a>';
+            var DecomissionedDate = full.DecomissionedDate;
+        var currentdate = moment();
+        if (DecomissionedDate != '') {
+            if ((currentdate >= GOLiveDate && currentdate <= DecomissionedDate) || (currentdate >= DecomissionedDate && currentdate <= GOLiveDate)) // false
+                return '<a  class="dta-act">Active</a>';
+            else if (GOLiveDate >= currentdate)//&& DecomissionedDate <= currentdate)
+                return '<a  class="dta-sign">PipeLine</a>';
+            else if (DecomissionedDate < currentdate)
+                return '<a  class="dta-act-not">InActive</a>';
+        }
+        else {
+            if (GOLiveDate < currentdate)
+                return '<a  class="dta-act-not">InActive</a>';
+            else if (GOLiveDate > currentdate)
+                return '<a  class="dta-sign">PipeLine</a>';
+            else
+                return '<a  class="dta-act-not">InActive</a>';
+        }
     }
     $scope.Confirmcancel = function () {
         $('#confirmModal').modal('show');
@@ -300,6 +314,7 @@
             $scope.selectModel.ThirdPartyApp = getdynamicobject($scope.selectModel.ThirdPartyAppId, "ThirdPartyList");
             $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
             $scope.selectModel.Description = $scope.selectModel.Description;
+            $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwner, "FTAApplicationOwnerList");
             $scope.userfilter(true);
             $scope.activateTab(0);
             for (var i = 0; i < $scope.pageList.length; i++) {
@@ -496,11 +511,11 @@
             var BusinessLine = $scope.selectModel.BusinessLine.Id;
             if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
                 ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
-                    $scope.FTAApplicationOwnerList = data;
+                    //$scope.FTAApplicationOwnerList = data;
                     $scope.FTAStrategyOwnerList = data;
                     if (state) {
                         $scope.selectModel.FTAStrategyOwner = getdynamicobjectuserfilter($scope.selectModel.FTAStrategyOwnerId, "FTAStrategyOwnerList")
-                        $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwnerId, "FTAApplicationOwnerList")
+                        //$scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.FTAApplicationOwnerId, "FTAApplicationOwnerList")
                     }
                     //if ($scope.AppOwnername != '')
                     //    $scope.selectModel.FTAApplicationOwner = getdynamicobjectuserfilter($scope.AppOwnername, "FTAApplicationOwnerList");
@@ -714,6 +729,16 @@
         });
     }
 
+    $scope.changeDecommisiondate = function (value) {
+        $scope.selectModel.DecomissionedDate = value;
+    }
+    $scope.changeGoLive = function (value) {
+        $scope.selectModel.GOLiveDate = value;
+    }
+    $scope.openpopup = function (type) {
+        $scope.Issystemflow = type;
+        $('#viewFiles').modal('show');
+    }
 
     $scope.GetRightsList();
 

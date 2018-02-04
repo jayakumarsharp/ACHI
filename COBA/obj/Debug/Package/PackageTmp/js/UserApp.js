@@ -8,7 +8,7 @@
         DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
         DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
 
-        DTColumnBuilder.newColumn('checked').withTitle('Actions').notSortable()
+        DTColumnBuilder.newColumn('checked').withTitle('Action').notSortable()
             .renderWith(actionsHtml)
     ];
 
@@ -24,7 +24,7 @@
         //DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
         //DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
         //DTColumnBuilder.newColumn('BusinessSector').withTitle('BusinessSector'),
-       DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
+       DTColumnBuilder.newColumn('userId').withTitle('Action').notSortable()
            .renderWith(actionsHtml1)
     ];
 

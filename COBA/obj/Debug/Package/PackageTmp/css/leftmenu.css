@@ -1,24 +1,30 @@
 .pushmenu { /*this is the nav*/
-
     text-align: left;
     width: 290px;
     height: 100%;
     top: 0;
     z-index: 1000;
     position: fixed;
-
-    background-color: #e8c447;
-    background-image: url('../images/leftpanel_bg.png');
+    border-right: 1px solid #515253;
+    /*background-color: #e8c447;
+    background-image: url('../images/leftpanel_bg.png');*/
+    background-color: #fff;
     background-size: auto 100%;
     background-repeat: no-repeat;
-
+    -webkit-transition: 600ms;
+    -moz-transition: 600ms;
+    -o-transition: 600ms;
+    transition: 600ms;
 }
 
-.pushmenu h3 {
-    padding: 17px 30px 5px;
-    margin: 0;
-    background: #3e3105;
-}
+    .pushmenu h3 {
+        padding: 17px 30px 5px;
+        margin: 0;
+        /*background: #3e3105;*/
+        background-color: #2196f3;
+        /*background-image: linear-gradient(90deg,#23b7e5 0,#51c6ea);*/
+        background-repeat: repeat-x;
+    }
 
 .links {
     list-style-type: none;
@@ -27,91 +33,80 @@
     width: 100%;
     display: table;
 }
-.links li {
 
-    width: 100%;
-    display: grid;
+    .links li {
+        width: 100%;
+        display: grid;
+    }
+
+        .links li a {
+            color: #51410a;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 15px 25px;
+            display: block;
+        }
+
+            .links li a:hover, .links li a:active, .links li a:focus {
+                /*color: #3d3215;*/
+                background-color: #eaf3f8;
+                color: #252d38;
+                border-left-color: #796AEE;
+                text-decoration: none;
+                outline: 0;
+                box-shadow: inset 9px -5px 0px -5px #3e3105;
+            }
+
+        .links li.active a {
+            background-color: #eaf3f8;
+            color: #252d38;
+            border-left-color: #796AEE;
+            text-decoration: none;
+            outline: 0;
+            box-shadow: inset 9px -5px 0px -5px #3e3105;
+        }
+
+
+
+
+        .links li .icon {
+            width: 20px;
+            height: 20px;
+            padding: 0 0 0 25px;
+            margin-right: 15px;
+        }
+
+
+
+
+
+
+.pushmenu-left {
+    left: -290px;
 }
-.links li a {
-    color: #51410a;
-    font-size: 16px;
-    font-weight: 400;
-    padding: 15px 25px;
-    display: block;
-}
-.links li a:hover, .links li a:active, .links li a:focus {
-    color: #3d3215;
-    background-color: #d3b13b;
-    text-decoration: none;
-    outline: 0;
-    box-shadow: inset 9px -5px 0px -5px #3e3105;
-}
-.links li.active a{
-    color: #3d3215;
-    background-color: #d3b13b;
-    text-decoration: none;
-    outline: 0;
-    box-shadow: inset 9px -5px 0px -5px #3e3105;
-}
 
+    .pushmenu-left.pushmenu-open {
+        left: 0;
+    }
 
-
-
-.links li .icon {
-    width: 20px;
-    height: 20px;
-    padding: 0 0 0 25px;
-    margin-right: 15px;
-}
-
-.links li:nth-child(1) .icon{ background: url(../images/menu_icon/1.svg) no-repeat;}
-.links li:nth-child(2) .icon{ background: url(../images/menu_icon/2.svg) no-repeat;}
-.links li:nth-child(3) .icon{ background: url(../images/menu_icon/3.svg) no-repeat;}
-.links li:nth-child(4) .icon{ background: url(../images/menu_icon/4.svg) no-repeat;}
-.links li:nth-child(5) .icon{ background: url(../images/menu_icon/5.svg) no-repeat;}
-.links li:nth-child(6) .icon{ background: url(../images/menu_icon/6.svg) no-repeat;}
-.links li:nth-child(7) .icon{ background: url(../images/menu_icon/7.svg) no-repeat;}
-.links li:nth-child(8) .icon{ background: url(../images/menu_icon/8.svg) no-repeat;}
-.links li:nth-child(9) .icon{ background: url(../images/menu_icon/9.svg) no-repeat;}
-.links li:nth-child(10) .icon{ background: url(../images/menu_icon/10.svg) no-repeat;}
-.links li:nth-child(11) .icon{ background: url(../images/menu_icon/11.svg) no-repeat;}
-.links li:nth-child(12) .icon{ background: url(../images/menu_icon/12.svg) no-repeat;}
-
-
-.links li:hover:nth-child(1) .icon, .links li.active:nth-child(1) .icon{ background: url(../images/menu_icon/1h.svg) no-repeat; }
-.links li:hover:nth-child(2) .icon, .links li.active:nth-child(2) .icon{ background: url(../images/menu_icon/2h.svg) no-repeat; }
-.links li:hover:nth-child(3) .icon, .links li.active:nth-child(3) .icon{ background: url(../images/menu_icon/3h.svg) no-repeat; }
-.links li:hover:nth-child(4) .icon, .links li.active:nth-child(4) .icon{ background: url(../images/menu_icon/4h.svg) no-repeat; }
-.links li:hover:nth-child(5) .icon, .links li.active:nth-child(5) .icon{ background: url(../images/menu_icon/5h.svg) no-repeat; }
-.links li:hover:nth-child(6) .icon, .links li.active:nth-child(6) .icon{ background: url(../images/menu_icon/6h.svg) no-repeat; }
-.links li:hover:nth-child(7) .icon, .links li.active:nth-child(7) .icon{ background: url(../images/menu_icon/7h.svg) no-repeat; }
-.links li:hover:nth-child(8) .icon, .links li.active:nth-child(8) .icon{ background: url(../images/menu_icon/8h.svg) no-repeat; }
-.links li:hover:nth-child(9) .icon, .links li.active:nth-child(9) .icon{ background: url(../images/menu_icon/9h.svg) no-repeat; }
-.links li:hover:nth-child(10) .icon, .links li.active:nth-child(10) .icon{ background: url(../images/menu_icon/10h.svg) no-repeat; }
-.links li:hover:nth-child(11) .icon, .links li.active:nth-child(11) .icon{ background: url(../images/menu_icon/11h.svg) no-repeat; }
-.links li:hover:nth-child(12) .icon, .links li.active:nth-child(12) .icon{ background: url(../images/menu_icon/12h.svg) no-repeat; }
-
-
-
-
-
-.pushmenu-left { left: -290px; }
-.pushmenu-left.pushmenu-open { left: 0; }
 .pushmenu-push {
     overflow-x: hidden;
     position: relative;
     left: 0;
 }
-.pushmenu-push-toright { left: 290px; }
 
-/*Transition*/
-.pushmenu-push-toright .main{
-    width: calc(100% - 290px);
+.pushmenu-push-toright {
+    left: 290px;
 }
 
-.pushmenu-push-toright .buttonset{
-    width: calc(100% - 290px);
-}
+    /*Transition*/
+    .pushmenu-push-toright .main {
+        width: calc(100% - 290px);
+    }
+
+    .pushmenu-push-toright .buttonset {
+        width: calc(100% - 290px);
+    }
 
 
 .pushmenu, .pushmenu-push {
@@ -140,90 +135,97 @@
     z-index: 9999;
     box-shadow: 1px 6px 10px RGBA(0,0,0,0.03);
 }
-.buttonset > .active {
-    background-position: -57px top !important;
-    left: 25px !important;
-    width: 200px !important;
-}
+
+    .buttonset > .active {
+        background-position: -57px top !important;
+        left: 25px !important;
+        width: 200px !important;
+    }
 
 
 
-.buttonset .set{
-    position: relative;
-    text-align: right;
-    height: 60px;
-    float: right;
-}
+    .buttonset .set {
+        position: relative;
+        text-align: right;
+        height: 60px;
+        float: right;
+    }
 
 
-.buttonset .set .user_set{
-    border-right: 1px solid #d7d8da;
-    vertical-align: middle;
-    text-align: right;
-    padding: 9px 30px;
-    float: left;
-}
-.buttonset .set .user_set .user_img{
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    vertical-align: middle;
-}
-.buttonset .set .user_set .user_name{
-    font-size: 18px;
-    color: #333333;
-    font-weight: 300;
-    display: inline-table;
-}
-.buttonset .set .user_set .user_online{
-    background-color: #51cb30;
-    border: 1px solid #fff;
-    width: 9px;
-    height: 9px;
-    display: inline-flex;
-    position: relative;
-    left: -11px;
-    top: -13px;
-    border-radius: 50%;
-}
+        .buttonset .set .user_set {
+            border-right: 1px solid #d7d8da;
+            vertical-align: middle;
+            text-align: right;
+            padding: 9px 30px;
+            float: left;
+        }
 
-.buttonset .set .action_set{
-    vertical-align: middle;
-    text-align: center;
-    border-right: 1px solid #d7d8da;
-    float: left;
-    padding: 18px 10px;
-}
+            .buttonset .set .user_set .user_img {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                vertical-align: middle;
+            }
 
-.buttonset .set .action_set .btn_bell, .buttonset .set .action_set .btn_setting{
-    margin: 0 15px;
-    width: 22px;
-    height: 22px;
-    position: relative;
-    top: 2px;
-}
+            .buttonset .set .user_set .user_name {
+                font-size: 18px;
+                color: #333333;
+                font-weight: 300;
+                display: inline-table;
+            }
 
-.buttonset .set .log_out{
-    vertical-align: middle;
-    text-align: right;
-    padding: 17px 30px;
-    float: left;
-}
-.buttonset .set .log_out .txt{
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 18px;
-    color: #333333;
-    font-weight: 300;
-    padding-right: 10px;
-}
-.buttonset .set .log_out .btn_logout{
-    display: table-cell;
-    vertical-align: middle;
-}
-.buttonset .set .log_out .btn_logout img{
-    width: 21px;
-    height: 21px;
-    position: relative;
-    top: 3px;
-}
+            .buttonset .set .user_set .user_online {
+                background-color: #51cb30;
+                border: 1px solid #fff;
+                width: 9px;
+                height: 9px;
+                display: inline-flex;
+                position: relative;
+                left: -11px;
+                top: -13px;
+                border-radius: 50%;
+            }
+
+        .buttonset .set .action_set {
+            vertical-align: middle;
+            text-align: center;
+            border-right: 1px solid #d7d8da;
+            float: left;
+            padding: 18px 10px;
+        }
+
+            .buttonset .set .action_set .btn_bell, .buttonset .set .action_set .btn_setting {
+                margin: 0 15px;
+                width: 22px;
+                height: 22px;
+                position: relative;
+                top: 2px;
+            }
+
+        .buttonset .set .log_out {
+            vertical-align: middle;
+            text-align: right;
+            padding: 17px 30px;
+            float: left;
+        }
+
+            .buttonset .set .log_out .txt {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 18px;
+                color: #333333;
+                font-weight: 300;
+                padding-right: 10px;
+            }
+
+            .buttonset .set .log_out .btn_logout {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+                .buttonset .set .log_out .btn_logout img {
+                    width: 21px;
+                    height: 21px;
+                    position: relative;
+                    top: 3px;
+                }

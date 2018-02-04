@@ -21,8 +21,8 @@
         padding: 17px 30px 5px;
         margin: 0;
         /*background: #3e3105;*/
-        background-color: #23b7e5;
-        background-image: linear-gradient(90deg,#23b7e5 0,#51c6ea);
+        background-color: #2196f3;
+        /*background-image: linear-gradient(90deg,#23b7e5 0,#51c6ea);*/
         background-repeat: repeat-x;
     }
 
@@ -48,16 +48,19 @@
         }
 
             .links li a:hover, .links li a:active, .links li a:focus {
-                color: #3d3215;
-                background-color: #23b7e5;
+                /*color: #3d3215;*/
+                background-color: #eaf3f8;
+                color: #252d38;
+                border-left-color: #796AEE;
                 text-decoration: none;
                 outline: 0;
                 box-shadow: inset 9px -5px 0px -5px #3e3105;
             }
 
         .links li.active a {
-            color: #3d3215;
-            background-color: #23b7e5;
+            background-color: #eaf3f8;
+            color: #252d38;
+            border-left-color: #796AEE;
             text-decoration: none;
             outline: 0;
             box-shadow: inset 9px -5px 0px -5px #3e3105;
@@ -73,102 +76,6 @@
             margin-right: 15px;
         }
 
-        .links li:nth-child(1) .icon {
-            background: url(../images/menu_icon/1.svg) no-repeat;
-        }
-
-        .links li:nth-child(2) .icon {
-            background: url(../images/menu_icon/2.svg) no-repeat;
-        }
-
-        .links li:nth-child(3) .icon {
-            background: url(../images/menu_icon/3.svg) no-repeat;
-        }
-
-        .links li:nth-child(4) .icon {
-            background: url(../images/menu_icon/4.svg) no-repeat;
-        }
-
-        .links li:nth-child(5) .icon {
-            background: url(../images/menu_icon/5.svg) no-repeat;
-        }
-
-        .links li:nth-child(6) .icon {
-            background: url(../images/menu_icon/6.svg) no-repeat;
-        }
-
-        .links li:nth-child(7) .icon {
-            background: url(../images/menu_icon/7.svg) no-repeat;
-        }
-
-        .links li:nth-child(8) .icon {
-            background: url(../images/menu_icon/8.svg) no-repeat;
-        }
-
-        .links li:nth-child(9) .icon {
-            background: url(../images/menu_icon/9.svg) no-repeat;
-        }
-
-        .links li:nth-child(10) .icon {
-            background: url(../images/menu_icon/10.svg) no-repeat;
-        }
-
-        .links li:nth-child(11) .icon {
-            background: url(../images/menu_icon/11.svg) no-repeat;
-        }
-
-        .links li:nth-child(12) .icon {
-            background: url(../images/menu_icon/12.svg) no-repeat;
-        }
-
-
-        .links li:hover:nth-child(1) .icon, .links li.active:nth-child(1) .icon {
-            background: url(../images/menu_icon/1h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(2) .icon, .links li.active:nth-child(2) .icon {
-            background: url(../images/menu_icon/2h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(3) .icon, .links li.active:nth-child(3) .icon {
-            background: url(../images/menu_icon/3h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(4) .icon, .links li.active:nth-child(4) .icon {
-            background: url(../images/menu_icon/4h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(5) .icon, .links li.active:nth-child(5) .icon {
-            background: url(../images/menu_icon/5h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(6) .icon, .links li.active:nth-child(6) .icon {
-            background: url(../images/menu_icon/6h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(7) .icon, .links li.active:nth-child(7) .icon {
-            background: url(../images/menu_icon/7h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(8) .icon, .links li.active:nth-child(8) .icon {
-            background: url(../images/menu_icon/8h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(9) .icon, .links li.active:nth-child(9) .icon {
-            background: url(../images/menu_icon/9h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(10) .icon, .links li.active:nth-child(10) .icon {
-            background: url(../images/menu_icon/10h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(11) .icon, .links li.active:nth-child(11) .icon {
-            background: url(../images/menu_icon/11h.svg) no-repeat;
-        }
-
-        .links li:hover:nth-child(12) .icon, .links li.active:nth-child(12) .icon {
-            background: url(../images/menu_icon/12h.svg) no-repeat;
-        }
 
 
 

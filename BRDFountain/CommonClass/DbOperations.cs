@@ -1018,7 +1018,7 @@ public class DbOperations
                 if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
                     cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 else
-                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", ""));
+                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", null));
                 cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
                 cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentID));
                 cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
@@ -1088,7 +1088,6 @@ public class DbOperations
         catch (MySqlException e)
         {
             this.CloseConnection();
-
         }
         catch (Exception e)
         {

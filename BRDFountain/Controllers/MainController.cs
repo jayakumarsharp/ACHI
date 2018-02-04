@@ -412,7 +412,7 @@ namespace BRDFountain.Controllers
                         files = new StrategyApprover();
                         files.Uploadedby = getloggedusername();
                         var fileContent = Request.Files[file];
-                        if (Request.Files.AllKeys[0].Contains("Systemflowfilelist"))
+                        if (file.Contains("Systemflowfilelist"))
                         {
                             files.Status = "S";
                             if (strategy.ExistingSystemflowfile != null)
@@ -630,8 +630,9 @@ namespace BRDFountain.Controllers
                     foreach (string file in Request.Files)
                     {
                         files = new StrategyApprover();
+                        files.Uploadedby = getloggedusername();
                         var fileContent = Request.Files[file];
-                        if (Request.Files.AllKeys[0].Contains("Systemflowfilelist"))
+                        if (file.Contains("Systemflowfilelist"))
                         {
                             files.Status = "S";
                             if (strategy.ExistingSystemflowfile != null)
@@ -857,8 +858,6 @@ namespace BRDFountain.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-
-
         public JsonResult CreateTempUser(UserMaster user)
         {
             string errordesc = "";
@@ -866,7 +865,6 @@ namespace BRDFountain.Controllers
             _dbOperations.CreateTempUser(user, out errocode, out errordesc);
             return Json("success", JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult GetusercountryMapping(string userId)
         {
@@ -902,7 +900,6 @@ namespace BRDFountain.Controllers
         }
         #endregion User
 
-
         #region Country
 
         public JsonResult GetAllCountry(string CountryId)
@@ -937,7 +934,6 @@ namespace BRDFountain.Controllers
 
         #endregion Country
 
-
         #region Region
 
         public JsonResult GetAllRegion(string RegionId)
@@ -971,7 +967,6 @@ namespace BRDFountain.Controllers
         }
 
         #endregion Region
-
 
         public JsonResult getADuser()
         {
@@ -1598,7 +1593,6 @@ namespace BRDFountain.Controllers
 
         #region FTAStrategyMapping
 
-
         public JsonResult GetStrategyVersionLog(string Id)
         {
             List<StrategyVersionLog> lst = _dbOperations.GetStrategyVersionLog(Id);
@@ -1671,8 +1665,6 @@ namespace BRDFountain.Controllers
         }
 
         #endregion FTAApplicationMapping
-
-
     }
 }
 

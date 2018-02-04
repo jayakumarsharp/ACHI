@@ -7,9 +7,9 @@
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
-        DTColumnBuilder.newColumn('FTAApplicationName').withTitle('FTAApplication Name'),
-        DTColumnBuilder.newColumn('FTAApplicationCode').withTitle('FTAApplication Code'),
-        DTColumnBuilder.newColumn('ChildIdValue').withTitle('ChildId'),
+        DTColumnBuilder.newColumn('FTAApplicationName').withTitle('FTA Application Name'),
+        DTColumnBuilder.newColumn('FTAApplicationCode').withTitle('FT AApplication Code'),
+        DTColumnBuilder.newColumn('ChildIdValue').withTitle('Child ID'),
         DTColumnBuilder.newColumn('ThirdPartyAppName').withTitle('ThirdParty'),
         DTColumnBuilder.newColumn('ParentID').withTitle('ParentID'),
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Application Category'),

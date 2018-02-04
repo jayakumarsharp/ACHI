@@ -200,8 +200,8 @@ span.mail-number {
     border-radius: 20px;
     text-align: center;
 }
-
-.main-content h4 {
+/*.main-content*/
+h4 {
     text-align: left;
     font-family: 'Dosis', sans-serif;
     text-shadow: none;
@@ -1306,56 +1306,56 @@ table.dataTable thead .sorting_asc {
 
 
 /*multiselect*/
-    .multiselect .dropdown-menu {
-        position: static;
-        box-shadow: none;
-        display: block;
-        float: none;
-        max-height: 60px !important;
-        overflow: auto;
+.multiselect .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    display: block;
+    float: none;
+    max-height: 60px !important;
+    overflow: auto;
+}
+
+.multiselect-labels a .fa {
+    color: #ccc;
+}
+
+    .multiselect-labels a .fa:hover {
+        color: #fff;
     }
 
-    .multiselect-labels a .fa {
-        color: #ccc;
-    }
+.multiselect-labels .label {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    padding: 4px 6px;
+    font-size: 14px;
+}
 
-        .multiselect-labels a .fa:hover {
-            color: #fff;
-        }
+.multiselect .dropdown-menu > li > a {
+    white-space: normal;
+}
 
-    .multiselect-labels .label {
-        margin-right: 5px;
-        margin-bottom: 5px;
-        display: inline-block;
-        padding: 4px 6px;
-        font-size: 14px;
-    }
+.multiselect .caret {
+    border: none !important;
+}
 
-    .multiselect .dropdown-menu > li > a {
-        white-space: normal;
-    }
+.dropdown-menu label.radio input[type=radio] {
+    visibility: hidden;
+}
 
-    .multiselect .caret {
-        border: none !important;
-    }
+.dropdown-menu label.radio {
+    padding-left: 10px;
+}
 
-    .dropdown-menu label.radio input[type=radio] {
-        visibility: hidden;
-    }
+.missed-call-bottom .multiselect-native-select .btn-group button,
+.missed-call-bottom .multiselect-native-select .btn-group {
+    min-width: 100%;
+}
 
-    .dropdown-menu label.radio {
-        padding-left: 10px;
-    }
+span.multiselect-native-select {
+    min-width: 100% !important;
+}
 
-    .missed-call-bottom .multiselect-native-select .btn-group button,
-    .missed-call-bottom .multiselect-native-select .btn-group {
-        min-width: 100%;
-    }
-
-    span.multiselect-native-select {
-        min-width: 100% !important;
-    }
-
-    .multiselect-native-select .multiselect-container {
-        min-width: 100% !important;
-    }
+.multiselect-native-select .multiselect-container {
+    min-width: 100% !important;
+}

@@ -99,7 +99,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -313,10 +313,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -332,7 +332,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -547,10 +547,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -565,7 +565,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Client", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -761,11 +761,11 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -790,7 +790,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand("sp_update_Client", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -986,11 +986,11 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1022,7 +1022,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1047,10 +1047,10 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1066,7 +1066,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1094,10 +1094,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1123,11 +1123,11 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1164,11 +1164,11 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsActive", _taskInfo.IsActive));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1193,13 +1193,11 @@ public class DbOperations
 
     public List<OnboardingTasks> GetOnboardingTaskData()
     {
+        try { 
         List<OnboardingTasks> lst = new List<OnboardingTasks>();
-
         string query = "SP_GetOnboardingTask";
-        //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1224,28 +1222,36 @@ public class DbOperations
                                    EmailSubject = Convert.ToString(row["EmailSubject"]),
                                    IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
                                    IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
+                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                   //TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
+                                   //TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
                                    TaskAttachement = Convert.ToString(row["TaskAttachement"]),
                                    TaskComments = Convert.ToString(row["TaskComments"]),
                                    TaskId = Convert.ToString(row["TaskId"]),
-                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
+                                   //UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
 
                                }).ToList();
                     }
                 }
-                //Execute command
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
         return lst;
-
+        }
+        catch (MySqlException e)
+        {
+            this.CloseConnection();
+            return null;
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+            return null;
+        }
     }
 
     public List<OnboardingTasks> GetOnboardingTaskDatabyId(int taskid)
@@ -1256,7 +1262,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1296,10 +1302,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 //    cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1325,11 +1331,11 @@ public class DbOperations
 
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1360,7 +1366,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1397,10 +1403,10 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1416,7 +1422,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1456,10 +1462,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1476,6 +1482,44 @@ public class DbOperations
 
     #region MapTask
 
+
+    public List<MapTasks> GetClientMapTaskData()
+    {
+        List<MapTasks> lst = new List<MapTasks>();
+
+        string query = "sp_getClientTaskMapping";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new MapTasks
+                               {
+                                   Id = Convert.ToInt32(row["Id"]),
+                                   TaskName = Convert.ToString(row["Name"]),
+                                   ClientNumber = Convert.ToString(row["ClientNumber"]),
+                                   TaskId = Convert.ToString(row["taskid"]),
+                               }).ToList();
+                    }
+                }
+            }
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+
     public List<MapTasks> GetMapTaskData()
     {
         List<MapTasks> lst = new List<MapTasks>();
@@ -1484,7 +1528,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1522,10 +1566,10 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1535,6 +1579,100 @@ public class DbOperations
 
 
 
+    public List<MapTasks> GetMapEmailData()
+    {
+        List<MapTasks> lst = new List<MapTasks>();
+
+        string query = "SP_GetMapTask";
+        //open connection
+        if (this.OpenConnection() == true)
+        {
+            
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new MapTasks
+                               {
+                                   Id = Convert.ToInt32(row["Id"]),
+                                   TaskName = Convert.ToString(row["Name"]),
+                                   ClientNumber = Convert.ToString(row["ClientNumber"]),
+                                   CreatedBy = row["CreatedBy"].ToString(),
+                                   CreatedDate = row["CreatedDate"].ToString(),
+                                   EmailAttachment = row["EmailAttachment"].ToString(),
+                                   EmailContent = Convert.ToString(row["EmailContent"]),
+                                   EmailId = Convert.ToString(row["EmailId"]),
+                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
+                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
+                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
+                                   LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                   LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                   TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
+                                   TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
+                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
+                                   TaskComments = Convert.ToString(row["TaskComments"]),
+                                   TaskId = Convert.ToString(row["TaskId"]),
+                                   UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
+                                   IsActive = Convert.ToString(row["IsActive"])
+
+                               }).ToList();
+                    }
+                }
+            }
+
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+
+
+
+    public List<MapTasks> GetClientMappedTask(string type)
+    {
+        List<MapTasks> lst = new List<MapTasks>();
+        string query = "get_emailtaskmapclient";
+        if (this.OpenConnection() == true)
+        {
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_type", type));
+                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+
+                               select new MapTasks
+                               {
+                                   Id = Convert.ToInt32(row["Id"]),
+                                   ClientNumber = Convert.ToString(row["ClientNumber"]),
+                                   TaskName = Convert.ToString(row["Name"]),
+                                   TaskId = Convert.ToString(row["taskid"]),
+                               }).ToList();
+
+                    }
+                }
+            }
+            this.CloseConnection();
+        }
+
+        return lst;
+
+    }
+
     public List<MapTasks> Get_Mapped_Mail_Task(string type)
     {
         List<MapTasks> lst = new List<MapTasks>();
@@ -1543,7 +1681,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1584,10 +1722,10 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1603,7 +1741,7 @@ public class DbOperations
         //open connection
         if (this.OpenConnection() == true)
         {
-            //create command and assign the query and connection from the constructor
+            
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1644,16 +1782,81 @@ public class DbOperations
 
                     }
                 }
-                //Execute command
+
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
         return lst;
 
     }
+
+
+    public void UpdateclientMapTaskdata(MapTasks objMaptask, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_update_client_taskstatus", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_clientnumber", objMaptask.Id));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+            using (MySqlCommand cmd = new MySqlCommand("delete_clientTask", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new MySqlParameter("i_id", objMaptask.ClientNumber));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_clienttaskmapping", connection))
+            {
+                foreach (TaskMaster s in objMaptask.TaskmasterList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_taskId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_clientid", objMaptask.ClientNumber));
+                    if (this.OpenConnection() == true)
+                    {
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+        }
+        catch (MySqlException e)
+        {
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+        catch (Exception e)
+        {
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+
+        }
+    }
+
 
     public void UpdateMapTaskdata(MapTasks objMaptask, out int errorcode, out string errordesc)
     {
@@ -1671,11 +1874,11 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_IsMappedToTask", objMaptask.IsMappedToTask));
                 if (this.OpenConnection() == true)
                 {
-                    //Execute command
+
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1735,7 +1938,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1779,7 +1982,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
@@ -1828,7 +2031,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2073,7 +2276,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
@@ -2129,7 +2332,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2187,7 +2390,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
         return lst;
@@ -2239,7 +2442,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2264,22 +2467,111 @@ public class DbOperations
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
                 cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
-                cmd.Parameters.Add(new MySqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
                 cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
                 cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
-                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
-                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
-                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new MySqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                //cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
+                //cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
+                //cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
                 cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "No"));
-
                 if (this.OpenConnection() == true)
                 {
-
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
 
             }
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_userBusinessSector", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userBusinessSector", connection))
+            {
+                foreach (BusinessSector s in user.BusinessSectorList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_usercountry", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_usercountry", connection))
+            {
+                foreach (CountryMaster s in user.CountryList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_CountryId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_userregion", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userregion", connection))
+            {
+                foreach (RegionMaster s in user.RegionList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RegionId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
         }
         catch (MySqlException e)
         {
@@ -2587,7 +2879,7 @@ public class DbOperations
                         }
                     }
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2633,7 +2925,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2774,7 +3066,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2885,7 +3177,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3009,7 +3301,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3137,7 +3429,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3333,6 +3625,7 @@ public class DbOperations
         }
     }
 
+
     private bool OpenConnection()
     {
         try
@@ -3360,7 +3653,7 @@ public class DbOperations
         }
     }
 
-    //Close connection
+
     private bool CloseConnection()
     {
         try
@@ -3375,15 +3668,7 @@ public class DbOperations
             return false;
         }
     }
-
-
-
-
 }
-
-
-
-
 
 
 public static class EncryptLib

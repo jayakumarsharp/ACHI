@@ -18,7 +18,7 @@
 
     $scope.dtColumns1 = [
        DTColumnBuilder.newColumn('userId').withTitle('UserId'),
-       DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
+       DTColumnBuilder.newColumn('UserName').withTitle('UserName'),
        DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
           DTColumnBuilder.newColumn('RoleName').withTitle('Role'),
         //DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
@@ -484,9 +484,7 @@
         });
     };
 
-
-    // bind code start
-
+    //multiselect
     $scope.multiselectRegion = {
         selected: [],
         options: [],

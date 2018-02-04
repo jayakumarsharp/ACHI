@@ -2083,9 +2083,6 @@
     <Content Include="Lib\dataTables.bootstrap.min.js" />
     <Content Include="Lib\jquery-1.11.0.min.js" />
     <Content Include="Lib\jquery.dataTables.min.js" />
-    <Content Include="Lib\moment-with-locales.js" />
-    <Content Include="Lib\moment-with-locales.min.js" />
-    <Content Include="Lib\npm.js" />
     <Content Include="Lib\responsive-tabs.js" />
     <Content Include="Lib\underscore-min.js" />
     <Content Include="Lib\underscore.js" />

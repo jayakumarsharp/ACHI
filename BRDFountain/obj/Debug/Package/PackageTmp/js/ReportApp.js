@@ -90,7 +90,7 @@ ReportApp.directive('datetimepicker', function () {
         require: '?ngModel',
         restrict: 'A',
         link: function (scope, element, attrs, ngModel) {
-
+            debugger;
             if (!ngModel) return; // do nothing if no ng-model
 
             var currentdate = '';
@@ -123,7 +123,8 @@ ReportApp.directive('datetimepicker', function () {
             $(element).datetimepicker({
                 language: 'en',
                 pickTime: false,
-                defaultDate: currentdate
+                defaultDate: ''
+                //currentdate
             });
 
             $(element).on('dp.change', function () {
@@ -136,6 +137,15 @@ ReportApp.directive('datetimepicker', function () {
                 var value = element.find('input').val();
                 ngModel.$setViewValue(value);
             }
+
+            $(element).on('keydown', function () {
+                scope.$apply(read);
+            });
+            // set input to the value set in the popup, which can differ if input was manually!
+            $(element).on('blur', function () {
+                // the value is an object if date has been changed! Otherwise it was set as a string.
+                scope.$apply(read);
+            });
         }
     }
 });
@@ -163,7 +173,7 @@ ReportApp.directive('multiselect', function () {
                  * -------------------------------- */
                 $scope.config = $scope.msConfig;
                 if (typeof ($scope.config) === 'undefined') {
-                    $scope.config = {};
+                    $scope.config = { };
                 }
                 if (typeof ($scope.config.itemTemplate) === 'undefined') {
                     $scope.config.itemTemplate = function (elem) {
@@ -244,7 +254,7 @@ ReportApp.directive('multiselect', function () {
                 /*  Helper methods */
 
                 var _filterOptions = function () {
-                    if ($scope.msModel === null) {
+                    if($scope.msModel === null) {
                         $scope.multiselect.options = $scope.msOptions;
                         return;
                     }
@@ -253,8 +263,8 @@ ReportApp.directive('multiselect', function () {
                     //    return $scope.msModel.indexOf(each) < 0;
                     //});
 
-                    $scope.multiselect.options = $scope.msOptions.filter(function (each) {
-                        for (var i = 0; i < $scope.msModel.length; i++) {
+                    $scope.multiselect.options = $scope.msOptions.filter(function(each) {
+                        for(var i = 0; i < $scope.msModel.length; i++) {
                             if ($scope.msModel[i].id == each.id) {
                                 return false;
                             }
@@ -269,7 +279,7 @@ ReportApp.directive('multiselect', function () {
                 var code = e.keyCode || e.which;
                 switch (code) {
                     case 40: // Down arrow
-                        scope.$apply(function () {
+                        scope.$apply(function() {
                             scope.multiselect.currentElement++;
                             if (scope.multiselect.currentElement >= scope.multiselect.filtered.length) {
                                 scope.multiselect.currentElement = 0;
@@ -277,7 +287,7 @@ ReportApp.directive('multiselect', function () {
                         });
                         break;
                     case 38: // Up arrow
-                        scope.$apply(function () {
+                        scope.$apply(function() {
                             scope.multiselect.currentElement--;
                             if (scope.multiselect.currentElement < 0) {
                                 scope.multiselect.currentElement = scope.multiselect.filtered.length - 1;
@@ -285,15 +295,15 @@ ReportApp.directive('multiselect', function () {
                         });
                         break;
                     case 13: // Enter
-                        scope.$apply(function () {
+                        scope.$apply(function() {
                             scope.multiselect.selectElement(scope.multiselect.currentElement);
                         });
                         break;
                     default:
-                        scope.$apply(function () {
+                        scope.$apply(function() {
                             scope.multiselect.currentElement = 0;
                         });
-                }
+                    }
             });
         },
         template: function (elem, attrs) {

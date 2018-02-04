@@ -14,6 +14,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
     display: block;
 }
 
+.header {
+    float: left;
+    font-weight: 300;
+    font-size: 28px;
+    color: #48b0d0;
+    margin-top: 10px;
+    margin-left:30px;
+}
+
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0;
     font-family: inherit;
@@ -75,6 +84,7 @@ body {
 
 section.content {
     /*padding: 40px;*/
+    padding: 10px;
     height: 100vh;
     top: 60px;
     position: relative;
@@ -150,115 +160,6 @@ section.content {
         position: relative;
         top: 2px;
     }
-/*-----------------------------------------*/
-.page_status {
-    width: 100%;
-    text-align: center;
-    display: table;
-    margin: 40px 0 30px;
-}
-
-    .page_status .status_pending, .page_status .status_completed {
-        background: white;
-        text-align: center;
-        display: inline-block;
-        padding: 20px 45px;
-        border: 1px solid #ececec;
-        -webkit-transition: all 0.3s ease-out 0s;
-        -moz-transition: all 0.3s ease-out 0s;
-        -o-transition: all 0.3s ease-out 0s;
-        transition: all 0.3s ease-out 0s;
-    }
-
-
-        .page_status .status_pending:hover {
-            box-shadow: inset -5px -10px 0px -5px #3da1ed;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_completed:hover {
-            box-shadow: inset -5px -10px 0px -5px #51cb30;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_pending:hover > .number {
-            color: #3da1ed;
-        }
-
-        .page_status .status_completed:hover > .number {
-            color: #51cb30;
-        }
-
-        .page_status .status_pending:hover > .status_txt, .page_status .status_completed:hover > .status_txt {
-            color: #7b7b7b;
-        }
-
-        .page_status .status_pending.active {
-            box-shadow: inset -5px -10px 0px -5px #3da1ed;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_completed.active {
-            box-shadow: inset -5px -10px 0px -5px #51cb30;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-
-        .page_status .status_pending.active > .number {
-            color: #3da1ed;
-        }
-
-        .page_status .status_completed.active > .number {
-            color: #51cb30;
-        }
-
-        .page_status .status_pending.active > .status_txt, .page_status .status_completed.active > .status_txt {
-            color: #7b7b7b;
-        }
-
-
-
-
-        .page_status .status_pending .number, .page_status .status_completed .number, .page_status .status_pending .status_txt, .page_status .status_completed .status_txt {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .page_status .status_pending .number, .page_status .status_completed .number {
-            font-family: 'Oswald', sans-serif;
-            color: #adadad;
-            font-size: 40px;
-            font-weight: 400;
-        }
-
-        .page_status .status_pending .status_txt, .page_status .status_completed .status_txt {
-            color: #adadad;
-            font-size: 16px;
-            text-align: left;
-            margin-left: 15px;
-        }
-
-    .page_status .status_pending {
-    }
-
-        .page_status .status_pending .number {
-        }
-
-        .page_status .status_pending .status_txt {
-        }
-
-    .page_status .status_completed {
-    }
-
-        .page_status .status_completed .number {
-        }
-
-        .page_status .status_completed .status_txt {
-        }
-
 /*-----------------------------------------*/
 
 .page_search {
@@ -924,7 +825,7 @@ select#sel1 {
 }
 
 .form-group.search {
-    margin-bottom: 0;
+    margin-bottom: 10px;
     max-width: 195px;
     width: 100%;
     margin-left: 140px;
@@ -1346,7 +1247,8 @@ p {
     width: 100%;
     text-align: center;
     display: table;
-    margin: 40px 0 30px;
+    margin-bottom: 10px;
+    /*margin: 40px 0 30px;*/
 }
 
     .page_status .status_pending, .page_status .status_completed {

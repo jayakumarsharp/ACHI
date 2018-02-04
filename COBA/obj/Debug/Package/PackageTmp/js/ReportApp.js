@@ -11,22 +11,33 @@ var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster', 'datatab
 
 ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', 'ApiCall', function ($scope, $rootScope, UserFactory, ApiCall) {
     $scope.rootname = 'Index';
+    $scope.MenuName = 'Home';
 
-    if (sessionStorage.getItem('menuname') != null) {
-        var root = sessionStorage.getItem('menuname');
+    if (sessionStorage.getItem('menupath') != null) {
+        var root = sessionStorage.getItem('menupath');
         $scope.rootname = root;
+        $scope.MenuName = sessionStorage.getItem('menuname');
     }
     else {
-        sessionStorage.setItem('menuname', 'Index');
+        sessionStorage.setItem('menupath', 'Index');
+        sessionStorage.setItem('menuname', 'Home');
         $scope.rootname = 'Index';
+        $scope.MenuName = 'Home';
     }
 
     $scope.notificationdata = [];
     $rootScope.UserInfo = {};
     $scope.MenuList = [];
 
-    $scope.updatemenuclick = function (path) {
-        sessionStorage.setItem('menuname', path);
+    $scope.updatemenuclick = function (menu) {
+        sessionStorage.setItem('menuname', menu.MenuName);
+        sessionStorage.setItem('menupath', menu.Path);
+    }
+    $scope.clearlogout = function () {
+        sessionStorage.setItem('menupath', 'Index');
+        sessionStorage.setItem('menuname', 'Home');
+        $scope.rootname = 'Index';
+        $scope.MenuName = 'Home';
     }
     $scope.GetUserRoles = function () {
         UserFactory.getloggedusername().success(function (data) {

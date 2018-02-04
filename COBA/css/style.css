@@ -14,6 +14,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, nav, sectio
     display: block;
 }
 
+.header {
+    float: left;
+    font-weight: 300;
+    font-size: 28px;
+    color: #48b0d0;
+    margin-top: 10px;
+    margin-left:30px;
+}
+
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0;
     font-family: inherit;
@@ -816,7 +825,7 @@ select#sel1 {
 }
 
 .form-group.search {
-    margin-bottom: 0;
+    margin-bottom: 10px;
     max-width: 195px;
     width: 100%;
     margin-left: 140px;
@@ -1238,6 +1247,7 @@ p {
     width: 100%;
     text-align: center;
     display: table;
+    margin-bottom: 10px;
     /*margin: 40px 0 30px;*/
 }
 

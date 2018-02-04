@@ -77,7 +77,7 @@
     DTColumnBuilder.newColumn('EmailSubject').withTitle('EmailSubject'),
          DTColumnBuilder.newColumn('TaskAttachement').withTitle('TaskAttachement'),
         DTColumnBuilder.newColumn('TaskComments').withTitle('TaskComments'),
-        DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
+        DTColumnBuilder.newColumn('Id').withTitle('Action').notSortable()
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {
