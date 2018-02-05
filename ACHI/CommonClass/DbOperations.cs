@@ -9,35 +9,6 @@ using System.Globalization;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.Data;
-
-public static class StaticClass
-{
-    public static string Adduser = "spsvn_Adduser";
-    public static string updateuser = "spsvn_updateuser";
-    public static string ChangePwd = "spsvn_ChangePwd";
-    public static string DeleteUser = "spsvn_deleteuser";
-
-    public static string GetAllFCCLocations = "SPSVN_GetAllFCCLocations";
-
-    public static string GetUserProfile = "spsvn_GetAllusers";
-    public static string GetMenuItems = "SPSVN_GetMenuItems";
-    public static string GetRoles = "spsvn_GetAllRoles";
-    public static string AddRightsForRoles = "SPSVN_RoleMenuMap";
-    public static string Checkuserlogin = "spsvn_validateLogin";
-    public static string GetExtensionwisecallReport = "SPSVN_ExtensionwiseCallDetail";
-
-    public static string GetAllManagers = "spsvn_GetAllManagers";
-    public static string GetAllTeams = "spsvn_GetAllTeams";
-    public static string GetAllusersById = "spsvn_GetAllusersById";
-    public static string GetManagerByEmpcode = "spsvn_GetManagerByEmpcode";
-    public static string GetHodByEmpcode = "spsvn_GetHodByEmpcode";
-
-    public static string updateManagerByEmpcode = "spsvn_ManagerHierachy";
-    public static string updateHodByEmpcode = "spsvn_hodHierachy";
-    public static string UpdatePwd = "spsvn_UpdatePwd";
-
-}
-
 public class DbOperations
 {
 
@@ -45,8 +16,6 @@ public class DbOperations
     private MySqlConnection connection;
     private static readonly log4net.ILog log = LogManager.GetLogger(typeof(DbOperations));
     private string connString = string.Empty;
-
-    private int commandTimeout = 0;
     #endregion
 
     #region Default Constructor
@@ -84,7 +53,7 @@ public class DbOperations
                     FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                     Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                 }
-                
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
@@ -129,7 +98,6 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_owner", OwnerUser));
                 if (this.OpenConnection() == true)
                 {
-
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -185,15 +153,11 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
-
         return lst;
-
     }
 
 
@@ -231,10 +195,7 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
             this.CloseConnection();
         }
         return lst;
@@ -410,10 +371,8 @@ public class DbOperations
                         Version = Convert.ToInt32(dt.Rows[0]["Version"]);
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -453,15 +412,13 @@ public class DbOperations
                                    Status = Convert.ToString(row["Status"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"]),
-                                   OriginalApprover= Convert.ToString(row["OriginalApprover"])
+                                   OriginalApprover = Convert.ToString(row["OriginalApprover"])
                                }).ToList();
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -506,10 +463,8 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -548,15 +503,10 @@ public class DbOperations
                                    Status = Convert.ToString(row["Status"]),
                                    CreatedDate = Convert.ToString(row["CreatedDate"]),
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"])
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
             this.CloseConnection();
         }
 
@@ -601,10 +551,8 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -649,7 +597,7 @@ public class DbOperations
 
         }
     }
-    
+
     public List<Strategy> GetStrategyData()
     {
         List<Strategy> lst = new List<Strategy>();
@@ -729,10 +677,7 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
             this.CloseConnection();
         }
 
@@ -817,13 +762,10 @@ public class DbOperations
                                    Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -908,13 +850,10 @@ public class DbOperations
                                    Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -999,13 +938,10 @@ public class DbOperations
                                    Type = Convert.ToString(row["Type"]),
                                    Version = Convert.ToString(row["Version"]),
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1062,7 +998,7 @@ public class DbOperations
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
 
 
@@ -1137,7 +1073,7 @@ public class DbOperations
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1217,7 +1153,7 @@ public class DbOperations
                     this.CloseConnection();
                     errordesc = "success|" + Convert.ToString(version);
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1237,7 +1173,7 @@ public class DbOperations
     }
 
     #endregion Strategy
-    
+
     #region MapTask
 
     public List<MapTasks> GetMapTaskData()
@@ -1285,10 +1221,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1339,15 +1273,11 @@ public class DbOperations
                                    TaskComments = Convert.ToString(row["TaskComments"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1398,15 +1328,11 @@ public class DbOperations
                                    TaskComments = Convert.ToString(row["TaskComments"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1435,7 +1361,7 @@ public class DbOperations
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
         catch (MySqlException e)
@@ -1466,25 +1392,32 @@ public class DbOperations
 
     public void AddRightsForRoles(string roleName, string menuRights, out int errorCode, out string errorDesc)
     {
-
-        errorDesc = "";
-        errorCode = 0;
-        string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
-
-
-        if (this.OpenConnection() == true)
+        try
         {
+            errorDesc = "";
+            errorCode = 0;
+            string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
+            if (this.OpenConnection() == true)
+            {
 
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-
-
-            cmd.ExecuteNonQuery();
-
-            //close connection
-            this.CloseConnection();
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
+            }
         }
+        catch (MySqlException e)
+        {
+            this.CloseConnection();
+            throw e;
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+            throw e;
+        }
+
     }
-    
+
     private bool OpenConnection()
     {
         try
@@ -1512,7 +1445,7 @@ public class DbOperations
         }
     }
 
-    //Close connection
+
     private bool CloseConnection()
     {
         try
@@ -1532,44 +1465,54 @@ public class DbOperations
 
     public List<Roles> GetRoles(string roleId)
     {
-        List<Roles> lst = new List<Roles>();
-        string query = "Sp_GetRoles";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<Roles> lst = new List<Roles>();
+            string query = "Sp_GetRoles";
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new Roles
-                               {
-                                   CreatedBy = Convert.ToString(row["CreatedBy"]),
-                                   id = Convert.ToString(row["id"]),
-                                   ModifiedBy = Convert.ToString(row["ModifiedBy"]),
-                                   CreatedDate = Convert.ToString(row["CreatedDate"]),
-                                   ModifiedDate = Convert.ToString(row["ModifiedDate"]),
-                                   RoleName = Convert.ToString(row["RoleName"])
-                               }).ToList();
 
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new Roles
+                                   {
+                                       CreatedBy = Convert.ToString(row["CreatedBy"]),
+                                       id = Convert.ToString(row["id"]),
+                                       ModifiedBy = Convert.ToString(row["ModifiedBy"]),
+                                       CreatedDate = Convert.ToString(row["CreatedDate"]),
+                                       ModifiedDate = Convert.ToString(row["ModifiedDate"]),
+                                       RoleName = Convert.ToString(row["RoleName"])
+                                   }).ToList();
+                        }
                     }
                 }
-
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
-            //close connection
+
+            return lst;
+        }
+        catch (MySqlException e)
+        {
             this.CloseConnection();
+            throw e;
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+            throw e;
         }
 
-        return lst;
     }
     public void GetUserRoles(string roleId)
     {
@@ -1606,20 +1549,14 @@ public class DbOperations
 
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
-
-            //return lst;
-            //models.User.findAll({ where: { RoleId: roleId } })
-            //   .then(function(userroles) { deferred.resolve(userroles); })
-            //   .catch (function (err) { deferred.reject(err) });
         }
         catch (Exception e)
         {
+            throw e;
         }
     }
 
@@ -1652,16 +1589,11 @@ public class DbOperations
                                    RightName = Convert.ToString(row["RightName"]),
                                    ShowMenu = Convert.ToString(row["ShowMenu"])
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
             this.CloseConnection();
         }
-
         return lst;
 
 
@@ -1681,7 +1613,6 @@ public class DbOperations
             {
                 cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
                 cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -1748,7 +1679,6 @@ public class DbOperations
                     cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.RoleID));
                     if (this.OpenConnection() == true)
                     {
-
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
@@ -1837,11 +1767,9 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-                    cmd.ExecuteNonQuery();
                 }
                 this.CloseConnection();
             }
-
             return lst;
         }
         catch (Exception e)
@@ -1899,10 +1827,7 @@ public class DbOperations
 
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
 
@@ -1952,16 +1877,11 @@ public class DbOperations
                                        CountryId = Convert.ToString(row["CountryId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
-
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2010,15 +1930,10 @@ public class DbOperations
                                    Status = Convert.ToString(row["Status"]),
                                    Password = Convert.ToString(row["Password"]),
                                    IsADUser = Convert.ToString(row["IsADUser"]),
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
             this.CloseConnection();
         }
         return lst;
@@ -2068,7 +1983,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2133,7 +2048,6 @@ public class DbOperations
             errordesc = "success";
             using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
             {
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
@@ -2159,14 +2073,12 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
         }
     }
     public void ModifyUser(UserMaster user, out int errorcode, out string errordesc)
@@ -2178,7 +2090,6 @@ public class DbOperations
             errordesc = "success";
             using (MySqlCommand cmd = new MySqlCommand("sp_updateuser", connection))
             {
-
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
@@ -2189,10 +2100,8 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
                 cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
                 cmd.Parameters.Add(new MySqlParameter("i_status", user.Status));
-
                 if (this.OpenConnection() == true)
                 {
-
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
@@ -2301,84 +2210,7 @@ public class DbOperations
         {
         }
     }
-    public void UserLogin(string user)
-    {
-        try
-        {
 
-            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
-            //var createdDate = moment.utc(curentdate).toDate();
-            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
-            //// var dbdate = new Date();
-            //// var createdDate = moment(dbdate).format('L LT');
-
-            //this.GetUser(user.userId)
-            //    .then(function(userdtl) {
-            //    if (userdtl != null && userdtl != undefined)
-            //    {
-            //        if (userdtl.Status != 'Inactive')
-            //        {
-            //            var currenthashedpwd = userdtl.Password;
-            //            // var verifyPwd = Utility.UtilityModel.check_password(currenthashedpwd,user.password);
-            //            Utility.UtilityModel.Authenticate(user.userId, user.password).then(function(data) {
-            //                logger.info('check ' + data);
-            //                if (data === true)
-            //                {
-            //                    logger.info('password matched for user ' + user.userId);
-            //                    var expireAt = moment().add(90000, 'seconds').format('L LT');
-            //                    var token = Utility.UtilityModel.generateToken(user, 90000);
-            //                    logger.info(token.length);
-            //                    models.sequelize.transaction().then(function(t) {
-            //                        if (t != null && t != undefined)
-            //                        {
-            //                            models.UserSession.create({
-            //                                SessionTokenId: token, UserId: user.userId, Tokendetail: token,
-            //                                    CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
-            //                                    }, { transaction: t })
-            //                                    .then(function(userSession) {
-            //                                models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
-            //                                            .then(function(userupdate) {
-            //                                    t.commit();
-            //                                    deferred.resolve({
-            //                                        token: token, expires: expireAt, user:
-            //                                        {
-            //                                            userId: userdtl.userId,
-            //                                                        UserName: userdtl.UserName, EmailId: userdtl.EmailId, MobileNumber: userdtl.MobileNumber,
-            //                                                        CustomData: userdtl.CustomData, Status: userdtl.Status, UserExpiryDate: userdtl.UserExpiryDate,
-            //                                                        PasswordExpiryDate: userdtl.PasswordExpiryDate, UserBlockDate: userdtl.UserBlockDate,
-            //                                                        AttemptedTries: userdtl.AttemptedTries, LastUsedDate: userdtl.LastUsedDate,
-            //                                                        CreatedDate: userdtl.CreatedDate, CreatedBy: userdtl.CreatedBy,
-            //                                                        ModifiedDate: userdtl.ModifiedDate, ModifiedBy: userdtl.ModifiedBy, ApprovedDate: userdtl.ModifiedBy,
-            //                                                        Approvedby: userdtl.Approvedby, MakerComment: userdtl.MakerComment,
-            //                                                        CheckerComment: userdtl.CheckerComment
-            //                                                        }
-        }
-        catch (Exception e)
-        {
-        }
-    }
-    public void UserLogout(string user)
-    {
-        try
-        {
-            //var dbdate = new Date();
-            //var createdDate = moment(dbdate).add(30, 'day').format('L LT');
-            //this.GetUser(user.userId)
-            //    .then(function(userdtl) {
-            //    models.sequelize.transaction().then(function(t) {
-            //        if (t != null && t != undefined)
-            //        {
-            //            models.UserSession.update({ LogoutDate: createdDate },
-            //                        { where: { userId: user.userId, SessionTokenId: user.token, LogoutDate: null } }, { transaction: t })
-            //                        .then(function(userSession) {
-            //                models.User.update({ LastUsedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
-            //                                .then(function(userupdate) {
-            //                    t.commit();
-        }
-        catch (Exception e)
-        {
-        }
-    }
 
     public List<RightMaster> GetMenuList(string userId)
     {
@@ -2412,17 +2244,12 @@ public class DbOperations
                                        ShowMenu = Convert.ToString(row["ShowMenu"])
 
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
             return lst;
-
         }
         catch (Exception e)
         {
@@ -2460,10 +2287,7 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
                 this.CloseConnection();
             }
             return lst;
@@ -2472,98 +2296,6 @@ public class DbOperations
         catch (Exception e)
         {
             return null;
-        }
-    }
-
-    public void GetUserSessionInfo(string createdDate)
-    {
-        try
-        {
-            //sequelize.query('Select UserId, CreatedDate from TBL_USER_SESSION where CONVERT(date, CreatedDate) = :CreatedOn',
-            //        {
-            //    replacements: { CreatedOn: createdDate },
-            //        type: sequelize.QueryTypes.SELECT
-            //    }).then(function(response) {
-            //    logger.info('success');
-            //    logger.info('response: ' + response);
-            //    deferred.resolve(response);
-            //}).error(function(err) {
-            //    logger.info('failure: ' + err);
-            //    deferred.reject(err);
-            //});
-        }
-        catch (Exception e)
-        {
-        }
-    }
-
-
-    public void GetInactiveUsers()
-    {
-        try
-        {
-            //models.User.findAll({ where: { Status: 'Inactive' } }).then(function(users) {
-            //    deferred.resolve(users);
-            //}).catch (function (err) { logger.info('GetInactiveUsers error: ' + err); deferred.reject(err) });
-        }
-        catch (Exception)
-        {
-        }
-    }
-
-    public void ADFSUserLogin(string email)
-    {
-        try
-        {
-
-            //var curentdate = moment().format("YYYY-MM-DD HH:mm:ss");
-            //var createdDate = moment.utc(curentdate).toDate();
-            //createdDate = moment(createdDate).format('YYYY-MM-DD HH:mm:ss');
-            //// var dbdate = new Date();
-            //// var createdDate = moment(dbdate).format('L LT');
-
-            //models.User.findOne({ where: { EmailId: email } })
-            //    .then(function(user) {
-            //    if (user != null && user != undefined)
-            //    {
-            //        if (user.Status != 'Inactive')
-            //        {
-
-            //            var expireAt = moment().add(90000, 'seconds').format('L LT');
-            //            var token = Utility.UtilityModel.generateToken(user, 90000);
-            //            logger.info(token.length);
-            //            models.sequelize.transaction().then(function(t) {
-            //                if (t != null && t != undefined)
-            //                {
-            //                    models.UserSession.create({
-            //                        SessionTokenId: token, UserId: user.userId, Tokendetail: token,
-            //                            CreatedDate: createdDate, ExpiredDate: expireAt, RequestIPAddress: user.requestIPAddress
-            //                            }, { transaction: t })
-            //                            .then(function(userSession) {
-            //                        models.User.update({ LastAuthenticatedDate: createdDate }, { where: { userId: user.userId } }, { transaction: t })
-            //                                    .then(function(userupdate) {
-            //                            t.commit();
-            //                            deferred.resolve({
-            //                                token: token, expires: expireAt, user:
-            //                                {
-            //                                    userId: user.userId,
-            //                                                UserName: user.UserName, EmailId: user.EmailId, MobileNumber: user.MobileNumber,
-            //                                                CustomData: user.CustomData, Status: user.Status, UserExpiryDate: user.UserExpiryDate,
-            //                                                PasswordExpiryDate: user.PasswordExpiryDate, UserBlockDate: user.UserBlockDate,
-            //                                                AttemptedTries: user.AttemptedTries, LastUsedDate: user.LastUsedDate,
-            //                                                CreatedDate: user.CreatedDate, CreatedBy: user.CreatedBy,
-            //                                                ModifiedDate: user.ModifiedDate, ModifiedBy: user.ModifiedBy, ApprovedDate: user.ModifiedBy,
-            //                                                Approvedby: user.Approvedby, MakerComment: user.MakerComment,
-            //                                                CheckerComment: user.CheckerComment
-            //                                                }
-            //                            });
-            //                        })
-            //                                    .catch (function (userupdateerror) {
-            //t.rollback();
-            //logger.info(userupdateerror);
-        }
-        catch (Exception)
-        {
         }
     }
 
@@ -2599,10 +2331,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2710,10 +2440,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2804,7 +2532,7 @@ public class DbOperations
     }
 
     #endregion Region
-    
+
     #region BusinessSector
 
     public List<BusinessSector> GetBusinessSectorList(string TaskTypeId)
@@ -2834,10 +2562,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2961,10 +2687,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3056,12 +2780,10 @@ public class DbOperations
         }
 
     }
-    
+
     #endregion ProductType
 
     #region Application
-
-
     public List<ApplicationMaster> GetApplicationList(string TaskTypeId)
     {
         List<ApplicationMaster> lst = new List<ApplicationMaster>();
@@ -3090,10 +2812,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3188,12 +2908,11 @@ public class DbOperations
 
     }
     #endregion Application
-    
+
 }
 
 public static class EncryptLib
 {
-
     public static string EncodePasswordToBase64(string password)
     {
         try
@@ -3207,7 +2926,8 @@ public static class EncryptLib
         {
             throw new Exception("Error in base64Encode" + ex.Message);
         }
-    } //this function Convert to Decord your Password
+    }
+
     public static string DecodeFrom64(string encodedData)
     {
         System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();

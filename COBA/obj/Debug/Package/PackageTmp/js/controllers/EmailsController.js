@@ -1,4 +1,4 @@
-﻿ReportApp.controller('EmailController', function ($scope, $rootScope, EmailService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('EmailController', ['$scope', '$rootScope', 'EmailService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, EmailService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.checked = true;
     $scope.test = { item: 'true' };
@@ -222,4 +222,4 @@
 
     $scope.GetRightsList();
 
-});
+}]);

@@ -1,4 +1,4 @@
-﻿ReportApp.controller('TaskController', function ($scope, $rootScope, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('TaskController', ['$scope', '$rootScope', 'TaskService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.showaction = false;
     $scope.editMode = false;
@@ -12,14 +12,14 @@
         });
     };
 
-    $scope.getallcurrencyconversions = function () {
+    $scope.getAllTasks = function () {
 
         TaskService.GetAllTask().success(function (data) {
             console.log(data)
             $scope.dtOptions.data = data;;
         })
     };
-    $scope.getallcurrencyconversions();
+    $scope.getAllTasks();
     $rootScope.$on("toggle", function () {
         $timeout(function () {
             $scope.CurrencyGrid.api.sizeColumnsToFit();
@@ -80,7 +80,7 @@
                     //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                     $('#currencyModel').modal('hide');
                     $scope.showaction = false;
-                    $scope.getallcurrencyconversions()
+                    $scope.getAllTasks()
                 }
                 else
                     $scope.errorinfo = data;
@@ -134,7 +134,7 @@
                 //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
                 $scope.showaction = false;
-                $scope.getallcurrencyconversions()
+                $scope.getAllTasks()
             }
             else
                 $scope.errorinfo = data;
@@ -176,9 +176,7 @@
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
     };
-
     $scope.SetCurrencyDescription = function (currencyId) {
         if (currencyId != null && currencyId != '' && currencyId != undefined) {
             var currDesc = '';
@@ -196,4 +194,4 @@
 
     $scope.GetRightsList();
 
-});
+}]);

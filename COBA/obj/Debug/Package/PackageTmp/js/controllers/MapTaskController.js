@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('MapTaskController', ['$scope', '$rootScope', 'MapTaskService', 'TaskService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.editMode = false;
     $scope.IsReadOnly = true;
@@ -164,4 +164,4 @@
     };
     $scope.gettask();
 
-});
+}]);

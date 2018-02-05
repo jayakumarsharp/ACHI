@@ -25,7 +25,6 @@
     $scope.EditedRole = {};
     $scope.Roles = [];
     $scope.RoleRight = {};
-    $scope.RoleRights = [];
     $scope.Right = {};
     $scope.Rights = [];
     $scope.editMode = false;
@@ -137,16 +136,6 @@
             $scope.Error = error;
         })
     };
-
-    $scope.GetRoleRightMappings = function () {
-        RoleFactory.GetRoleRightMappings().success(function (data) {
-            $scope.RoleRights = data;
-        }).error(function (error) {
-            console.log(error);
-            $scope.Error = error;
-        })
-    };
-
     //Model popup events
     $scope.showadd = function () {
         $scope.role = {};
@@ -174,7 +163,6 @@
                     //currentRole.UserId = data;
                     //$scope.users.push(currentRole);
                     $scope.GetAllRoles();
-                    $scope.GetRoleRightMappings();
                     $scope.role = {};
                     // $scope.adduserform.$setPristine(); //for form reset
                     toaster.pop('success', "Success", "Role added successfully", null);
@@ -414,7 +402,6 @@
 
     $scope.GetAllRoles();
     $scope.GetAllRights();
-    $scope.GetRoleRightMappings();
     $scope.IsPageReadOnly();
 }]);
 
@@ -435,9 +422,6 @@ ReportApp.factory('RoleFactory', ['$http', function ($http) {
         },
         GetUser: function (userid) {
             return $http.get(URL + 'getusers?userId=' + userid);
-        },
-        GetRoleRightMappings: function () {
-            return $http.get(URL + 'GetRoleRightMappings?roleId=');
         },
         AddRole: function (role) {
             return $http.post(URL + 'AddRole', role);

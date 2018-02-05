@@ -1,4 +1,8 @@
 ﻿ReportApp.controller('RegionMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+    $scope.editMode = false;
+    $scope.IsReadOnly = false;
+    $scope.showAddwindow = false;
+
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -20,9 +24,7 @@
         $scope.data = data;
         return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="images/edit.png"></a>';
     }
-    $scope.editMode = false;
-    $scope.IsReadOnly = false;
-
+    
     $scope.GetAllRegionMaster = function () {
         ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
             $scope.data = data;
@@ -39,7 +41,7 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-
+                        $scope.showAddwindow = false;
                         $scope.RegionMaster = null;
                         $scope.GetAllRegionMaster();
                         $scope.editMode = false;
@@ -104,7 +106,6 @@
         }
     };
 
-    $scope.showAddwindow = false;
 
     $scope.showconfirm = function (data) {
         $scope.RegionMasterId = data;

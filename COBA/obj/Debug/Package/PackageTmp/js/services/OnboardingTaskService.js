@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('OnboardingTaskService', function ($http) {
+ReportApp.factory('OnboardingTaskService', ['$http', function ($http) {
     var OnboardingTaskServiceURI = BaseURL + 'Main/';
     var OnboardingTaskServiceFactory = {};
 
@@ -21,5 +21,5 @@ ReportApp.factory('OnboardingTaskService', function ($http) {
     }
 
     return OnboardingTaskServiceFactory;
-});
+}]);
 

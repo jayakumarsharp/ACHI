@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace BRDFountain.Controllers
 {
+    [NoCache]
     public class MainController : Controller
     {
         private DbOperations _dbOperations = new DbOperations();
@@ -321,7 +322,6 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult GetDatabyId(string Strategynumber)
         {
             List<Strategy> lst = _dbOperations.GetStrategyDatabyId(Strategynumber);
@@ -361,7 +361,6 @@ namespace BRDFountain.Controllers
             else
                 return "No Records";
         }
-
 
         public JsonResult GetStrategyApprovalByuser()
         {
@@ -466,7 +465,6 @@ namespace BRDFountain.Controllers
             }
         }
 
-
         public FileResult DownLoadFile(string FileName, string RefNumber, string Version)
         {
             try
@@ -491,7 +489,6 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
-
 
         public FileResult DownLoadReportFile(string FileName)
         {
@@ -580,7 +577,6 @@ namespace BRDFountain.Controllers
             _dbOperations.updatedelegateAcceptance(strategy, out errorcode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult UpdateStrategy(List<Strategy> Strategy)
         {
@@ -680,57 +676,6 @@ namespace BRDFountain.Controllers
         }
 
         #endregion Strategy
-
-        #region OnboardingTask
-
-
-        public JsonResult UpdateOnboardingTask(string Id, string TaskComments, string StrategyNumber, string ExisitingFiles)
-        {
-            string mailbox = @"C:/EMail/inbox";
-            string filepath = mailbox + "/" + StrategyNumber + "/";
-
-            bool exists = System.IO.Directory.Exists(@filepath);
-            if (!exists)
-                System.IO.Directory.CreateDirectory(@filepath);
-            if (Request.Files.Count > 0)
-            {
-                foreach (string file in Request.Files)
-                {
-                    var fileContent = Request.Files[file];
-                    if (fileContent != null && fileContent.ContentLength > 0)
-                    {
-                        filepath = filepath + fileContent.FileName;
-                        if (!System.IO.File.Exists(filepath))
-                        {
-                            FileStream fileStream = System.IO.File.Create(filepath, (int)fileContent.InputStream.Length);
-                            byte[] bytesInStream = new byte[fileContent.InputStream.Length];
-                            fileContent.InputStream.Read(bytesInStream, 0, bytesInStream.Length);
-                            fileStream.Write(bytesInStream, 0, bytesInStream.Length);
-                            fileStream.Close();
-                            if (ExisitingFiles != null)
-                                ExisitingFiles += "," + fileContent.FileName;
-                            else
-                                ExisitingFiles = fileContent.FileName;
-                        }
-                        else
-                            return Json("File already exists", JsonRequestBehavior.AllowGet);
-                    }
-                }
-
-                string errordesc = "success";
-                int errocode = 0;
-                // _dbOperations.UpdateOnboardingTaskdata(Id, ExisitingFiles, TaskComments, out errocode, out errordesc);
-
-                return Json(errordesc, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json("success", JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        #endregion OnboardingTask
-
         #region Roles
 
         public JsonResult GetUserRoles(string userId)
@@ -790,23 +735,36 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddRoleRightMapping([FromBody]RoleRightMapping obj)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddRoleRightMapping(obj, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddRoleRightMapping(obj, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyRoleRight([FromBody]RoleRightMapping obj)
         {
-            _dbOperations.ModifyRoleRight(obj);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                _dbOperations.ModifyRoleRight(obj);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteRole(RoleRightMapping obj)
         {
-
-            _dbOperations.DeleteRole(obj.id);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                _dbOperations.DeleteRole(obj.id);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Roles
@@ -821,20 +779,27 @@ namespace BRDFountain.Controllers
 
         public JsonResult profile(string userId)
         {
-            _dbOperations.GetUserProfile(userId);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                _dbOperations.GetUserProfile(userId);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
         public JsonResult GetUserSessionInfo(string createdOn)
         {
-            _dbOperations.GetUserSessionInfo(createdOn);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                _dbOperations.GetUserSessionInfo(createdOn);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult GetInactiveUsers()
-        {
-            _dbOperations.GetInactiveUsers();
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
+
 
         public JsonResult GetUserbyFilter(string RegionId, string BusinessLineId)
         {
@@ -845,17 +810,26 @@ namespace BRDFountain.Controllers
 
         public JsonResult email()
         {
-            _dbOperations.GetAllEmail();
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                _dbOperations.GetAllEmail();
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult CreateUser(UserMaster user)
         {
-
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.CreateUser(user, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.CreateUser(user, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult CreateTempUser(UserMaster user)
@@ -886,17 +860,26 @@ namespace BRDFountain.Controllers
 
         public JsonResult ModifyUser(UserMaster user)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyUser(user, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyUser(user, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteUser(string user)
         {
+            try
+            {
+                string errordesc = "";
 
-            _dbOperations.DeleteUser(user);
-            return Json("", JsonRequestBehavior.AllowGet);
+                _dbOperations.DeleteUser(user);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
         #endregion User
 
@@ -904,32 +887,52 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetAllCountry(string CountryId)
         {
-            List<CountryMaster> lst = _dbOperations.GetCountryList(CountryId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+
+                List<CountryMaster> lst = _dbOperations.GetCountryList(CountryId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public JsonResult AddCountry(CountryMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddCountry(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddCountry(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyCountry(CountryMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyCountry(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyCountry(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteCountry(string CountryId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteCountry(CountryId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteCountry(CountryId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Country
@@ -944,26 +947,38 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddRegion(RegionMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddRegion(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddRegion(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyRegion(RegionMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyRegion(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyRegion(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteRegion(string RegionId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteRegion(RegionId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteRegion(RegionId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Region
@@ -994,32 +1009,66 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetAllFTAApplicationCode(string FTAApplicationCodeId)
         {
-            List<FTAApplicationCodeMaster> lst = _dbOperations.GetFTAApplicationCodeList(FTAApplicationCodeId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                log.Info("Get All FTA Application - Begin ");
+                List<FTAApplicationCodeMaster> lst = _dbOperations.GetFTAApplicationCodeList(FTAApplicationCodeId);
+                log.Info("Get All FTA Application Called - End");
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         public JsonResult AddFTAApplicationCode(FTAApplicationCodeMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAApplicationCode(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddFTAApplicationCode(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         public JsonResult ModifyFTAApplicationCode(FTAApplicationCodeMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAApplicationCode(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyFTAApplicationCode(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         public JsonResult DeleteFTAApplicationCode(string FTAApplicationCodeId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAApplicationCode(FTAApplicationCodeId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteFTAApplicationCode(FTAApplicationCodeId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         #endregion FTAApplicationCode
@@ -1029,32 +1078,65 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetAllFTAStrategyCode(string FTAStrategyCodeId)
         {
-            List<FTAStrategyCodeMaster> lst = _dbOperations.GetFTAStrategyCodeList(FTAStrategyCodeId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<FTAStrategyCodeMaster> lst = _dbOperations.GetFTAStrategyCodeList(FTAStrategyCodeId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
+
         }
 
         public JsonResult AddFTAStrategyCode(FTAStrategyCodeMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAStrategyCode(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddFTAStrategyCode(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         public JsonResult ModifyFTAStrategyCode(FTAStrategyCodeMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAStrategyCode(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyFTAStrategyCode(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         public JsonResult DeleteFTAStrategyCode(string FTAStrategyCodeId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAStrategyCode(FTAStrategyCodeId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteFTAStrategyCode(FTAStrategyCodeId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         #endregion FTAStrategyCode
@@ -1069,26 +1151,38 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddFTAStrategyOwner(FTAStrategyOwnerMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAStrategyOwner(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddFTAStrategyOwner(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyFTAStrategyOwner(FTAStrategyOwnerMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAStrategyOwner(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyFTAStrategyOwner(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteFTAStrategyOwner(string FTAStrategyOwnerId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAStrategyOwner(FTAStrategyOwnerId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteFTAStrategyOwner(FTAStrategyOwnerId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion FTAStrategyOwner
@@ -1103,26 +1197,40 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddDiscretionaryCode(DiscretionaryCodeMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddDiscretionaryCode(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddDiscretionaryCode(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyDiscretionaryCode(DiscretionaryCodeMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyDiscretionaryCode(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyDiscretionaryCode(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteDiscretionaryCode(string DiscretionaryCodeId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteDiscretionaryCode(DiscretionaryCodeId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteDiscretionaryCode(DiscretionaryCodeId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion DiscretionaryCode
@@ -1137,26 +1245,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddBusinessSuffix(BusinessSuffixMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddBusinessSuffix(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddBusinessSuffix(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyBusinessSuffix(BusinessSuffixMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyBusinessSuffix(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyBusinessSuffix(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteBusinessSuffix(string BusinessSuffixId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteBusinessSuffix(BusinessSuffixId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteBusinessSuffix(BusinessSuffixId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion BusinessSuffix
@@ -1171,26 +1294,38 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddBusiness(BusinessMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddBusiness(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddBusiness(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyBusiness(BusinessMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                string errordesc = ""; int errocode = 0;
+                _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteBusiness(string BusinessId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteBusiness(BusinessId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteBusiness(BusinessId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Business
@@ -1205,26 +1340,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddParentID(ParentIDMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddParentID(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddParentID(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyParentID(ParentIDMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyParentID(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyParentID(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteParentID(string ParentIDId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteParentID(ParentIDId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteParentID(ParentIDId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion ParentID
@@ -1239,26 +1389,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddChildID(ChildIDMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddChildID(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddChildID(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyChildID(ChildIDMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyChildID(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyChildID(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteChildID(string ChildIDId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteChildID(ChildIDId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteChildID(ChildIDId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion ChildID
@@ -1273,26 +1438,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddBusinessLine(BusinessLineMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddBusinessLine(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddBusinessLine(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyBusinessLine(BusinessLineMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyBusinessLine(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyBusinessLine(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteBusinessLine(string BusinessLineId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteBusinessLine(BusinessLineId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteBusinessLine(BusinessLineId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion BusinessLine
@@ -1307,26 +1487,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddFTAApplicationName(FTAApplicationNameMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAApplicationName(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddFTAApplicationName(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyFTAApplicationName(FTAApplicationNameMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAApplicationName(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyFTAApplicationName(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteFTAApplicationName(string FTAApplicationNameId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAApplicationName(FTAApplicationNameId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteFTAApplicationName(FTAApplicationNameId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion FTAApplicationName
@@ -1341,26 +1536,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddFTAApplicationOwner(FTAApplicationOwnerMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAApplicationOwner(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddFTAApplicationOwner(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyFTAApplicationOwner(FTAApplicationOwnerMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAApplicationOwner(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyFTAApplicationOwner(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteFTAApplicationOwner(string FTAApplicationOwnerId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAApplicationOwner(FTAApplicationOwnerId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteFTAApplicationOwner(FTAApplicationOwnerId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion FTAApplicationOwner
@@ -1375,26 +1585,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddFTAStrategyName(FTAStrategyNameMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAStrategyName(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddFTAStrategyName(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyFTAStrategyName(FTAStrategyNameMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyFTAStrategyName(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyFTAStrategyName(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteFTAStrategyName(string FTAStrategyNameId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteFTAStrategyName(FTAStrategyNameId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteFTAStrategyName(FTAStrategyNameId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion FTAStrategyName
@@ -1409,26 +1634,40 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddApplicationCategory(ApplicationCategoryMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddApplicationCategory(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddApplicationCategory(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyApplicationCategory(ApplicationCategoryMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyApplicationCategory(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyApplicationCategory(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteApplicationCategory(string ApplicationCategoryId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteApplicationCategory(ApplicationCategoryId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteApplicationCategory(ApplicationCategoryId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion ApplicationCategory
@@ -1443,26 +1682,41 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddStrategytype(StrategytypeMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddStrategytype(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddStrategytype(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyStrategytype(StrategytypeMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyStrategytype(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyStrategytype(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteStrategytype(string StrategytypeId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteStrategytype(StrategytypeId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.DeleteStrategytype(StrategytypeId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Strategytype
@@ -1477,26 +1731,40 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddVenuetype(VenuetypeMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddVenuetype(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.AddVenuetype(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyVenuetype(VenuetypeMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyVenuetype(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+
+                int errocode = 0;
+                _dbOperations.ModifyVenuetype(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteVenuetype(string VenuetypeId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteVenuetype(VenuetypeId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteVenuetype(VenuetypeId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         #endregion Venuetype
@@ -1511,26 +1779,42 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddCapacity(CapacityMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddCapacity(taskInfo, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddCapacity(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult ModifyCapacity(CapacityMaster opp)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.ModifyCapacity(opp, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.ModifyCapacity(opp, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { log.Error(e); return null; }
         }
 
         public JsonResult DeleteCapacity(string CapacityId)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.DeleteCapacity(CapacityId, out errocode, out errordesc);
-            return Json("", JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.DeleteCapacity(CapacityId, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
         }
 
         #endregion Capacity
@@ -1577,7 +1861,7 @@ namespace BRDFountain.Controllers
         //    string errordesc = "";
         //    int errocode = 0;
         //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json("", JsonRequestBehavior.AllowGet);
+        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
         //}
 
         public JsonResult DeleteBusinessMapping(string BusinessId)
@@ -1617,7 +1901,7 @@ namespace BRDFountain.Controllers
         //    string errordesc = "";
         //    int errocode = 0;
         //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json("", JsonRequestBehavior.AllowGet);
+        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
         //}
 
         public JsonResult DeleteFTAStrategyMapping(string Id)
@@ -1642,18 +1926,24 @@ namespace BRDFountain.Controllers
 
         public JsonResult AddFTAApplicationMapping(FTAApplicationMappingMaster taskInfo)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.AddFTAApplicationMapping(taskInfo, out errocode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddFTAApplicationMapping(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
-
         //public JsonResult ModifyBusiness(BusinessMaster opp)
         //{
         //    string errordesc = "";
         //    int errocode = 0;
         //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json("", JsonRequestBehavior.AllowGet);
+        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
         //}
 
         public JsonResult DeleteFTAApplicationMapping(string Id)
@@ -1700,3 +1990,20 @@ public static class Utilities
         return returnActive ? "active" : "";
     }
 }
+
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public sealed class NoCacheAttribute : ActionFilterAttribute
+{
+    public override void OnResultExecuting(ResultExecutingContext filterContext)
+    {
+        filterContext.HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+        filterContext.HttpContext.Response.Cache.SetValidUntilExpires(false);
+        filterContext.HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+        filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        filterContext.HttpContext.Response.Cache.SetNoStore();
+
+        base.OnResultExecuting(filterContext);
+    }
+}
+

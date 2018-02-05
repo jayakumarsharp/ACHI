@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization;
 @Scripts.Render("~/bundles/defaultscripts")
+@Scripts.Render("~/bundles/customscripts")
 <html style="height: auto; min-height: 100%;">
 <head>
     @*<base href="/">*@
@@ -12,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="~/css/leftmenu.css">
     <link rel="stylesheet" type="text/css" href="~/css/magic-check.css">
     <link rel="stylesheet" type="text/css" href="~/css/jquery.mCustomScrollbar.css">
-
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500,600|Open+Sans:400,600|Oswald" rel="stylesheet">
     <link href="~/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="~/css/toaster.css" rel="stylesheet" />
@@ -20,7 +20,6 @@
     <link href="~/css/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
-    @*<link rel="stylesheet" type="text/css" href="~/css/style.css">*@
 </head>
 <body ng-app="reportApp" ng-controller="MainController" class="pushmenu-push pushmenu-push-toright">
 
@@ -28,60 +27,6 @@
         <h3><img src="~/images/logo.svg" width="80px"></h3>
         <div>
             <ul class="links" data-widget="tree">
-                @*    <li class='@Html.IsActive("Main", "Index")' aria-haspopup="true">
-                        <a href="Main/Index">
-                            Dashboard
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Clients")'>
-                        <a href="Main/Clients">
-                            Clients
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-
-                    <li class='@Html.IsActive("Main", "Tasks")'>
-                        <a href="Main/Tasks">
-                            Tasks
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-
-                    <li class='@Html.IsActive("Main", "MapTask")'>
-                        <a href="Main/MapTask">
-                            Map Task
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "OnBoardingTasks")'>
-                        <a href="Main/OnBoardingTasks">
-                            OnBoarding Tasks
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-                    <li class='@Html.IsActive("Main", "Emails")'>
-                        <a href="Main/Emails">
-                            Emails
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-
-                    <li class='@Html.IsActive("Main", "Reports")' aria-haspopup="true">
-                        <a href="javascript:;">
-                            Reports
-                            <span class="arrow"></span>
-                        </a>
-                    </li>
-
-                    <li class='@Html.IsActive("Main", "Licensing")' aria-haspopup="true">
-                        <a href="javascript:;">
-                            <i class="icon-briefcase"></i> Licensing
-                            <span class="arrow"></span>
-                        </a>
-
-                    </li>*@
-
                 <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu)"> <span><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
                 @*<li ng-class="{'active': rootname == 'MappingMaster' }"><a href="MappingMaster" ng-click="updatemenuclick('MappingMaster')"> <span class="icon"><i class="fa fa-star-o"></i></span> Mapping Page</a></li>*@
             </ul>
@@ -97,14 +42,6 @@
                 <div class="user_online"></div>
                 <div class="user_name">@Convert.ToString(Session["UserName"]) </div>
             </div>
-            @*<div class="action_set">
-                    <a href="#">
-                        <img src="~/images/notification.svg" class="btn_bell" />
-                    </a>
-                    <a href="#">
-                        <img src="~/images/settings.svg" class="btn_setting" />
-                    </a>
-                </div>*@
             <div class="log_out">
                 <a ng-click="clearlogout()" href="@Url.Action("Logout", "Home")">
                     <div class="txt">Logout</div>
@@ -113,139 +50,10 @@
                     </div>
                 </a>
             </div>
-
         </div>
-
     </section>
     <div class="main">
-
-        @*<div class="page_link">
-                <ul class="page_link_left">
-                    <li><a href="#" class="active">MY APPROVALS</a></li>
-                    <li><a href="#">Delegate request</a></li>
-                    <li><a href="#">Delegate approval status</a></li>
-                </ul>
-
-                <ul class="page_link_right">
-                    <li><a href="#"><img src="~/images/print.svg">Print</a></li>
-                    <li><a href="#"><img src="~/images/export.svg">EXPORT</a></li>
-                </ul>
-            </div>
-            <div class="page_status">
-                <a href="#" style="margin: 0 -5px;">
-                    <div class="status_pending active">
-                        <div class="number">
-                            45
-                        </div>
-                        <div class="status_txt">
-                            Pending<br />
-                            Approvals
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="status_completed">
-                        <div class="number">
-                            21
-                        </div>
-                        <div class="status_txt">
-                            Completed<br />
-                            Approvals
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="page_search">
-                <div class="delete">
-                    <button class="btn_delete" />
-                </div>
-                <div class="textbox">
-                    <input type="search" class="input_search" placeholder="Start typing to search">
-                </div>
-
-            </div>
-            <table id="example" class="datatable" cellspacing="0" cellpadding="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>
-                            <input class="magic-checkbox" type="checkbox" name="layout" id="0" value="option"><label for="0"></label>
-                        </th>
-                        <th><span>Reference No</span><img src="~/images/sort.jpg" /></th>
-                        <th><span>Strategy Name</span><img src="~/images/sort.jpg" /></th>
-                        <th><span>Version Number</span><img src="~/images/sort.jpg" /></th>
-                        <th><span>Date / Time</span><img src="~/images/sort.jpg" /></th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td><input class="magic-checkbox" type="checkbox" name="layout" id="1" value="option"><label for="1"></label></td>
-                        <td>100023</td>
-                        <td>Equity Market maker solution for the part name of company</td>
-                        <td>1.2.13</td>
-                        <td>4th May 2017, 16:47</td>
-                        <td><a href="#" title="Edit"><img src="~/images/edit.svg" class="table_btn_edit" title="Edit" /></a></td>
-                        <td><a href="#" title="Delete"><img src="~/images/delete.svg" class="table_btn_delete" title="Delete" /></a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="magic-checkbox" type="checkbox" name="layout" id="2" value="option"><label for="2"></label></td>
-                        <td>100023</td>
-                        <td>Equity Market maker solution for the part name of company</td>
-                        <td>1.2.13</td>
-                        <td>4th May 2017, 16:47</td>
-                        <td><a href="#" title="Edit"><img src="~/images/edit.svg" class="table_btn_edit" title="Edit" /></a></td>
-                        <td><a href="#" title="Delete"><img src="~/images/delete.svg" class="table_btn_delete" title="Delete" /></a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="magic-checkbox" type="checkbox" name="layout" id="3" value="option"><label for="3"></label></td>
-                        <td>100023</td>
-                        <td>Equity Market maker solution for the part name of company</td>
-                        <td>1.2.13</td>
-                        <td>4th May 2017, 16:47</td>
-                        <td><a href="#" title="Edit"><img src="~/images/edit.svg" class="table_btn_edit" title="Edit" /></a></td>
-                        <td><a href="#" title="Delete"><img src="~/images/delete.svg" class="table_btn_delete" title="Delete" /></a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="magic-checkbox" type="checkbox" name="layout" id="4" value="option"><label for="4"></label></td>
-                        <td>100023</td>
-                        <td>Equity Market maker solution for the part name of company</td>
-                        <td>1.2.13</td>
-                        <td>4th May 2017, 16:47</td>
-                        <td><a href="#" title="Edit"><img src="~/images/edit.svg" class="table_btn_edit" title="Edit" /></a></td>
-                        <td><a href="#" title="Delete"><img src="~/images/delete.svg" class="table_btn_delete" title="Delete" /></a></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="paging">
-                <a href="#" class="btn_priv disable">PREV</a>
-                <a href="#" class="page_number active">1</a>
-                <a href="#" class="page_number">2</a>
-                <a href="#" class="page_number">3</a>
-                <a href="#" class="page_number">4</a>
-                <a href="#" class="btn_next">NEXT</a>
-            </div>*@
         @RenderBody()
-
     </div>
-
-    <script src="~/js/ReportApp.js"></script>
-    <script src="~/js/RoleApp.js"></script>
-    <script src="~/js/UserApp.js"></script>
-    <script src="~/js/controllers/BusinessLineMasterController.js"></script>
-    <script src="~/js/controllers/CountryMasterController.js"></script>
-    <script src="~/js/controllers/RegionMasterController.js"></script>
-    <script src="~/js/controllers/ClientController.js"></script>
-    <script src="~/js/controllers/TaskController.js"></script>
-    <script src="~/js/controllers/OnboardingTaskController.js"></script>
-    <script src="~/js/controllers/MapTaskController.js"></script>
-    <script src="~/js/controllers/MapClientTaskController.js"></script>
-    <script src="~/js/controllers/EmailsController.js"></script>
-    <script src="~/js/services/ClientService.js"></script>
-    <script src="~/js/services/TaskService.js"></script>
-    <script src="~/js/services/OnboardingTaskService.js"></script>
-    <script src="~/js/services/EmailService.js"></script>
-    <script src="~/js/services/MapTaskService.js"></script>
-    <script type="text/javascript" src="~/js/script.js"></script>
 </body>
 </html>

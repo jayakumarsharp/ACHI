@@ -5,49 +5,17 @@ using System.Configuration;
 using System.Linq;
 using log4net;
 using System.Globalization;
-using MySql.Data.MySqlClient;
 using System.Data;
+
+using System.Data.SqlClient;
 using BRDFountain.Models;
-
-public static class StaticClass
-{
-    public static string Adduser = "spsvn_Adduser";
-    public static string updateuser = "spsvn_updateuser";
-    public static string ChangePwd = "spsvn_ChangePwd";
-
-    public static string DeleteUser = "spsvn_deleteuser";
-
-    public static string GetAllFCCLocations = "SPSVN_GetAllFCCLocations";
-
-    public static string GetUserProfile = "spsvn_GetAllusers";
-    public static string GetMenuItems = "SPSVN_GetMenuItems";
-    public static string GetRoles = "spsvn_GetAllRoles";
-    public static string AddRightsForRoles = "SPSVN_RoleMenuMap";
-    public static string Checkuserlogin = "spsvn_validateLogin";
-    public static string GetExtensionwisecallReport = "SPSVN_ExtensionwiseCallDetail";
-
-    public static string GetAllManagers = "spsvn_GetAllManagers";
-    public static string GetAllTeams = "spsvn_GetAllTeams";
-    public static string GetAllusersById = "spsvn_GetAllusersById";
-    public static string GetManagerByEmpcode = "spsvn_GetManagerByEmpcode";
-    public static string GetHodByEmpcode = "spsvn_GetHodByEmpcode";
-
-    public static string updateManagerByEmpcode = "spsvn_ManagerHierachy";
-    public static string updateHodByEmpcode = "spsvn_hodHierachy";
-    public static string UpdatePwd = "spsvn_UpdatePwd";
-
-}
-
-
-
 public class DbOperations
 {
     #region Private Variable Declaration
-    private MySqlConnection connection;
+
+    private SqlConnection connection;
     private static readonly log4net.ILog log = LogManager.GetLogger(typeof(DbOperations));
     private string connString = string.Empty;
-
-    private int commandTimeout = 0;
     #endregion
 
     #region Default Constructor
@@ -57,7 +25,7 @@ public class DbOperations
         try
         {
             connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
-            connection = new MySqlConnection(connString);
+            connection = new SqlConnection(connString);
         }
         catch (Exception ex)
         {
@@ -76,7 +44,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_transfersetting", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_transfersetting", connection))
             {
                 DateTime FromDate = new DateTime();
                 DateTime Todate = new DateTime();
@@ -88,10 +56,10 @@ public class DbOperations
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
-                cmd.Parameters.Add(new MySqlParameter("i_TransferTo", objTransferSetting.Transferuser));
-                cmd.Parameters.Add(new MySqlParameter("i_DurationFrom", FromDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
-                cmd.Parameters.Add(new MySqlParameter("i_DurationTo", Todate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new SqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
+                cmd.Parameters.Add(new SqlParameter("i_TransferTo", objTransferSetting.Transferuser));
+                cmd.Parameters.Add(new SqlParameter("i_DurationFrom", FromDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new SqlParameter("i_DurationTo", Todate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -100,7 +68,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -122,12 +90,12 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_delete_transfersetting", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_delete_transfersetting", connection))
             {
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_owner", OwnerUser));
+                cmd.Parameters.Add(new SqlParameter("i_owner", OwnerUser));
                 if (this.OpenConnection() == true)
                 {
 
@@ -137,7 +105,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -162,11 +130,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_Owner", username));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_Owner", username));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -190,7 +158,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
@@ -213,11 +181,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_user", userid));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -241,7 +209,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
         return lst;
@@ -258,18 +226,18 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_strategy_Approval", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_strategy_Approval", connection))
             {
                 foreach (StrategyApprover s in lst)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
-                    cmd.Parameters.Add(new MySqlParameter("i_Version", version));
-                    cmd.Parameters.Add(new MySqlParameter("i_systemfile", s.Approver));
-                    cmd.Parameters.Add(new MySqlParameter("i_OrignalFile", s.Comments));
-                    cmd.Parameters.Add(new MySqlParameter("i_status", s.Status));
-                    cmd.Parameters.Add(new MySqlParameter("I_uploadedby", s.Uploadedby));
+                    cmd.Parameters.Add(new SqlParameter("i_RefNumber", RefNumber));
+                    cmd.Parameters.Add(new SqlParameter("i_Version", version));
+                    cmd.Parameters.Add(new SqlParameter("i_systemfile", s.Approver));
+                    cmd.Parameters.Add(new SqlParameter("i_OrignalFile", s.Comments));
+                    cmd.Parameters.Add(new SqlParameter("i_status", s.Status));
+                    cmd.Parameters.Add(new SqlParameter("I_uploadedby", s.Uploadedby));
 
 
                     if (this.OpenConnection() == true)
@@ -281,7 +249,7 @@ public class DbOperations
                 }
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -303,15 +271,15 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_delete_strategy_Approval", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_delete_strategy_Approval", connection))
             {
                 foreach (StrategyApprover s in lst)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                    cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
-                    cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
+                    cmd.Parameters.Add(new SqlParameter("i_RefNumber", s.RefNumber));
+                    cmd.Parameters.Add(new SqlParameter("i_Version", s.Version));
+                    cmd.Parameters.Add(new SqlParameter("i_Approver", s.Approver));
 
                     if (this.OpenConnection() == true)
                     {
@@ -323,7 +291,7 @@ public class DbOperations
                 }
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -346,17 +314,17 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("Sp_update_strategy_approval", connection))
+            using (SqlCommand cmd = new SqlCommand("Sp_update_strategy_approval", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
-                cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
-                cmd.Parameters.Add(new MySqlParameter("i_Comments", s.Comments));
-                cmd.Parameters.Add(new MySqlParameter("i_Status", s.Status));
-                cmd.Parameters.Add(new MySqlParameter("i_Type", s.Type));
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", s.RefNumber));
+                cmd.Parameters.Add(new SqlParameter("i_Version", s.Version));
+                cmd.Parameters.Add(new SqlParameter("i_Approver", s.Approver));
+                cmd.Parameters.Add(new SqlParameter("i_Comments", s.Comments));
+                cmd.Parameters.Add(new SqlParameter("i_Status", s.Status));
+                cmd.Parameters.Add(new SqlParameter("i_Type", s.Type));
 
-                //cmd.Parameters.Add(new MySqlParameter("i_Approver", s.ApprovedDate));
+                //cmd.Parameters.Add(new SqlParameter("i_Approver", s.ApprovedDate));
                 if (this.OpenConnection() == true)
                 {
 
@@ -366,7 +334,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -390,11 +358,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", RefNumber));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -407,7 +375,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -425,11 +393,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_user", userid));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -455,7 +423,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -472,11 +440,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_user", userid));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -502,7 +470,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -519,11 +487,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_user", userid));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_user", userid));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -549,7 +517,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -567,12 +535,12 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", Version));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", StrategyNumber));
+                cmd.Parameters.Add(new SqlParameter("i_Version", Version));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -596,7 +564,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -610,14 +578,14 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_update_delegate_Acceptance", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_update_delegate_Acceptance", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", s.Id));
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", s.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", s.Version));
-                cmd.Parameters.Add(new MySqlParameter("i_Approver", s.Approver));
-                cmd.Parameters.Add(new MySqlParameter("i_Status", s.Status));
+                cmd.Parameters.Add(new SqlParameter("i_Id", s.Id));
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", s.RefNumber));
+                cmd.Parameters.Add(new SqlParameter("i_Version", s.Version));
+                cmd.Parameters.Add(new SqlParameter("i_Approver", s.Approver));
+                cmd.Parameters.Add(new SqlParameter("i_Status", s.Status));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -626,7 +594,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -652,10 +620,10 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.TableDirect;
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -731,13 +699,13 @@ public class DbOperations
                     }
 
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
             return lst;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             log.ErrorFormat("Exception Occured :{0}", ex.ToString());
             log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
@@ -764,11 +732,11 @@ public class DbOperations
 
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.TableDirect;
-                    //cmd.Parameters.Add(new MySqlParameter("i_RefNumber", StrategyNumber));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    //cmd.Parameters.Add(new SqlParameter("i_RefNumber", StrategyNumber));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -845,13 +813,13 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
             return lst;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             log.ErrorFormat("Exception Occured :{0}", ex.ToString());
             log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
@@ -875,19 +843,19 @@ public class DbOperations
             string query = "SP_StrategyReport";
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", filter.FTAStrategyCode));
-                    cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", filter.BusinessLine));
-                    cmd.Parameters.Add(new MySqlParameter("i_Region", filter.Region));
-                    cmd.Parameters.Add(new MySqlParameter("i_Country", filter.Country));
-                    cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", filter.FTAStrategyOwner));
-                    cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
-                    cmd.Parameters.Add(new MySqlParameter("i_VenueType", filter.VenuetypeId));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", filter.FTAApplicationCode));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", filter.FTAStrategyCode));
+                    cmd.Parameters.Add(new SqlParameter("i_BusinessLine", filter.BusinessLine));
+                    cmd.Parameters.Add(new SqlParameter("i_Region", filter.Region));
+                    cmd.Parameters.Add(new SqlParameter("i_Country", filter.Country));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", filter.FTAStrategyOwner));
+                    cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
+                    cmd.Parameters.Add(new SqlParameter("i_VenueType", filter.VenuetypeId));
 
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -965,7 +933,7 @@ public class DbOperations
             }
             return lst;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             log.ErrorFormat("Exception Occured :{0}", ex.ToString());
             log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
@@ -994,49 +962,49 @@ public class DbOperations
                 DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategy", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_CountryId", _StrategyInfo.Country));
-                cmd.Parameters.Add(new MySqlParameter("i_CountryIdList", _StrategyInfo.CountryId));
-                cmd.Parameters.Add(new MySqlParameter("i_CountryNameList", _StrategyInfo.CountryNameList));
-                cmd.Parameters.Add(new MySqlParameter("i_RegionId", _StrategyInfo.Region));
-                cmd.Parameters.Add(new MySqlParameter("i_Description", _StrategyInfo.Description));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", _StrategyInfo.FTAApplicationCodeId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffixId", _StrategyInfo.BusinessSuffixId));
-                cmd.Parameters.Add(new MySqlParameter("i_ChildID", _StrategyInfo.ChildID));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", _StrategyInfo.FTAStrategyNameId));
-                cmd.Parameters.Add(new MySqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
-                cmd.Parameters.Add(new MySqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", _StrategyInfo.FTAStrategyCodeId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCode));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
-                cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
+                cmd.Parameters.Add(new SqlParameter("i_CountryId", _StrategyInfo.Country));
+                cmd.Parameters.Add(new SqlParameter("i_CountryIdList", _StrategyInfo.CountryId));
+                cmd.Parameters.Add(new SqlParameter("i_CountryNameList", _StrategyInfo.CountryNameList));
+                cmd.Parameters.Add(new SqlParameter("i_RegionId", _StrategyInfo.Region));
+                cmd.Parameters.Add(new SqlParameter("i_Description", _StrategyInfo.Description));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", _StrategyInfo.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessSuffixId", _StrategyInfo.BusinessSuffixId));
+                cmd.Parameters.Add(new SqlParameter("i_ChildID", _StrategyInfo.ChildID));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", _StrategyInfo.FTAStrategyNameId));
+                cmd.Parameters.Add(new SqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
+                cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", _StrategyInfo.FTAStrategyCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCode));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
                 if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
-                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                    cmd.Parameters.Add(new SqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 else
-                    cmd.Parameters.Add(new MySqlParameter("i_DecommissionedDate", null));
-                cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
-                cmd.Parameters.Add(new MySqlParameter("i_ParentID", _StrategyInfo.ParentID));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
-                cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", _StrategyInfo.PriorityScore));
-                cmd.Parameters.Add(new MySqlParameter("i_Priority", _StrategyInfo.Priority));
-                cmd.Parameters.Add(new MySqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
-                cmd.Parameters.Add(new MySqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", _StrategyInfo.Version));
-                cmd.Parameters.Add(new MySqlParameter("i_SignOff", _StrategyInfo.SignOff));
+                    cmd.Parameters.Add(new SqlParameter("i_DecommissionedDate", null));
+                cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_ParentID", _StrategyInfo.ParentID));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_PriorityScore", _StrategyInfo.PriorityScore));
+                cmd.Parameters.Add(new SqlParameter("i_Priority", _StrategyInfo.Priority));
+                cmd.Parameters.Add(new SqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
+                cmd.Parameters.Add(new SqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
+                cmd.Parameters.Add(new SqlParameter("i_Version", _StrategyInfo.Version));
+                cmd.Parameters.Add(new SqlParameter("i_SignOff", _StrategyInfo.SignOff));
 
-                cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", _StrategyInfo.ThirdPartyAppId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessId", _StrategyInfo.BusinessId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationMappingId", _StrategyInfo.FTAApplicationMappingId));
-                cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyMappingId", _StrategyInfo.FTAStrategyMappingId));
-                cmd.Parameters.Add(new MySqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
-                cmd.Parameters.Add(new MySqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
+                cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", _StrategyInfo.ThirdPartyAppId));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessId", _StrategyInfo.BusinessId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationMappingId", _StrategyInfo.FTAApplicationMappingId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyMappingId", _StrategyInfo.FTAStrategyMappingId));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
+                cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
 
-                cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
                 {
@@ -1048,7 +1016,7 @@ public class DbOperations
                 //    errordesc = "success-" + _StrategyInfo.RefNumber + "|" + _StrategyInfo.Version;
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -1067,13 +1035,13 @@ public class DbOperations
         try
         {
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_strategyVersionLog", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_strategyVersionLog", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_RefNumber", RefNumber));
-                cmd.Parameters.Add(new MySqlParameter("i_Version", Version));
-                cmd.Parameters.Add(new MySqlParameter("i_ChangeDesc", Changedesc));
-                cmd.Parameters.Add(new MySqlParameter("i_Createdby", username));
+                cmd.Parameters.Add(new SqlParameter("i_RefNumber", RefNumber));
+                cmd.Parameters.Add(new SqlParameter("i_Version", Version));
+                cmd.Parameters.Add(new SqlParameter("i_ChangeDesc", Changedesc));
+                cmd.Parameters.Add(new SqlParameter("i_Createdby", username));
 
 
                 if (this.OpenConnection() == true)
@@ -1082,10 +1050,10 @@ public class DbOperations
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
                 }
-                //close connection
+
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             this.CloseConnection();
         }
@@ -1107,11 +1075,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_Id", id));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_Id", id));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1134,13 +1102,13 @@ public class DbOperations
                     }
 
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
             return lst;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             log.ErrorFormat("Exception Occured :{0}", ex.ToString());
             log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
@@ -1178,12 +1146,12 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            MySqlCommand cmd = new MySqlCommand(query, connection);
+            SqlCommand cmd = new SqlCommand(query, connection);
 
 
             cmd.ExecuteNonQuery();
 
-            //close connection
+
             this.CloseConnection();
         }
     }
@@ -1195,7 +1163,7 @@ public class DbOperations
             connection.Open();
             return true;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             //When handling errors, you can your application's response based on the error number.
             //The two most common error numbers when connecting are as follows:
@@ -1215,7 +1183,7 @@ public class DbOperations
         }
     }
 
-    //Close connection
+
     private bool CloseConnection()
     {
         try
@@ -1223,7 +1191,7 @@ public class DbOperations
             connection.Close();
             return true;
         }
-        catch (MySqlException ex)
+        catch (SqlException ex)
         {
             connection.Close();
             log.Error(ex.Message);
@@ -1241,11 +1209,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_roleId", roleId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -1268,7 +1236,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1285,11 +1253,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_roleId", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1312,7 +1280,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
@@ -1334,11 +1302,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_roleId", roleId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -1361,7 +1329,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -1374,15 +1342,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_role", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_role", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_role", role));
+            cmd.Parameters.Add(new SqlParameter("i_role", role));
 
             if (this.OpenConnection() == true)
             {
-                cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -1398,11 +1366,11 @@ public class DbOperations
     {
         try
         {
-            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_RoleRight", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright.id));
+                cmd.Parameters.Add(new SqlParameter("i_roleid", roleright.id));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1411,14 +1379,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_roleright", connection))
             {
                 foreach (RightMaster s in roleright.Rights)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
-                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.id));
+                    cmd.Parameters.Add(new SqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new SqlParameter("i_RoleId", roleright.id));
                     if (this.OpenConnection() == true)
                     {
 
@@ -1441,14 +1409,14 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_roleright", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_roleright", connection))
             {
                 foreach (RightMaster s in roleright.Rights)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RightId", s.RightID));
-                    cmd.Parameters.Add(new MySqlParameter("i_RoleId", roleright.RoleID));
+                    cmd.Parameters.Add(new SqlParameter("i_RightId", s.RightID));
+                    cmd.Parameters.Add(new SqlParameter("i_RoleId", roleright.RoleID));
                     if (this.OpenConnection() == true)
                     {
 
@@ -1460,7 +1428,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -1481,11 +1449,11 @@ public class DbOperations
     {
         try
         {
-            using (MySqlCommand cmd = new MySqlCommand("delete_RoleRight", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_RoleRight", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_roleid", roleright));
+                cmd.Parameters.Add(new SqlParameter("i_roleid", roleright));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1494,11 +1462,11 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("SP_DeleteRole", connection))
+            using (SqlCommand cmd = new SqlCommand("SP_DeleteRole", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_id", roleright));
+                cmd.Parameters.Add(new SqlParameter("i_id", roleright));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1521,11 +1489,11 @@ public class DbOperations
             string query = "SP_GetRoleRights";
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_roleId", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1578,11 +1546,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.Add(new MySqlParameter("i_roleId", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    //cmd.Parameters.Add(new SqlParameter("i_roleId", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1605,7 +1573,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
 
@@ -1626,12 +1594,12 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_regionId", RegionId));
-                    cmd.Parameters.Add(new MySqlParameter("i_businesssectorId", BusinessSectorId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_regionId", RegionId));
+                    cmd.Parameters.Add(new SqlParameter("i_businesssectorId", BusinessSectorId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1675,11 +1643,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_userId", userId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -1712,7 +1680,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
         return lst;
@@ -1727,11 +1695,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_roleid", Roleid));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_roleid", Roleid));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -1762,13 +1730,13 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
 
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
 
             this.CloseConnection();
@@ -1781,19 +1749,19 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_adduser", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
-                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
-                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
-                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
-                cmd.Parameters.Add(new MySqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
-                //cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
-                //cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
-                //cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
-                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "No"));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new SqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new SqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new SqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                //cmd.Parameters.Add(new SqlParameter("i_countryid", user.CountryId));
+                //cmd.Parameters.Add(new SqlParameter("i_regionid", user.RegionId));
+                //cmd.Parameters.Add(new SqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new SqlParameter("i_IsADUser", "No"));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -1802,11 +1770,11 @@ public class DbOperations
 
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("delete_userBusinessSector", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_userBusinessSector", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -1814,14 +1782,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userBusinessSector", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_userBusinessSector", connection))
             {
                 foreach (BusinessSector s in user.BusinessSectorList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_BusinessSectorId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -1831,11 +1799,11 @@ public class DbOperations
             }
 
 
-            using (MySqlCommand cmd = new MySqlCommand("delete_usercountry", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1844,14 +1812,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_usercountry", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
             {
                 foreach (CountryMaster s in user.CountryList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_CountryId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
 
@@ -1862,11 +1830,11 @@ public class DbOperations
             }
 
 
-            using (MySqlCommand cmd = new MySqlCommand("delete_userregion", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_userregion", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1875,14 +1843,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userregion", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_userregion", connection))
             {
                 foreach (RegionMaster s in user.RegionList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RegionId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_RegionId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -1893,7 +1861,7 @@ public class DbOperations
 
 
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -1914,20 +1882,20 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_adduser", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_adduser", connection))
             {
 
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
-                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
-                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
-                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
-                cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
-                cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
-                cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
-                cmd.Parameters.Add(new MySqlParameter("i_IsADUser", "Yes"));
-                cmd.Parameters.Add(new MySqlParameter("i_password", ""));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new SqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new SqlParameter("i_Roleid", user.RoleId));
+                cmd.Parameters.Add(new SqlParameter("i_countryid", user.CountryId));
+                cmd.Parameters.Add(new SqlParameter("i_regionid", user.RegionId));
+                cmd.Parameters.Add(new SqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new SqlParameter("i_IsADUser", "Yes"));
+                cmd.Parameters.Add(new SqlParameter("i_password", ""));
                 if (this.OpenConnection() == true)
                 {
 
@@ -1937,7 +1905,7 @@ public class DbOperations
 
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -1959,18 +1927,18 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_updateuser", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_updateuser", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
-                cmd.Parameters.Add(new MySqlParameter("i_username", user.UserName));
-                cmd.Parameters.Add(new MySqlParameter("i_emailid", user.EmailId));
-                cmd.Parameters.Add(new MySqlParameter("i_Roleid", user.RoleId));
-                //cmd.Parameters.Add(new MySqlParameter("i_countryid", user.CountryId));
-                //cmd.Parameters.Add(new MySqlParameter("i_regionid", user.RegionId));
-                //cmd.Parameters.Add(new MySqlParameter("i_businesssectorid", user.BusinessSectorId));
-                cmd.Parameters.Add(new MySqlParameter("i_status", user.Status));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_username", user.UserName));
+                cmd.Parameters.Add(new SqlParameter("i_emailid", user.EmailId));
+                cmd.Parameters.Add(new SqlParameter("i_Roleid", user.RoleId));
+                //cmd.Parameters.Add(new SqlParameter("i_countryid", user.CountryId));
+                //cmd.Parameters.Add(new SqlParameter("i_regionid", user.RegionId));
+                //cmd.Parameters.Add(new SqlParameter("i_businesssectorid", user.BusinessSectorId));
+                cmd.Parameters.Add(new SqlParameter("i_status", user.Status));
 
                 if (this.OpenConnection() == true)
                 {
@@ -1979,11 +1947,11 @@ public class DbOperations
                     this.CloseConnection();
                 }
             }
-            using (MySqlCommand cmd = new MySqlCommand("delete_userBusinessSector", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_userBusinessSector", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -1991,14 +1959,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userBusinessSector", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_userBusinessSector", connection))
             {
                 foreach (BusinessSector s in user.BusinessSectorList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_BusinessSectorId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -2008,11 +1976,11 @@ public class DbOperations
             }
 
 
-            using (MySqlCommand cmd = new MySqlCommand("delete_usercountry", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
                 if (this.OpenConnection() == true)
                 {
@@ -2021,14 +1989,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_usercountry", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
             {
                 foreach (CountryMaster s in user.CountryList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_CountryId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
 
@@ -2039,11 +2007,11 @@ public class DbOperations
             }
 
 
-            using (MySqlCommand cmd = new MySqlCommand("delete_userregion", connection))
+            using (SqlCommand cmd = new SqlCommand("delete_userregion", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
                 if (this.OpenConnection() == true)
                 {
@@ -2052,14 +2020,14 @@ public class DbOperations
                 }
             }
 
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userregion", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_userregion", connection))
             {
                 foreach (RegionMaster s in user.RegionList)
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new MySqlParameter("i_RegionId", s.Id));
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    cmd.Parameters.Add(new SqlParameter("i_RegionId", s.Id));
+                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
@@ -2068,7 +2036,7 @@ public class DbOperations
                 }
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -2260,11 +2228,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_userId", userId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -2287,7 +2255,7 @@ public class DbOperations
 
                     cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2310,11 +2278,11 @@ public class DbOperations
             if (this.OpenConnection() == true)
             {
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_userId", userId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_userId", userId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -2329,10 +2297,8 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-                //close connection
+
                 this.CloseConnection();
             }
             return lst;
@@ -2444,11 +2410,11 @@ public class DbOperations
             string query = "SP_Getusercountry";
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_userid", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -2483,11 +2449,11 @@ public class DbOperations
             string query = "SP_Getuserregion";
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_userid", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -2522,11 +2488,11 @@ public class DbOperations
             string query = "SP_GetuserBusinessSector";
             if (this.OpenConnection() == true)
             {
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new MySqlParameter("i_userid", roleId));
-                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    cmd.Parameters.Add(new SqlParameter("i_userid", roleId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         sda.Fill(dt);
@@ -2563,11 +2529,11 @@ public class DbOperations
         string query = "sp_getallcountry";
         if (this.OpenConnection() == true)
         {
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -2592,15 +2558,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Country", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_Country", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_CountryName", opp.CountryName));
+            cmd.Parameters.Add(new SqlParameter("i_CountryName", opp.CountryName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2615,16 +2581,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_countrymaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_countrymaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_CountryName", Opp.CountryName));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_CountryName", Opp.CountryName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2639,15 +2605,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_country", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_country", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2669,11 +2635,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -2689,7 +2655,7 @@ public class DbOperations
                     }
                 }
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -2702,11 +2668,11 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (MySqlCommand cmd = new MySqlCommand("sp_insert_Region", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_insert_Region", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new MySqlParameter("i_RegionName", opp.RegionName));
+                cmd.Parameters.Add(new SqlParameter("i_RegionName", opp.RegionName));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -2715,7 +2681,7 @@ public class DbOperations
                 //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
         }
-        catch (MySqlException e)
+        catch (SqlException e)
         {
             errorcode = e.ErrorCode;
             errordesc = e.Message;
@@ -2736,16 +2702,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_Regionmaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_Regionmaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_RegionName", Opp.RegionName));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_RegionName", Opp.RegionName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2760,11 +2726,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Region", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_Region", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
@@ -2789,11 +2755,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -2818,11 +2784,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
 
             if (this.OpenConnection() == true)
             {
@@ -2837,12 +2803,12 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationCodemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationCodemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
             if (this.OpenConnection() == true)
             {
                 cmd.ExecuteNonQuery();
@@ -2856,11 +2822,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
             if (this.OpenConnection() == true)
             {
                 cmd.ExecuteNonQuery();
@@ -2882,11 +2848,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -2912,15 +2878,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2935,16 +2901,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyCodemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyCodemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -2959,11 +2925,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
             if (this.OpenConnection() == true)
             {
                 cmd.ExecuteNonQuery();
@@ -2985,11 +2951,11 @@ public class DbOperations
 
         if (this.OpenConnection() == true)
         {
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3014,11 +2980,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_DiscretionaryCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_DiscretionaryCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCode", opp.DiscretionaryCode));
+            cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", opp.DiscretionaryCode));
             if (this.OpenConnection() == true)
             {
                 cmd.ExecuteNonQuery();
@@ -3031,16 +2997,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_DiscretionaryCodemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_DiscretionaryCodemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_DiscretionaryCode", Opp.DiscretionaryCode));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", Opp.DiscretionaryCode));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3054,11 +3020,11 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_DiscretionaryCode", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_DiscretionaryCode", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
@@ -3081,11 +3047,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3103,7 +3069,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3114,15 +3080,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessSuffix", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessSuffix", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffix", opp.BusinessSuffix));
+            cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", opp.BusinessSuffix));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3137,16 +3103,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessSuffixmaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_BusinessSuffixmaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_BusinessSuffix", Opp.BusinessSuffix));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", Opp.BusinessSuffix));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3161,15 +3127,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessSuffix", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessSuffix", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3192,11 +3158,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3214,7 +3180,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3225,15 +3191,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Business", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_Business", opp.Business));
+            cmd.Parameters.Add(new SqlParameter("i_Business", opp.Business));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3248,16 +3214,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_Business", Opp.Business));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3272,15 +3238,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Business", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_Business", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3303,11 +3269,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3325,7 +3291,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3336,15 +3302,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ParentID", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_ParentID", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_ParentID", opp.ParentID));
+            cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3359,16 +3325,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_ParentIDmaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_ParentIDmaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_ParentID", Opp.ParentID));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_ParentID", Opp.ParentID));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3383,15 +3349,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ParentID", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_ParentID", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3414,11 +3380,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3436,7 +3402,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3447,15 +3413,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ChildID", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_ChildID", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_ChildID", opp.ChildID));
+            cmd.Parameters.Add(new SqlParameter("i_ChildID", opp.ChildID));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3470,16 +3436,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_ChildIDmaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_ChildIDmaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_ChildID", Opp.ChildID));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_ChildID", Opp.ChildID));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3494,15 +3460,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ChildID", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_ChildID", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3525,11 +3491,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3547,7 +3513,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3558,15 +3524,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_BusinessLine", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessLine", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", opp.BusinessLine));
+            cmd.Parameters.Add(new SqlParameter("i_BusinessLine", opp.BusinessLine));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3581,16 +3547,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_BusinessLinemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_BusinessLinemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_BusinessLine", Opp.BusinessLine));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_BusinessLine", Opp.BusinessLine));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3605,15 +3571,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessLine", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessLine", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3636,11 +3602,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3655,10 +3621,8 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3669,15 +3633,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationName", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationName", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3692,16 +3656,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationNamemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationNamemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3716,15 +3680,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationName", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationName", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3747,11 +3711,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3769,7 +3733,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3780,15 +3744,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAApplicationOwner", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationOwner", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3803,16 +3767,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAApplicationOwnermaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationOwnermaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3827,15 +3791,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAApplicationOwner", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationOwner", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3858,11 +3822,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3880,7 +3844,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -3891,15 +3855,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyName", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyName", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3914,16 +3878,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyNamemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyNamemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3938,15 +3902,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyName", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyName", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -3969,11 +3933,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -3991,7 +3955,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4002,15 +3966,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_FTAStrategyOwner", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyOwner", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4025,16 +3989,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_FTAStrategyOwnermaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyOwnermaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4049,15 +4013,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyOwner", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyOwner", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4080,11 +4044,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4102,7 +4066,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4113,15 +4077,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_SystemFlow", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_SystemFlow", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_SystemFlow", opp.SystemFlow));
+            cmd.Parameters.Add(new SqlParameter("i_SystemFlow", opp.SystemFlow));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4136,16 +4100,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_SystemFlowmaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_SystemFlowmaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_SystemFlow", Opp.SystemFlow));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_SystemFlow", Opp.SystemFlow));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4160,15 +4124,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_SystemFlow", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_SystemFlow", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4191,11 +4155,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4213,7 +4177,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4224,15 +4188,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_ApplicationCategory", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_ApplicationCategory", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", opp.ApplicationCategory));
+            cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", opp.ApplicationCategory));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4247,16 +4211,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_ApplicationCategorymaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_ApplicationCategorymaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategory", Opp.ApplicationCategory));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", Opp.ApplicationCategory));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4271,15 +4235,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_ApplicationCategory", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_ApplicationCategory", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4302,11 +4266,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4324,7 +4288,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4335,15 +4299,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Strategytype", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_Strategytype", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_Strategytype", opp.Strategytype));
+            cmd.Parameters.Add(new SqlParameter("i_Strategytype", opp.Strategytype));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4358,16 +4322,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_Strategytypemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_Strategytypemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_Strategytype", Opp.Strategytype));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_Strategytype", Opp.Strategytype));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4382,15 +4346,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Strategytype", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_Strategytype", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4413,11 +4377,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4435,7 +4399,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4446,15 +4410,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Venuetype", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_Venuetype", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_Venuetype", opp.Venuetype));
+            cmd.Parameters.Add(new SqlParameter("i_Venuetype", opp.Venuetype));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4469,16 +4433,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_Venuetypemaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_Venuetypemaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_Venuetype", Opp.Venuetype));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_Venuetype", Opp.Venuetype));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4493,15 +4457,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Venuetype", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_Venuetype", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4524,11 +4488,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4546,7 +4510,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4557,15 +4521,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_Capacity", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_Capacity", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_Capacity", opp.Capacity));
+            cmd.Parameters.Add(new SqlParameter("i_Capacity", opp.Capacity));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4580,16 +4544,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_Capacitymaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_Capacitymaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_Capacity", Opp.Capacity));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_Capacity", Opp.Capacity));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4604,15 +4568,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_Capacity", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_Capacity", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4635,11 +4599,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4657,7 +4621,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4668,15 +4632,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_insert_PriorityScore", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_insert_PriorityScore", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", opp.PriorityScore));
+            cmd.Parameters.Add(new SqlParameter("i_PriorityScore", opp.PriorityScore));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4691,16 +4655,16 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_update_PriorityScoremaster", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_update_PriorityScoremaster", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new MySqlParameter("i_PriorityScore", Opp.PriorityScore));
+            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+            cmd.Parameters.Add(new SqlParameter("i_PriorityScore", Opp.PriorityScore));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4715,15 +4679,15 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_PriorityScore", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_PriorityScore", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
             if (this.OpenConnection() == true)
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
@@ -4747,11 +4711,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4772,7 +4736,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4783,14 +4747,14 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_addbusinessmapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_addbusinessmapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
-            cmd.Parameters.Add(new MySqlParameter("i_businessid", opp.BusinessId));
+            cmd.Parameters.Add(new SqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
+            cmd.Parameters.Add(new SqlParameter("i_businessid", opp.BusinessId));
 
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -4808,16 +4772,16 @@ public class DbOperations
     //{
     //    errorcode = 0;
     //    errordesc = "success";
-    //    using (MySqlCommand cmd = new MySqlCommand("sp_update_Business", connection))
+    //    using (SqlCommand cmd = new SqlCommand("sp_update_Business", connection))
     //    {
     //        cmd.CommandType = CommandType.StoredProcedure;
     //        cmd.Parameters.Clear();
-    //        cmd.Parameters.Add(new MySqlParameter("i_id", Opp.Id));
-    //        cmd.Parameters.Add(new MySqlParameter("i_Business", Opp.Business));
+    //        cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+    //        cmd.Parameters.Add(new SqlParameter("i_Business", Opp.Business));
 
     //        if (this.OpenConnection() == true)
     //        {
-    //            // cmd.Parameters.AddWithValue("param_auto_id", MySqlDbType.Int32);
+    //            // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
     //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
     //            cmd.ExecuteNonQuery();
@@ -4832,12 +4796,12 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_BusinessMapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessMapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -4862,11 +4826,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4895,9 +4859,8 @@ public class DbOperations
                     }
                 }
 
-                cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -4908,18 +4871,18 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_addFTAApplicationMapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_addFTAApplicationMapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
-            cmd.Parameters.Add(new MySqlParameter("i_ChildId", opp.ChildId));
-            cmd.Parameters.Add(new MySqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
-            cmd.Parameters.Add(new MySqlParameter("i_ParentID", opp.ParentID));
-            cmd.Parameters.Add(new MySqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
-            cmd.Parameters.Add(new MySqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
+            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+            cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
+            cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
+            cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
+            cmd.Parameters.Add(new SqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
+            cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -4937,12 +4900,12 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_deleteFTAApplicationMapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_deleteFTAApplicationMapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -4966,11 +4929,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -4991,7 +4954,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -5002,13 +4965,13 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_addFTAStrategyMapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_addFTAStrategyMapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
-            cmd.Parameters.Add(new MySqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
+            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -5026,12 +4989,12 @@ public class DbOperations
     {
         errorcode = 0;
         errordesc = "success";
-        using (MySqlCommand cmd = new MySqlCommand("sp_delete_FTAStrategyMapping", connection))
+        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyMapping", connection))
         {
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add(new MySqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new MySqlParameter("i_OutParam", MySqlDbType.String));
+            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
             cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
@@ -5056,11 +5019,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", TaskTypeId));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -5078,7 +5041,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -5093,11 +5056,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -5118,7 +5081,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -5133,11 +5096,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -5168,7 +5131,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 
@@ -5183,11 +5146,11 @@ public class DbOperations
         if (this.OpenConnection() == true)
         {
 
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_Id", Id));
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -5208,7 +5171,7 @@ public class DbOperations
 
                 cmd.ExecuteNonQuery();
             }
-            //close connection
+
             this.CloseConnection();
         }
 

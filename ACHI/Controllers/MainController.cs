@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CRMManagement.Controllers
 {
+    [NoCache]
     public class MainController : Controller
     {
         private DbOperations _dbOperations = new DbOperations();
@@ -25,8 +26,6 @@ namespace CRMManagement.Controllers
         {
             return PartialView();
         }
-
-
 
         public ActionResult ViewApprovals()
         {
@@ -419,24 +418,12 @@ namespace CRMManagement.Controllers
             _dbOperations.GetUserProfile(userId);
             return Json("", JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetUserSessionInfo(string createdOn)
-        {
-            _dbOperations.GetUserSessionInfo(createdOn);
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetInactiveUsers()
-        {
-            _dbOperations.GetInactiveUsers();
-            return Json("", JsonRequestBehavior.AllowGet);
-        }
-
+     
         public JsonResult GetUserbyFilter(string CountryId, string RegionId, string BusinessSectorId)
         {
             List<UserMaster> lst = _dbOperations.GetUserbyFilter(CountryId, RegionId, BusinessSectorId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult email()
         {
@@ -452,8 +439,6 @@ namespace CRMManagement.Controllers
             _dbOperations.CreateUser(user, out errocode, out errordesc);
             return Json("", JsonRequestBehavior.AllowGet);
         }
-
-
 
         public JsonResult CreateTempUser(UserMaster user)
         {
@@ -477,6 +462,7 @@ namespace CRMManagement.Controllers
             _dbOperations.DeleteUser(user);
             return Json("", JsonRequestBehavior.AllowGet);
         }
+        
         #endregion User
 
 
@@ -1026,3 +1012,21 @@ public class SessionTimeoutAttribute : ActionFilterAttribute
         base.OnActionExecuting(filterContext);
     }
 }
+
+
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public sealed class NoCacheAttribute : ActionFilterAttribute
+{
+    public override void OnResultExecuting(ResultExecutingContext filterContext)
+    {
+        filterContext.HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+        filterContext.HttpContext.Response.Cache.SetValidUntilExpires(false);
+        filterContext.HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+        filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        filterContext.HttpContext.Response.Cache.SetNoStore();
+
+        base.OnResultExecuting(filterContext);
+    }
+}
+

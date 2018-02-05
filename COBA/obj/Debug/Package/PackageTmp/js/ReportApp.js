@@ -65,37 +65,6 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', '
     }
     $scope.GetUserRoles();
 
-    //$scope.GetAllNofitications = function () {
-    //    ApiCall.MakeApiCall("GetStrategyApprovalByuser", 'GET', '').success(function (data) {
-    //        $scope.notificationdata = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    });
-    //};
-    //$scope.GetAllNofitications();
-
-
-    //$scope.GetCurrencyConversionForId = function (id, Version, Comments, ApprovedDate, Status) {
-    //    $('#LayoutModel').modal('show');
-    //    $scope.notificationExist = true;
-    //    $scope.currency = { 'Comments': Comments };
-    //    //StrategyService.GetStrategyApprovalByuser().success(function (data) {
-    //    //    for (var i = 0; i < data.length; i++) {
-    //    //        //if (data[i].RefNumber == id && data[i].Version == Version) {
-
-    //    //        //}
-    //    //    }
-    //    //}).error(function (error) {
-    //    //    $scope.Error = error;
-    //    //});
-    //};
-
-    //$scope.layoutcancel = function () {
-    //    $scope.currency = {};
-    //    $('#LayoutModel').modal('hide');
-    //};
-
-
 }]);
 
 

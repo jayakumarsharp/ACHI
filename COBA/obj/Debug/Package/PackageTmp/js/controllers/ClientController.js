@@ -1,12 +1,10 @@
-﻿ReportApp.controller('ClientController', function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('ClientController', ['$scope', '$rootScope', 'ClientService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'toaster',function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder, toaster) {
     $scope.errorinfo = '';
-    $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
     $scope.showaction = false;
     $scope.LoanTypeList = [{ value: 'Investment Loan' }, { value: 'Development Loan' }]
     $scope.StructureList = [{ value: 'Yes' }, { value: 'No' }]
-
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
     $scope.activateTab = function (tabid) {
         for (var i = 0; i < $scope.pageList.length; i++) {
@@ -50,8 +48,6 @@
             });
         });
     }
-
-
     $scope.showadd = function () {
         $scope.showaction = true;
         $timeout(function () {
@@ -112,24 +108,22 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
-    $scope.delete = function () {
-        var crc = { Id: $scope.Id };
-        ClientService.DeletecurrencyConversion(crc).success(function (data) {
-            $scope.editMode = false;
-            $scope.getclientdata();
-            $('#confirmModal').modal('hide');
-            toaster.pop('success', "Success", "Client deleted successfully", null);
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-    };
-
+    //$scope.delete = function () {
+    //    var crc = { Id: $scope.Id };
+    //    ClientService.DeletecurrencyConversion(crc).success(function (data) {
+    //        $scope.editMode = false;
+    //        $scope.getclientdata();
+    //        $('#confirmModal').modal('hide');
+    //        toaster.pop('success', "Success", "Client deleted successfully", null);
+    //    }).error(function (data) {
+    //        $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+    //    });
+    //};
     $scope.UpdateClient = function (model) {
         if ($scope.ClientActive)
             model.IsActive = "Y";
         else
             model.IsActive = "N";
-
         if ($scope.IsSignOff)
             model.IsSignOff = "Y";
         else
@@ -209,4 +203,4 @@
     };
     $scope.GetRightsList();
 
-});
+}]);

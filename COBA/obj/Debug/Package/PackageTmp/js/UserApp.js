@@ -620,11 +620,9 @@ ReportApp.factory('UserFactory', ['$http', function ($http) {
         GetUsers: function () {
             return $http.get(Url + 'getusers?userid=');
         },
-
         GetADUsers: function () {
             return $http.get(Url + 'getADuser');
         },
-
         GetUser: function (userid) {
             return $http.get(Url + 'getusers?userid=' + userid);
         },

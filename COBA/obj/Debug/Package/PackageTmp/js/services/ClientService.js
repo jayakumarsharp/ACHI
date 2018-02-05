@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('ClientService', function ($http) {
+ReportApp.factory('ClientService', ['$http', function ($http) {
     var ClientServiceURI = BaseURL + 'Main/';
     var ClientServiceFactory = {};
 
@@ -22,5 +22,5 @@ ReportApp.factory('ClientService', function ($http) {
 
 
     return ClientServiceFactory;
-});
+}]);
 

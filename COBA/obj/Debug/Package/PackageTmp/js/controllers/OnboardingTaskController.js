@@ -1,4 +1,4 @@
-﻿ReportApp.controller('OnboardingTaskController', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('OnboardingTaskController', ['$scope', '$rootScope', 'OnboardingTaskService', '$timeout', 'Upload', '$window', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, OnboardingTaskService, $timeout, Upload, $window, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.downloadurl = 'http://localhost/Appserver/inbox/';
     $scope.FileList = [];
     $scope.ManualFileList = [];
@@ -38,9 +38,6 @@
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
         return '<a  ng-click="GetCurrencyConversionForId(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
     }
 
 
@@ -174,10 +171,7 @@
             $scope.ecurrency.CurrencyDescrition = '';
         }
     };
-
     $scope.GetRightsList();
-
-
     $scope.upload = function () {
         if ($scope.upload_form.file.$valid && $scope.file) { //check if from is valid
             var uploaddata = $scope.ecurrency;
@@ -206,4 +200,4 @@
 
     }
 
-});
+}]);

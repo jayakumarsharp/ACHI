@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapClientTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder, $sce, _) {
+﻿ReportApp.controller('MapClientTaskController', ['$scope', '$rootScope', 'MapTaskService', 'TaskService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', '$sce', '_', function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder, $sce, _) {
     $scope.errorinfo = '';
     $scope.editMode = false;
     $scope.IsReadOnly = true;
@@ -176,4 +176,4 @@
         });
     }
 
-});
+}]);
