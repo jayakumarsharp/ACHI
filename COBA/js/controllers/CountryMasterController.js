@@ -1,6 +1,9 @@
-﻿ReportApp.controller('CountryMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('CountryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
     $scope.showAddwindow = false;
+    $scope.editMode = false;
+    $scope.IsReadOnly = false;
+
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
@@ -10,27 +13,15 @@
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
         $compile(angular.element(row).contents())($scope);
     }
-
-  
-    
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
         return '<a  ng-click="GetCountryMasterById(' + data + ')"><img src="../images/edit.png"></a> ';
-            //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-            //'   <i class="fa fa-trash-o"></i>' +
-            //'</button>';
     }
-
-    $scope.editMode = false;
-    $scope.IsReadOnly = false;
     $scope.Showadd = function () {
         $scope.showAddwindow = true;
     }
-
-
     $scope.GetAllCountryMaster = function () {
         ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
             $scope.data = data;
@@ -39,8 +30,6 @@
             $scope.Error = error;
         })
     };
-
-    
     $scope.add = function (CountryMaster) {
         if (CountryMaster != null) {
             if (CountryMaster.CountryName.trim() != "") {
@@ -51,7 +40,7 @@
                         $scope.CountryMaster = null;
                         $scope.GetAllCountryMaster();
                         $scope.editMode = false;
-                        
+
                         $scope.showAddwindow = false;
                         toaster.pop('success', "Success", 'Country added successfully', null);
                     }
@@ -118,9 +107,6 @@
             toaster.pop('warning', "Warning", 'Please enter Country', null);
         }
     };
-
-
-
     $scope.showconfirm = function (data) {
         $scope.CountryMasterId = data;
         $('#confirmModal').modal('show');
@@ -159,4 +145,4 @@
     };
     $scope.GetRightsList();
 
-});
+}]);

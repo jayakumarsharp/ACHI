@@ -1,9 +1,9 @@
 ﻿'use strict';
-ReportApp.factory('ClientService', function ($http) {
-    var ClientServiceURI = BaseURL+'Main/';
+ReportApp.factory('ClientService', ['$http', function ($http) {
+    var ClientServiceURI = BaseURL + 'Main/';
     var ClientServiceFactory = {};
 
-    ClientServiceFactory.GetAllCurrencyConversion = function () {
+    ClientServiceFactory.GetAllCurrency = function () {
         var result = $http.get(ClientServiceURI + 'GetData');
         return result;
     }
@@ -22,5 +22,5 @@ ReportApp.factory('ClientService', function ($http) {
 
 
     return ClientServiceFactory;
-});
+}]);
 

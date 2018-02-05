@@ -1,4 +1,4 @@
-﻿ReportApp.controller('MapTaskController', function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('MapTaskController', ['$scope', '$rootScope', 'MapTaskService', 'TaskService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder',function ($scope, $rootScope, MapTaskService, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.editMode = false;
     $scope.IsReadOnly = true;
@@ -96,6 +96,7 @@
 
     $scope.GetCurrencyConversionForId = function (id) {
         MapTaskService.GetAllTaskById(id).success(function (data) {
+            debugger;
             $scope.editMode = true;
             data[0].IsSignOff = (data[0].IsSignOff == "Y" ? "checked" : 'unchecked');
             $scope.ecurrency = data[0];
@@ -163,4 +164,4 @@
     };
     $scope.gettask();
 
-});
+}]);

@@ -26,21 +26,12 @@ namespace COBA
                 AreaRegistration.RegisterAllAreas();
                 WebApiConfig.Register(GlobalConfiguration.Configuration);
                 FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-
                 RouteConfig.RegisterRoutes(RouteTable.Routes);
                 BundleConfig.RegisterBundles(BundleTable.Bundles);
-                //WebSecurity.InitializeDatabaseConnection("CDRConn", "TBL_UserMaster", "UserId", "UserName", autoCreateTables: true);
                 log4net.Config.XmlConfigurator.Configure();
                 BundleTable.Bundles.ForEach(x => x.Transforms.Clear());
-
             }
-            //catch (SqlException ex1)
-            //{
-            //}
-            catch (Exception ex)
-            {
-            }
-
+            catch (Exception ex) { }
         }
 
         void Session_Start(object sender, EventArgs e)

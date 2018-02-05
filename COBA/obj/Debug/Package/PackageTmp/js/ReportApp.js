@@ -211,24 +211,15 @@ ReportApp.service('ApiCall', ['$http', function ($http) {
     var result;
     this.MakeApiCall = function (Url, type, jsondata) {
         //var Jsondata = JSON.stringify(data);
-        Url = 'Main/' + Url;
+        var uri = 'Main/' + Url;
         if (type == 'GET') {
-
-            //return $http.get(Url, jsondata);
-
             return $http({
-                url: Url,
+                url: uri,
                 method: type,
                 params: jsondata
             });
         } else if (type == 'POST') {
-            return $http.post(Url, jsondata);
-
-            //return $http({
-            //    url: Url,
-            //    method: type,
-            //    data: jsondata
-            //});
+            return $http.post(uri, jsondata);
         }
     };
 }]);
@@ -253,3 +244,181 @@ ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
     };
     return AuthFactory;
 }]);
+
+
+
+
+ReportApp.directive('multiselect', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            msModel: '=',
+            msOptions: '=',
+            msConfig: '=',
+            msChange: '&'
+        },
+        replace: true,
+        controller: ['$scope',
+            function ($scope) {
+                /* -------------------------------- *
+                 *      Configuration defaults      *
+                 * -------------------------------- */
+                $scope.config = $scope.msConfig;
+                if (typeof ($scope.config) === 'undefined') {
+                    $scope.config = {};
+                }
+                if (typeof ($scope.config.itemTemplate) === 'undefined') {
+                    $scope.config.itemTemplate = function (elem) {
+                        return elem;
+                    };
+                }
+                if (typeof ($scope.config.labelTemplate) === 'undefined') {
+                    $scope.config.labelTemplate = function (elem) {
+                        return elem;
+                    };
+                }
+                if (typeof ($scope.config.modelFormat) === 'undefined') {
+                    $scope.config.modelFormat = function (elem) {
+                        return elem;
+                    };
+                }
+                $scope.$watch('msOptions', function () {
+                    _filterOptions();
+                });
+
+
+
+                /* -------------------------------- *
+                 *          Multiselect setup       *
+                 * -------------------------------- */
+                if ($scope.msModel === null || typeof ($scope.msModel) === 'undefined') {
+                    $scope.msModel = [];
+                }
+                if ($scope.msOptions === null || typeof ($scope.msOptions) === 'undefined') {
+                    $scope.msOptions = [];
+                }
+
+                $scope.multiselect = {
+                    filter: '',
+                    filtered: [],
+                    options: $scope.msOptions,
+                    displayDropdown: true,
+                    deleteSelected: function (index) {
+                        debugger;
+                        var oldVal = angular.copy($scope.msModel);
+                        $scope.msModel.splice(index, 1);
+                        $scope.msChange({
+                            newVal: $scope.msModel,
+                            oldVal: oldVal
+                        });
+                        _filterOptions();
+                    },
+                    selectElement: function (index) {
+                        debugger;
+                        var oldVal = angular.copy($scope.msModel);
+                        $scope.msModel.push($scope.multiselect.filtered[index]);
+                        $scope.msChange({
+                            newVal: $scope.msModel,
+                            oldVal: oldVal
+                        });
+                        $scope.multiselect.filter = '';
+                        _filterOptions();
+                    },
+                    focusFilter: function () {
+                        $scope.multiselect.currentElement = 0;
+                        if ($scope.config.hideOnBlur) {
+                            $scope.multiselect.displayDropdown = true;
+                        }
+                    },
+                    blurFilter: function () {
+                        $scope.multiselect.currentElement = null;
+                        if ($scope.config.hideOnBlur) {
+                            $scope.multiselect.displayDropdown = false;
+                        }
+                    },
+                    currentElement: null
+                };
+
+                if ($scope.config.hideOnBlur) {
+                    $scope.multiselect.displayDropdown = false;
+                }
+
+                /*  Helper methods */
+
+                var _filterOptions = function () {
+                    if ($scope.msModel === null) {
+                        $scope.multiselect.options = $scope.msOptions;
+                        return;
+                    }
+                    //debugger
+                    //$scope.multiselect.options = $scope.msOptions.filter(function (each) {
+                    //    return $scope.msModel.indexOf(each) < 0;
+                    //});
+
+                    $scope.multiselect.options = $scope.msOptions.filter(function (each) {
+                        for (var i = 0; i < $scope.msModel.length; i++) {
+                            if ($scope.msModel[i].id == each.id) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    });
+                };
+            }
+        ],
+        link: function (scope, element, attrs) {
+            element.on('keydown', function (e) {
+                var code = e.keyCode || e.which;
+                switch (code) {
+                    case 40: // Down arrow
+                        scope.$apply(function () {
+                            scope.multiselect.currentElement++;
+                            if (scope.multiselect.currentElement >= scope.multiselect.filtered.length) {
+                                scope.multiselect.currentElement = 0;
+                            }
+                        });
+                        break;
+                    case 38: // Up arrow
+                        scope.$apply(function () {
+                            scope.multiselect.currentElement--;
+                            if (scope.multiselect.currentElement < 0) {
+                                scope.multiselect.currentElement = scope.multiselect.filtered.length - 1;
+                            }
+                        });
+                        break;
+                    case 13: // Enter
+                        scope.$apply(function () {
+                            scope.multiselect.selectElement(scope.multiselect.currentElement);
+                        });
+                        break;
+                    default:
+                        scope.$apply(function () {
+                            scope.multiselect.currentElement = 0;
+                        });
+                }
+            });
+        },
+        template: function (elem, attrs) {
+            var template = $(elem).find('template');
+            return '<div class="multiselect" id="multi_popover">' +
+                '   <div class="multiselect-labels">' +
+                '       <span class="label label-default multiselect-labels-lg" ng-repeat="element in msModel">' +
+                '           <span ng-bind-html="config.labelTemplate(element)"></span>' +
+                '           <a href="" ng-click="$event.preventDefault(); multiselect.deleteSelected($index)" title="Remove element">' +
+                '               <i class="fa fa-times"></i>' +
+                '           </a>' +
+                '       </span>' +
+                '   </div>' +
+                //'   <input ng-show="multiselect.options.length > 0" placeholder="' + attrs.placeholder + '" type="text" class="form-control" ng-model="multiselect.filter" ng-focus="multiselect.focusFilter()" ng-blur="multiselect.blurFilter()" />' +
+                '   <div ng-show="msModel.length < multiselect.options.length && multiselect.options.length === 0 && !multiselect.options.$resolved"><em>Loading...</em></div>' +
+                '   <ul id="agent_dropdown" class="dropdown-menu" role="menu" ng-show="multiselect.displayDropdown && multiselect.options.length > 0">' +
+                '       <li ng-repeat="element in multiselect.filtered = (multiselect.options | filter:multiselect.filter) track by $index" role="presentation" ng-class="{active: $index == multiselect.currentElement}">' +
+                '           <a href="" role="menuitem" ng-click="$event.preventDefault(); multiselect.selectElement($index)" ng-bind-html="config.itemTemplate(element)"></a>' +
+                '       </li>' +
+                '   </ul>' +
+                '</div>';
+        }
+    };
+});
+
+

@@ -25,5 +25,5 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\EmailReader.pdb
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.exe
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.pdb
-C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\OpenPop.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache

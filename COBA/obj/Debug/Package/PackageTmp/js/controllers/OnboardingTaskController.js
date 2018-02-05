@@ -3,15 +3,9 @@
     $scope.FileList = [];
     $scope.ManualFileList = [];
     $scope.errorinfo = '';
-    $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
-    $scope.Currency = [];
-    $scope.LegalEntity = [];
     $scope.ecurrency = {};
-    $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
             if (value.RightName.contains('Currency Rate Write')) {
@@ -19,54 +13,12 @@
             }
         });
     };
-
     $scope.getallcurrencyconversions = function () {
-
         OnboardingTaskService.GetAllTask().success(function (data) {
             console.log(data)
             $scope.dtOptions.data = data;
         })
     };
-
-    //var columnDefs = [{ name: 'Id' },
-    //{ name: 'ClientNumber' },
-    //{ name: 'TaskName' },
-    //{ name: 'EmailSubject' },
-    ////{ headerName: 'EmailId', name: 'EmailId', width: 320 },
-    ////{ headerName: 'IsActive', name: 'IsActive', width: 320 },
-    ////{ headerName: 'IsMappedToTask', name: 'IsMappedToTask', width: 320 },
-    //,
-
-    ////{ headerName: 'CreatedDate', name: 'CreatedDate', width: 320 },
-    //{ headerName: 'EmailAttachment', name: 'EmailAttachment' },
-    ////{ headerName: 'CreatedBy', name: 'CreatedBy', width: 320 },
-    //{ headerName: 'EmailContent', name: 'EmailContent' },
-    ////{ headerName: 'LastModifiedBy', name: 'LastModifiedBy', width: 320, hide: true },
-    // //   { headerName: 'LastModifiedDate', name: 'LastModifiedDate', width: 320, hide: true },
-    // //   { headerName: 'TaskAssignedBy', name: 'TaskAssignedBy', width: 320, hide: true },
-    //  //  { headerName: 'TaskAssignedDate', name: 'TaskAssignedDate', width: 320, hide: true },
-    //    { headerName: 'TaskAttachement', name: 'TaskAttachement' },
-    //    { headerName: 'TaskComments', name: 'TaskComments' },
-    //   // { headerName: 'UniqueEmailId', name: 'UniqueEmailId', width: 320, hide: true },
-    //    //{ headerName: 'Description', name: 'Description', width: 440 },
-    //    //{ headerName: 'SignOff Status', name: 'IsSignOff', width: 140 },
-    //     {
-    //         name: 'IsProcessed',
-    //         cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsProcessed=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsProcessed=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-    //     },
-    //     {
-    //         field: 'Action'
-    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-
-    //     }];
-
-
-    //$scope.CurrencyGrid = {
-    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
-    //    paginationPageSize: 10,
-    //    columnDefs: columnDefs,
-    //};
-
 
     $scope.dtOptions = DTOptionsBuilder.fromSource()
    .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -153,8 +105,6 @@
                     }
                 }
             }
-
-
             data[0].IsSignOff = (data[0].IsSignOff == "Y" ? "checked" : 'unchecked');
             $scope.ecurrency = data[0];
             $('#currencyModel').modal('show');
@@ -163,11 +113,8 @@
         });
     };
 
-
-
     $scope.UpdatecurrencyConversion = function (model) {
         //model.UpdatedBy = $rootScope.UserInfo.user.userId;
-
         OnboardingTaskService.UpdatecurrencyConversion(model).success(function (data) {
             $scope.editMode = false;
             toaster.pop('success', "Success", "Currency rate updated successfully", null);
@@ -241,8 +188,7 @@
                 data: { Id: $scope.ecurrency.Id, TaskComments: $scope.ecurrency.TaskComments, ClientNumber: $scope.ecurrency.ClientNumber, ExisitingFiles: $scope.ecurrency.TaskAttachment, obj: $scope.file }//pass file as data, should be user ng-model
             }).then(function (resp) { //upload function returns a promise
                 //if (resp.data.error_code === 0) { //validate success
-                console.log(resp.data)
-
+                $scope.getallcurrencyconversions();
                 $('#currencyModel').modal('hide');
                 //} else {
                 //  $window.alert('an error occured');

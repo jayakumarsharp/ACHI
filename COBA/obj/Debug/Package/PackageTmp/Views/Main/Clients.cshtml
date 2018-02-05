@@ -1,7 +1,7 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
 <section class="content" ng-controller="ClientController">
     <div ng-include="'Main/ConfirmModal'"></div>
-    <div ng-show="!showaction" style="padding:1%;">
+    <div ng-show="!showaction && !editmode" style="padding:1%;">
         <div class="row pull-right">
             <button data-ng-click="showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
         </div>
@@ -9,57 +9,49 @@
     </div>
     <div ng-show="showaction">
         <div class="col-lg-9 col-md-8 main-content basic-page sidebar">
-            <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;" ng-hide="editMode">Add Client</h4>
-            <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;" ng-show="editMode">Edit Client</h4>
+            @*<h4 class="modal-title" id="myModalLabel" style="margin-left:40%;" ng-hide="editMode">Add Client</h4>
+                <h4 class="modal-title" id="myModalLabel" style="margin-left:40%;" ng-show="editMode">Edit Client</h4>*@
             <div class="content">
                 <div class="row">
                     <div ng-show="pageList[0].Page">
                         <form novalidate role="form" name="form1">
-
-                            @*<div class="form-group">
-                                    <label for="SBU" >Client Id</label>
-                                    <div>
-                                        <input class="form-control" type="text" ng-model="ecurrency.CurrencyDescrition" title="Select Currency Description" disabled />
-                                    </div>
-                                </div>*@
                             <div class="col-md-6">
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label>Client number</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="currency.ClientNumber" required />
+                                        <input class="form-control" numberdotonly type="text" maxlength="150" ng-readonly="editMode" ng-model="currency.ClientNumber" required />
                                     </div>
                                     <div class="form-group">
-                                        <label>Investment Loan or Development Loan</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="currency.InvDevLoan" required />
+                                        <label> Loan Type </label>
+                                        <select ng-model="currency.InvDevLoan" class="form-control" style="height:33px" required name="TaskId">
+                                            <option value="">- Select Loan Type-</option>
+                                            <option ng-repeat="x in LoanTypeList" value="{{x.value}}">{{x.value}}</option>
+                                        </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="RoleID">Original Lender(s):</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="currency.OriginalLender" required />
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label>Obligor name(s):</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="currency.ObligorName" required />
+                                        <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.ObligorName" required />
                                     </div>
                                     <div class="form-group">
                                         <label>Structure Chart attached:</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="1" ng-model="ecurrency.StrChartAttchd" required />
+                                        <select ng-model="currency.StrChartAttchd" class="form-control" style="height:33px" required name="TaskId">
+                                            <option value="">- Select Structure Chart attached-</option>
+                                            <option ng-repeat="x in StructureList" value="{{x.value}}">{{x.value}}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-12">
-                                <label for="RoleID">Name of the Company</label>
-                                <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LCompanyName" required />
-                            </div>
+
                         </form>
                         <div class="form-group col-lg-12">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(1)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form1.$invalid" ng-click="activateTab(1)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
@@ -67,12 +59,16 @@
                     </div>
                     <div ng-show="pageList[1].Page">
                         <form novalidate role="form" name="form2">
+                            <h4> LENDER KEY DETAILS </h4>
+                            <div class="form-group col-lg-12">
+                                <label for="RoleID"> Name of the Company</label>
+                                <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LCompanyName" />
+                            </div>
                             <section class="col-lg-12 connectedSortable ui-sortable">
                                 <div class="nav-tabs-custom" style="cursor: move;">
                                     <ul class="nav nav-tabs responsive hidden-xs hidden-sm">
                                         <li class="active"><a href="#revenue-chart" data-toggle="tab" aria-expanded="false">Registered Address</a></li>
                                         <li class=""><a href="#sales-chart" data-toggle="tab" aria-expanded="true">Primary Address</a></li>
-                                        @*<li class="pull-left header"><i class="fa fa-inbox"></i> Lender Contact details</li>*@
                                     </ul>
                                     <div class="tab-content no-padding">
                                         <div class="chart tab-pane active" id="revenue-chart">
@@ -81,31 +77,31 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressL1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressL1" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressL3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressL3" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressState" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressState" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressPostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressPostCode" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressTelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressTelNum" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -115,27 +111,27 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressL2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressL2" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressCity" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressCity" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressCountry" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressCountry" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LRegAddressEmail" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LRegAddressEmail" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -149,33 +145,33 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressL1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressL1" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressL3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressL3" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressState" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressState" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressPostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressPostCode" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressTelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressTelNum" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,19 +181,19 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressL2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressL2" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressCity" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressCity" required />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressCountry" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressCountry" required />
                                                         </div>
                                                     </div>
 
@@ -205,7 +201,7 @@
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LPriAddressEmail" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LPriAddressEmail" required />
                                                         </div>
                                                     </div>
 
@@ -223,7 +219,7 @@
                                 </span>&nbsp;
 
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(2)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form2.$invalid" ng-click="activateTab(2)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
@@ -231,6 +227,7 @@
                     </div>
                     <div ng-show="pageList[2].Page">
                         <form novalidate role="form" name="form3">
+                            <h4>  Lender contact Details</h4>
                             <section class="col-lg-12 connectedSortable ui-sortable">
                                 <div class="nav-tabs-custom" style="cursor: move;">
                                     <ul class="nav nav-tabs responsive hidden-xs hidden-sm">
@@ -239,7 +236,8 @@
                                         <li class=""><a href="#Lkey3" data-toggle="tab" aria-expanded="true">key Contact 3</a></li>
                                         <li class=""><a href="#Lkey4" data-toggle="tab" aria-expanded="true">key Contact 4</a></li>
                                         <li class=""><a href="#Lkey5" data-toggle="tab" aria-expanded="true">key Contact 5</a></li>
-                                        @*<li class="pull-left header"><i class="fa fa-inbox"></i> Lender Key Contact details</li>*@
+                                        @*
+                                            <li class="pull-left header"><i class="fa fa-inbox"></i> Lender Key Contact details</li>*@
                                     </ul>
                                     <div class="tab-content no-padding">
                                         <div class="chart tab-pane active" id="Lkey1">
@@ -248,31 +246,31 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1L1" />
                                                         </div>`
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1State" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1PostCode" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -282,26 +280,26 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1Country" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC1Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC1Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,33 +311,33 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2L1" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2TelNum" />
                                                         </div>
                                                     </div>
 
@@ -350,26 +348,26 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2City" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC2Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC2Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -382,31 +380,31 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3L1" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3PostCode" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -418,25 +416,25 @@
                                                         <div class="form-group">
                                                             <label>Line2</label>
                                                             <div>
-                                                                <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3L2" />
+                                                                <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3L2" />
                                                             </div>
                                                         </div>
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3State" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
 
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC3Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC3Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -450,14 +448,14 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4L1" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4L3" />
                                                         </div>
                                                     </div>
 
@@ -465,7 +463,7 @@
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4State" />
                                                         </div>
                                                     </div>
 
@@ -475,13 +473,13 @@
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4Email" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -491,25 +489,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC4PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC4PostCode" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -521,44 +519,33 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5L1" />
                                                         </div>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5L3" />
                                                         </div>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5State" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5PostCode" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5TelNum" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -566,25 +553,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.LKC5Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.LKC5Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -600,7 +587,7 @@
                                     <input type="button" value="Prev" ng-click="activateTab(1)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(3)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form3.$invalid" ng-click="activateTab(3)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
@@ -608,59 +595,50 @@
                     </div>
                     <div ng-show="pageList[3].Page">
                         <form novalidate role="form" name="form4">
+                            <h4>Borrower Key details</h4>
                             <div class="form-group col-lg-12">
                                 <label for="RoleID"> Name of the Company</label>
-                                <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BCompanyName" />
+                                <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BCompanyName" />
                             </div>
-
                             <section class="col-lg-12 connectedSortable ui-sortable">
                                 <div class="nav-tabs-custom" style="cursor: move;">
                                     <ul class="nav nav-tabs responsive hidden-xs hidden-sm">
                                         <li class="active"><a href="#brevenue-chart" data-toggle="tab" aria-expanded="false">Registered Address</a></li>
                                         <li class=""><a href="#bsales-chart" data-toggle="tab" aria-expanded="true">Primary Address</a></li>
-                                        @*<li class="pull-left header"><i class="fa fa-inbox"></i> Borrower Contact details</li>*@
                                     </ul>
                                     <div class="tab-content no-padding">
                                         <div class="chart tab-pane active" id="brevenue-chart">
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
-
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressL1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressL1" />
                                                         </div>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressL3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressL3" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressState" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressState" />
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressPostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressPostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressTelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressTelNum" />
                                                         </div>
                                                     </div>
 
@@ -671,25 +649,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressL2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressL2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressCity" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressCity" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressCountry" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressCountry" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BRegAddressEmail" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BRegAddressEmail" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -698,74 +676,63 @@
                                         <div class="chart tab-pane" id="bsales-chart">
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressL1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressL1" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressL3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressL3" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressState" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressState" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressEmail" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressEmail" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressTelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressTelNum" />
                                                         </div>
                                                     </div>
 
                                                 </div>
                                             </div>
-
-
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
-
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressL2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressL2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressCity" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressCity" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressCountry" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressCountry" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BPriAddressPostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BPriAddressPostCode" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -782,7 +749,7 @@
                                     <input type="button" value="Prev" ng-click="activateTab(2)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(4)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form4.$invalid" ng-click="activateTab(4)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
@@ -790,6 +757,7 @@
                     </div>
                     <div ng-show="pageList[4].Page">
                         <form novalidate role="form" name="form5">
+                            <h4>Borrower Contact details</h4>
                             <section class="col-lg-12 connectedSortable ui-sortable">
                                 <div class="nav-tabs-custom" style="cursor: move;">
                                     <ul class="nav nav-tabs responsive hidden-xs hidden-sm">
@@ -798,48 +766,43 @@
                                         <li class=""><a href="#Bkey3" data-toggle="tab" aria-expanded="true">key Contact 3</a></li>
                                         <li class=""><a href="#Bkey4" data-toggle="tab" aria-expanded="true">key Contact 4</a></li>
                                         <li class=""><a href="#Bkey5" data-toggle="tab" aria-expanded="true">key Contact 5</a></li>
-                                        @*<li class="pull-left header"><i class="fa fa-inbox"></i> Borrower Key Contact details</li>*@
+                                        @*
+                                            <li class="pull-left header"><i class="fa fa-inbox"></i> Borrower Key Contact details</li>*@
                                     </ul>
                                     <div class="tab-content no-padding">
                                         <div class="chart tab-pane active" id="BKey1">
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
-
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1L1" />
                                                         </div>`
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1L3" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1TelNum" />
                                                         </div>
                                                     </div>
 
@@ -847,35 +810,31 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
-
-
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC1Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC1Email" />
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
 
@@ -886,37 +845,34 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2L1" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2PostCode" />
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2TelNum" />
                                                         </div>
                                                     </div>
-
-
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -924,76 +880,65 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2L2" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2City" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2Country" />
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC2Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC2Email" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <div class="chart tab-pane" id="Bkey3">
                                             <div class="col-md-6">
                                                 <div class="box-body">
-
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3L1" />
                                                         </div>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3L3" />
                                                         </div>
                                                     </div>
-
-
-                                                    <div class="form-group">
+                                                    s<div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3TelNum" />
                                                         </div>
                                                     </div>
 
@@ -1008,68 +953,63 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC3Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC3Email" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="chart tab-pane" id="Bkey4">
                                             <div class="col-md-6">
                                                 <div class="box-body">
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4L1" />
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1080,25 +1020,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.BKC4Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.BKC4Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1112,13 +1052,13 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L1" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L3" />
                                                         </div>
                                                     </div>
 
@@ -1126,21 +1066,21 @@
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5TelNum" />
                                                         </div>
                                                     </div>
 
@@ -1152,7 +1092,7 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L2" />
                                                         </div>
                                                     </div>
 
@@ -1160,19 +1100,19 @@
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5Email" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1180,8 +1120,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </section>
                         </form>
                         <div class="form-group col-lg-12">
@@ -1190,26 +1128,15 @@
                                     <input type="button" value="Prev" ng-click="activateTab(3)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(5)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form5.$invalid" ng-click="activateTab(5)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
                         </div>
                     </div>
-                    @*<div class="row col-lg-12">
-                            <div class="form-group">
-                                <label for="RoleID"> Proposed Deal Commencement Date:</label>
-                                <div class='input-group date' datetimepicker ng-model="currency.ProposedDealCommencementDate">
-                                    <input type='text' class="form-control" readonly required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-
-                            </div>
-                        </div>*@
                     <div ng-show="pageList[5].Page">
                         <form novalidate role="form" name="form6">
+                            <h4>PROPERTY ADDRESSES</h4>
                             <section class="col-lg-12 connectedSortable ui-sortable">
                                 <div class="nav-tabs-custom" style="cursor: move;">
                                     <ul class="nav nav-tabs responsive hidden-xs hidden-sm">
@@ -1218,7 +1145,8 @@
                                         <li class=""><a href="#pkey3" data-toggle="tab" aria-expanded="true">key Contact 3</a></li>
                                         <li class=""><a href="#pkey4" data-toggle="tab" aria-expanded="true">key Contact 4</a></li>
                                         <li class=""><a href="#pkey5" data-toggle="tab" aria-expanded="true">key Contact 5</a></li>
-                                        @*<li class="pull-left header"><i class="fa fa-inbox"></i> Property address(es)</li>*@
+                                        @*
+                                            <li class="pull-left header"><i class="fa fa-inbox"></i> Property address(es)</li>*@
                                     </ul>
                                     <div class="tab-content no-padding">
                                         <div class="chart tab-pane active" id="pKey1">
@@ -1227,32 +1155,32 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1L1" />
                                                         </div>`
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1L3" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1State" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1TelNum" />
                                                         </div>
                                                     </div>
 
@@ -1264,25 +1192,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress1Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress1Email" />
                                                         </div>
                                                     </div>
 
@@ -1298,35 +1226,35 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2L1" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2L3" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2TelNum" />
                                                         </div>
                                                     </div>
 
@@ -1338,26 +1266,26 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2City" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress2Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress2Email" />
                                                         </div>
                                                     </div>
 
@@ -1374,7 +1302,7 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3L1" />
                                                         </div>
                                                     </div>
 
@@ -1382,7 +1310,7 @@
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3L3" />
                                                         </div>
                                                     </div>
 
@@ -1390,21 +1318,21 @@
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1415,25 +1343,25 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3L2" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3City" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress3Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress3Email" />
                                                         </div>
                                                     </div>
 
@@ -1449,13 +1377,13 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4L1" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4L3" />
                                                         </div>
                                                     </div>
 
@@ -1463,21 +1391,21 @@
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4TelNum" />
                                                         </div>
                                                     </div>
 
@@ -1490,28 +1418,28 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4L2" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4City" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4Country" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress4Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress4Email" />
                                                         </div>
                                                     </div>
 
@@ -1525,7 +1453,7 @@
                                                     <div class="form-group">
                                                         <label>Line 1</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L1" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L1" />
                                                         </div>
                                                     </div>
 
@@ -1534,7 +1462,7 @@
                                                     <div class="form-group">
                                                         <label>Line3</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L3" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L3" />
                                                         </div>
                                                     </div>
 
@@ -1542,21 +1470,21 @@
                                                     <div class="form-group">
                                                         <label>County/State</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5State" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5State" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Postcode</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5PostCode" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5PostCode" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>TelNum</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5TelNum" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5TelNum" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1567,27 +1495,27 @@
                                                     <div class="form-group">
                                                         <label>Line2</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5L2" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5L2" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Town/City</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5City" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5City" />
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label>Country</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5Country" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5Country" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Email</label>
                                                         <div>
-                                                            <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PropAddress5Email" />
+                                                            <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PropAddress5Email" />
                                                         </div>
                                                     </div>
 
@@ -1604,7 +1532,7 @@
                                     <input type="button" value="Prev" ng-click="activateTab(4)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <span>
-                                    <input type="button" value="Next" ng-disabled="addform.$invalid || multiselect.selected.length<=0" ng-click="activateTab(6)" class="btn btn-primary" />
+                                    <input type="button" value="Next" ng-disabled="form6.$invalid" ng-click="activateTab(6)" class="btn btn-primary" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
@@ -1625,7 +1553,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="RoleID"> Amount advanced on first Utilisation Date (per Lender)</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.AmountAdvancedonFUD" />
+                                        <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.AmountAdvancedonFUD" />
                                     </div>
                                     <div class="form-group">
                                         <label for="RoleID"> First Interest Payment Date</label>
@@ -1659,11 +1587,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="RoleID"> Original commitment amount (per Lender)</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.OriginalCommitmentAmount" />
+                                        <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.OriginalCommitmentAmount" />
                                     </div>
                                     <div class="form-group">
                                         <label for="RoleID"> Payment frequency</label>
-                                        <input class="form-control" numberdotonly type="text" maxlength="8" ng-model="ecurrency.PaymentFrequency" />
+                                        <input class="form-control" numberdotonly type="text" maxlength="150" ng-model="currency.PaymentFrequency" />
                                     </div>
 
                                     <div class="form-group">
@@ -1684,22 +1612,25 @@
                                 <span>
                                     <input type="button" value="Prev" ng-click="activateTab(5)" class="btn btn-primary" />
                                 </span>&nbsp;
-                                <span>
-                                    <input type="button" value="Save" ng-disabled="addform.$invalid || multiselect.selected.length<=0" class="btn btn-primary"  ng-click="InsertClient(currency)" />
+                                <span ng-show="editMode">
+                                    <input type="button" value="Update" ng-disabled="form7.$invalid" class="btn btn-primary" ng-click="UpdateClient(currency)" />
+                                </span>&nbsp;
+                                <span ng-show="!editMode">
+                                    <input type="button" value="Save" ng-disabled="form7.$invalid" class="btn btn-primary" ng-click="InsertClient(currency)" />
                                 </span>&nbsp;
                                 <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary cancel" />
                             </div>
                         </div>
+                        <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
                     </div>
 
                     @*<div class="form-group col-lg-12">
                             <div class="col-sm-offset-4 col-sm-10">
-
                                 <span data-ng-hide="editMode">
                                     <input type="button" value="Add" ng-click="InsertClient(currency)" class="btn btn-primary" />
                                 </span>
                                 <span>
-                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-primary" />
+                                    <input type="button" value="Update" data-ng-click="UpdatcurrencyConversion(currency)" class="btn btn-primary" />
                                 </span>
                                 <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-primary cancel" />
                             </div>
@@ -1728,10 +1659,10 @@
                     <a ng-click="activateTab(3)">BORROWER KEY DETAILS</a>
                 </li>
                 <li ng-class="{'active-ol':pageList[4].IsValid,'done-act':pageList[5].IsValid}">
-                    <a ng-click="activateTab(4)">PROPERTY ADDRESSes</a>
+                    <a ng-click="activateTab(4)">BORROWER CONTACT DETAILS</a>
                 </li>
                 <li ng-class="{'active-ol':pageList[5].IsValid,'done-act':pageList[6].IsValid}">
-                    <a ng-click="activateTab(5)">OTHER DETAILS</a>
+                    <a ng-click="activateTab(5)">PROPERTY ADDRESSES</a>
                 </li>
                 <li ng-class="{'active-ol':pageList[6].IsValid,'done-act':pageList[7].IsValid}">
                     <a ng-click="activateTab(6)">OTHER DETAILS</a>

@@ -9,36 +9,7 @@ using System.Globalization;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.Data;
-
-public static class StaticClass
-{
-
-    public static string Adduser = "spsvn_Adduser";
-    public static string updateuser = "spsvn_updateuser";
-    public static string ChangePwd = "spsvn_ChangePwd";
-
-    public static string DeleteUser = "spsvn_deleteuser";
-
-    public static string GetAllFCCLocations = "SPSVN_GetAllFCCLocations";
-
-    public static string GetUserProfile = "spsvn_GetAllusers";
-    public static string GetMenuItems = "SPSVN_GetMenuItems";
-    public static string GetRoles = "spsvn_GetAllRoles";
-    public static string AddRightsForRoles = "SPSVN_RoleMenuMap";
-    public static string Checkuserlogin = "spsvn_validateLogin";
-    public static string GetExtensionwisecallReport = "SPSVN_ExtensionwiseCallDetail";
-
-    public static string GetAllManagers = "spsvn_GetAllManagers";
-    public static string GetAllTeams = "spsvn_GetAllTeams";
-    public static string GetAllusersById = "spsvn_GetAllusersById";
-    public static string GetManagerByEmpcode = "spsvn_GetManagerByEmpcode";
-    public static string GetHodByEmpcode = "spsvn_GetHodByEmpcode";
-
-    public static string updateManagerByEmpcode = "spsvn_ManagerHierachy";
-    public static string updateHodByEmpcode = "spsvn_hodHierachy";
-    public static string UpdatePwd = "spsvn_UpdatePwd";
-
-}
+using COBA.Models;
 
 
 
@@ -47,17 +18,9 @@ public class DbOperations
 
     #region Private Variable Declaration
     private MySqlConnection connection;
-    private string server;
-    private string database;
-    private string uid;
-    private string password;
-
-
     private static readonly log4net.ILog log = LogManager.GetLogger(typeof(DbOperations));
     private string connString = string.Empty;
 
-
-    private int commandTimeout = 0;
     #endregion
 
     #region Default Constructor
@@ -68,17 +31,6 @@ public class DbOperations
         {
             connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
             connection = new MySqlConnection(connString);
-            //connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
-            //server = "localhost";
-            //database = "coba";
-            //uid = "root";
-            //password = "Servion@123";
-            //string connectionString;
-            //connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
-
-            //connection = new MySqlConnection(connectionString);
-
-
         }
         catch (Exception ex)
         {
@@ -93,249 +45,254 @@ public class DbOperations
     #region Client
     public List<Client> GetClientData()
     {
-        List<Client> lst = new List<Client>();
-
-        string query = "SP_GetClients";
-        //open connection
-        if (this.OpenConnection() == true)
+        try
         {
-            
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            List<Client> lst = new List<Client>();
+            string query = "SP_GetClients";
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
 
-                               select new Client
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   AmountAdvancedonFUD = Convert.ToString(row["AmountAdvancedonFUD"]),
-                                   BCompanyName = Convert.ToString(row["BCompanyName"]),
-                                   BKC1City = Convert.ToString(row["BKC1City"]),
-                                   BKC1Country = Convert.ToString(row["BKC1Country"]),
-                                   BKC1Email = Convert.ToString(row["BKC1Email"]),
-                                   BKC1L1 = Convert.ToString(row["BKC1L1"]),
-                                   BKC1L2 = Convert.ToString(row["BKC1L2"]),
-                                   BKC1L3 = Convert.ToString(row["BKC1L3"]),
-                                   BKC1PostCode = row["BKC1PostCode"].ToString(),
-                                   BKC1State = row["BKC1State"].ToString(),
-                                   BKC1TelNum = row["BKC1TelNum"].ToString(),
-                                   BKC2City = row["BKC2City"].ToString(),
-                                   BKC2Country = row["BKC2Country"].ToString(),
-                                   BKC2Email = row["BKC2Email"].ToString(),
-                                   BKC2L1 = row["BKC2L1"].ToString(),
-                                   BKC2L2 = row["BKC2L2"].ToString(),
-                                   BKC2L3 = row["BKC2L3"].ToString(),
-                                   BKC2PostCode = row["BKC2PostCode"].ToString(),
-                                   BKC2State = row["BKC2State"].ToString(),
-                                   BKC2TelNum = row["BKC2TelNum"].ToString(),
-                                   BKC3City = row["BKC3City"].ToString(),
-                                   BKC3Country = row["BKC3Country"].ToString(),
-                                   BKC3Email = row["BKC3Email"].ToString(),
-                                   BKC3L1 = row["BKC3L1"].ToString(),
-                                   BKC3L2 = row["BKC3L2"].ToString(),
-                                   BKC3L3 = row["BKC3L3"].ToString(),
-                                   BKC3PostCode = row["BKC3PostCode"].ToString(),
-                                   BKC3State = row["BKC3State"].ToString(),
-                                   BKC3TelNum = row["BKC3TelNum"].ToString(),
-                                   BKC4City = row["BKC4City"].ToString(),
-                                   BKC4Country = row["BKC4Country"].ToString(),
-                                   BKC4Email = row["BKC4Email"].ToString(),
-                                   BKC4L1 = row["BKC4L1"].ToString(),
-                                   BKC4L2 = row["BKC4L2"].ToString(),
-                                   BKC4L3 = row["BKC4L3"].ToString(),
-                                   BKC4PostCode = row["BKC4PostCode"].ToString(),
-                                   BKC4State = row["BKC4State"].ToString(),
-                                   BKC4TelNum = row["BKC4TelNum"].ToString(),
-                                   BKC5City = row["BKC5City"].ToString(),
-                                   BKC5Country = row["BKC5Country"].ToString(),
-                                   BKC5Email = row["BKC5Email"].ToString(),
-                                   BKC5L1 = row["BKC5L1"].ToString(),
-                                   BKC5L2 = row["BKC5L2"].ToString(),
-                                   BKC5L3 = row["BKC5L3"].ToString(),
-                                   BKC5PostCode = row["BKC5PostCode"].ToString(),
-                                   BKC5State = row["BKC5State"].ToString(),
-                                   BKC5TelNum = row["BKC5TelNum"].ToString(),
-                                   BPriAddressCity = row["BPriAddressCity"].ToString(),
-                                   BPriAddressCountry = row["BPriAddressCountry"].ToString(),
-                                   BPriAddressEmail = row["BPriAddressEmail"].ToString(),
-                                   BPriAddressL1 = row["BPriAddressL1"].ToString(),
-                                   BPriAddressL2 = row["BPriAddressL2"].ToString(),
-                                   BPriAddressL3 = row["BPriAddressL3"].ToString(),
-                                   BPriAddressPostCode = row["BPriAddressPostCode"].ToString(),
-                                   BPriAddressState = row["BPriAddressState"].ToString(),
-                                   BPriAddressTelNum = row["BPriAddressTelNum"].ToString(),
-                                   //BPrimaryAddress = row["BPrimaryAddress"].ToString(),
-                                   //BRegAddress = row["BRegAddress"].ToString(),
-                                   BRegAddressCity = row["BRegAddressCity"].ToString(),
-                                   BRegAddressCountry = row["BRegAddressCountry"].ToString(),
-                                   BRegAddressEmail = row["BRegAddressEmail"].ToString(),
-                                   BRegAddressL1 = row["BRegAddressL1"].ToString(),
-                                   BRegAddressL2 = row["BRegAddressL2"].ToString(),
-                                   BRegAddressL3 = row["BRegAddressL3"].ToString(),
-                                   BRegAddressPostCode = row["BRegAddressPostCode"].ToString(),
-                                   BRegAddressState = row["BRegAddressState"].ToString(),
-                                   BRegAddressTelNum = row["BRegAddressTelNum"].ToString(),
-                                   ClientNumber = row["ClientNumber"].ToString(),
-                                   FirstInterestPaymentDate = row["FirstInterestPaymentDate"].ToString(),
-                                   FirstUtilisationDate = row["FirstUtilisationDate"].ToString(),
-                                   InvDevLoan = row["InvDevLoan"].ToString(),
-                                   IsActive = row["IsActive"].ToString(),
-                                   IsSignOff = row["IsSignOff"].ToString(),
-                                   LCompanyName = row["LCompanyName"].ToString(),
-                                   LKC1City = row["LKC1City"].ToString(),
-                                   LKC1Country = row["LKC1Country"].ToString(),
-                                   LKC1Email = row["LKC1Email"].ToString(),
-                                   LKC1L1 = row["LKC1L1"].ToString(),
-                                   LKC1L2 = row["LKC1L2"].ToString(),
-                                   LKC1L3 = row["LKC1L3"].ToString(),
-                                   LKC1PostCode = row["LKC1PostCode"].ToString(),
-                                   LKC1State = row["LKC1State"].ToString(),
-                                   LKC1TelNum = row["LKC1TelNum"].ToString(),
-                                   LKC2City = row["LKC2City"].ToString(),
-                                   LKC2Country = row["LKC2Country"].ToString(),
-                                   LKC2Email = row["LKC2Email"].ToString(),
-                                   LKC2L1 = row["LKC2L1"].ToString(),
-                                   LKC2L2 = row["LKC2L2"].ToString(),
-                                   LKC2L3 = row["LKC2L3"].ToString(),
-                                   LKC2PostCode = row["LKC2PostCode"].ToString(),
-                                   LKC2State = row["LKC2State"].ToString(),
-                                   LKC2TelNum = row["LKC2TelNum"].ToString(),
-                                   LKC3City = row["LKC3City"].ToString(),
-                                   LKC3Country = row["LKC3Country"].ToString(),
-                                   LKC3Email = row["LKC3Email"].ToString(),
-                                   LKC3L1 = row["LKC3L1"].ToString(),
-                                   LKC3L2 = row["LKC3L2"].ToString(),
-                                   LKC3L3 = row["LKC3L3"].ToString(),
-                                   LKC3PostCode = row["LKC3PostCode"].ToString(),
-                                   LKC3State = row["LKC3State"].ToString(),
-                                   LKC3TelNum = row["LKC3TelNum"].ToString(),
-                                   LKC4City = row["LKC4City"].ToString(),
-                                   LKC4Country = row["LKC4Country"].ToString(),
-                                   LKC4Email = row["LKC4Email"].ToString(),
-                                   LKC4L1 = row["LKC4L1"].ToString(),
-                                   LKC4L2 = row["LKC4L2"].ToString(),
-                                   LKC4L3 = row["LKC4L3"].ToString(),
-                                   LKC4PostCode = row["LKC4PostCode"].ToString(),
-                                   LKC4State = row["LKC4State"].ToString(),
-                                   LKC4TelNum = row["LKC4TelNum"].ToString(),
-                                   LKC5City = row["LKC5City"].ToString(),
-                                   LKC5Country = row["LKC5Country"].ToString(),
-                                   LKC5Email = row["LKC5Email"].ToString(),
-                                   LKC5L1 = row["LKC5L1"].ToString(),
-                                   LKC5L2 = row["LKC5L2"].ToString(),
-                                   LKC5L3 = row["LKC5L3"].ToString(),
-                                   LKC5PostCode = row["LKC5PostCode"].ToString(),
-                                   LKC5State = row["LKC5State"].ToString(),
-                                   LKC5TelNum = row["LKC5TelNum"].ToString(),
-                                   LoanDateAggrmnt = row["LoanDateAggrmnt"].ToString(),
-                                   LPriAddressCity = row["LPriAddressCity"].ToString(),
-                                   LPriAddressCountry = row["LPriAddressCountry"].ToString(),
-                                   LPriAddressEmail = row["LPriAddressEmail"].ToString(),
-                                   LPriAddressL1 = row["LPriAddressL1"].ToString(),
-                                   LPriAddressL2 = row["LPriAddressL2"].ToString(),
-                                   LPriAddressL3 = row["LPriAddressL3"].ToString(),
-                                   LPriAddressPostCode = row["LPriAddressPostCode"].ToString(),
-                                   LPriAddressState = row["LPriAddressState"].ToString(),
-                                   LPriAddressTelNum = row["LPriAddressTelNum"].ToString(),
-                                   //LPrimaryAddress = row["LPrimaryAddress"].ToString(),
-                                   //LRegAddress = row["LRegAddress"].ToString(),
-                                   LRegAddressCity = row["LRegAddressCity"].ToString(),
-                                   LRegAddressCountry = row["LRegAddressCountry"].ToString(),
-                                   LRegAddressEmail = row["LRegAddressEmail"].ToString(),
-                                   LRegAddressL1 = row["LRegAddressL1"].ToString(),
-                                   LRegAddressL2 = row["LRegAddressL2"].ToString(),
-                                   LRegAddressL3 = row["LRegAddressL3"].ToString(),
-                                   LRegAddressPostCode = row["LRegAddressPostCode"].ToString(),
-                                   LRegAddressState = row["LRegAddressState"].ToString(),
-                                   LRegAddressTelNum = row["LRegAddressTelNum"].ToString(),
-                                   ObligorName = row["ObligorName"].ToString(),
-                                   OriginalCommitmentAmount = row["OriginalCommitmentAmount"].ToString(),
-                                   OriginalLender = row["OriginalLender"].ToString(),
-                                   PaymentFrequency = row["PaymentFrequency"].ToString(),
-                                   PropAddress1City = row["PropAddress1City"].ToString(),
-                                   PropAddress1Country = row["PropAddress1Country"].ToString(),
-                                   PropAddress1Email = row["PropAddress1Email"].ToString(),
-                                   PropAddress1L1 = row["PropAddress1L1"].ToString(),
-                                   PropAddress1L2 = row["PropAddress1L2"].ToString(),
-                                   PropAddress1L3 = row["PropAddress1L3"].ToString(),
-                                   PropAddress1PostCode = row["PropAddress1PostCode"].ToString(),
-                                   PropAddress1State = row["PropAddress1State"].ToString(),
-                                   PropAddress1TelNum = row["PropAddress1TelNum"].ToString(),
-                                   PropAddress2City = row["PropAddress2City"].ToString(),
-                                   PropAddress2Country = row["PropAddress2Country"].ToString(),
-                                   PropAddress2Email = row["PropAddress2Email"].ToString(),
-                                   PropAddress2L1 = row["PropAddress2L1"].ToString(),
-                                   PropAddress2L2 = row["PropAddress2L2"].ToString(),
-                                   PropAddress2L3 = row["PropAddress2L3"].ToString(),
-                                   PropAddress2PostCode = row["PropAddress2PostCode"].ToString(),
-                                   PropAddress2State = row["PropAddress2State"].ToString(),
-                                   PropAddress2TelNum = row["PropAddress2TelNum"].ToString(),
-                                   PropAddress3City = row["PropAddress3City"].ToString(),
-                                   PropAddress3Country = row["PropAddress3Country"].ToString(),
-                                   PropAddress3Email = row["PropAddress3Email"].ToString(),
-                                   PropAddress3L1 = row["PropAddress3L1"].ToString(),
-                                   PropAddress3L2 = row["PropAddress3L2"].ToString(),
-                                   PropAddress3L3 = row["PropAddress3L3"].ToString(),
-                                   PropAddress3PostCode = row["PropAddress3PostCode"].ToString(),
-                                   PropAddress3State = row["PropAddress3State"].ToString(),
-                                   PropAddress3TelNum = row["PropAddress3TelNum"].ToString(),
-                                   PropAddress4City = row["PropAddress4City"].ToString(),
-                                   PropAddress4Country = row["PropAddress4Country"].ToString(),
-                                   PropAddress4Email = row["PropAddress4Email"].ToString(),
-                                   PropAddress4L1 = row["PropAddress4L1"].ToString(),
-                                   PropAddress4L2 = row["PropAddress4L2"].ToString(),
-                                   PropAddress4L3 = row["PropAddress4L3"].ToString(),
-                                   PropAddress4PostCode = row["PropAddress4PostCode"].ToString(),
-                                   PropAddress4State = row["PropAddress4State"].ToString(),
-                                   PropAddress4TelNum = row["PropAddress4TelNum"].ToString(),
-                                   PropAddress5City = row["PropAddress5City"].ToString(),
-                                   PropAddress5Country = row["PropAddress5Country"].ToString(),
-                                   PropAddress5Email = row["PropAddress5Email"].ToString(),
-                                   PropAddress5L1 = row["PropAddress5L1"].ToString(),
-                                   PropAddress5L2 = row["PropAddress5L2"].ToString(),
-                                   PropAddress5L3 = row["PropAddress5L3"].ToString(),
-                                   PropAddress5PostCode = row["PropAddress5PostCode"].ToString(),
-                                   PropAddress5State = row["PropAddress5State"].ToString(),
-                                   PropAddress5TelNum = row["PropAddress5TelNum"].ToString(),
-                                   ProposedDealCommencementDate = row["ProposedDealCommencementDate"].ToString(),
-                                   SignoffBy = row["SignoffBy"].ToString(),
-                                   SignOffDate = Convert.ToDateTime(row["SignOffDate"]),
-                                   StrChartAttchd = row["StrChartAttchd"].ToString(),
+                                   select new Client
+                                   {
+                                       Id = Convert.ToInt32(row["Id"]),
+                                       AmountAdvancedonFUD = Convert.ToString(row["AmountAdvancedonFUD"]),
+                                       BCompanyName = Convert.ToString(row["BCompanyName"]),
+                                       BKC1City = Convert.ToString(row["BKC1City"]),
+                                       BKC1Country = Convert.ToString(row["BKC1Country"]),
+                                       BKC1Email = Convert.ToString(row["BKC1Email"]),
+                                       BKC1L1 = Convert.ToString(row["BKC1L1"]),
+                                       BKC1L2 = Convert.ToString(row["BKC1L2"]),
+                                       BKC1L3 = Convert.ToString(row["BKC1L3"]),
+                                       BKC1PostCode = row["BKC1PostCode"].ToString(),
+                                       BKC1State = row["BKC1State"].ToString(),
+                                       BKC1TelNum = row["BKC1TelNum"].ToString(),
+                                       BKC2City = row["BKC2City"].ToString(),
+                                       BKC2Country = row["BKC2Country"].ToString(),
+                                       BKC2Email = row["BKC2Email"].ToString(),
+                                       BKC2L1 = row["BKC2L1"].ToString(),
+                                       BKC2L2 = row["BKC2L2"].ToString(),
+                                       BKC2L3 = row["BKC2L3"].ToString(),
+                                       BKC2PostCode = row["BKC2PostCode"].ToString(),
+                                       BKC2State = row["BKC2State"].ToString(),
+                                       BKC2TelNum = row["BKC2TelNum"].ToString(),
+                                       BKC3City = row["BKC3City"].ToString(),
+                                       BKC3Country = row["BKC3Country"].ToString(),
+                                       BKC3Email = row["BKC3Email"].ToString(),
+                                       BKC3L1 = row["BKC3L1"].ToString(),
+                                       BKC3L2 = row["BKC3L2"].ToString(),
+                                       BKC3L3 = row["BKC3L3"].ToString(),
+                                       BKC3PostCode = row["BKC3PostCode"].ToString(),
+                                       BKC3State = row["BKC3State"].ToString(),
+                                       BKC3TelNum = row["BKC3TelNum"].ToString(),
+                                       BKC4City = row["BKC4City"].ToString(),
+                                       BKC4Country = row["BKC4Country"].ToString(),
+                                       BKC4Email = row["BKC4Email"].ToString(),
+                                       BKC4L1 = row["BKC4L1"].ToString(),
+                                       BKC4L2 = row["BKC4L2"].ToString(),
+                                       BKC4L3 = row["BKC4L3"].ToString(),
+                                       BKC4PostCode = row["BKC4PostCode"].ToString(),
+                                       BKC4State = row["BKC4State"].ToString(),
+                                       BKC4TelNum = row["BKC4TelNum"].ToString(),
+                                       BKC5City = row["BKC5City"].ToString(),
+                                       BKC5Country = row["BKC5Country"].ToString(),
+                                       BKC5Email = row["BKC5Email"].ToString(),
+                                       BKC5L1 = row["BKC5L1"].ToString(),
+                                       BKC5L2 = row["BKC5L2"].ToString(),
+                                       BKC5L3 = row["BKC5L3"].ToString(),
+                                       BKC5PostCode = row["BKC5PostCode"].ToString(),
+                                       BKC5State = row["BKC5State"].ToString(),
+                                       BKC5TelNum = row["BKC5TelNum"].ToString(),
+                                       BPriAddressCity = row["BPriAddressCity"].ToString(),
+                                       BPriAddressCountry = row["BPriAddressCountry"].ToString(),
+                                       BPriAddressEmail = row["BPriAddressEmail"].ToString(),
+                                       BPriAddressL1 = row["BPriAddressL1"].ToString(),
+                                       BPriAddressL2 = row["BPriAddressL2"].ToString(),
+                                       BPriAddressL3 = row["BPriAddressL3"].ToString(),
+                                       BPriAddressPostCode = row["BPriAddressPostCode"].ToString(),
+                                       BPriAddressState = row["BPriAddressState"].ToString(),
+                                       BPriAddressTelNum = row["BPriAddressTelNum"].ToString(),
+                                       //BPrimaryAddress = row["BPrimaryAddress"].ToString(),
+                                       //BRegAddress = row["BRegAddress"].ToString(),
+                                       BRegAddressCity = row["BRegAddressCity"].ToString(),
+                                       BRegAddressCountry = row["BRegAddressCountry"].ToString(),
+                                       BRegAddressEmail = row["BRegAddressEmail"].ToString(),
+                                       BRegAddressL1 = row["BRegAddressL1"].ToString(),
+                                       BRegAddressL2 = row["BRegAddressL2"].ToString(),
+                                       BRegAddressL3 = row["BRegAddressL3"].ToString(),
+                                       BRegAddressPostCode = row["BRegAddressPostCode"].ToString(),
+                                       BRegAddressState = row["BRegAddressState"].ToString(),
+                                       BRegAddressTelNum = row["BRegAddressTelNum"].ToString(),
+                                       ClientNumber = row["ClientNumber"].ToString(),
+                                       FirstInterestPaymentDate = row["FirstInterestPaymentDate"].ToString(),
+                                       FirstUtilisationDate = row["FirstUtilisationDate"].ToString(),
+                                       InvDevLoan = row["InvDevLoan"].ToString(),
+                                       IsActive = row["IsActive"].ToString(),
+                                       IsSignOff = row["IsSignOff"].ToString(),
+                                       LCompanyName = row["LCompanyName"].ToString(),
+                                       LKC1City = row["LKC1City"].ToString(),
+                                       LKC1Country = row["LKC1Country"].ToString(),
+                                       LKC1Email = row["LKC1Email"].ToString(),
+                                       LKC1L1 = row["LKC1L1"].ToString(),
+                                       LKC1L2 = row["LKC1L2"].ToString(),
+                                       LKC1L3 = row["LKC1L3"].ToString(),
+                                       LKC1PostCode = row["LKC1PostCode"].ToString(),
+                                       LKC1State = row["LKC1State"].ToString(),
+                                       LKC1TelNum = row["LKC1TelNum"].ToString(),
+                                       LKC2City = row["LKC2City"].ToString(),
+                                       LKC2Country = row["LKC2Country"].ToString(),
+                                       LKC2Email = row["LKC2Email"].ToString(),
+                                       LKC2L1 = row["LKC2L1"].ToString(),
+                                       LKC2L2 = row["LKC2L2"].ToString(),
+                                       LKC2L3 = row["LKC2L3"].ToString(),
+                                       LKC2PostCode = row["LKC2PostCode"].ToString(),
+                                       LKC2State = row["LKC2State"].ToString(),
+                                       LKC2TelNum = row["LKC2TelNum"].ToString(),
+                                       LKC3City = row["LKC3City"].ToString(),
+                                       LKC3Country = row["LKC3Country"].ToString(),
+                                       LKC3Email = row["LKC3Email"].ToString(),
+                                       LKC3L1 = row["LKC3L1"].ToString(),
+                                       LKC3L2 = row["LKC3L2"].ToString(),
+                                       LKC3L3 = row["LKC3L3"].ToString(),
+                                       LKC3PostCode = row["LKC3PostCode"].ToString(),
+                                       LKC3State = row["LKC3State"].ToString(),
+                                       LKC3TelNum = row["LKC3TelNum"].ToString(),
+                                       LKC4City = row["LKC4City"].ToString(),
+                                       LKC4Country = row["LKC4Country"].ToString(),
+                                       LKC4Email = row["LKC4Email"].ToString(),
+                                       LKC4L1 = row["LKC4L1"].ToString(),
+                                       LKC4L2 = row["LKC4L2"].ToString(),
+                                       LKC4L3 = row["LKC4L3"].ToString(),
+                                       LKC4PostCode = row["LKC4PostCode"].ToString(),
+                                       LKC4State = row["LKC4State"].ToString(),
+                                       LKC4TelNum = row["LKC4TelNum"].ToString(),
+                                       LKC5City = row["LKC5City"].ToString(),
+                                       LKC5Country = row["LKC5Country"].ToString(),
+                                       LKC5Email = row["LKC5Email"].ToString(),
+                                       LKC5L1 = row["LKC5L1"].ToString(),
+                                       LKC5L2 = row["LKC5L2"].ToString(),
+                                       LKC5L3 = row["LKC5L3"].ToString(),
+                                       LKC5PostCode = row["LKC5PostCode"].ToString(),
+                                       LKC5State = row["LKC5State"].ToString(),
+                                       LKC5TelNum = row["LKC5TelNum"].ToString(),
+                                       LoanDateAggrmnt = row["LoanDateAggrmnt"].ToString(),
+                                       LPriAddressCity = row["LPriAddressCity"].ToString(),
+                                       LPriAddressCountry = row["LPriAddressCountry"].ToString(),
+                                       LPriAddressEmail = row["LPriAddressEmail"].ToString(),
+                                       LPriAddressL1 = row["LPriAddressL1"].ToString(),
+                                       LPriAddressL2 = row["LPriAddressL2"].ToString(),
+                                       LPriAddressL3 = row["LPriAddressL3"].ToString(),
+                                       LPriAddressPostCode = row["LPriAddressPostCode"].ToString(),
+                                       LPriAddressState = row["LPriAddressState"].ToString(),
+                                       LPriAddressTelNum = row["LPriAddressTelNum"].ToString(),
+                                       //LPrimaryAddress = row["LPrimaryAddress"].ToString(),
+                                       //LRegAddress = row["LRegAddress"].ToString(),
+                                       LRegAddressCity = row["LRegAddressCity"].ToString(),
+                                       LRegAddressCountry = row["LRegAddressCountry"].ToString(),
+                                       LRegAddressEmail = row["LRegAddressEmail"].ToString(),
+                                       LRegAddressL1 = row["LRegAddressL1"].ToString(),
+                                       LRegAddressL2 = row["LRegAddressL2"].ToString(),
+                                       LRegAddressL3 = row["LRegAddressL3"].ToString(),
+                                       LRegAddressPostCode = row["LRegAddressPostCode"].ToString(),
+                                       LRegAddressState = row["LRegAddressState"].ToString(),
+                                       LRegAddressTelNum = row["LRegAddressTelNum"].ToString(),
+                                       ObligorName = row["ObligorName"].ToString(),
+                                       OriginalCommitmentAmount = row["OriginalCommitmentAmount"].ToString(),
+                                       OriginalLender = row["OriginalLender"].ToString(),
+                                       PaymentFrequency = row["PaymentFrequency"].ToString(),
+                                       PropAddress1City = row["PropAddress1City"].ToString(),
+                                       PropAddress1Country = row["PropAddress1Country"].ToString(),
+                                       PropAddress1Email = row["PropAddress1Email"].ToString(),
+                                       PropAddress1L1 = row["PropAddress1L1"].ToString(),
+                                       PropAddress1L2 = row["PropAddress1L2"].ToString(),
+                                       PropAddress1L3 = row["PropAddress1L3"].ToString(),
+                                       PropAddress1PostCode = row["PropAddress1PostCode"].ToString(),
+                                       PropAddress1State = row["PropAddress1State"].ToString(),
+                                       PropAddress1TelNum = row["PropAddress1TelNum"].ToString(),
+                                       PropAddress2City = row["PropAddress2City"].ToString(),
+                                       PropAddress2Country = row["PropAddress2Country"].ToString(),
+                                       PropAddress2Email = row["PropAddress2Email"].ToString(),
+                                       PropAddress2L1 = row["PropAddress2L1"].ToString(),
+                                       PropAddress2L2 = row["PropAddress2L2"].ToString(),
+                                       PropAddress2L3 = row["PropAddress2L3"].ToString(),
+                                       PropAddress2PostCode = row["PropAddress2PostCode"].ToString(),
+                                       PropAddress2State = row["PropAddress2State"].ToString(),
+                                       PropAddress2TelNum = row["PropAddress2TelNum"].ToString(),
+                                       PropAddress3City = row["PropAddress3City"].ToString(),
+                                       PropAddress3Country = row["PropAddress3Country"].ToString(),
+                                       PropAddress3Email = row["PropAddress3Email"].ToString(),
+                                       PropAddress3L1 = row["PropAddress3L1"].ToString(),
+                                       PropAddress3L2 = row["PropAddress3L2"].ToString(),
+                                       PropAddress3L3 = row["PropAddress3L3"].ToString(),
+                                       PropAddress3PostCode = row["PropAddress3PostCode"].ToString(),
+                                       PropAddress3State = row["PropAddress3State"].ToString(),
+                                       PropAddress3TelNum = row["PropAddress3TelNum"].ToString(),
+                                       PropAddress4City = row["PropAddress4City"].ToString(),
+                                       PropAddress4Country = row["PropAddress4Country"].ToString(),
+                                       PropAddress4Email = row["PropAddress4Email"].ToString(),
+                                       PropAddress4L1 = row["PropAddress4L1"].ToString(),
+                                       PropAddress4L2 = row["PropAddress4L2"].ToString(),
+                                       PropAddress4L3 = row["PropAddress4L3"].ToString(),
+                                       PropAddress4PostCode = row["PropAddress4PostCode"].ToString(),
+                                       PropAddress4State = row["PropAddress4State"].ToString(),
+                                       PropAddress4TelNum = row["PropAddress4TelNum"].ToString(),
+                                       PropAddress5City = row["PropAddress5City"].ToString(),
+                                       PropAddress5Country = row["PropAddress5Country"].ToString(),
+                                       PropAddress5Email = row["PropAddress5Email"].ToString(),
+                                       PropAddress5L1 = row["PropAddress5L1"].ToString(),
+                                       PropAddress5L2 = row["PropAddress5L2"].ToString(),
+                                       PropAddress5L3 = row["PropAddress5L3"].ToString(),
+                                       PropAddress5PostCode = row["PropAddress5PostCode"].ToString(),
+                                       PropAddress5State = row["PropAddress5State"].ToString(),
+                                       PropAddress5TelNum = row["PropAddress5TelNum"].ToString(),
+                                       ProposedDealCommencementDate = row["ProposedDealCommencementDate"].ToString(),
+                                       SignoffBy = row["SignoffBy"].ToString(),
+                                       SignOffDate = Convert.ToDateTime(row["SignOffDate"]),
+                                       StrChartAttchd = row["StrChartAttchd"].ToString(),
 
-                               }).ToList();
+                                   }).ToList();
 
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
-
+        catch (MySqlException e)
+        {
+            this.CloseConnection();
+            throw e;
+        }
+        catch (Exception e)
+        {
+            this.CloseConnection();
+            throw e;
+        }
     }
 
     public List<Client> GetClientDatabyId(string clientNumber)
     {
         List<Client> lst = new List<Client>();
-
-        string query = "SP_GetClientsById";
-        //open connection
+        string query = "SELECT Id, ClientNumber, InvDevLoan, ObligorName, StrChartAttchd, OriginalLender, LCompanyName, LRegAddressL1, LRegAddressL2, LRegAddressL3, LRegAddressEmail, LRegAddressTelNum, LRegAddressCity, LRegAddressState, LRegAddressCountry, LRegAddressPostCode, LPriAddressL1, LPriAddressL2, LPriAddressL3, LPriAddressEmail, LPriAddressTelNum, LPriAddressCity, LPriAddressState, LPriAddressCountry, LPriAddressPostCode, LKC1L1, LKC1L2, LKC1L3, LKC1Email, LKC1TelNum, LKC1City, LKC1State, LKC1Country, LKC1PostCode, LKC2L1, LKC2L2, LKC2L3, LKC2Email, LKC2TelNum, LKC2City, LKC2State, LKC2Country, LKC2PostCode, LKC3L1, LKC3L2, LKC3L3, LKC3Email, LKC3TelNum, LKC3City, LKC3State, LKC3Country, LKC3PostCode, LKC4L1, LKC4L2, LKC4L3, LKC4Email, LKC4TelNum, LKC4City, LKC4State, LKC4Country, LKC4PostCode, LKC5L1, LKC5L2, LKC5L3, LKC5Email, LKC5TelNum, LKC5City, LKC5State, LKC5Country, LKC5PostCode, BCompanyName, BRegAddressL1, BRegAddressL2, BRegAddressL3, BRegAddressEmail, BRegAddressTelNum, BRegAddressCity, BRegAddressState, BRegAddressCountry, BRegAddressPostCode, BPriAddressL1, BPriAddressL2, BPriAddressL3, BPriAddressEmail, BPriAddressTelNum, BPriAddressCity, BPriAddressState, BPriAddressCountry, BPriAddressPostCode, BKC1L1, BKC1L2, BKC1L3, BKC1Email, BKC1TelNum, BKC1City, BKC1State, BKC1Country, BKC1PostCode, BKC2L1, BKC2L2, BKC2L3, BKC2Email, BKC2TelNum, BKC2City, BKC2State, BKC2Country, BKC2PostCode, BKC3L1, BKC3L2, BKC3L3, BKC3Email, BKC3TelNum, BKC3City, BKC3State, BKC3Country, BKC3PostCode, BKC4L1, BKC4L2, BKC4L3, BKC4Email, BKC4TelNum, BKC4City, BKC4State, BKC4Country, BKC4PostCode, BKC5L1, BKC5L2, BKC5L3, BKC5Email, BKC5TelNum, BKC5City, BKC5State, BKC5Country, BKC5PostCode, ProposedDealCommencementDate, PropAddress1L1, PropAddress1L2, PropAddress1L3, PropAddress1Email, PropAddress1TelNum, PropAddress1City, PropAddress1State, PropAddress1Country, PropAddress1PostCode, PropAddress2L1, PropAddress2L2, PropAddress2L3, PropAddress2Email, PropAddress2TelNum, PropAddress2City, PropAddress2State, PropAddress2Country, PropAddress2PostCode, PropAddress3L1, PropAddress3L2, PropAddress3L3, PropAddress3Email, PropAddress3TelNum, PropAddress3City, PropAddress3State, PropAddress3Country, PropAddress3PostCode, PropAddress4L1, PropAddress4L2, PropAddress4L3, PropAddress4Email, PropAddress4TelNum, PropAddress4City, PropAddress4State, PropAddress4Country, PropAddress4PostCode, PropAddress5L1, PropAddress5L2, PropAddress5L3, PropAddress5Email, PropAddress5TelNum, PropAddress5City, PropAddress5State, PropAddress5Country, PropAddress5PostCode, DATE_FORMAT(LoanDateAggrmnt, '%m/%d/%Y')LoanDateAggrmnt, DATE_FORMAT(FirstUtilisationDate, '%m/%d/%Y') FirstUtilisationDate, AmountAdvancedonFUD, OriginalCommitmentAmount,  DATE_FORMAT(FirstInterestPaymentDate, '%m/%d/%Y')  FirstInterestPaymentDate, PaymentFrequency, IsSignOff, SignOffDate, SignoffBy, IsActive, DATE_FORMAT(CreatedDate, '%m/%d/%Y')CreatedDate, CreatedBy, LastModifiedDate, LastModifiedBy FROM TBL_CLIENT WHERE ClientNumber=" + clientNumber;
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.TableDirect;
                 cmd.Parameters.Add(new MySqlParameter("i_ClientNumber", clientNumber));
                 using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                 {
@@ -547,8 +504,6 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -565,7 +520,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            
+
             using (MySqlCommand cmd = new MySqlCommand("sp_insert_Client", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -682,8 +637,8 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3TelNum", _clientInfo.BKC3TelNum));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3City", _clientInfo.BKC3City));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3State", _clientInfo.BKC3State));
-                cmd.Parameters.Add(new MySqlParameter("i_BKC3PostCode", _clientInfo.BKC3PostCode));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3Country", _clientInfo.BKC3Country));
+                cmd.Parameters.Add(new MySqlParameter("i_BKC3PostCode", _clientInfo.BKC3PostCode));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L1", _clientInfo.BKC4L1));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L2", _clientInfo.BKC4L2));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L3", _clientInfo.BKC4L3));
@@ -773,14 +728,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
     }
 
@@ -790,7 +745,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            
+
             using (MySqlCommand cmd = new MySqlCommand("sp_update_Client", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -907,8 +862,8 @@ public class DbOperations
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3TelNum", _clientInfo.BKC3TelNum));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3City", _clientInfo.BKC3City));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3State", _clientInfo.BKC3State));
-                cmd.Parameters.Add(new MySqlParameter("i_BKC3PostCode", _clientInfo.BKC3PostCode));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC3Country", _clientInfo.BKC3Country));
+                cmd.Parameters.Add(new MySqlParameter("i_BKC3PostCode", _clientInfo.BKC3PostCode));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L1", _clientInfo.BKC4L1));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L2", _clientInfo.BKC4L2));
                 cmd.Parameters.Add(new MySqlParameter("i_BKC4L3", _clientInfo.BKC4L3));
@@ -1019,10 +974,10 @@ public class DbOperations
         List<Tasks> lst = new List<Tasks>();
 
         string query = "Get_Tasks";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1047,8 +1002,6 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1063,10 +1016,10 @@ public class DbOperations
         List<Tasks> lst = new List<Tasks>();
 
         string query = "Get_TasksById";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1091,11 +1044,8 @@ public class DbOperations
                                    IsActive = Convert.ToString(row["IsActive"])
 
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1176,14 +1126,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
     }
 
@@ -1193,54 +1143,55 @@ public class DbOperations
 
     public List<OnboardingTasks> GetOnboardingTaskData()
     {
-        try { 
-        List<OnboardingTasks> lst = new List<OnboardingTasks>();
-        string query = "SP_GetOnboardingTask";
-        if (this.OpenConnection() == true)
+        try
         {
-            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            List<OnboardingTasks> lst = new List<OnboardingTasks>();
+            string query = "SP_GetOnboardingTask";
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new OnboardingTasks
-                               {
-                                   Id = Convert.ToInt32(row["Id"]),
-                                   TaskName = Convert.ToString(row["Name"]),
-                                   ClientNumber = Convert.ToString(row["ClientNumber"]),
-                                   CreatedBy = row["CreatedBy"].ToString(),
-                                   CreatedDate = row["CreatedDate"].ToString(),
-                                   EmailAttachment = row["EmailAttachment"].ToString(),
-                                   EmailContent = Convert.ToString(row["EmailContent"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   EmailSubject = Convert.ToString(row["EmailSubject"]),
-                                   IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
-                                   IsProcessed = Convert.ToString(row["IsProcessed"]),
-                                   //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
-                                   //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                   //TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
-                                   //TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
-                                   TaskAttachement = Convert.ToString(row["TaskAttachement"]),
-                                   TaskComments = Convert.ToString(row["TaskComments"]),
-                                   TaskId = Convert.ToString(row["TaskId"]),
-                                   //UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
-                                   IsActive = Convert.ToString(row["IsActive"])
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new OnboardingTasks
+                                   {
+                                       Id = Convert.ToInt32(row["Id"]),
+                                       TaskName = Convert.ToString(row["Name"]),
+                                       ClientNumber = Convert.ToString(row["ClientNumber"]),
+                                       CreatedBy = row["CreatedBy"].ToString(),
+                                       CreatedDate = row["CreatedDate"].ToString(),
+                                       EmailAttachment = row["EmailAttachment"].ToString(),
+                                       EmailContent = Convert.ToString(row["EmailContent"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       EmailSubject = Convert.ToString(row["EmailSubject"]),
+                                       IsMappedToTask = Convert.ToString(row["IsMappedToTask"]),
+                                       IsProcessed = Convert.ToString(row["IsProcessed"]),
+                                       //LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
+                                       //LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
+                                       //TaskAssignedBy = Convert.ToString(row["TaskAssignedBy"]),
+                                       //TaskAssignedDate = Convert.ToString(row["TaskAssignedDate"]),
+                                       TaskAttachement = Convert.ToString(row["TaskAttachement"]),
+                                       TaskComments = Convert.ToString(row["TaskComments"]),
+                                       TaskId = Convert.ToString(row["TaskId"]),
+                                       //UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
+                                       IsActive = Convert.ToString(row["IsActive"])
 
-                               }).ToList();
+                                   }).ToList();
+                        }
                     }
                 }
+
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
-        }
-
-        return lst;
+            return lst;
         }
         catch (MySqlException e)
         {
@@ -1259,10 +1210,10 @@ public class DbOperations
         List<OnboardingTasks> lst = new List<OnboardingTasks>();
 
         string query = "SP_GetOnboardingTaskbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1299,11 +1250,8 @@ public class DbOperations
                                    IsActive = Convert.ToString(row["IsActive"]),
                                    TaskName = Convert.ToString(row["Name"])
                                }).ToList();
-
                     }
                 }
-
-                //    cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1363,10 +1311,10 @@ public class DbOperations
         List<Emails> lst = new List<Emails>();
 
         string query = "SP_GetEmail";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1403,10 +1351,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
 
@@ -1419,10 +1364,10 @@ public class DbOperations
         List<Emails> lst = new List<Emails>();
 
         string query = "SP_GetEmailbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1457,15 +1402,10 @@ public class DbOperations
                                    TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
 
@@ -1488,10 +1428,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "sp_getClientTaskMapping";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1525,10 +1465,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "SP_GetMapTask";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1562,14 +1502,10 @@ public class DbOperations
                                    TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
-
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
 
@@ -1584,10 +1520,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "SP_GetMapTask";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1662,7 +1598,6 @@ public class DbOperations
                                    TaskName = Convert.ToString(row["Name"]),
                                    TaskId = Convert.ToString(row["taskid"]),
                                }).ToList();
-
                     }
                 }
             }
@@ -1678,10 +1613,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "Get_Mapped_Mail_Task";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1719,11 +1654,8 @@ public class DbOperations
                                    IsActive = Convert.ToString(row["IsActive"])
 
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1738,10 +1670,10 @@ public class DbOperations
         List<MapTasks> lst = new List<MapTasks>();
 
         string query = "SP_GetMapTaskbyId";
-        //open connection
+
         if (this.OpenConnection() == true)
         {
-            
+
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -1777,13 +1709,9 @@ public class DbOperations
                                    TaskId = Convert.ToString(row["TaskId"]),
                                    UniqueEmailId = Convert.ToString(row["UniqueEmailId"]),
                                    IsActive = Convert.ToString(row["IsActive"])
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1932,11 +1860,8 @@ public class DbOperations
                                    ModifiedDate = Convert.ToString(row["ModifiedDate"]),
                                    RoleName = Convert.ToString(row["RoleName"])
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1976,20 +1901,12 @@ public class DbOperations
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
                                        RoleName = Convert.ToString(row["RoleName"])
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-
                 this.CloseConnection();
             }
 
-            //return lst;
-            //models.User.findAll({ where: { RoleId: roleId } })
-            //   .then(function(userroles) { deferred.resolve(userroles); })
-            //   .catch (function (err) { deferred.reject(err) });
         }
         catch (Exception e)
         {
@@ -2025,13 +1942,9 @@ public class DbOperations
                                    RightName = Convert.ToString(row["RightName"]),
                                    ShowMenu = Convert.ToString(row["ShowMenu"])
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
 
@@ -2210,11 +2123,9 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-                    cmd.ExecuteNonQuery();
                 }
                 this.CloseConnection();
             }
-
             return lst;
         }
         catch (Exception e)
@@ -2270,11 +2181,8 @@ public class DbOperations
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
                                        RoleName = Convert.ToString(row["RoleName"])
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -2323,14 +2231,9 @@ public class DbOperations
                                        BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
-
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -2382,15 +2285,10 @@ public class DbOperations
                                    Status = Convert.ToString(row["Status"]),
                                    Password = Convert.ToString(row["Password"]),
                                    IsADUser = Convert.ToString(row["IsADUser"]),
-
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
         return lst;
@@ -2433,16 +2331,10 @@ public class DbOperations
                                        CountryId = Convert.ToString(row["CountryId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
-
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-
                 this.CloseConnection();
             }
             return lst;
@@ -2661,6 +2553,98 @@ public class DbOperations
                 }
 
             }
+
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_userBusinessSector", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userBusinessSector", connection))
+            {
+                foreach (BusinessSector s in user.BusinessSectorList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_BusinessSectorId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_usercountry", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_usercountry", connection))
+            {
+                foreach (CountryMaster s in user.CountryList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_CountryId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
+            using (MySqlCommand cmd = new MySqlCommand("delete_userregion", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+
+            using (MySqlCommand cmd = new MySqlCommand("sp_insert_userregion", connection))
+            {
+                foreach (RegionMaster s in user.RegionList)
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.Add(new MySqlParameter("i_RegionId", s.Id));
+                    cmd.Parameters.Add(new MySqlParameter("i_userid", user.userId));
+                    if (this.OpenConnection() == true)
+                    {
+                        cmd.ExecuteNonQuery();
+                        this.CloseConnection();
+                    }
+                }
+            }
+
+
         }
         catch (MySqlException e)
         {
@@ -2873,13 +2857,10 @@ public class DbOperations
                                        Path = Convert.ToString(row["Path"]),
                                        RightID = Convert.ToString(row["RightID"]),
                                        ShowMenu = Convert.ToString(row["ShowMenu"])
-
                                    }).ToList();
-
                         }
                     }
                 }
-
                 this.CloseConnection();
             }
             return lst;
@@ -2922,10 +2903,7 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-
                 this.CloseConnection();
             }
             return lst;
@@ -3063,8 +3041,6 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -3174,8 +3150,6 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -3298,10 +3272,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
-
             this.CloseConnection();
         }
 
@@ -3426,8 +3397,7 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
+                
             }
 
             this.CloseConnection();

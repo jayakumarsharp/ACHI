@@ -28,6 +28,7 @@ namespace EmailReaderService
         string emailCountFile = AppDomain.CurrentDomain.BaseDirectory + "\\emailCountFile.txt";
         private string connString = string.Empty;
         private MySqlConnection connection;
+        private bool isStopped = false;
 
         string strTimeSec = ConfigurationManager.AppSettings["TimeSec"];
         ArrayList messageList = new ArrayList();
@@ -40,45 +41,60 @@ namespace EmailReaderService
         {
             try
             {
-                connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
-                connection = new MySqlConnection(connString);
-
                 log.Info("Begin Constructor");
                 InitializeComponent();
-                mailbox = @"C:/EMail/inbox";
-                log.Info("End Constructor");
-                //client.Connect(ConfigurationManager.AppSettings["HostName"], 993, true);
-                client.Connect("pop3.live.com", 995, true);
-
-
-                // client.Authenticate(ConfigurationManager.AppSettings["MailID"], ConfigurationManager.AppSettings["Password"]);
-                //client.Authenticate("jayakumar.t@servion.com", "boomathi@1992");
-                client.Authenticate("savvyjayakumar@outlook.com", "Welcome@123");
                 OnStart(null);
             }
             catch (Exception e)
             {
-                Console.Write(e.InnerException);
+                log.Error(e.InnerException);
             }
         }
         protected override void OnStart(string[] args)
         {
-            log.Info("Service strarted");
-            thread = new System.Threading.Thread(ReadMails);
-            thread.Start();
+            try
+            {
+                log.Info("Service started");
+                mailbox = @"C:/EMail/inbox";
+                log.Info("End Constructor");
+                //client.Connect(ConfigurationManager.AppSettings["HostName"], 993, true);
+                client.Connect("pop3.live.com", 995, true);
+                connString = ConfigurationManager.ConnectionStrings["CRMConn"].ConnectionString.ToString();
+                connection = new MySqlConnection(connString);
+                // client.Authenticate(ConfigurationManager.AppSettings["MailID"], ConfigurationManager.AppSettings["Password"]);
+                //client.Authenticate("jayakumar.t@servion.com", "boomathi@1992");
+                client.Authenticate("savvyjayakumar@outlook.com", "Welcome@123");
+                log.Info("Thread begin");
+                thread = new System.Threading.Thread(ReadMails);
+                thread.Start();
+                log.Info("Thread started");
+            }
+            catch (Exception e)
+            {
+                log.Info("Error in connect mail");
+                log.Error(e.InnerException);
+            }
         }
         protected override void OnStop()
         {
+            isStopped = true;
             thread.Abort();
         }
         public void ReadMails()
         {
             while (true)
-
             {
                 try
                 {
-                    //Imap4Folder destFolder = getfoldercount();
+
+
+                    System.Threading.Thread.Sleep(60000);
+                    if (isStopped)
+                    {
+                        log.Info("Service is stopped");
+                        thread.Abort();
+                        break;
+                    }
 
                     int MessageCount = client.GetMessageCount();
 
@@ -118,7 +134,6 @@ namespace EmailReaderService
                                 objmaildata.ClientNumber = "";
                                 objmaildata.UniqueEmailID = messageId;
 
-
                                 for (int j = 0; j < a.Length; j++)
                                 {
                                     if (Char.IsDigit(a[j]))
@@ -137,7 +152,7 @@ namespace EmailReaderService
                                 MessagePart html = CurrentMessage.FindFirstHtmlVersion();
                                 if (html != null)
                                 {
-                                    xml=html.GetBodyAsText();
+                                    xml = html.GetBodyAsText();
                                 }
 
                                 //fileDataHtml = Regex.Replace(fileDataHtml, "&nbsp;", String.Empty);
@@ -175,57 +190,10 @@ namespace EmailReaderService
                     //SendErrorEmail(fromEmailID, null);
                 }
             }
+            return;
         }
 
 
-        //public Imap4Folder getfoldercount()
-        //{
-        //    Imap4Folder Folder = null;
-        //    Imap4Folder[] folders = oClient.Imap4Folders;
-        //    int count = folders.Length;
-
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        Imap4Folder folder = folders[i];
-        //        if (String.Compare("Archeive", folder.Name, true) == 0)
-        //        {
-        //            //find "Deleted Items" folder
-        //            Folder = folder;
-        //            break;
-        //        }
-        //    }
-        //    return Folder;
-        //}
-        private void SendErrorEmail(string senderID)
-        {
-            try
-            {
-                //string adminEmail = ConfigurationManager.AppSettings["adminEmail"];
-                //string errorMessage = ConfigurationManager.AppSettings["EmailMessage"];
-                //var xDoc = new XmlDocument();
-                //xDoc.LoadXml(GetOpportunityData(data));
-                //string emailData = Beautify(xDoc);
-                //MailMessage mail = new MailMessage();
-                //SmtpClient SmtpServer = new SmtpClient(HostName);
-
-                //mail.From = new MailAddress(strFromMailId);
-                //mail.To.Add(senderID);
-                //mail.To.Add(adminEmail);
-                //mail.Subject = "Unable to create opportunity";
-                //mail.Body = errorMessage + "\n" + "Data posted by user" + "\n" + emailData;
-                //mail.IsBodyHtml = false;
-                //SmtpServer.Port = 587;
-                //SmtpServer.Credentials = new System.Net.NetworkCredential(strMailID, strPassword);
-                //SmtpServer.EnableSsl = true;
-
-                //SmtpServer.Send(mail);
-
-            }
-            catch (Exception ex)
-            {
-                log.ErrorFormat("Error occured SendErrorEmail : {0}", ex);
-            }
-        }
         public string Beautify(XmlDocument doc)
         {
             StringBuilder sb = new StringBuilder();

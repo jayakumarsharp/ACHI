@@ -1,14 +1,8 @@
-﻿ReportApp.controller('TaskController', function ($scope, $rootScope, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('TaskController', ['$scope', '$rootScope', 'TaskService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, TaskService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.errorinfo = '';
     $scope.showaction = false;
-    $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.SBU = [];
-    $scope.Region = [];
-    $scope.Currency = [];
-    $scope.LegalEntity = [];
-    $scope.ecurrency = {};
     $scope.LockedPriceSheet = [];
     $scope.GetRightsList = function () {
         angular.forEach($rootScope.RightList, function (value, key) {
@@ -18,44 +12,19 @@
         });
     };
 
-    $scope.getallcurrencyconversions = function () {
+    $scope.getAllTasks = function () {
 
         TaskService.GetAllTask().success(function (data) {
             console.log(data)
             $scope.dtOptions.data = data;;
         })
     };
-    $scope.getallcurrencyconversions();
+    $scope.getAllTasks();
     $rootScope.$on("toggle", function () {
         $timeout(function () {
             $scope.CurrencyGrid.api.sizeColumnsToFit();
         }, 1000);
     });
-
-    //var columnDefs = [{ name: 'Id' },
-    //    { name: 'Name' },
-    //    //{ headerName: 'Description', name: 'Description', width: 440 },
-    //    //{
-    //    //    headerName: 'SignOff Status', name: 'IsSignOff', width: 40, cellRenderer: function (params) {
-    //    //        if (params.data.IsSignOff == "Y")
-    //    //            return "<i class='fa fa-check btn-success btn-circle'></i>"
-    //    //        else
-    //    //            return "<i class='fa fa-close btn-danger btn-circle'></i>"
-    //    //    }
-    //    //},
-    //    {
-    //        headerName: 'IsActive', name: 'IsActive'
-    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-show={{row.entity.IsActive=="N"}}><i class="fa fa-close" ></i></a ><a ng-show={{row.entity.IsActive=="Y"}}><i class="fa fa-check" ></i></a> </div>'
-    //    },
-
-    //    {
-    //        name: 'Action'
-    //        , cellTemplate: '<div class="ui-grid-cell-contents"> <a ng-click=\"grid.appScope.GetCurrencyConversionForId(row.entity.Id)" ><i class="fa fa-edit" ></i></a ></div>'
-
-    //    }
-    //];
-
-
     $scope.dtOptions = DTOptionsBuilder.fromSource()
     .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
@@ -69,19 +38,7 @@
     }
     function actionsHtml(data, type, full, meta) {
         return '<a  ng-click="GetCurrencyConversionForId(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
     }
-
-
-
-    //$scope.CurrencyGrid = {
-    //    paginationPageSizes: [10, 20, 30, 40, 50, 60],
-    //    paginationPageSize: 10,
-    //    columnDefs: columnDefs,
-
-    //};
 
     $scope.showadd = function () {
         $scope.showaction = true;
@@ -92,7 +49,7 @@
         $scope.errorinfo = '';
         $scope.editMode = false;
         $scope.currency = {};
-        $scope.ecurrency.CurrencyDescrition = '';
+        $scope.currency.CurrencyDescrition = '';
         $('#currencyModel').modal('show');
 
     };
@@ -123,7 +80,7 @@
                     //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                     $('#currencyModel').modal('hide');
                     $scope.showaction = false;
-                    $scope.getallcurrencyconversions()
+                    $scope.getAllTasks()
                 }
                 else
                     $scope.errorinfo = data;
@@ -150,7 +107,7 @@
 
 
             data[0].IsSignOff = (data[0].IsSignOff == "Y" ? "checked" : 'unchecked');
-            $scope.ecurrency = data[0];
+            $scope.currency = data[0];
             $('#currencyModel').modal('show');
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
@@ -177,7 +134,7 @@
                 //toaster.pop('success', "Success", "Currency rate updated successfully", null);
                 $('#currencyModel').modal('hide');
                 $scope.showaction = false;
-                $scope.getallcurrencyconversions()
+                $scope.getAllTasks()
             }
             else
                 $scope.errorinfo = data;
@@ -206,7 +163,6 @@
 
     $scope.cancel = function () {
         $scope.currency = {};
-        $scope.ecurrency = {};
         $('#currencyModel').modal('hide');
         $scope.showaction = false;
     };
@@ -214,15 +170,13 @@
     $scope.updatecancel = function (data) {
         TaskService.GetCurrencyConversionbyId(id).success(function (data) {
             $scope.editMode = true;
-            $scope.ecurrency = data[0];
+            $scope.currency = data[0];
             $('#currencyModel').modal('show');
 
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
     };
-
     $scope.SetCurrencyDescription = function (currencyId) {
         if (currencyId != null && currencyId != '' && currencyId != undefined) {
             var currDesc = '';
@@ -231,13 +185,13 @@
                     currDesc = value.CurrencyDescrition;
                 }
             })
-            $scope.ecurrency.CurrencyDescrition = currDesc;
+            $scope.currency.CurrencyDescrition = currDesc;
         }
         else {
-            $scope.ecurrency.CurrencyDescrition = '';
+            $scope.currency.CurrencyDescrition = '';
         }
     };
 
     $scope.GetRightsList();
 
-});
+}]);

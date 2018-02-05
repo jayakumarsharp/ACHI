@@ -1,8 +1,7 @@
 ﻿'use strict';
-ReportApp.factory('EmailService', function ($http) {
+ReportApp.factory('EmailService', ['$http', function ($http) {
     var EmailServiceURI = BaseURL + 'Main/';
     var EmailServiceFactory = {};
-
     EmailServiceFactory.GetAllTask = function () {
         var result = $http.get(EmailServiceURI + 'GetOnboardingTaskData');
         return result;
@@ -15,8 +14,6 @@ ReportApp.factory('EmailService', function ($http) {
     EmailServiceFactory.UpdateOnboardingTask = function (currencysheet) {
         return $http.post(EmailServiceURI + 'UpdateOnboardingTask', currencysheet);
     }
-
-
     return EmailServiceFactory;
-});
+}]);
 

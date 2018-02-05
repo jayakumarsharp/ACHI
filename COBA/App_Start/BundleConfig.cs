@@ -29,39 +29,11 @@ namespace COBA.App_Start
             const string ANGULAR_APP_ROOT = "~/js/";
             var scriptBundle = new ScriptBundle("~/bundles/customscripts")
                 .IncludeDirectory(ANGULAR_APP_ROOT, "*.js", searchSubdirectories: true);
+
             bundles.Add(scriptBundle);
 
             BundleTable.EnableOptimizations = true;
 
-
-
-            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-            //        "~/Scripts/bootstrap.min.js",
-            //            "~/Scripts/bootstrap-multiselect.js",
-            //           "~/Scripts/custom.js"
-            //            ));
-            //bundles.Add(new ScriptBundle("~/bundles/customscripts").Include(
-            //       "~/Scripts/CustomScripts/CommonFunction.js"
-            //    //"~/Scripts/CustomScripts/HotFlash.js",
-            //    //"~/Scripts/CustomScripts/VoiceOffers.js",
-            //    //"~/Scripts/CustomScripts/DataOffers.js",
-            //    //"~/Scripts/CustomScripts/Vas.js",
-            //    //"~/Scripts/CustomScripts/ChangeTariff.js"
-            //    //"~/Scripts/CustomScripts/VoiceOffers.js"
-            //        ));
-
-            //bundles.Add(new StyleBundle("~/Content/css").Include(
-            //    "~/Content/jquery-ui.min.css",
-            //    "~/Content/style.css",
-            //    "~/Content/paging.css",
-            //    "~/Content/bootstrap.min.css",
-            //    "~/Content/bootstrapValidator.min.css",
-            //    "~/Content/bootstrap-multiselect.css",
-            //    "~/Content/font-awesome.min.css",
-            //    "~/Content/jquery.jqGrid/ui.jqgrid.css",
-            //    "~/Content/jquery.jqGrid/ui.jqgrid.css"
-            //    ));
-            //BundleTable.EnableOptimizations = true;
         }
     }
 }

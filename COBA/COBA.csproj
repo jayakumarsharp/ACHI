@@ -154,6 +154,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CobaModel.cs" />
     <Compile Include="plugins\ng-file-upload\demo\C#\UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
@@ -1935,7 +1936,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="js\directives\" />
     <Folder Include="js\models\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

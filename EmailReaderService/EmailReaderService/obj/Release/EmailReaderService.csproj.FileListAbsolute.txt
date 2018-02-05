@@ -1,0 +1,14 @@
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\EmailReader.exe.config
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\EmailReader.exe
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\EmailReader.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\HtmlAgilityPack.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\log4net.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\MySql.Data.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\OpenPop.dll
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\HtmlAgilityPack.pdb
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Release\HtmlAgilityPack.xml
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Release\EmailReaderService.EmailReader.resources
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Release\WinServ_VisioConverter.ProjectInstaller.resources
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Release\EmailReaderService.csproj.GenerateResource.Cache
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Release\EmailReader.exe
+C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Release\EmailReader.pdb

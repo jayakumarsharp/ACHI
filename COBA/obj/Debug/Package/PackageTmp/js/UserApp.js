@@ -8,7 +8,7 @@
         DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
         DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
 
-        DTColumnBuilder.newColumn('checked').withTitle('Action').notSortable()
+        DTColumnBuilder.newColumn('checked').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
 
@@ -18,13 +18,13 @@
 
     $scope.dtColumns1 = [
        DTColumnBuilder.newColumn('userId').withTitle('UserId'),
-       DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
+       DTColumnBuilder.newColumn('UserName').withTitle('UserName'),
        DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
           DTColumnBuilder.newColumn('RoleName').withTitle('Role'),
         //DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
         //DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
         //DTColumnBuilder.newColumn('BusinessSector').withTitle('BusinessSector'),
-       DTColumnBuilder.newColumn('userId').withTitle('Action').notSortable()
+       DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
            .renderWith(actionsHtml1)
     ];
 
@@ -484,9 +484,7 @@
         });
     };
 
-
-    // bind code start
-
+    //multiselect
     $scope.multiselectRegion = {
         selected: [],
         options: [],

@@ -1,5 +1,9 @@
-﻿ReportApp.controller('RegionMasterController', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster,$compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('RegionMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
     $scope.data = [];
+    $scope.editMode = false;
+    $scope.IsReadOnly = false;
+    $scope.showAddwindow = false;
+
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
@@ -20,8 +24,6 @@
         $scope.data = data;
         return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="../images/edit.png"></a>';
     }
-    $scope.editMode = false;
-    $scope.IsReadOnly = false;
 
     $scope.GetAllRegionMaster = function () {
         ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
@@ -104,8 +106,6 @@
         }
     };
 
-    $scope.showAddwindow = false;
-
     $scope.showconfirm = function (data) {
         $scope.RegionMasterId = data;
         $('#confirmModal').modal('show');
@@ -119,13 +119,9 @@
         $scope.editMode = false;
         $scope.showAddwindow = false;
         $('#confirmModal').modal('hide');
-        
     };
 
-
-
     $scope.GetRightsList = function () {
-
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -153,4 +149,4 @@
     $scope.GetRightsList();
 
 
-});
+}]);

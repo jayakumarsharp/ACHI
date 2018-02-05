@@ -65,37 +65,6 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', '
     }
     $scope.GetUserRoles();
 
-    //$scope.GetAllNofitications = function () {
-    //    ApiCall.MakeApiCall("GetStrategyApprovalByuser", 'GET', '').success(function (data) {
-    //        $scope.notificationdata = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    });
-    //};
-    //$scope.GetAllNofitications();
-
-
-    //$scope.GetCurrencyConversionForId = function (id, Version, Comments, ApprovedDate, Status) {
-    //    $('#LayoutModel').modal('show');
-    //    $scope.notificationExist = true;
-    //    $scope.currency = { 'Comments': Comments };
-    //    //StrategyService.GetStrategyApprovalByuser().success(function (data) {
-    //    //    for (var i = 0; i < data.length; i++) {
-    //    //        //if (data[i].RefNumber == id && data[i].Version == Version) {
-
-    //    //        //}
-    //    //    }
-    //    //}).error(function (error) {
-    //    //    $scope.Error = error;
-    //    //});
-    //};
-
-    //$scope.layoutcancel = function () {
-    //    $scope.currency = {};
-    //    $('#LayoutModel').modal('hide');
-    //};
-
-
 }]);
 
 
@@ -211,24 +180,15 @@ ReportApp.service('ApiCall', ['$http', function ($http) {
     var result;
     this.MakeApiCall = function (Url, type, jsondata) {
         //var Jsondata = JSON.stringify(data);
-        Url = 'Main/' + Url;
+        var uri = 'Main/' + Url;
         if (type == 'GET') {
-
-            //return $http.get(Url, jsondata);
-
             return $http({
-                url: Url,
+                url: uri,
                 method: type,
                 params: jsondata
             });
         } else if (type == 'POST') {
-            return $http.post(Url, jsondata);
-
-            //return $http({
-            //    url: Url,
-            //    method: type,
-            //    data: jsondata
-            //});
+            return $http.post(uri, jsondata);
         }
     };
 }]);

@@ -1,16 +1,10 @@
-﻿ReportApp.controller('ClientController', function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('ClientController', ['$scope', '$rootScope', 'ClientService', '$timeout', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'toaster',function ($scope, $rootScope, ClientService, $timeout, $compile, DTOptionsBuilder, DTColumnBuilder, toaster) {
     $scope.errorinfo = '';
-    $scope.CurrencyList = [];
     $scope.editMode = false;
     $scope.IsReadOnly = true;
-    $scope.ecurrency = {};
-    $scope.GetRightsList = function () {
-        angular.forEach($rootScope.RightList, function (value, key) {
-            if (value.RightName.contains('Currency Rate Write')) {
-                $scope.IsReadOnly = false;
-            }
-        });
-    };
+    $scope.showaction = false;
+    $scope.LoanTypeList = [{ value: 'Investment Loan' }, { value: 'Development Loan' }]
+    $scope.StructureList = [{ value: 'Yes' }, { value: 'No' }]
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
     $scope.activateTab = function (tabid) {
         for (var i = 0; i < $scope.pageList.length; i++) {
@@ -19,12 +13,11 @@
         $scope.pageList[tabid].Page = true;
         $scope.pageList[tabid].IsValid = true;
     }
-
     $scope.Confirmcancel = function () {
         $('#confirmModal').modal('show');
     }
     $scope.getclientdata = function () {
-        ClientService.GetAllCurrencyConversion().success(function (data) {
+        ClientService.GetAllCurrency().success(function (data) {
             console.log(data);
             $scope.dtOptions.data = data
         })
@@ -55,8 +48,6 @@
             });
         });
     }
-
-    $scope.showaction = false;
     $scope.showadd = function () {
         $scope.showaction = true;
         $timeout(function () {
@@ -68,17 +59,7 @@
         $scope.currency = {};
         $scope.ecurrency.CurrencyDescrition = '';
         $('#currencyModel').modal('show');
-
     };
-
-    $scope.GetAllCurrency = function () {
-        ClientService.GetAllCurrency().success(function (data) {
-            $scope.dtOptions.data = data
-        }).error(function (error) {
-            $scope.Error = error;
-        });
-    };
-
 
     $scope.InsertClient = function (currency) {
         if ($scope.ClientActive)
@@ -93,13 +74,13 @@
         if (currency != null) {
             ClientService.InsertClient(currency).success(function (data) {
                 if (data == "success") {
-                    $scope.GetAllCurrency();
                     $scope.showaction = false;
-                    $scope.showaction = false;
-                    $('#currencyModel').modal('hide');
+                    toaster.pop('success', "Success", "Client inserted successfully", null);
+                    $scope.getclientdata();
                 }
-                else
-                    $scope.errorinfo = data;
+                else {
+                    $scope.errorinfo = "Error : Mandatory fields are not filled <br />" + data;
+                }
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
             });
@@ -108,9 +89,9 @@
 
     $scope.GetCurrencyConversionForId = function (id) {
         ClientService.GetDatabyId(id).success(function (data) {
+            $scope.pageList = [{ Page: true, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }, { Page: false, IsValid: true }];
             $scope.editMode = true;
-            $scope.ecurrency = data[0];
-
+            $scope.currency = data[0];
             if (data[0].IsActive == "Y")
                 $scope.ClientActive = true;
             else
@@ -127,37 +108,42 @@
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
     };
+    //$scope.delete = function () {
+    //    var crc = { Id: $scope.Id };
+    //    ClientService.DeletecurrencyConversion(crc).success(function (data) {
+    //        $scope.editMode = false;
+    //        $scope.getclientdata();
+    //        $('#confirmModal').modal('hide');
+    //        toaster.pop('success', "Success", "Client deleted successfully", null);
+    //    }).error(function (data) {
+    //        $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+    //    });
+    //};
+    $scope.UpdateClient = function (model) {
+        if ($scope.ClientActive)
+            model.IsActive = "Y";
+        else
+            model.IsActive = "N";
+        if ($scope.IsSignOff)
+            model.IsSignOff = "Y";
+        else
+            model.IsSignOff = "N";
+        if (model != null) {
+            ClientService.UpdateClient(model).success(function (data) {
+                if (data == "success") {
+                    $scope.editMode = false;
+                    toaster.pop('success', "Success", "Client updated successfully", null);
+                    $scope.showaction = false;
+                    $scope.getclientdata();
+                }
+                else {
+                    $scope.errorinfo = "Error : Mandatory fields are not filled <br />" + data;
+                }
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding currency! " + data.ExceptionMessage;
+            });
+        }
 
-
-    $scope.delete = function () {
-        var crc = { Id: $scope.Id };
-        ClientService.DeletecurrencyConversion(crc).success(function (data) {
-            $scope.editMode = false;
-            $scope.getclientdata();
-            $('#confirmModal').modal('hide');
-            toaster.pop('success', "Success", "Currency rate deleted successfully", null);
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-    };
-
-
-
-    $scope.UpdatecurrencyConversion = function (model) {
-        //  model.UpdatedBy = $rootScope.UserInfo.user.userId;
-        model.UpdatedBy = '';
-        ClientService.UpdateClient(model).success(function (data) {
-            if (data == "success") {
-                $scope.editMode = false;
-                //toaster.pop('success', "Success", "Currency rate updated successfully", null);
-                $('#currencyModel').modal('hide');
-                $scope.getclientdata()
-            }
-            else
-                $scope.errorinfo = data;
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
     };
 
     var formatDate = function (indate) {
@@ -179,7 +165,6 @@
 
     $scope.cancel = function () {
         $scope.currency = {};
-        $scope.ecurrency = {};
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
     };
@@ -187,15 +172,12 @@
     $scope.updatecancel = function (data) {
         ClientService.GetCurrencyConversionbyId(id).success(function (data) {
             $scope.editMode = true;
-            $scope.ecurrency = data[0];
             $('#currencyModel').modal('show');
 
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
-
     };
-
     $scope.SetCurrencyDescription = function (currencyId) {
         if (currencyId != null && currencyId != '' && currencyId != undefined) {
             var currDesc = '';
@@ -210,7 +192,15 @@
             $scope.ecurrency.CurrencyDescrition = '';
         }
     };
+
     $scope.getclientdata();
+    $scope.GetRightsList = function () {
+        angular.forEach($rootScope.RightList, function (value, key) {
+            if (value.RightName.contains('Currency Rate Write')) {
+                $scope.IsReadOnly = false;
+            }
+        });
+    };
     $scope.GetRightsList();
 
-});
+}]);

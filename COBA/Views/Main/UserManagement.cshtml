@@ -1,4 +1,6 @@
-﻿<div class="col-lg-10 col-md-9 main-content basic-page sidebar" style="width:83%;">
+﻿<section class="content">
+
+
     <div ng-controller="UserController" class="nav-tabs-custom">
         <div class="box-header with-border">
             <h4> User Management   </h4>
@@ -12,81 +14,13 @@
         <section class="content">
             <table datatable="" dt-options="dtOptions1" dt-columns="dtColumns1" class="table table-responsive"></table>
         </section>
-        @*<div class="modal fade" id="userModel" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" style="width:60%;height:400px">
-                    <div class="modal-content">
-                        <div class="modal-header" style="margin-bottom:0px;">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                            <h5 class="modal-title" id="myModalLabel" ng-hide="editMode">Add User</h5>
-                            <h5 class="modal-title" id="myModalLabel" ng-show="editMode">Edit User</h5>
-                        </div>
-                        <div class="modal-body">
-                            <form novalidate class="form-horizontal" role="form" name="adduserform">
-                                <div class="form-group">
-                                    <div style="margin-left:10px;">
-                                        <input name="chkShowSelected" type="checkbox" ng-change="showSelectedUsers(user.showSelected)" ng-model="user.showSelected" style="font-size: 7px" class="mnbxcont">&nbsp;<label style="font-size: 12px;font: 10pt Calibri, Arial, Verdana, sans-serif">Show Selected Users</label></input>
-                                    </div>
-                                </div>
-
-                                <div class="panel">
-                                    <div class="panel-body">
-                                        <div class="row ">
-                                            <div class="col-md-12 data-table">
-                                                <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive" style="width: 100%!important;"></table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            <select class="form-control" name="ddlRole" ng-model="user.selectedRole" ng-options="item.RoleName for item in Roles" title="Select Role" style="width:100%;font-size: 0.8em" required>
-                                                <option value="">- Select Role -</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <select class="form-control" name="ddlLocation" ng-model="user.selectedBusinessSector" ng-options="item.BusinessLine for item in BusinessLineList" title="Select Country" style="width:100%;font-size: 0.8em" required>
-                                                <option value="">- Select Business Sector -</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="row" style="margin-top:10px;">
-                                        <div class="col-xs-4">
-                                            <select class="form-control" name="ddlSBU" ng-model="user.selectedRegion" ng-options="item.RegionName for item in RegionMasterList" title="Select Region" style="width:100%;font-size: 0.8em" required>
-                                                <option value="">- Select User Region -</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <select class="form-control" name="ddlSBU" ng-model="user.selectedCountry" ng-options="item.CountryName for item in CountryMasterList" title="Select Division" style="width:100%;font-size: 0.8em" required>
-                                                <option value="">- Select Country -</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="pull-right">
-                                <span data-ng-hide="editMode">
-                                    <input name="UserAdd" ng-disabled="adduserform.$invalid" type="submit" value="Add Users"
-                                           data-ng-click="getSelected(user.selectedRole,user.selectedRegion,user.selectedCountry,user.selectedBusinessSector)" class="btn btn-primary" />
-                                </span>
-                                <input name="UserCancel" type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-primary" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
         <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" style="width:40%">
+            <div class="modal-dialog" style="width:40%;top:10%;">
 
                 <div class="modal-content">
                     <div class="modal-header" style="border-bottom:0px;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                        <h4 class="modal-title" id="myModalLabel">View User</h4>
+                        <h3 class="modal-title" id="myModalLabel">View User</h3>
                     </div>
                     <div class="" style="overflow-y:auto">
                         <div class="box-comments">
@@ -156,11 +90,11 @@
             </div>
         </div>
         <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" style="width:60%">
+            <div class="modal-dialog" style="width:60%;top:10%;">
                 <div class="modal-content">
                     <div class="modal-header" style="border-bottom:0px;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                        <h4 class="modal-title" id="myModalLabel">Edit User</h4>
+                        <h3 class="modal-title" id="myModalLabel">Edit User</h3>
                     </div>
                     <div class="box-comments">
                         <div class="">
@@ -237,11 +171,11 @@
             </div>
         </div>
         <div class="modal fade" id="userCreateModel" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" style="width:50%">
+            <div class="modal-dialog" style="width:50%;top:10%;">
                 <div class="modal-content">
                     <div class="modal-header" style="border-bottom:0px;padding:2px;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                        <h4 class="modal-title" id="myModalLabel">Create User</h4>
+                        <h3 class="modal-title" id="myModalLabel">Create User</h3>
                     </div>
                     <div class="box-comments">
                         <div class="">
@@ -328,4 +262,5 @@
         </div>
 
     </div>
-</div>
+
+</section>
