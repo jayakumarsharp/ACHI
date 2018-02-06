@@ -15,7 +15,7 @@
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
     .withPaginationType('full_numbers').withOption('createdRow', createdRow)
-    .withOption('rowCallback', rowCallback);
+    .withOption('rowCallback', rowCallback).withOption('scrollX', true);
 
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID'),
@@ -163,7 +163,6 @@
         GetAllCapacity,
         GetAllRegion, GetUsers
         ]).then(function (resp) {
-            console.log(resp)
             $scope.CountryMasterList = resp[0].data;
             $scope.FTAApplicationCodeList = resp[1].data;
             $scope.ThirdPartyList = resp[2].data;
@@ -217,7 +216,6 @@
             CountryNames += $scope.multiselect.selected[i].name + ',';
         }
         var currency = {
-            //Country: $scope.selectModel.Country.Id
             CountryId: idlist,
             CountryNameList: CountryNames,
             Country: JSON.stringify($scope.multiselect.selected),
@@ -631,7 +629,6 @@
         $scope.selectModel.FTAStrategyCode = {};
         $scope.selectModel.FTAStrategyMappingId = 0;
     }
-
     $scope.userfilter5 = function () {
         try {
             var Business = $scope.selectModel.Business;
@@ -699,7 +696,6 @@
             }
         });
     };
-
     $scope.multiselect = {
         selected: [],
         options: [],
@@ -714,12 +710,10 @@
             }
         }
     };
-
     function assignUsers() {
         var msUsers = $scope.multiselect.selected;
         binddata($scope.CountryMasterList);
     }
-
     function binddata(list) {
         $scope.multiselect.options = list.map(function (item) {
             return {
@@ -739,9 +733,6 @@
         $scope.Issystemflow = type;
         $('#viewFiles').modal('show');
     }
-
     $scope.GetRightsList();
-
-
 }]);
 

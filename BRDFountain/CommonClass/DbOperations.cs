@@ -50,8 +50,8 @@ public class DbOperations
                 DateTime Todate = new DateTime();
                 if (objTransferSetting.TransferFrom != "")
                 {
-                    FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 }
 
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -70,17 +70,18 @@ public class DbOperations
         }
         catch (SqlException e)
         {
+            log.Error(e);
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
     }
 
@@ -110,19 +111,20 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            throw e;
         }
     }
 
     public List<TransferSetting> GetTransfersettingIDbyuser(string username)
     {
+
         List<TransferSetting> lst = new List<TransferSetting>();
         string query = "sp_getdelegatesettingbyuser";
         try
@@ -152,11 +154,8 @@ public class DbOperations
                                        Id = Convert.ToString(row["Id"])
 
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -166,7 +165,8 @@ public class DbOperations
         }
         catch (Exception e)
         {
-            return null;
+            log.Error(e);
+            throw e;
         }
 
     }
@@ -176,43 +176,50 @@ public class DbOperations
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
 
-        string query = "Get_ApprovaltransferByuser";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            string query = "Get_ApprovaltransferByuser";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_user", userid));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new StrategyApprover
-                               {
-                                   Approver = Convert.ToString(row["Approver"]),
-                                   RefNumber = Convert.ToString(row["RefNumber"]),
-                                   Version = Convert.ToString(row["Version"]),
-                                   Comments = Convert.ToString(row["Comments"]),
-                                   Status = Convert.ToString(row["Status"]),
-                                   ApprovedDate = Convert.ToString(row["ApprovedDate"]),
-                                   OriginalApprover = Convert.ToString(row["OriginalApprover"])
-                               }).ToList();
 
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_user", userid));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new StrategyApprover
+                                   {
+                                       Approver = Convert.ToString(row["Approver"]),
+                                       RefNumber = Convert.ToString(row["RefNumber"]),
+                                       Version = Convert.ToString(row["Version"]),
+                                       Comments = Convert.ToString(row["Comments"]),
+                                       Status = Convert.ToString(row["Status"]),
+                                       ApprovedDate = Convert.ToString(row["ApprovedDate"]),
+                                       OriginalApprover = Convert.ToString(row["OriginalApprover"])
+                                   }).ToList();
+
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
-
-            this.CloseConnection();
+            return lst;
         }
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+
     }
 
 
@@ -238,14 +245,11 @@ public class DbOperations
                     cmd.Parameters.Add(new SqlParameter("i_OrignalFile", s.Comments));
                     cmd.Parameters.Add(new SqlParameter("i_status", s.Status));
                     cmd.Parameters.Add(new SqlParameter("I_uploadedby", s.Uploadedby));
-
-
                     if (this.OpenConnection() == true)
                     {
                         cmd.ExecuteNonQuery();
                         this.CloseConnection();
                     }
-
                 }
             }
         }
@@ -254,14 +258,16 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
+            throw e;
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
+            throw e;
         }
     }
 
@@ -296,14 +302,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
     }
 
@@ -339,14 +345,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
     }
 
@@ -417,11 +423,8 @@ public class DbOperations
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"]),
                                    OriginalApprover = Convert.ToString(row["OriginalApprover"])
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -464,11 +467,8 @@ public class DbOperations
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"]),
                                    Type = Convert.ToString(row["Type"])
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -511,11 +511,8 @@ public class DbOperations
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"])
 
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -558,11 +555,8 @@ public class DbOperations
                                    ApprovedDate = Convert.ToString(row["ApprovedDate"]),
                                    Uploadedby = Convert.ToString(row["Uploadedby"]),
                                }).ToList();
-
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -599,14 +593,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
     }
 
@@ -614,15 +608,14 @@ public class DbOperations
     {
         List<Strategy> lst = new List<Strategy>();
         //JOIN tbl_country_master C on S.CountryId = C.id 
-        string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,CountryIdList,CountryNameList,FTAStrategyCodeId,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId,PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore, SignOff,SignOffDate,SignoffBy,LastModifiedDate ,LastModifiedBy,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,DATE_FORMAT(S.DecomissionedDate, '%m/%d/%Y') DecomissionedDate,DATE_FORMAT(S.GoLiveDate, '%m/%d/%Y') GoLiveDate from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id  JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id right JOIN (SELECT  MAX(Id) as Id FROM tbl_strategy GROUP BY REfnumber) t2  ON S.ID = t2.Id";
+        string query = "SP_GetAllStrategy";
         try
         {
             if (this.OpenConnection() == true)
             {
-
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.CommandType = CommandType.TableDirect;
+                    cmd.CommandType = CommandType.StoredProcedure;
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -697,7 +690,6 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
                 }
 
                 this.CloseConnection();
@@ -727,15 +719,13 @@ public class DbOperations
         List<Strategy> lst = new List<Strategy>();
         try
         {
-
-            string query = "select S.Id,S.RefNumber,FTAApplicationCodeId,FTAAC.FTAApplicationCode,FTAShortCodeId,FTAStrategyCodeId,CountryIdList,CountryNameList,FTASC.FTAStrategyCode,DiscretionaryCodeId,DM.Discretionarycode,BusinessSuffixId,BSFM.BusinessSuffix,FTAStrategyCode,S.ParentId, PM.ParentId as ParentIdValue,S.ChildId,cM.ChildID as ChildIdValue,BusinessLineId,BSL.BusinessLine,RegionId,R.RegionName,CountryId,FTAApplicationNameId,APN.FTAApplicationName,FTAApplicationOwnerId,ApplicationCategoryId,ACM.ApplicationCategory,StrategyTypeId,STM.StrategyType,VenueTypeId,VTM.VenueType,CapacityId,CPM.Capacity,CreatedBy,CreatedDate,Description,S.IsActive,LastModifiedBy,LastModifiedDate,NoOfApprover,Version,FTAStrategyNameId,FTASN.FTAStrategyName,S.FTAStrategyOwnerId,S.Priority,S.PriorityScore,SignOff, SignOffDate, SignoffBy, LastModifiedDate, LastModifiedBy, BusinessId,BM.business,FTAApplicationMappingId,FTAStrategyMappingId,BusinessMappingId,ThirdPartyAppId,TM.ThirdPartyAppName,BusinessId,BM.business,DATE_FORMAT(DecomissionedDate, '%m/%d/%Y') DecomissionedDate1,DATE_FORMAT(GoLiveDate, '%m/%d/%Y') as GoLiveDate1 from tbl_strategy S join tbl_ftaapplicationcode_master FTAAC  On S.FTAApplicationCodeId = FTAAC.Id join tbl_ftastrategycode_master FTASC on S.FTAStrategyCodeId = FTASC.Id JOin tbl_discretionarycode_master DM on s.DiscretionaryCodeId = DM.Id JOin tbl_businesssuffix_master BSFM on s.BusinessSuffixId = BSFM.Id JOIN tbl_parentid_master PM on s.ParentId = PM.Id join tbl_childid_master CM on S.ChildId = CM.Id JOIn tbl_businessline_master BSL on BusinessLineId = BSL.Id JOIN tbl_region_master R on S.RegionId = R.id JOIN tbl_ftaapplicationname_master APN on S.FTAApplicationNameId = APN.Id JOIN tbl_applicationcategory_master ACM on S.ApplicationCategoryId = ACM.Id JOIN tbl_ftastrategyname_master FTASN on S.FTAStrategyNameId = FTASN.Id JOIN tbl_strategytype_master STM on S.StrategyTypeId = STM.Id JOIN tbl_venuetype_master VTM on S.VenueTypeId = VTM.Id JOIN tbl_capacity_master CPM on S.CapacityId = CPM.Id JOIN tbl_thirdpartyapplication TM on S.ThirdPartyAppId = TM.Id JOIN tbl_business_master BM on S.BusinessId = BM.Id  WHERE S.Id = " + StrategyNumber;
-
+            string query = "SP_GetAllStrategybyId";
             if (this.OpenConnection() == true)
             {
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.CommandType = CommandType.TableDirect;
-                    //cmd.Parameters.Add(new SqlParameter("i_RefNumber", StrategyNumber));
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_RefNumber", StrategyNumber));
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -798,8 +788,8 @@ public class DbOperations
                                        Version = Convert.ToInt32(row["Version"]),
                                        Priority = Convert.ToString(row["Priority"]),
                                        PriorityScore = Convert.ToString(row["PriorityScore"]),
-                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate1"]),
-                                       GOLiveDate = Convert.ToString(row["GoLiveDate1"]),
+                                       DecomissionedDate = Convert.ToString(row["DecomissionedDate"]),
+                                       GOLiveDate = Convert.ToString(row["GoLiveDate"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
                                        FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
@@ -810,13 +800,9 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
-
                 this.CloseConnection();
             }
-
             return lst;
         }
         catch (SqlException ex)
@@ -956,10 +942,10 @@ public class DbOperations
             errorcode = 0;
             errordesc = "success";
 
-            DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             DateTime DecomissionedDate = new DateTime();
             if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
-                DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
 
             using (SqlCommand cmd = new SqlCommand("sp_insert_Strategy", connection))
@@ -1004,7 +990,7 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
                 cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
 
-                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 500));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
                 {
@@ -1021,13 +1007,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
     }
     public void insertStrategyVersionChange(string RefNumber, int Version, string Changedesc, string username)
@@ -1056,11 +1043,12 @@ public class DbOperations
         catch (SqlException e)
         {
             this.CloseConnection();
+            log.Error(e);
         }
         catch (Exception e)
         {
             this.CloseConnection();
-
+            log.Error(e);
         }
     }
 
@@ -1233,8 +1221,6 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1277,8 +1263,6 @@ public class DbOperations
 
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -1291,6 +1275,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
         }
     }
 
@@ -1326,8 +1311,6 @@ public class DbOperations
 
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -1398,6 +1381,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             this.CloseConnection();
         }
     }
@@ -1433,14 +1417,14 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
 
     }
@@ -1479,6 +1463,7 @@ public class DbOperations
         catch (Exception e)
         {
             this.CloseConnection();
+            log.Error(e);
         }
     }
     public List<RoleRightMapping> GetRoleRightMapping(string roleId)
@@ -1508,7 +1493,6 @@ public class DbOperations
                                    }).ToList();
                         }
                     }
-                    cmd.ExecuteNonQuery();
                 }
                 this.CloseConnection();
             }
@@ -1517,6 +1501,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             return null;
         }
     }
@@ -1525,17 +1510,6 @@ public class DbOperations
 
     #region Users
 
-
-    public void GetAllEmail()
-    {
-        try
-        {
-
-        }
-        catch (Exception ex)
-        {
-        }
-    }
     public void GetUserProfile(string userId)
     {
         try
@@ -1567,11 +1541,8 @@ public class DbOperations
                                        ModifiedDate = Convert.ToString(row["ModifiedDate"]),
                                        RoleName = Convert.ToString(row["RoleName"])
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -1581,6 +1552,8 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
+            throw e;
         }
     }
     public List<UserMaster> GetUserbyFilter(string RegionId, string BusinessSectorId)
@@ -1630,6 +1603,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             return null;
         }
     }
@@ -1639,51 +1613,52 @@ public class DbOperations
     {
         List<UserMaster> lst = new List<UserMaster>();
         string query = "sp_getusers";
-
-        if (this.OpenConnection() == true)
+        try
         {
-
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_userId", userId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_userId", userId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new UserMaster
-                               {
-                                   Id = Convert.ToString(row["Id"]),
-                                   userId = Convert.ToString(row["Userid"]),
-                                   UserName = Convert.ToString(row["username"]),
-                                   EmailId = Convert.ToString(row["EmailId"]),
-                                   RoleId = Convert.ToString(row["RoleId"]),
-                                   RoleName = Convert.ToString(row["RoleName"]),
-                                   //RegionName = Convert.ToString(row["RegionName"]),
-                                   //CountryName = Convert.ToString(row["CountryName"]),
-                                   //BusinessSector = Convert.ToString(row["BusinessLine"]),
-                                   //BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
-                                   //CountryId = Convert.ToString(row["CountryId"]),
-                                   //RegionId = Convert.ToString(row["RegionId"]),
-                                   Status = Convert.ToString(row["Status"]),
-                                   Password = Convert.ToString(row["Password"]),
-                                   IsADUser = Convert.ToString(row["IsADUser"]),
-
-                               }).ToList();
-
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new UserMaster
+                                   {
+                                       Id = Convert.ToString(row["Id"]),
+                                       userId = Convert.ToString(row["Userid"]),
+                                       UserName = Convert.ToString(row["username"]),
+                                       EmailId = Convert.ToString(row["EmailId"]),
+                                       RoleId = Convert.ToString(row["RoleId"]),
+                                       RoleName = Convert.ToString(row["RoleName"]),
+                                       //RegionName = Convert.ToString(row["RegionName"]),
+                                       //CountryName = Convert.ToString(row["CountryName"]),
+                                       //BusinessSector = Convert.ToString(row["BusinessLine"]),
+                                       //BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
+                                       //CountryId = Convert.ToString(row["CountryId"]),
+                                       //RegionId = Convert.ToString(row["RegionId"]),
+                                       Status = Convert.ToString(row["Status"]),
+                                       Password = Convert.ToString(row["Password"]),
+                                       IsADUser = Convert.ToString(row["IsADUser"]),
+                                   }).ToList();
+                        }
                     }
                 }
-
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
-
-            this.CloseConnection();
+            return lst;
+            catch (Exception e)
+        {
+            log.Error(e);
+            return null;
         }
-        return lst;
     }
     public List<UserMaster> GetUsersByRoles(string Roleid)
     {
@@ -1721,14 +1696,9 @@ public class DbOperations
                                        CountryId = Convert.ToString(row["CountryId"]),
                                        RegionId = Convert.ToString(row["RegionId"]),
                                        Status = Convert.ToString(row["Status"]),
-
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -1738,7 +1708,7 @@ public class DbOperations
         }
         catch (SqlException e)
         {
-
+            log.Error(e);
             this.CloseConnection();
             return null;
         }
@@ -1749,19 +1719,16 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_adduser", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_adduser1", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
-                cmd.Parameters.Add(new SqlParameter("i_username", user.UserName));
-                cmd.Parameters.Add(new SqlParameter("i_emailid", user.EmailId));
-                cmd.Parameters.Add(new SqlParameter("i_Roleid", user.RoleId));
-                cmd.Parameters.Add(new SqlParameter("i_password", EncryptLib.EncodePasswordToBase64(user.Password)));
-                //cmd.Parameters.Add(new SqlParameter("i_countryid", user.CountryId));
-                //cmd.Parameters.Add(new SqlParameter("i_regionid", user.RegionId));
-                //cmd.Parameters.Add(new SqlParameter("i_businesssectorid", user.BusinessSectorId));
-                cmd.Parameters.Add(new SqlParameter("i_IsADUser", "No"));
+                cmd.Parameters.Add(new SqlParameter("userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("username", user.UserName));
+                cmd.Parameters.Add(new SqlParameter("emailid", user.EmailId));
+                cmd.Parameters.Add(new SqlParameter("Roleid", user.RoleId));
+                cmd.Parameters.Add(new SqlParameter("password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                cmd.Parameters.Add(new SqlParameter("IsADUser", "No"));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -1863,6 +1830,7 @@ public class DbOperations
         }
         catch (SqlException e)
         {
+            log.Error(e);
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
@@ -1870,6 +1838,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
@@ -1907,6 +1876,7 @@ public class DbOperations
         }
         catch (SqlException e)
         {
+            log.Error(e);
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
@@ -1914,6 +1884,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
@@ -2038,6 +2009,7 @@ public class DbOperations
         }
         catch (SqlException e)
         {
+            log.Error(e);
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
@@ -2045,6 +2017,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
@@ -2247,13 +2220,9 @@ public class DbOperations
                                        Path = Convert.ToString(row["Path"]),
                                        RightID = Convert.ToString(row["RightID"]),
                                        ShowMenu = Convert.ToString(row["ShowMenu"])
-
                                    }).ToList();
-
                         }
                     }
-
-                    cmd.ExecuteNonQuery();
                 }
 
                 this.CloseConnection();
@@ -2264,6 +2233,7 @@ public class DbOperations
         catch (Exception e)
         {
             return null;
+            log.Error(e);
         }
     }
 
@@ -2307,6 +2277,7 @@ public class DbOperations
         catch (Exception e)
         {
             return null;
+            log.Error(e);
         }
     }
 
@@ -2438,6 +2409,7 @@ public class DbOperations
         catch (Exception e)
         {
             return null;
+            log.Error(e);
         }
     }
 
@@ -2476,6 +2448,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             return null;
         }
     }
@@ -2515,6 +2488,7 @@ public class DbOperations
         }
         catch (Exception e)
         {
+            log.Error(e);
             return null;
         }
     }
@@ -2525,101 +2499,132 @@ public class DbOperations
 
     public List<CountryMaster> GetCountryList(string TaskTypeId)
     {
-        List<CountryMaster> lst = new List<CountryMaster>();
-        string query = "sp_getallcountry";
-        if (this.OpenConnection() == true)
+        try
         {
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            List<CountryMaster> lst = new List<CountryMaster>();
+            string query = "sp_getallcountry";
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new CountryMaster
-                               {
-                                   CountryName = Convert.ToString(row["CountryName"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new CountryMaster
+                                   {
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
+                this.CloseConnection();
             }
-            this.CloseConnection();
+            return lst;
         }
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddCountry(CountryMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_Country", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_CountryName", opp.CountryName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_Country", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_CountryName", opp.CountryName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyCountry(CountryMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_countrymaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_CountryName", Opp.CountryName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_countrymaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_CountryName", Opp.CountryName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
 
     public void DeleteCountry(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_country", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_country", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
     }
 
@@ -2629,37 +2634,45 @@ public class DbOperations
 
     public List<RegionMaster> GetRegionList(string TaskTypeId)
     {
-        List<RegionMaster> lst = new List<RegionMaster>();
-        string query = "sp_getallRegion";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<RegionMaster> lst = new List<RegionMaster>();
+            string query = "sp_getallRegion";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new RegionMaster
-                               {
-                                   RegionName = Convert.ToString(row["RegionName"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new RegionMaster
+                                   {
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
+
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddRegion(RegionMaster opp, out int errorcode, out string errordesc)
@@ -2686,59 +2699,75 @@ public class DbOperations
             errorcode = e.ErrorCode;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
         catch (Exception e)
         {
             errorcode = -1;
             errordesc = e.Message;
             this.CloseConnection();
-
+            log.Error(e);
         }
 
     }
 
     public void ModifyRegion(RegionMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_Regionmaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_RegionName", Opp.RegionName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_Regionmaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_RegionName", Opp.RegionName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
 
     public void DeleteRegion(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_Region", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_Region", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion Region
@@ -2749,91 +2778,122 @@ public class DbOperations
 
     public List<FTAApplicationCodeMaster> GetFTAApplicationCodeList(string TaskTypeId)
     {
-        List<FTAApplicationCodeMaster> lst = new List<FTAApplicationCodeMaster>();
-        string query = "sp_getallFTAApplicationCode";
-
-        if (this.OpenConnection() == true)
+        try
         {
-
-            using (SqlCommand cmd = new SqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAApplicationCodeMaster
-                               {
-                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
-                    }
-                }
-            }
-            this.CloseConnection();
-        }
-        return lst;
-    }
-
-    public void AddFTAApplicationCode(FTAApplicationCodeMaster opp, out int errorcode, out string errordesc)
-    {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationCode", connection))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
+            List<FTAApplicationCodeMaster> lst = new List<FTAApplicationCodeMaster>();
+            string query = "sp_getallFTAApplicationCode";
 
             if (this.OpenConnection() == true)
             {
-                cmd.ExecuteNonQuery();
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAApplicationCodeMaster
+                                   {
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
+                    }
+                }
                 this.CloseConnection();
             }
+            return lst;
         }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
 
+
+    public void AddFTAApplicationCode(FTAApplicationCodeMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationCode", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyFTAApplicationCode(FTAApplicationCodeMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationCodemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationCodemaster", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAApplicationCode(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationCode", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationCode", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAApplicationCode
@@ -2842,102 +2902,126 @@ public class DbOperations
 
     public List<FTAStrategyCodeMaster> GetFTAStrategyCodeList(string TaskTypeId)
     {
-        List<FTAStrategyCodeMaster> lst = new List<FTAStrategyCodeMaster>();
-        string query = "sp_getallFTAStrategyCode";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAStrategyCodeMaster> lst = new List<FTAStrategyCodeMaster>();
+            string query = "sp_getallFTAStrategyCode";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAStrategyCodeMaster
-                               {
-                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAStrategyCodeMaster
+                                   {
+                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
+                this.CloseConnection();
             }
-            this.CloseConnection();
-        }
 
-        return lst;
+            return lst;
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAStrategyCode(FTAStrategyCodeMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyCode", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyCode", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
             }
-
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyFTAStrategyCode(FTAStrategyCodeMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyCodemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyCodemaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAStrategyCode(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyCode", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyCode", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
-
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAStrategyCode
@@ -2946,93 +3030,120 @@ public class DbOperations
 
     public List<DiscretionaryCodeMaster> GetDiscretionaryCodeList(string TaskTypeId)
     {
-        List<DiscretionaryCodeMaster> lst = new List<DiscretionaryCodeMaster>();
-        string query = "sp_getallDiscretionaryCode";
-
-        if (this.OpenConnection() == true)
+        try
         {
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            List<DiscretionaryCodeMaster> lst = new List<DiscretionaryCodeMaster>();
+            string query = "sp_getallDiscretionaryCode";
+
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new DiscretionaryCodeMaster
-                               {
-                                   DiscretionaryCode = Convert.ToString(row["DiscretionaryCode"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new DiscretionaryCodeMaster
+                                   {
+                                       DiscretionaryCode = Convert.ToString(row["DiscretionaryCode"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
+                this.CloseConnection();
             }
-            this.CloseConnection();
+            return lst;
+
         }
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddDiscretionaryCode(DiscretionaryCodeMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_DiscretionaryCode", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", opp.DiscretionaryCode));
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_DiscretionaryCode", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", opp.DiscretionaryCode));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
     }
 
     public void ModifyDiscretionaryCode(DiscretionaryCodeMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_DiscretionaryCodemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", Opp.DiscretionaryCode));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_DiscretionaryCodemaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCode", Opp.DiscretionaryCode));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteDiscretionaryCode(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_DiscretionaryCode", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_DiscretionaryCode", connection))
             {
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion DiscretionaryCode
@@ -3041,107 +3152,124 @@ public class DbOperations
 
     public List<BusinessSuffixMaster> GetBusinessSuffixList(string TaskTypeId)
     {
-        List<BusinessSuffixMaster> lst = new List<BusinessSuffixMaster>();
-        string query = "sp_getallBusinessSuffix";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<BusinessSuffixMaster> lst = new List<BusinessSuffixMaster>();
+            string query = "sp_getallBusinessSuffix";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new BusinessSuffixMaster
-                               {
-                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessSuffixMaster
+                                   {
+                                       BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddBusinessSuffix(BusinessSuffixMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessSuffix", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", opp.BusinessSuffix));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessSuffix", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", opp.BusinessSuffix));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyBusinessSuffix(BusinessSuffixMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_BusinessSuffixmaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", Opp.BusinessSuffix));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_BusinessSuffixmaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessSuffix", Opp.BusinessSuffix));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteBusinessSuffix(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessSuffix", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessSuffix", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
@@ -3152,109 +3280,139 @@ public class DbOperations
 
     public List<BusinessMaster> GetBusinessList(string TaskTypeId)
     {
-        List<BusinessMaster> lst = new List<BusinessMaster>();
-        string query = "sp_getallBusiness";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<BusinessMaster> lst = new List<BusinessMaster>();
+            string query = "sp_getallBusiness";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new BusinessMaster
-                               {
-                                   Business = Convert.ToString(row["Business"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessMaster
+                                   {
+                                       Business = Convert.ToString(row["Business"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddBusiness(BusinessMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_Business", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_Business", opp.Business));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_Business", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_Business", opp.Business));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
 
     public void ModifyBusiness(BusinessMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_Business", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_Business", Opp.Business));
 
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_Business", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_Business", Opp.Business));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
 
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteBusiness(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_Business", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_Business", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion Business
@@ -3263,109 +3421,138 @@ public class DbOperations
 
     public List<ParentIDMaster> GetParentIDList(string TaskTypeId)
     {
-        List<ParentIDMaster> lst = new List<ParentIDMaster>();
-        string query = "sp_getallParentID";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<ParentIDMaster> lst = new List<ParentIDMaster>();
+            string query = "sp_getallParentID";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new ParentIDMaster
-                               {
-                                   ParentID = Convert.ToString(row["ParentID"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ParentIDMaster
+                                   {
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
+                    cmd.ExecuteNonQuery();
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddParentID(ParentIDMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_ParentID", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_ParentID", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyParentID(ParentIDMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_ParentIDmaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_ParentID", Opp.ParentID));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_ParentIDmaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_ParentID", Opp.ParentID));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteParentID(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_ParentID", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_ParentID", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion ParentID
@@ -3374,109 +3561,136 @@ public class DbOperations
 
     public List<ChildIDMaster> GetChildIDList(string TaskTypeId)
     {
-        List<ChildIDMaster> lst = new List<ChildIDMaster>();
-        string query = "sp_getallChildID";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<ChildIDMaster> lst = new List<ChildIDMaster>();
+            string query = "sp_getallChildID";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new ChildIDMaster
-                               {
-                                   ChildID = Convert.ToString(row["ChildID"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ChildIDMaster
+                                   {
+                                       ChildID = Convert.ToString(row["ChildID"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
-
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddChildID(ChildIDMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_ChildID", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_ChildID", opp.ChildID));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_ChildID", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_ChildID", opp.ChildID));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyChildID(ChildIDMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_ChildIDmaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_ChildID", Opp.ChildID));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_ChildIDmaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_ChildID", Opp.ChildID));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteChildID(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_ChildID", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_ChildID", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion ChildID
@@ -3485,109 +3699,136 @@ public class DbOperations
 
     public List<BusinessLineMaster> GetBusinessLineList(string TaskTypeId)
     {
-        List<BusinessLineMaster> lst = new List<BusinessLineMaster>();
-        string query = "sp_getallBusinessLine";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<BusinessLineMaster> lst = new List<BusinessLineMaster>();
+            string query = "sp_getallBusinessLine";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new BusinessLineMaster
-                               {
-                                   BusinessLine = Convert.ToString(row["BusinessLine"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessLineMaster
+                                   {
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddBusinessLine(BusinessLineMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessLine", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_BusinessLine", opp.BusinessLine));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_BusinessLine", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_BusinessLine", opp.BusinessLine));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyBusinessLine(BusinessLineMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_BusinessLinemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_BusinessLine", Opp.BusinessLine));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_BusinessLinemaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessLine", Opp.BusinessLine));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteBusinessLine(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessLine", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessLine", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion BusinessLine
@@ -3596,107 +3837,137 @@ public class DbOperations
 
     public List<FTAApplicationNameMaster> GetFTAApplicationNameList(string TaskTypeId)
     {
-        List<FTAApplicationNameMaster> lst = new List<FTAApplicationNameMaster>();
-        string query = "sp_getallFTAApplicationName";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAApplicationNameMaster> lst = new List<FTAApplicationNameMaster>();
+            string query = "sp_getallFTAApplicationName";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAApplicationNameMaster
-                               {
-                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAApplicationNameMaster
+                                   {
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
+
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAApplicationName(FTAApplicationNameMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationName", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationName", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
-        }
 
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyFTAApplicationName(FTAApplicationNameMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationNamemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationNamemaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAApplicationName(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationName", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationName", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAApplicationName
@@ -3705,109 +3976,138 @@ public class DbOperations
 
     public List<FTAApplicationOwnerMaster> GetFTAApplicationOwnerList(string TaskTypeId)
     {
-        List<FTAApplicationOwnerMaster> lst = new List<FTAApplicationOwnerMaster>();
-        string query = "sp_getallFTAApplicationOwner";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAApplicationOwnerMaster> lst = new List<FTAApplicationOwnerMaster>();
+            string query = "sp_getallFTAApplicationOwner";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAApplicationOwnerMaster
-                               {
-                                   FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAApplicationOwnerMaster
+                                   {
+                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAApplicationOwner(FTAApplicationOwnerMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationOwner", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAApplicationOwner", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
 
     public void ModifyFTAApplicationOwner(FTAApplicationOwnerMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationOwnermaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAApplicationOwnermaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAApplicationOwner(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationOwner", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAApplicationOwner", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAApplicationOwner
@@ -3816,109 +4116,137 @@ public class DbOperations
 
     public List<FTAStrategyNameMaster> GetFTAStrategyNameList(string TaskTypeId)
     {
-        List<FTAStrategyNameMaster> lst = new List<FTAStrategyNameMaster>();
-        string query = "sp_getallFTAStrategyName";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAStrategyNameMaster> lst = new List<FTAStrategyNameMaster>();
+            string query = "sp_getallFTAStrategyName";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAStrategyNameMaster
-                               {
-                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAStrategyNameMaster
+                                   {
+                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAStrategyName(FTAStrategyNameMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyName", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyName", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyFTAStrategyName(FTAStrategyNameMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyNamemaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyNamemaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAStrategyName(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyName", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyName", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAStrategyName
@@ -3927,109 +4255,137 @@ public class DbOperations
 
     public List<FTAStrategyOwnerMaster> GetFTAStrategyOwnerList(string TaskTypeId)
     {
-        List<FTAStrategyOwnerMaster> lst = new List<FTAStrategyOwnerMaster>();
-        string query = "sp_getallFTAStrategyOwner";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAStrategyOwnerMaster> lst = new List<FTAStrategyOwnerMaster>();
+            string query = "sp_getallFTAStrategyOwner";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAStrategyOwnerMaster
-                               {
-                                   FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAStrategyOwnerMaster
+                                   {
+                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAStrategyOwner(FTAStrategyOwnerMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyOwner", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_FTAStrategyOwner", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifyFTAStrategyOwner(FTAStrategyOwnerMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyOwnermaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_FTAStrategyOwnermaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteFTAStrategyOwner(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyOwner", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyOwner", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAStrategyOwner
@@ -4038,109 +4394,136 @@ public class DbOperations
 
     public List<SystemFlowMaster> GetSystemFlowList(string TaskTypeId)
     {
-        List<SystemFlowMaster> lst = new List<SystemFlowMaster>();
-        string query = "sp_getallSystemFlow";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<SystemFlowMaster> lst = new List<SystemFlowMaster>();
+            string query = "sp_getallSystemFlow";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new SystemFlowMaster
-                               {
-                                   SystemFlow = Convert.ToString(row["SystemFlow"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new SystemFlowMaster
+                                   {
+                                       SystemFlow = Convert.ToString(row["SystemFlow"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddSystemFlow(SystemFlowMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_SystemFlow", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_SystemFlow", opp.SystemFlow));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_insert_SystemFlow", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_SystemFlow", opp.SystemFlow));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void ModifySystemFlow(SystemFlowMaster Opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_SystemFlowmaster", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_SystemFlow", Opp.SystemFlow));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_update_SystemFlowmaster", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+                cmd.Parameters.Add(new SqlParameter("i_SystemFlow", Opp.SystemFlow));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void DeleteSystemFlow(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_SystemFlow", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_SystemFlow", connection))
             {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                if (this.OpenConnection() == true)
+                {
+                    // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+                    //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+                //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion SystemFlow
@@ -4149,39 +4532,46 @@ public class DbOperations
 
     public List<ApplicationCategoryMaster> GetApplicationCategoryList(string TaskTypeId)
     {
-        List<ApplicationCategoryMaster> lst = new List<ApplicationCategoryMaster>();
-        string query = "sp_getallApplicationCategory";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<ApplicationCategoryMaster> lst = new List<ApplicationCategoryMaster>();
+            string query = "sp_getallApplicationCategory";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new ApplicationCategoryMaster
-                               {
-                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ApplicationCategoryMaster
+                                   {
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddApplicationCategory(ApplicationCategoryMaster opp, out int errorcode, out string errordesc)
@@ -4285,8 +4675,6 @@ public class DbOperations
                                }).ToList();
                     }
                 }
-
-                cmd.ExecuteNonQuery();
             }
 
             this.CloseConnection();
@@ -4589,183 +4977,196 @@ public class DbOperations
 
     #endregion Capacity
 
-    #region PriorityScore
+    //#region PriorityScore
 
-    public List<PriorityScoreMaster> GetPriorityScoreList(string TaskTypeId)
-    {
-        List<PriorityScoreMaster> lst = new List<PriorityScoreMaster>();
-        string query = "sp_getallPriorityScore";
+    //public List<PriorityScoreMaster> GetPriorityScoreList(string TaskTypeId)
+    //{
+    //    List<PriorityScoreMaster> lst = new List<PriorityScoreMaster>();
+    //    string query = "sp_getallPriorityScore";
 
-        if (this.OpenConnection() == true)
-        {
+    //    if (this.OpenConnection() == true)
+    //    {
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new PriorityScoreMaster
-                               {
-                                   PriorityScore = Convert.ToString(row["PriorityScore"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
-                    }
-                }
+    //        using (SqlCommand cmd = new SqlCommand(query, connection))
+    //        {
+    //            cmd.CommandType = CommandType.StoredProcedure;
+    //            cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+    //            using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+    //            {
+    //                DataTable dt = new DataTable();
+    //                sda.Fill(dt);
+    //                IEnumerable<DataRow> sequence = dt.AsEnumerable();
+    //                if (dt != null && dt.Rows.Count > 0)
+    //                {
+    //                    lst = (from DataRow row in dt.Rows
+    //                           select new PriorityScoreMaster
+    //                           {
+    //                               PriorityScore = Convert.ToString(row["PriorityScore"]),
+    //                               Id = Convert.ToString(row["Id"]),
+    //                           }).ToList();
+    //                }
+    //            }
 
-                cmd.ExecuteNonQuery();
-            }
+    //            cmd.ExecuteNonQuery();
+    //        }
 
-            this.CloseConnection();
-        }
+    //        this.CloseConnection();
+    //    }
 
-        return lst;
-    }
+    //    return lst;
+    //}
 
-    public void AddPriorityScore(PriorityScoreMaster opp, out int errorcode, out string errordesc)
-    {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_insert_PriorityScore", connection))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_PriorityScore", opp.PriorityScore));
+    //public void AddPriorityScore(PriorityScoreMaster opp, out int errorcode, out string errordesc)
+    //{
+    //    errorcode = 0;
+    //    errordesc = "success";
+    //    using (SqlCommand cmd = new SqlCommand("sp_insert_PriorityScore", connection))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.Clear();
+    //        cmd.Parameters.Add(new SqlParameter("i_PriorityScore", opp.PriorityScore));
 
-            if (this.OpenConnection() == true)
-            {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
-            }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
-        }
+    //            cmd.ExecuteNonQuery();
+    //            this.CloseConnection();
+    //        }
+    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+    //    }
 
-    }
+    //}
 
-    public void ModifyPriorityScore(PriorityScoreMaster Opp, out int errorcode, out string errordesc)
-    {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_update_PriorityScoremaster", connection))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-            cmd.Parameters.Add(new SqlParameter("i_PriorityScore", Opp.PriorityScore));
+    //public void ModifyPriorityScore(PriorityScoreMaster Opp, out int errorcode, out string errordesc)
+    //{
+    //    errorcode = 0;
+    //    errordesc = "success";
+    //    using (SqlCommand cmd = new SqlCommand("sp_update_PriorityScoremaster", connection))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.Clear();
+    //        cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
+    //        cmd.Parameters.Add(new SqlParameter("i_PriorityScore", Opp.PriorityScore));
 
-            if (this.OpenConnection() == true)
-            {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
-            }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
-        }
+    //            cmd.ExecuteNonQuery();
+    //            this.CloseConnection();
+    //        }
+    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+    //    }
 
-    }
+    //}
 
-    public void DeletePriorityScore(string TaskTypeId, out int errorcode, out string errordesc)
-    {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_PriorityScore", connection))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+    //public void DeletePriorityScore(string TaskTypeId, out int errorcode, out string errordesc)
+    //{
+    //    errorcode = 0;
+    //    errordesc = "success";
+    //    using (SqlCommand cmd = new SqlCommand("sp_delete_PriorityScore", connection))
+    //    {
+    //        cmd.CommandType = CommandType.StoredProcedure;
+    //        cmd.Parameters.Clear();
+    //        cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
 
-            if (this.OpenConnection() == true)
-            {
-                // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
-                //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
+    //            //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
 
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
-            }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
-        }
+    //            cmd.ExecuteNonQuery();
+    //            this.CloseConnection();
+    //        }
+    //        //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+    //    }
 
-    }
+    //}
 
-    #endregion PriorityScore
+    //#endregion PriorityScore
 
 
     #region BusinessMapping
 
     public List<BusinessMappingMaster> GetBusinessMappingList(string TaskTypeId)
     {
-        List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
-        string query = "sp_getbusinessmapping";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
+            string query = "sp_getbusinessmapping";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lst = (from DataRow row in dt.Rows
-                               select new BusinessMappingMaster
-                               {
-                                   Business = Convert.ToString(row["Business"]),
-                                   BusinessId = Convert.ToString(row["BusinessId"]),
-                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
-                                   BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-
-            this.CloseConnection();
-        }
-
-        return lst;
-    }
-
-    public void AddBusinessMapping(BusinessMappingMaster opp, out int errorcode, out string errordesc)
-    {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_addbusinessmapping", connection))
-        {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
-            cmd.Parameters.Add(new SqlParameter("i_businessid", opp.BusinessId));
-
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
             if (this.OpenConnection() == true)
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessMappingMaster
+                                   {
+                                       Business = Convert.ToString(row["Business"]),
+                                       BusinessId = Convert.ToString(row["BusinessId"]),
+                                       BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                       BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
+                    }
+                }
 
                 this.CloseConnection();
             }
 
+            return lst;
         }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
 
+    public void AddBusinessMapping(BusinessMappingMaster opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_addbusinessmapping", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_businesssuffixid", opp.BusinessSuffixId));
+                cmd.Parameters.Add(new SqlParameter("i_businessid", opp.BusinessId));
+
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+
+                    this.CloseConnection();
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     //public void ModifyBusinessMapping(BusinessMaster Opp, out int errorcode, out string errordesc)
@@ -4794,22 +5195,30 @@ public class DbOperations
 
     public void DeleteBusinessMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessMapping", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_BusinessMapping", connection))
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
 
-                this.CloseConnection();
+                    this.CloseConnection();
+                }
             }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
         }
 
     }
@@ -4820,101 +5229,123 @@ public class DbOperations
 
     public List<FTAApplicationMappingMaster> GetFTAApplicationMappingList(string TaskTypeId)
     {
-        List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
-        string query = "sp_getFTAApplicationMapping";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+            string query = "sp_getFTAApplicationMapping";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAApplicationMappingMaster
-                               {
-                                   ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
-                                   ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
-                                   ChildId = Convert.ToString(row["ChildId"]),
-                                   ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                   FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                   FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                   ParentID = Convert.ToString(row["ParentID"]),
-                                   ParentIDValue = Convert.ToString(row["ParentIDValue"]),
-                                   ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
-                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                   ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
-                                   ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAApplicationMappingMaster
+                                   {
+                                       ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                       ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                       ChildId = Convert.ToString(row["ChildId"]),
+                                       ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                       ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                       ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
+
                 }
 
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAApplicationMapping(FTAApplicationMappingMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_addFTAApplicationMapping", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
-            cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
-            cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
-            cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
-            cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
-            cmd.Parameters.Add(new SqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
-            cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_addFTAApplicationMapping", connection))
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
+                cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
+                cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
+                cmd.Parameters.Add(new SqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
 
 
     public void DeleteFTAApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_deleteFTAApplicationMapping", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_deleteFTAApplicationMapping", connection))
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAApplicationMapping
@@ -4923,87 +5354,107 @@ public class DbOperations
 
     public List<FTAStrategyMappingMaster> GetFTAStrategyMappingList(string TaskTypeId)
     {
-        List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
-        string query = "sp_getFTAStrategyMapping";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+            string query = "sp_getFTAStrategyMapping";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAStrategyMappingMaster
-                               {
-                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                   FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
-                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                   FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAStrategyMappingMaster
+                                   {
+                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public void AddFTAStrategyMapping(FTAStrategyMappingMaster opp, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_addFTAStrategyMapping", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
-            cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_addFTAStrategyMapping", connection))
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
 
 
     public void DeleteFTAStrategyMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
-        errorcode = 0;
-        errordesc = "success";
-        using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyMapping", connection))
+        try
         {
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
-            cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar,50));
-            cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
-            if (this.OpenConnection() == true)
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_delete_FTAStrategyMapping", connection))
             {
-                cmd.ExecuteNonQuery();
-                errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
-                this.CloseConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
             }
         }
-
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     #endregion FTAStrategyMapping
@@ -5013,169 +5464,193 @@ public class DbOperations
 
     public List<ThirdPartyApp> GetThirdPartyAppList(string TaskTypeId)
     {
-        List<ThirdPartyApp> lst = new List<ThirdPartyApp>();
-        string query = "sp_getAllThirdPartyAppType";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<ThirdPartyApp> lst = new List<ThirdPartyApp>();
+            string query = "sp_getAllThirdPartyAppType";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new ThirdPartyApp
-                               {
-                                   Value = Convert.ToString(row["ThirdPartyAppName"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ThirdPartyApp
+                                   {
+                                       Value = Convert.ToString(row["ThirdPartyAppName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public List<BusinessMappingMaster> GetBusinessMappingListbyId(string Id)
     {
-        List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
-        string query = "sp_getbusinessmappingbyId";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<BusinessMappingMaster> lst = new List<BusinessMappingMaster>();
+            string query = "sp_getbusinessmappingbyId";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new BusinessMappingMaster
-                               {
-                                   Business = Convert.ToString(row["Business"]),
-                                   BusinessId = Convert.ToString(row["BusinessId"]),
-                                   BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
-                                   BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new BusinessMappingMaster
+                                   {
+                                       Business = Convert.ToString(row["Business"]),
+                                       BusinessId = Convert.ToString(row["BusinessId"]),
+                                       BusinessSuffix = Convert.ToString(row["BusinessSuffix"]),
+                                       BusinessSuffixId = Convert.ToString(row["BusinessSuffixId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public List<FTAApplicationMappingMaster> GetFTAApplicationMappingListbyId(string Id)
     {
-        List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
-        string query = "sp_getFTAApplicationMappingbyId";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+            string query = "sp_getFTAApplicationMappingbyId";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAApplicationMappingMaster
-                               {
-                                   ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
-                                   ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
-                                   ChildId = Convert.ToString(row["ChildId"]),
-                                   ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                   FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                   FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                   FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                   FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                   ParentID = Convert.ToString(row["ParentID"]),
-                                   ParentIDValue = Convert.ToString(row["ParentIDValue"]),
-                                   ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
-                                   ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                   ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
-                                   ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAApplicationMappingMaster
+                                   {
+                                       ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                       ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                       ChildId = Convert.ToString(row["ChildId"]),
+                                       ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                       ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                       ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
     public List<FTAStrategyMappingMaster> GetFTAStrategyMappingListbyId(string Id)
     {
-        List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
-        string query = "sp_getFTAStrategyMappingbyId";
-
-        if (this.OpenConnection() == true)
+        try
         {
+            List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+            string query = "sp_getFTAStrategyMappingbyId";
 
-            using (SqlCommand cmd = new SqlCommand(query, connection))
+            if (this.OpenConnection() == true)
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_Id", Id));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", Id));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
-                        lst = (from DataRow row in dt.Rows
-                               select new FTAStrategyMappingMaster
-                               {
-                                   FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                   FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
-                                   FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                   FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
-                                   Id = Convert.ToString(row["Id"]),
-                               }).ToList();
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new FTAStrategyMappingMaster
+                                   {
+                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
                     }
                 }
 
-                cmd.ExecuteNonQuery();
+                this.CloseConnection();
             }
 
-            this.CloseConnection();
+            return lst;
         }
-
-        return lst;
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
     }
 
 }

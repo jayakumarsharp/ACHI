@@ -7,7 +7,6 @@
         DTColumnBuilder.newColumn('userId').withTitle('UserId'),
         DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
         DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
-
         DTColumnBuilder.newColumn('checked').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -27,8 +26,6 @@
        DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
            .renderWith(actionsHtml1)
     ];
-
-
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
     }
@@ -36,7 +33,6 @@
         return '<a  class="test" ><img src="images/edit.png"></a>' +
             '&nbsp;<a  class="view"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
-
     function actionsHtml(data, type, full, meta) {
         if (data)
             return '<input type="checkbox" class="checkclick"  checked />';
@@ -89,7 +85,6 @@
     $scope.ADUsers = [];
     $scope.Roles = [];
     $scope.IsReadOnly = false;
-
     $scope.IsUserSCHead = function () {
         UserFactory.GetUser($rootScope.UserInfo.user.userId).success(function (data) {
             if (data.TypeId == '8') {
@@ -99,8 +94,6 @@
             $scope.IsSCUser = false;
         });
     };
-
-
     $scope.stateChanged = function (selectedType) {
         if (selectedType.Id != undefined) {
             if (selectedType.Id == 2) {
@@ -125,10 +118,8 @@
         angular.forEach(data, function (value, key) {
             $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
         });
-
         $scope.dtOptions.data = $scope.UserTypes;
     };
-
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
             $scope.Roles = data;
@@ -141,7 +132,6 @@
         }).error(function (error) {
             $scope.Error = error;
         });
-
         ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
             console.log(data);
             $scope.CountryMasterList = data;
@@ -156,8 +146,6 @@
         }).error(function (error) {
             $scope.Error = error;
         })
-
-
     };
     $scope.ViewData = {};
     function Getusermappingdata(userid) {
@@ -169,7 +157,6 @@
         }).error(function (error) {
             $scope.Error = error;
         })
-
         ApiCall.MakeApiCall("GetuserRegionMapping?userId=" + userid, 'GET', '').success(function (data) {
 
             $scope.ViewData.region = data.map(function (val) {
@@ -179,7 +166,6 @@
         }).error(function (error) {
             $scope.Error = error;
         })
-
         ApiCall.MakeApiCall("GetBusinessMapping?userId=" + userid, 'GET', '').success(function (data) {
             $scope.ViewData.businessmapping = data.map(function (val) {
                 return val.BusinessLine;
@@ -188,7 +174,6 @@
         }).error(function (error) {
             $scope.Error = error;
         });
-
     }
 
     $scope.GetADUsers = function () {
@@ -475,7 +460,6 @@
         }).error(function (error) {
         });
     };
-
     $scope.ChangePassword = function () {
         UserFactory.ChangePassword($scope.User).success(function (data) {
 
@@ -483,10 +467,7 @@
 
         });
     };
-
-
     // bind code start
-
     $scope.multiselectRegion = {
         selected: [],
         options: [],
@@ -501,8 +482,6 @@
             }
         }
     };
-
-
     $scope.multiselectBusinessSector = {
         selected: [],
         options: [],
@@ -517,8 +496,6 @@
             }
         }
     };
-
-
     $scope.multiselectCountry = {
         selected: [],
         options: [],
@@ -533,24 +510,16 @@
             }
         }
     };
-
-
-
-
     function assignCountry(data) {
-
         for (var i = 0; i < data.length > 0; i++) {
             $scope.multiselectCountry.selected.push({ id: data[i].Id, name: data[i].CountryName })
         }
-
         bindCountrydata($scope.CountryMasterList);
     }
-
     function assignRegion(data) {
         for (var i = 0; i < data.length > 0; i++) {
             $scope.multiselectRegion.selected.push({ id: data[i].Id, name: data[i].RegionName })
         }
-
         bindRegiondata($scope.RegionMasterList);
     }
 
@@ -609,10 +578,8 @@
             }
         });
     }
-
     $scope.GetAllRoles();
     $scope.GetAllUsers();
-    //$scope.IsUserSCHead();
     $scope.IsPageReadOnly();
 }]);
 
@@ -654,8 +621,6 @@ ReportApp.factory('UserFactory', ['$http', function ($http) {
         GetInactiveUsers: function () {
             return $http.get(Url + '/GetInactiveUsers');
         },
-
-
     };
     return UserFactory;
 }]);

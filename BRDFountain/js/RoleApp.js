@@ -68,6 +68,11 @@
         };
 
     $scope.GetAllRoles = function () {
+        UserFactory.getloggedusername().success(function (username) {
+            $scope.username = username;
+        }).error(function (error) {
+            console.log('Error modifying Role-right: ' + error);
+        });
         RoleFactory.GetRoles().success(function (data) {
             $scope.data = data;
             $scope.dtOptions.data = $scope.data;
@@ -182,48 +187,49 @@
 
 
     $scope.ModifyRoleRight = function (data) {
-        //RoleFactory.GetUser($rootScope.UserInfo.user.userId).success(function (userrole) {
-        //    if (userrole.RoleId == data.id) {
-        //        $scope.EditedRole = data;
-        //        $('#roleChange').modal('show');
-        //    }
-        //    else {
+        RoleFactory.GetUser($scope.username).success(function (userrole) {
+            var isfound = true;
+            if (userrole.length > 0) {
+                if (userrole[0].RoleId == data.id) {
+                    $scope.EditedRole = data;
+                    $('#roleChange').modal('show');
+                    isfound = false;
+                }
+            }
+            if (isfound) {
+                $scope.role = data;
+                $scope.role.Rights = $scope.listB;
+                RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
+                    $scope.GetAllRoles();
+                    $scope.role = {};
+                    toaster.pop('success', "Success", "Role modified successfully", null);
+                    $('#AddEditRole').modal('hide');
+                    $scope.listA = [];
+                    $scope.listB = [];
+                }).error(function (error) {
+                    console.log('Error modifying Role-right: ' + error);
+                });
+            }
+        }).error(function (error) {
+            console.log('Error getting user roles: ' + error);
+        });
+
+
+    };
+
+    $scope.ModifySelfUser = function (data) {
+        $('#roleChange').modal('hide');
         $scope.role = data;
         $scope.role.Rights = $scope.listB;
         RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
             $scope.GetAllRoles();
-            //reset form
             $scope.role = {};
-            //     toaster.pop('success', "Success", "Role modified successfully", null);
+            toaster.pop('success', "Success", "Role modified successfully", null);
             $('#AddEditRole').modal('hide');
             $scope.listA = [];
             $scope.listB = [];
-
-        }).error(function (error) {
-            console.log('Error modifying Role-right: ' + error);
-        });
-        //}
-        //}).error(function (error) {
-        //    console.log('Error getting user roles: ' + error);
-        //});
-    };
-    $scope.ModifySelfUser = function () {
-        $('#roleChange').modal('hide');
-        $scope.role = $scope.EditedRole;
-        $scope.role.Rights = $scope.listB;
-        RoleFactory.ModifyRoleRight($scope.role).success(function (data) {
-            $scope.GetAllRoles();
-            //reset form
-            $scope.role = {};
-            $scope.EditedRole = {};
-            $('#AddEditRole').modal('hide');
-            $scope.listA = [];
-            $scope.listB = [];
-            reportFactory.Logout($rootScope.UserInfo.user.userId).success(function (data) {
-                $window.sessionStorage['userAuth'] = null;
-                $rootScope.UserInfo = null;
-                $rootScope.isAuth = false;
-                $location.path('/');
+            reportFactory.Logout($scope.username).success(function (data) {
+                location.href = 'Home/LoginDisplay';
                 console.log('Logged out successfully');
             }).error(function (error) {
                 console.log('Failed to log out properly. Error: ' + error);

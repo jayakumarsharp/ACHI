@@ -1359,3 +1359,7 @@ span.multiselect-native-select {
 .multiselect-native-select .multiselect-container {
     min-width: 100% !important;
 }
+
+.table {
+    margin-bottom: 0px;
+}

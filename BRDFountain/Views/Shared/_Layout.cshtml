@@ -39,7 +39,7 @@
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="#">Profile</a></li>
                                 <li class="divider"></li>
-                                <li><a href="@Url.Action("Logout", "Home")">Sign out</a></li>
+                                <li><a ng-click="clearlogout()" href="@Url.Action("Logout", "Home")">Sign out</a></li>
                             </ul>
                         </div>
                         <div class="info">
@@ -122,7 +122,7 @@
             }
     </style>
     <script>
-        $('.sidebar').css("height", $(document).height() + 120);
+        $('.sidebar').css("height", $(document).height());
     </script>
 </body>
 

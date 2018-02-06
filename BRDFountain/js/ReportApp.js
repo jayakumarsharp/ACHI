@@ -20,6 +20,12 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'StrategyService
     $scope.notificationdata = [];
     $rootScope.UserInfo = {};
     $scope.MenuList = [];
+    $scope.clearlogout = function () {
+        //sessionStorage.setItem('menupath', 'Index');
+        sessionStorage.setItem('menuname', 'Home');
+        $scope.rootname = 'Index';
+        // $scope.MenuName = 'Home';
+    }
 
     $scope.updatemenuclick = function (path) {
         sessionStorage.setItem('menuname', path);
@@ -50,7 +56,6 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'StrategyService
     }
     $scope.GetUserRoles();
 
-
 }]);
 
 
@@ -63,39 +68,13 @@ ReportApp.directive('datetimepicker', function () {
             date: '=ngModel'
         },
         link: function (scope, element, attrs, ngModel) {
-            debugger;
-            console.log(scope.date);
             if (!ngModel) return; // do nothing if no ng-model
-
-            //var currentdate = '';
-            //if (scope.opp != undefined && scope.opp.WorkDate != undefined) {
-            //    currentdate = scope.opp.WorkDate;
-            //}
-            //else if (scope.user != undefined && scope.user.length == 0) {
-            //    currentdate = '';
-            //}
-            //else if (scope.user != undefined && (scope.user.FirstWorkingDate != '' || scope.user.FirstWorkingDate != null)) {
-            //    currentdate = scope.user.FirstWorkingDate;
-            //}
-            //else if (scope.user != undefined && (scope.user.LastWorkingDate != '' || scope.user.LastWorkingDate != null)) {
-            //    currentdate = scope.user.LastWorkingDate;
-            //}
-            //else if (scope.taskDetails != undefined && scope.taskDetails.length > 0 && (scope.taskDetails.FromDate != undefined || scope.taskDetails.FromDate != '' || scope.taskDetails.FromDate != null)) {
-            //    currentdate = scope.taskDetails.FromDate;
-            //}
-            //else if (scope.taskDetails != undefined && scope.taskDetails.length > 0 && (scope.taskDetails.ToDate != undefined || scope.taskDetails.ToDate != '' || scope.taskDetails.ToDate != null)) {
-            //    currentdate = scope.taskDetails.ToDate;
-            //}
-            //else {
-            //    currentdate = new Date();
-            //}
-
             ngModel.$render = function () {
                 $(element).find('input').val(ngModel.$viewValue || '');
             }
 
             $(element).datetimepicker({
-                format: 'MM-DD-YYYY',
+                format: 'DD/MM/YYYY',
                 language: 'en',
                 pickTime: false,
                 defaultDate: scope.date
@@ -292,7 +271,7 @@ ReportApp.directive('multiselect', function () {
                 '           </a>' +
                 '       </span>' +
                 '   </div>' +
-                //'   <input ng-show="multiselect.options.length > 0" placeholder="' + attrs.placeholder + '" type="text" class="form-control" ng-model="multiselect.filter" ng-focus="multiselect.focusFilter()" ng-blur="multiselect.blurFilter()" />' +
+                '   <input ng-show="multiselect.options.length > 0" placeholder="' + attrs.placeholder + '" type="text" class="form-control" ng-model="multiselect.filter" ng-focus="multiselect.focusFilter()" ng-blur="multiselect.blurFilter()" />' +
                 '   <div ng-show="msModel.length < multiselect.options.length && multiselect.options.length === 0 && !multiselect.options.$resolved"><em>Loading...</em></div>' +
                 '   <ul id="agent_dropdown" class="dropdown-menu" role="menu" ng-show="multiselect.displayDropdown && multiselect.options.length > 0">' +
                 '       <li ng-repeat="element in multiselect.filtered = (multiselect.options | filter:multiselect.filter) track by $index" role="presentation" ng-class="{active: $index == multiselect.currentElement}">' +
@@ -311,7 +290,7 @@ ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
     var URL = 'Main/';
     var AuthFactory = {
         Logout: function (userId) {
-            return $http.post(URL + 'Logout/', { userId: userId });
+            return $http.post('Home/Logout/', { userId: userId });
         },
         GetMenuList: function (userId) {
             return $http.get(URL + 'GetmenuList?userId=' + userId);

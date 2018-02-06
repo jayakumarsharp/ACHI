@@ -808,17 +808,6 @@ namespace BRDFountain.Controllers
         }
 
 
-        public JsonResult email()
-        {
-            try
-            {
-                string errordesc = "";
-
-                _dbOperations.GetAllEmail();
-                return Json(errordesc, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e) { log.Error(e); return null; }
-        }
 
         public JsonResult CreateUser(UserMaster user)
         {
@@ -837,7 +826,7 @@ namespace BRDFountain.Controllers
             string errordesc = "";
             int errocode = 0;
             _dbOperations.CreateTempUser(user, out errocode, out errordesc);
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetusercountryMapping(string userId)
