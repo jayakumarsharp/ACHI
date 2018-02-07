@@ -38,140 +38,6 @@ public class DbOperations
 
     #region TransferSetting
 
-    public void InsertTransferSetting(TransferSetting objTransferSetting, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_insert_transfersetting", connection))
-            {
-                DateTime FromDate = new DateTime();
-                DateTime Todate = new DateTime();
-                if (objTransferSetting.TransferFrom != "")
-                {
-                    FromDate = DateTime.ParseExact(objTransferSetting.TransferFrom, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    Todate = DateTime.ParseExact(objTransferSetting.TransferTo, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                }
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_Owneruser", objTransferSetting.OwnerUser));
-                cmd.Parameters.Add(new SqlParameter("i_TransferTo", objTransferSetting.Transferuser));
-                cmd.Parameters.Add(new SqlParameter("i_DurationFrom", FromDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
-                cmd.Parameters.Add(new SqlParameter("i_DurationTo", Todate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
-                if (this.OpenConnection() == true)
-                {
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-
-            }
-        }
-        catch (SqlException e)
-        {
-            log.Error(e);
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-            throw e;
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-            throw e;
-        }
-    }
-
-    public void DeleteTransferSetting(string OwnerUser, out int errorcode, out string errordesc)
-    {
-        try
-        {
-            errorcode = 0;
-            errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_delete_transfersetting", connection))
-            {
-
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_owner", OwnerUser));
-                if (this.OpenConnection() == true)
-                {
-
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-
-            }
-        }
-        catch (SqlException e)
-        {
-            errorcode = e.ErrorCode;
-            errordesc = e.Message;
-            this.CloseConnection();
-            throw e;
-        }
-        catch (Exception e)
-        {
-            errorcode = -1;
-            errordesc = e.Message;
-            this.CloseConnection();
-            throw e;
-        }
-    }
-
-    public List<TransferSetting> GetTransfersettingIDbyuser(string username)
-    {
-
-        List<TransferSetting> lst = new List<TransferSetting>();
-        string query = "sp_getdelegatesettingbyuser";
-        try
-        {
-            if (this.OpenConnection() == true)
-            {
-
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("i_Owner", username));
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                        if (dt != null && dt.Rows.Count > 0)
-                        {
-                            lst = (from DataRow row in dt.Rows
-                                   select new TransferSetting
-                                   {
-                                       TransferFrom = Convert.ToString(row["DurationFrom"]),
-                                       TransferTo = Convert.ToString(row["DurationTo"]),
-                                       OwnerUser = Convert.ToString(row["Owneruser"]),
-                                       Transferuser = Convert.ToString(row["TransferTo"]),
-                                       IsActive = Convert.ToString(row["IsActive"]),
-                                       Id = Convert.ToString(row["Id"])
-
-                                   }).ToList();
-                        }
-                    }
-                }
-
-                this.CloseConnection();
-            }
-
-            return lst;
-        }
-        catch (Exception e)
-        {
-            log.Error(e);
-            throw e;
-        }
-
-    }
-
-
     public List<StrategyApprover> Get_ApprovaltransferByuser(string userid)
     {
         List<StrategyApprover> lst = new List<StrategyApprover>();
@@ -1654,7 +1520,8 @@ public class DbOperations
                 this.CloseConnection();
             }
             return lst;
-            catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.Error(e);
             return null;

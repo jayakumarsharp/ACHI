@@ -282,36 +282,8 @@ namespace BRDFountain.Controllers
             List<StrategyApprover> lst = _dbOperations.Get_ApprovaltransferByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetTransferSettingByuser()
-        {
-            List<TransferSetting> lst = _dbOperations.GetTransfersettingIDbyuser(Convert.ToString(Session["UserName"]));
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult InsertTransferSetting(TransferSetting strategy)
-        {
-            string errordesc = "";
-            int errorcode = 0;
-            if (Convert.ToString(Session["UserName"]) != "")
-            {
-                strategy.OwnerUser = Convert.ToString(Session["UserName"]);
-                _dbOperations.InsertTransferSetting(strategy, out errorcode, out errordesc);
-            }
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult DeleteTransferSetting()
-        {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-            string errordesc = "";
-            int errorcode = 0;
-
-            _dbOperations.DeleteTransferSetting(Convert.ToString(Session["UserName"]), out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
-        }
-
+   
+    
         #endregion TransferSetting
 
         #region Strategy
@@ -676,6 +648,7 @@ namespace BRDFountain.Controllers
         }
 
         #endregion Strategy
+
         #region Roles
 
         public JsonResult GetUserRoles(string userId)
@@ -1061,7 +1034,6 @@ namespace BRDFountain.Controllers
         }
 
         #endregion FTAApplicationCode
-
 
         #region FTAStrategyCode
 
@@ -1813,16 +1785,19 @@ namespace BRDFountain.Controllers
             List<ThirdPartyApp> lst = _dbOperations.GetThirdPartyAppList(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetAllBusinessMappingbyId(string Id)
         {
             List<BusinessMappingMaster> lst = _dbOperations.GetBusinessMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetAllFTAStrategyMappingbyId(string Id)
         {
             List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetAllFTAApplicationMappingbyId(string Id)
         {
             List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingListbyId(Id);
@@ -1863,7 +1838,6 @@ namespace BRDFountain.Controllers
 
         #endregion BusinessMapping
 
-
         #region FTAStrategyMapping
 
         public JsonResult GetStrategyVersionLog(string Id)
@@ -1902,9 +1876,7 @@ namespace BRDFountain.Controllers
         }
 
         #endregion FTAStrategyMapping
-
-
-
+        
         #region FTAApplicationMapping
 
         public JsonResult GetAllFTAApplicationMapping(string BusinessId)
