@@ -202,7 +202,6 @@
         $scope.showfilter = true;
     };
     $scope.Export = function () {
-        // StrategyService.DownLoadReportFile('5e08a3bc-e59a-4d7e-9bac-3afb08ad7b1f.xlsx').success(function (data) { });
         var currency = { Country: '', Region: '', FTAApplicationCode: '', FTAStrategyCode: '', BusinessLine: '', FTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
         if ($scope.selectModel) {
             StrategyService.ShowLoader();
@@ -221,7 +220,14 @@
             if ($scope.selectModel.ApplicationCategory)
                 currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
             if ($scope.selectModel.Venuetype)
-                currency.VenuetypeId = $scope.selectModel.Venuetype.Id
+                currency.VenuetypeId = $scope.selectModel.Venuetype.Id;
+            if ($scope.selectModel.FTAApplicationName)
+                currency.FTAApplicationNameId = $scope.selectModel.FTAApplicationName.Id;
+            if ($scope.selectModel.ChildID)
+                currency.ChildID = $scope.selectModel.ChildID.Id;
+            if ($scope.selectModel.ParentID)
+                currency.ParentID = $scope.selectModel.ParentID.Id;
+
 
             ApiCall.MakeApiCall("ExportReport", 'POST', currency).success(function (data) {
                 if (data.Error != undefined) {
@@ -269,7 +275,13 @@
             if ($scope.selectModel.ApplicationCategory)
                 currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
             if ($scope.selectModel.Venuetype)
-                currency.VenuetypeId = $scope.selectModel.Venuetype.Id
+                currency.VenuetypeId = $scope.selectModel.Venuetype.Id;
+            if ($scope.selectModel.FTAApplicationName)
+                currency.FTAApplicationNameId = $scope.selectModel.FTAApplicationName.Id;
+            if ($scope.selectModel.ChildID)
+                currency.ChildID = $scope.selectModel.ChildID.Id;
+            if ($scope.selectModel.ParentID)
+                currency.ParentID = $scope.selectModel.ParentID.Id;
 
             ApiCall.MakeApiCall("GetStrategyReport", 'POST', currency).success(function (data) {
                 if (data.Error != undefined) {
@@ -349,7 +361,7 @@
             StrategyService.HideLoader();
         }, 500)
     };
-  
+
     var getdynamicobject = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
             if ($scope[type][i].Id == userId) {

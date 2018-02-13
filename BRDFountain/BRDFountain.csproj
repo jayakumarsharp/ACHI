@@ -2061,6 +2061,7 @@
     <Content Include="js\controllers\PriorityScoreMasterController.js" />
     <Content Include="js\controllers\ProductTypeMasterController.js" />
     <Content Include="js\controllers\RegionMasterController.js" />
+    <Content Include="js\controllers\ReportsApplicationMapping.js" />
     <Content Include="js\controllers\ReportsController.js" />
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\StrategytypeMasterController.js" />
@@ -2620,6 +2621,7 @@
     <Content Include="Views\Main\BusinessMapping.cshtml" />
     <Content Include="Views\Main\FTAStrategyMapping.cshtml" />
     <Content Include="Views\Main\FTAApplicationMapping.cshtml" />
+    <Content Include="Views\Main\ReportApplicationMapping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

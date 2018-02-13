@@ -163,6 +163,11 @@ namespace BRDFountain.Controllers
             return View();
         }
 
+        public ActionResult ReportApplicationMapping()
+        {
+            return View();
+        }
+
         [SessionTimeout]
         public ActionResult FTAStrategyMapping()
         {
@@ -282,8 +287,8 @@ namespace BRDFountain.Controllers
             List<StrategyApprover> lst = _dbOperations.Get_ApprovaltransferByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-   
-    
+
+
         #endregion TransferSetting
 
         #region Strategy
@@ -1820,14 +1825,6 @@ namespace BRDFountain.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult ModifyBusiness(BusinessMaster opp)
-        //{
-        //    string errordesc = "";
-        //    int errocode = 0;
-        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
-        //}
-
         public JsonResult DeleteBusinessMapping(string BusinessId)
         {
             string errordesc = "";
@@ -1859,14 +1856,6 @@ namespace BRDFountain.Controllers
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult ModifyBusiness(BusinessMaster opp)
-        //{
-        //    string errordesc = "";
-        //    int errocode = 0;
-        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
-        //}
-
         public JsonResult DeleteFTAStrategyMapping(string Id)
         {
             string errordesc = "";
@@ -1876,7 +1865,7 @@ namespace BRDFountain.Controllers
         }
 
         #endregion FTAStrategyMapping
-        
+
         #region FTAApplicationMapping
 
         public JsonResult GetAllFTAApplicationMapping(string BusinessId)
@@ -1899,13 +1888,6 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
-        //public JsonResult ModifyBusiness(BusinessMaster opp)
-        //{
-        //    string errordesc = "";
-        //    int errocode = 0;
-        //    _dbOperations.ModifyBusiness(opp, out errocode, out errordesc);
-        //    return Json(errordesc, JsonRequestBehavior.AllowGet); } catch (Exception e){log.Error(e); return null;}
-        //}
 
         public JsonResult DeleteFTAApplicationMapping(string Id)
         {
@@ -1916,6 +1898,41 @@ namespace BRDFountain.Controllers
         }
 
         #endregion FTAApplicationMapping
+
+
+        #region ReportApplicationMapping
+
+        public JsonResult GetAllReportApplicationMapping(string Id)
+        {
+            List<ReportAppMapping> lst = _dbOperations.GetReportApplicationMappingList(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult AddReportMapping(ReportAppMapping taskInfo)
+        {
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.AddReportApplicationMapping(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public JsonResult DeleteReportApplicationMapping(string Id)
+        {
+            string errordesc = "";
+            int errocode = 0;
+            _dbOperations.DeleteReportApplicationMapping(Id, out errocode, out errordesc);
+            return Json(errordesc, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion ReportApplicationMapping
     }
 }
 

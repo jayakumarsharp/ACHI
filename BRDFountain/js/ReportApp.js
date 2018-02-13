@@ -166,7 +166,6 @@ ReportApp.directive('multiselect', function () {
                     options: $scope.msOptions,
                     displayDropdown: true,
                     deleteSelected: function (index) {
-                        debugger;
                         var oldVal = angular.copy($scope.msModel);
                         $scope.msModel.splice(index, 1);
                         $scope.msChange({
@@ -176,7 +175,6 @@ ReportApp.directive('multiselect', function () {
                         _filterOptions();
                     },
                     selectElement: function (index) {
-                        debugger;
                         var oldVal = angular.copy($scope.msModel);
                         $scope.msModel.push($scope.multiselect.filtered[index]);
                         $scope.msChange({
@@ -289,6 +287,7 @@ ReportApp.directive('multiselect', function () {
 ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
     var URL = 'Main/';
     var AuthFactory = {
+
         Logout: function (userId) {
             return $http.post('Home/Logout/', { userId: userId });
         },
@@ -300,6 +299,10 @@ ReportApp.factory('reportFactory', ['$http', function ($http, $q) {
         },
         GetUser: function (userId) {
             return $http.get(URL + 'GetUser?userId=' + userId);
+        },
+
+        AddReportApplicationMappings(postdata) {
+            return $http.post(URL + 'AddReportApplicationMappings', postdata);
         }
     };
     return AuthFactory;

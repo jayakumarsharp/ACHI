@@ -173,6 +173,9 @@ namespace BRDFountain.Models
         public string SystemFlow { get; set; }
         public string ApplicationCategory { get; set; }
         public string VenuetypeId { get; set; }
+        public string ChildID { get; set; }
+        public string ParentID { get; set; }
+        public string FTAApplicationNameId { get; set; }
 
     }
 
@@ -540,6 +543,45 @@ namespace BRDFountain.Models
         public string ApplicationCategory { get; set; }
 
     }
+
+
+
+    public class ReportAppMapping
+    {
+        public string Id { get; set; }
+        public string ThirdPartyAppId { get; set; }
+        public string ThirdPartyAppName { get; set; }
+        public string ChildId { get; set; }
+        public string ChildIdValue { get; set; }
+        public string FTAApplicationCodeId { get; set; }
+        public string FTAApplicationCode { get; set; }
+        public string FTAApplicationNameId { get; set; }
+        public string FTAApplicationName { get; set; }
+
+        public string ParentID { get; set; }
+        public string ParentIDValue { get; set; }
+
+        public string ApplicationOwnerId { get; set; }
+        public string ApplicationOwner { get; set; }
+
+        public string ApplicationCategoryId { get; set; }
+        public string ApplicationCategory { get; set; }
+
+        public string BusinessLineId { get; set; }
+        public string BusinessLine { get; set; }
+        public string Country { get; set; }
+        public string CountryName { get; set; }
+        public string Region { get; set; }
+        public string RegionName { get; set; }
+
+
+    }
+
+
+
+
+
+
     public static class SimpleComparer
     {
         // Item1: property name, Item2 current, Item3 original

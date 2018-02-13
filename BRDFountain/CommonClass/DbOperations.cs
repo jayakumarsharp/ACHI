@@ -2639,7 +2639,6 @@ public class DbOperations
 
     #endregion Region
 
-    //new code start here
 
     #region FTAApplicationCode
 
@@ -5217,6 +5216,135 @@ public class DbOperations
 
     #endregion FTAApplicationMapping
 
+
+    #region FTAApplicationMapping
+
+    public List<ReportAppMapping> GetReportApplicationMappingList(string TaskTypeId)
+    {
+        try
+        {
+            List<ReportAppMapping> lst = new List<ReportAppMapping>();
+            string query = "sp_getReportApplicationMapping";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ReportAppMapping
+                                   {
+                                       ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                       ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                       ChildId = Convert.ToString(row["ChildId"]),
+                                       ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                       ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                       ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
+                    }
+
+                }
+
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
+
+    public void AddReportApplicationMapping(ReportAppMapping opp, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_addReportApplicationMapping", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
+                cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
+                cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
+                cmd.Parameters.Add(new SqlParameter("i_ApplicationOwnerId", opp.ApplicationOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", opp.ApplicationCategoryId));
+                cmd.Parameters.Add(new SqlParameter("i_CountryId", opp.Country));
+                cmd.Parameters.Add(new SqlParameter("i_RegionId", opp.Region));
+                cmd.Parameters.Add(new SqlParameter("i_BusinessLineId", opp.BusinessLineId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
+
+
+
+    public void DeleteReportApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_deleteReportApplicationMapping", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("i_id", TaskTypeId));
+                cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
+                cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
+                    this.CloseConnection();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
+
+    #endregion FTAApplicationMapping
+
     #region FTAStrategyMapping
 
     public List<FTAStrategyMappingMaster> GetFTAStrategyMappingList(string TaskTypeId)
@@ -5325,8 +5453,6 @@ public class DbOperations
     }
 
     #endregion FTAStrategyMapping
-
-
 
 
     public List<ThirdPartyApp> GetThirdPartyAppList(string TaskTypeId)
@@ -5519,6 +5645,12 @@ public class DbOperations
             throw e;
         }
     }
+
+
+
+    //sp_getReportApplicationMapping
+
+
 
 }
 
