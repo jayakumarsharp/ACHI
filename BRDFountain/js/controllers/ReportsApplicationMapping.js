@@ -4,7 +4,8 @@
     $scope.editMode = false;
     $scope.IsReadOnly = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
-        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow).
+    withOption('scrollX', true);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
         DTColumnBuilder.newColumn('FTAApplicationName').withTitle('FTA Application Name'),
@@ -14,6 +15,9 @@
         DTColumnBuilder.newColumn('ParentID').withTitle('ParentID'),
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Application Category'),
         DTColumnBuilder.newColumn('ApplicationOwnerId').withTitle('Application Owner'),
+        DTColumnBuilder.newColumn('BusinessLine').withTitle('BusinessLine'),
+        DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
+        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
