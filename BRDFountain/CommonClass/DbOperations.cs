@@ -703,10 +703,13 @@ public class DbOperations
                     cmd.Parameters.Add(new SqlParameter("i_BusinessLine", filter.BusinessLine));
                     cmd.Parameters.Add(new SqlParameter("i_Region", filter.Region));
                     cmd.Parameters.Add(new SqlParameter("i_Country", filter.Country));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", filter.FTAStrategyOwner));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", filter.FTAApplicationOwner));
                     cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
                     cmd.Parameters.Add(new SqlParameter("i_VenueType", filter.VenuetypeId));
-
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", filter.FTAApplicationNameId));
+                    cmd.Parameters.Add(new SqlParameter("i_ParentID", filter.ParentID));
+                    cmd.Parameters.Add(new SqlParameter("i_ChildID", filter.ChildID));
+                    cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", filter.ThirdPartyAppId));
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -5257,6 +5260,75 @@ public class DbOperations
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
                                        ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
                                        ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       BusinessLineId = Convert.ToString(row["BusinessLineId"]),
+                                       Region = Convert.ToString(row["RegionId"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Country = Convert.ToString(row["CountryId"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+                        }
+                    }
+
+                }
+
+                this.CloseConnection();
+            }
+
+            return lst;
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            throw e;
+        }
+    }
+
+    public List<ReportAppMapping> GetReportApplicationfilter(string TaskTypeId)
+    {
+        try
+        {
+            List<ReportAppMapping> lst = new List<ReportAppMapping>();
+            string query = "sp_getReportApplicationMappingFilter";
+
+            if (this.OpenConnection() == true)
+            {
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ReportAppMapping
+                                   {
+                                       ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                       ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                       ChildId = Convert.ToString(row["ChildId"]),
+                                       ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                       ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                       ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       BusinessLineId = Convert.ToString(row["BusinessLineId"]),
+                                       Region = Convert.ToString(row["RegionId"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Country = Convert.ToString(row["CountryId"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }

@@ -169,13 +169,14 @@ namespace BRDFountain.Models
         public string FTAStrategyCode { get; set; }
         public string BusinessLine { get; set; }
         public string Country { get; set; }
-        public string FTAStrategyOwner { get; set; }
+        public string FTAApplicationOwner { get; set; }
         public string SystemFlow { get; set; }
         public string ApplicationCategory { get; set; }
         public string VenuetypeId { get; set; }
         public string ChildID { get; set; }
         public string ParentID { get; set; }
         public string FTAApplicationNameId { get; set; }
+        public string ThirdPartyAppId { get; set; }
 
     }
 

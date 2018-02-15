@@ -1908,7 +1908,6 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult AddReportMapping(ReportAppMapping taskInfo)
         {
             try
@@ -1931,6 +1930,15 @@ namespace BRDFountain.Controllers
             _dbOperations.DeleteReportApplicationMapping(Id, out errocode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetAllReportApplicationAutofill(string Id)
+        {
+            List<ReportAppMapping> lst = _dbOperations.GetReportApplicationfilter(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+
+
+
 
         #endregion ReportApplicationMapping
     }

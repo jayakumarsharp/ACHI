@@ -5,11 +5,13 @@
         <h4>Strategy Report   </h4>
         <div ng-show="showfilter">
             <div class="col-md-3">
+
                 <div class="form-group">
-                    <label>FTA Application Code</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplicationCode" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplication Code -</option>
+                    <label>FTA Application</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationName" ng-options="item.FTAApplicationName for item in FTAApplicationNameList" title="Select FTAApplication" style="width:100%;font-size: 0.8em" ng-change="userfilter3()" required>
+                        <option value="">- Select FTAApplication Name-</option>
                     </select>
+
                 </div>
                 <div class="form-group">
                     <label>Region</label>
@@ -27,11 +29,10 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label>FTA Application</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationName" ng-options="item.FTAApplicationName for item in FTAApplicationNameList" title="Select FTAApplication" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAApplication Name-</option>
+                    <label>FTA Application Code</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationCode" ng-options="item.FTAApplicationCode for item in FTAApplicationCodeList" title="Select FTAApplicationCode" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplication Code -</option>
                     </select>
-
                 </div>
 
                 <div class="form-group">
@@ -44,6 +45,27 @@
                     <label>ChildID </label>
                     <select class="form-control" name="ddlSBU" ng-model="selectModel.ChildID" ng-options="item.ChildID for item in ChildIDList" title="Select FTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
                         <option value="">- Select ChildID -</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Application Category</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ApplicationCategory -</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ThirdParty Application</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ThirdPartyApp" ng-options="item.Value for item in ThirdPartyList" title="Select FTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ThirdParty-</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Parent ID</label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ParentID" ng-options="item.ParentID for item in ParentIDList" title="Select ParentID" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select ParentID-</option>
                     </select>
                 </div>
             </div>
@@ -62,25 +84,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Parent ID</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ParentID" ng-options="item.ParentID for item in ParentIDList" title="Select ParentID" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select ParentID-</option>
+                    <label>FTA Application Owner </label>
+                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAApplicationOwner" ng-options="item.userId for item in FTAApplicationOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
+                        <option value="">- Select FTAApplicationOwner -</option>
                     </select>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Application Category</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select ApplicationCategory -</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>FTA Strategy Owner</label>
-                    <select class="form-control" name="ddlSBU" ng-model="selectModel.FTAStrategyOwner" ng-options="item.userId for item in FTAStrategyOwnerList" title="Select FTAApplicationOwner" style="width:100%;font-size: 0.8em" required>
-                        <option value="">- Select FTAStrategyOwner -</option>
-                    </select>
-                </div>
+
             </div>
         </div>
         <div class="col-md-12" style="margin-bottom:10px;">
@@ -98,7 +107,7 @@
 </div>
 
 <style>
-    .disabled {
+    .{
         cursor: not-allowed;
     }
 
