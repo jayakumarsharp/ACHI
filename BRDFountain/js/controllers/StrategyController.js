@@ -167,6 +167,7 @@
         GetAllCapacity,
         GetAllRegion, GetUsers
         ]).then(function (resp) {
+
             $scope.CountryMasterList = resp[0].data;
             $scope.LTAApplicationCodeList = resp[1].data;
             $scope.ThirdPartyList = resp[2].data;
@@ -186,10 +187,8 @@
             $scope.RegionMasterList = resp[16].data;
             $scope.LTAApplicationOwnerList = resp[17].data;
             binddata($scope.CountryMasterList);
-        });
-        $timeout(function () {
             StrategyService.HideLoader();
-        }, 1000)
+        });
     };
 
     $scope.showadd = function () {

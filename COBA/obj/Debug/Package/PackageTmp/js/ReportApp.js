@@ -5,10 +5,6 @@ var urltype = '';
 
 var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster', 'datatables']);
 
-//ReportApp.controller('MainController', function ($scope, $rootScope) {
-
-//});
-
 ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', 'ApiCall', function ($scope, $rootScope, UserFactory, ApiCall) {
     $scope.rootname = 'Index';
     $scope.MenuName = 'Home';
@@ -28,7 +24,6 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'UserFactory', '
     $scope.notificationdata = [];
     $rootScope.UserInfo = {};
     $scope.MenuList = [];
-
     $scope.updatemenuclick = function (menu) {
         sessionStorage.setItem('menuname', menu.MenuName);
         sessionStorage.setItem('menupath', menu.Path);
