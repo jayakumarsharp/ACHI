@@ -11,7 +11,7 @@ namespace BRDFountain.Controllers
     [SessionState(System.Web.SessionState.SessionStateBehavior.Default)]
     public class HomeController : Controller
     {
-        
+
         #region Private Variables
         private static readonly ILog log = LogManager.GetLogger(typeof(HomeController));
         private DbOperations _dbOperations = new DbOperations();
@@ -83,24 +83,25 @@ namespace BRDFountain.Controllers
                 else if (string.IsNullOrEmpty(passWord))
                 {
                     return "Please enter the Password";
-
                 }
                 else
                 {
+                    log.InfoFormat("Login request : {0}", userName);
                     List<UserMaster> lst = _dbOperations.GetUser(userName);
-
                     if (lst.Count > 0)
                     {
                         if (lst[0].IsADUser == "No" && passWord == EncryptLib.DecodeFrom64(lst[0].Password))
                         {
                             FormsAuthentication.SetAuthCookie(userName, false);
                             Session["UserName"] = userName;
+                            Session["DisplayName"] = lst[0].UserName;
                             return "Logged in successfully";
                         }
                         else if ((userName == lst[0].userId) && passWord == "welcome@17")
                         {
                             FormsAuthentication.SetAuthCookie(userName, false);
                             Session["UserName"] = userName;
+                            Session["DisplayName"] = userName;
                             return "Logged in successfully";
                         }
                         else
@@ -116,8 +117,6 @@ namespace BRDFountain.Controllers
                         return "Login failed please check the credentials you entered";
                     }
                 }
-
-
             }
             catch (Exception ex)
             {

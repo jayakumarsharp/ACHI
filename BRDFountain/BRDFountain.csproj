@@ -2038,7 +2038,6 @@
     <Content Include="js\animate.js" />
     <Content Include="js\Config.js" />
     <Content Include="js\controllers\ApplicationCategoryMasterController.js" />
-    <Content Include="js\controllers\ApplicationMasterController.js" />
     <Content Include="js\controllers\ApprovalsController.js" />
     <Content Include="js\controllers\BusinessLineMasterController.js" />
     <Content Include="js\controllers\BusinessMapping.js" />
@@ -2066,7 +2065,6 @@
     <Content Include="js\controllers\StrategyController.js" />
     <Content Include="js\controllers\StrategytypeMasterController.js" />
     <Content Include="js\controllers\SystemFlowMasterController.js" />
-    <Content Include="js\controllers\TransferSettingsController.js" />
     <Content Include="js\controllers\VenuetypeMasterController.js" />
     <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
@@ -2596,20 +2594,19 @@
     <Content Include="Views\Main\UserManagement.cshtml" />
     <Content Include="Views\Main\RoleManagement.cshtml" />
     <Content Include="Views\Main\BusinessSector.cshtml" />
-    <Content Include="Views\Main\ApplicationMaster.cshtml" />
     <Content Include="Views\Main\ConfirmModal.cshtml" />
-    <Content Include="Views\Main\FTAApplicationCode.cshtml" />
-    <Content Include="Views\Main\FTAStrategyCode.cshtml" />
+    <Content Include="Views\Main\LTAApplicationCode.cshtml" />
+    <Content Include="Views\Main\LTAStrategyCode.cshtml" />
     <Content Include="Views\Main\DiscretionaryCode.cshtml" />
     <Content Include="Views\Main\BusinessSuffix.cshtml" />
     <Content Include="Views\Main\Business.cshtml" />
     <Content Include="Views\Main\ParentID.cshtml" />
     <Content Include="Views\Main\ChildID.cshtml" />
     <Content Include="Views\Main\BusinessLine.cshtml" />
-    <Content Include="Views\Main\FTAApplicationName.cshtml" />
-    <Content Include="Views\Main\FTAApplicationOwner.cshtml" />
-    <Content Include="Views\Main\FTAStrategyName.cshtml" />
-    <Content Include="Views\Main\FTAStrategyOwner.cshtml" />
+    <Content Include="Views\Main\LTAApplicationName.cshtml" />
+    <Content Include="Views\Main\LTAApplicationOwner.cshtml" />
+    <Content Include="Views\Main\LTAStrategyName.cshtml" />
+    <Content Include="Views\Main\LTAStrategyOwner.cshtml" />
     <Content Include="Views\Main\SystemFlow.cshtml" />
     <Content Include="Views\Main\ApplicationCategory.cshtml" />
     <Content Include="Views\Main\Strategytype.cshtml" />
@@ -2619,8 +2616,8 @@
     <Content Include="Views\Main\MasterPage.cshtml" />
     <Content Include="Views\Main\MappingMaster.cshtml" />
     <Content Include="Views\Main\BusinessMapping.cshtml" />
-    <Content Include="Views\Main\FTAStrategyMapping.cshtml" />
-    <Content Include="Views\Main\FTAApplicationMapping.cshtml" />
+    <Content Include="Views\Main\LTAStrategyMapping.cshtml" />
+    <Content Include="Views\Main\LTAApplicationMapping.cshtml" />
     <Content Include="Views\Main\ReportApplicationMapping.cshtml" />
   </ItemGroup>
   <ItemGroup>

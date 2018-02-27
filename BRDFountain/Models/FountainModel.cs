@@ -32,7 +32,7 @@ namespace BRDFountain.Models
         public string RefNumber { get; set; }
         public string Version { get; set; }
         public string ChangeDesc { get; set; }
-        public string FTAShortCode { get; set; }
+        public string LTAShortCode { get; set; }
         public string CreatedDateTime { get; set; }
         public string Createdby { get; set; }
 
@@ -165,17 +165,17 @@ namespace BRDFountain.Models
     public class StrategyReportFilter
     {
         public string Region { get; set; }
-        public string FTAApplicationCode { get; set; }
-        public string FTAStrategyCode { get; set; }
+        public string LTAApplicationCode { get; set; }
+        public string LTAStrategyCode { get; set; }
         public string BusinessLine { get; set; }
         public string Country { get; set; }
-        public string FTAApplicationOwner { get; set; }
+        public string LTAApplicationOwner { get; set; }
         public string SystemFlow { get; set; }
         public string ApplicationCategory { get; set; }
         public string VenuetypeId { get; set; }
         public string ChildID { get; set; }
         public string ParentID { get; set; }
-        public string FTAApplicationNameId { get; set; }
+        public string LTAApplicationNameId { get; set; }
         public string ThirdPartyAppId { get; set; }
 
     }
@@ -196,7 +196,7 @@ namespace BRDFountain.Models
 
         public string NoOfApprover { get; set; }
         public int Version { get; set; }
-        public string SignOff { get; set; }
+        public string Attest { get; set; }
         public string SignOffDate { get; set; }
         public string SignoffBy { get; set; }
         public string IsActive { get; set; }
@@ -205,27 +205,27 @@ namespace BRDFountain.Models
         public string LastModifiedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public string Page { get; set; }
-        public int FTAApplicationCodeId { get; set; }
-        public string FTAApplicationCode { get; set; }
+        public int LTAApplicationCodeId { get; set; }
+        public string LTAApplicationCode { get; set; }
         public int BusinessSuffixId { get; set; }
         public string BusinessSuffix { get; set; }
         public int ChildIDValue { get; set; }
         public string ChildID { get; set; }
-        public int FTAStrategyNameId { get; set; }
-        public string FTAStrategyName { get; set; }
+        public int LTAStrategyNameId { get; set; }
+        public string LTAStrategyName { get; set; }
         public int StrategytypeId { get; set; }
         public string Strategytype { get; set; }
         public string GOLiveDate { get; set; }
-        public int FTAStrategyCodeId { get; set; }
-        public string FTAStrategyCode { get; set; }
-        public int FTAShortCodeId { get; set; }
-        public string FTAShortCode { get; set; }
+        public int LTAStrategyCodeId { get; set; }
+        public string LTAStrategyCode { get; set; }
+        public int LTAShortCodeId { get; set; }
+        public string LTAShortCode { get; set; }
         public int BusinessLineId { get; set; }
         public string BusinessLine { get; set; }
-        public int FTAApplicationNameId { get; set; }
-        public string FTAApplicationName { get; set; }
-        public string FTAStrategyOwnerId { get; set; }
-        public string FTAStrategyOwner { get; set; }
+        public int LTAApplicationNameId { get; set; }
+        public string LTAApplicationName { get; set; }
+        public string LTAStrategyOwnerId { get; set; }
+        public string LTAStrategyOwner { get; set; }
         public int ApplicationCategoryId { get; set; }
         public string ApplicationCategory { get; set; }
         public string DecomissionedDate { get; set; }
@@ -233,8 +233,8 @@ namespace BRDFountain.Models
         public string DiscretionaryCode { get; set; }
         public string ParentIDValue { get; set; }
         public string ParentID { get; set; }
-        public string FTAApplicationOwnerId { get; set; }
-        public string FTAApplicationOwner { get; set; }
+        public string LTAApplicationOwnerId { get; set; }
+        public string LTAApplicationOwner { get; set; }
         public string PriorityScore { get; set; }
         public string Priority { get; set; }
         public int CapacityId { get; set; }
@@ -246,8 +246,8 @@ namespace BRDFountain.Models
         public string ThirdPartyValue { get; set; }
         public int BusinessId { get; set; }
         public string Business { get; set; }
-        public string FTAApplicationMappingId { get; set; }
-        public string FTAStrategyMappingId { get; set; }
+        public string LTAApplicationMappingId { get; set; }
+        public string LTAStrategyMappingId { get; set; }
         public string BusinessMappingId { get; set; }
         public string Systemflowfile { get; set; }
         public string Decommissionedfile { get; set; }
@@ -255,6 +255,9 @@ namespace BRDFountain.Models
         public string ExistingSystemflowfile { get; set; }
         public string ExistingDecommissionedfile { get; set; }
 
+
+        public string SeniorManagementFunction { get; set; }
+        public string LTALongCode { get; set; }
     }
 
 
@@ -379,10 +382,10 @@ namespace BRDFountain.Models
 
 
 
-    public class FTAStrategyCodeMaster
+    public class LTAStrategyCodeMaster
     {
         public string Id { get; set; }
-        public string FTAStrategyCode { get; set; }
+        public string LTAStrategyCode { get; set; }
 
     }
     public class DiscretionaryCodeMaster
@@ -426,28 +429,28 @@ namespace BRDFountain.Models
 
 
 
-    public class FTAApplicationNameMaster
+    public class LTAApplicationNameMaster
     {
         public string Id { get; set; }
-        public string FTAApplicationName { get; set; }
+        public string LTAApplicationName { get; set; }
 
     }
-    public class FTAApplicationOwnerMaster
+    public class LTAApplicationOwnerMaster
     {
         public string Id { get; set; }
-        public string FTAApplicationOwner { get; set; }
+        public string LTAApplicationOwner { get; set; }
 
     }
-    public class FTAStrategyNameMaster
+    public class LTAStrategyNameMaster
     {
         public string Id { get; set; }
-        public string FTAStrategyName { get; set; }
+        public string LTAStrategyName { get; set; }
 
     }
-    public class FTAStrategyOwnerMaster
+    public class LTAStrategyOwnerMaster
     {
         public string Id { get; set; }
-        public string FTAStrategyOwner { get; set; }
+        public string LTAStrategyOwner { get; set; }
 
     }
     public class SystemFlowMaster
@@ -463,23 +466,24 @@ namespace BRDFountain.Models
         public string ApplicationCategory { get; set; }
 
     }
+
     public class StrategytypeMaster
     {
         public string Id { get; set; }
         public string Strategytype { get; set; }
-
+        public int Strategytypecode { get; set; }
     }
     public class VenuetypeMaster
     {
         public string Id { get; set; }
         public string Venuetype { get; set; }
-
+        public int Venuetypecode { get; set; }
     }
     public class CapacityMaster
     {
         public string Id { get; set; }
         public string Capacity { get; set; }
-
+        public int Capacitycode { get; set; }
     }
     public class PriorityScoreMaster
     {
@@ -487,10 +491,10 @@ namespace BRDFountain.Models
         public string PriorityScore { get; set; }
 
     }
-    public class FTAApplicationCodeMaster
+    public class LTAApplicationCodeMaster
     {
         public string Id { get; set; }
-        public string FTAApplicationCode { get; set; }
+        public string LTAApplicationCode { get; set; }
 
     }
 
@@ -512,27 +516,27 @@ namespace BRDFountain.Models
 
     }
 
-    public class FTAStrategyMappingMaster
+    public class LTAStrategyMappingMaster
     {
         public string Id { get; set; }
-        public string FTAStrategyNameId { get; set; }
-        public string FTAStrategyName { get; set; }
-        public string FTAStrategyCodeId { get; set; }
-        public string FTAStrategyCode { get; set; }
+        public string LTAStrategyNameId { get; set; }
+        public string LTAStrategyName { get; set; }
+        public string LTAStrategyCodeId { get; set; }
+        public string LTAStrategyCode { get; set; }
 
     }
 
-    public class FTAApplicationMappingMaster
+    public class LTAApplicationMappingMaster
     {
         public string Id { get; set; }
         public string ThirdPartyAppId { get; set; }
         public string ThirdPartyAppName { get; set; }
         public string ChildId { get; set; }
         public string ChildIdValue { get; set; }
-        public string FTAApplicationCodeId { get; set; }
-        public string FTAApplicationCode { get; set; }
-        public string FTAApplicationNameId { get; set; }
-        public string FTAApplicationName { get; set; }
+        public string LTAApplicationCodeId { get; set; }
+        public string LTAApplicationCode { get; set; }
+        public string LTAApplicationNameId { get; set; }
+        public string LTAApplicationName { get; set; }
 
         public string ParentID { get; set; }
         public string ParentIDValue { get; set; }
@@ -554,10 +558,10 @@ namespace BRDFountain.Models
         public string ThirdPartyAppName { get; set; }
         public string ChildId { get; set; }
         public string ChildIdValue { get; set; }
-        public string FTAApplicationCodeId { get; set; }
-        public string FTAApplicationCode { get; set; }
-        public string FTAApplicationNameId { get; set; }
-        public string FTAApplicationName { get; set; }
+        public string LTAApplicationCodeId { get; set; }
+        public string LTAApplicationCode { get; set; }
+        public string LTAApplicationNameId { get; set; }
+        public string LTAApplicationName { get; set; }
 
         public string ParentID { get; set; }
         public string ParentIDValue { get; set; }
@@ -574,7 +578,6 @@ namespace BRDFountain.Models
         public string CountryName { get; set; }
         public string Region { get; set; }
         public string RegionName { get; set; }
-
 
     }
 

@@ -78,17 +78,12 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult UserManagement()
         {
             return View();
         }
-        [SessionTimeout]
-        public ActionResult ApplicationMaster()
-        {
-            return View();
-        }
-
 
         [SessionTimeout]
         public ActionResult Region()
@@ -121,13 +116,13 @@ namespace BRDFountain.Controllers
 
 
         [SessionTimeout]
-        public ActionResult FTAApplicationCode()
+        public ActionResult LTAApplicationCode()
         {
             return View();
         }
 
         [SessionTimeout]
-        public ActionResult FTAStrategyCode()
+        public ActionResult LTAStrategyCode()
         {
             return View();
         }
@@ -158,7 +153,7 @@ namespace BRDFountain.Controllers
         }
 
         [SessionTimeout]
-        public ActionResult FTAApplicationMapping()
+        public ActionResult LTAApplicationMapping()
         {
             return View();
         }
@@ -169,7 +164,7 @@ namespace BRDFountain.Controllers
         }
 
         [SessionTimeout]
-        public ActionResult FTAStrategyMapping()
+        public ActionResult LTAStrategyMapping()
         {
             return View();
         }
@@ -197,24 +192,24 @@ namespace BRDFountain.Controllers
             return View();
         }
         [SessionTimeout]
-        public ActionResult FTAApplicationName()
+        public ActionResult LTAApplicationName()
         {
             return View();
         }
         [SessionTimeout]
-        public ActionResult FTAApplicationOwner()
-        {
-            return View();
-        }
-
-        [SessionTimeout]
-        public ActionResult FTAStrategyName()
+        public ActionResult LTAApplicationOwner()
         {
             return View();
         }
 
         [SessionTimeout]
-        public ActionResult FTAStrategyOwner()
+        public ActionResult LTAStrategyName()
+        {
+            return View();
+        }
+
+        [SessionTimeout]
+        public ActionResult LTAStrategyOwner()
         {
             return View();
         }
@@ -317,8 +312,8 @@ namespace BRDFountain.Controllers
             List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
             if (lst.Count > 0)
             {
-                string[] columns = { "RegionName", "FTAApplicationCode", "FTAStrategyCode", "FTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "FTAApplicationOwnerId", "ApplicationCategory", "FTAStrategyOwnerId", "FTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
-                byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "Strategy Report", true, columns);
+                string[] columns = { "RegionName", "LTAApplicationCode", "LTAStrategyCode", "LTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "LTAApplicationOwnerId", "ApplicationCategory", "LTAStrategyOwnerId", "LTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
+                byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Strategy Inventory Report", true, columns);
                 //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
                 string mailbox = ConfigurationManager.AppSettings["FilePath"];
                 string filepath = mailbox + "/Report/";
@@ -339,18 +334,45 @@ namespace BRDFountain.Controllers
                 return "No Records";
         }
 
+
+        public string ExportReportFilter(StrategyReportFilter filter)
+        {
+            List<ReportAppMapping> lst = _dbOperations.GetReportApplicationMappingList("");
+            if (lst.Count > 0)
+            {
+                string[] columns = { "LTAApplicationName", "LTAApplicationCode", "ChildId", "ThirdPartyAppName", "ParentID", "ApplicationOwner", "ApplicationCategory", "BusinessLine", "CountryName", "RegionName", "Attest" };
+                byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Application Inventory", true, columns);
+                //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
+                string mailbox = ConfigurationManager.AppSettings["FilePath"];
+                string filepath = mailbox + "/Report/";
+                bool exists = System.IO.Directory.Exists(@filepath);
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(@filepath);
+                string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
+                if (!System.IO.File.Exists(filepath))
+                {
+                    FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
+                    fileStream.Write(filecontent, 0, filecontent.Length);
+                    fileStream.Close();
+                }
+                return filename;
+            }
+            else
+                return "No Records";
+        }
+
         public JsonResult GetStrategyApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
+
         public JsonResult GetStrategyDelegatesApprovalByuser()
         {
             List<StrategyApprover> lst = _dbOperations.GetStrategyDelegatesApprovalByuser(Convert.ToString(Session["UserName"]));
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult GetDelegatedApprovalByuser()
         {
@@ -467,7 +489,7 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public FileResult DownLoadReportFile(string FileName)
+        public FileResult DownLoadReportFile(string FileName, string Page)
         {
             try
             {
@@ -482,8 +504,13 @@ namespace BRDFountain.Controllers
                 }
 
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath1);
-                return File(fileBytes, ExcelExportHelper.ExcelContentType, "Report.xlsx");
 
+                string name = "Report.xlsx";
+                if (Page == "Mapping")
+                    name = "LTAStrategyInventoryReport.xlsx";
+                else
+                    name = "Report.xlsx";
+                return File(fileBytes, ExcelExportHelper.ExcelContentType, name);
             }
             catch (Exception ex)
             {
@@ -562,10 +589,10 @@ namespace BRDFountain.Controllers
 
             var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
 
-            var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("FTAApplicationCode") || x.Item1.Equals("ChildIDValue")
-            || x.Item1.Equals("FTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("FTAStrategyCode") || x.Item1.Equals("FTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("FTAApplicationName") || x.Item1.Equals("FTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
-            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("FTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
-            || x.Item1.Equals("Description") || x.Item1.Equals("SignOff"));
+            var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
+            || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
+            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
+            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction"));
             string Changedata = "";
             if (data.Count() > 0)
             {
@@ -972,15 +999,15 @@ namespace BRDFountain.Controllers
             return Json(ls, JsonRequestBehavior.AllowGet);
         }
 
-        #region FTAApplicationCode
+        #region LTAApplicationCode
 
-        public JsonResult GetAllFTAApplicationCode(string FTAApplicationCodeId)
+        public JsonResult GetAllLTAApplicationCode(string LTAApplicationCodeId)
         {
             try
             {
-                log.Info("Get All FTA Application - Begin ");
-                List<FTAApplicationCodeMaster> lst = _dbOperations.GetFTAApplicationCodeList(FTAApplicationCodeId);
-                log.Info("Get All FTA Application Called - End");
+                log.Info("Get All LTA Application - Begin ");
+                List<LTAApplicationCodeMaster> lst = _dbOperations.getFTAApplicationCodeList(LTAApplicationCodeId);
+                log.Info("Get All LTA Application Called - End");
                 return Json(lst, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -990,13 +1017,13 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult AddFTAApplicationCode(FTAApplicationCodeMaster taskInfo)
+        public JsonResult AddLTAApplicationCode(LTAApplicationCodeMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.AddFTAApplicationCode(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAApplicationCode(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1006,13 +1033,13 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult ModifyFTAApplicationCode(FTAApplicationCodeMaster opp)
+        public JsonResult ModifyLTAApplicationCode(LTAApplicationCodeMaster opp)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.ModifyFTAApplicationCode(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAApplicationCode(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1022,13 +1049,13 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult DeleteFTAApplicationCode(string FTAApplicationCodeId)
+        public JsonResult DeleteLTAApplicationCode(string LTAApplicationCodeId)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.DeleteFTAApplicationCode(FTAApplicationCodeId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAApplicationCode(LTAApplicationCodeId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1038,15 +1065,15 @@ namespace BRDFountain.Controllers
             }
         }
 
-        #endregion FTAApplicationCode
+        #endregion LTAApplicationCode
 
-        #region FTAStrategyCode
+        #region LTAStrategyCode
 
-        public JsonResult GetAllFTAStrategyCode(string FTAStrategyCodeId)
+        public JsonResult GetAllLTAStrategyCode(string LTAStrategyCodeId)
         {
             try
             {
-                List<FTAStrategyCodeMaster> lst = _dbOperations.GetFTAStrategyCodeList(FTAStrategyCodeId);
+                List<LTAStrategyCodeMaster> lst = _dbOperations.getFTAStrategyCodeList(LTAStrategyCodeId);
                 return Json(lst, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1057,13 +1084,13 @@ namespace BRDFountain.Controllers
 
         }
 
-        public JsonResult AddFTAStrategyCode(FTAStrategyCodeMaster taskInfo)
+        public JsonResult AddLTAStrategyCode(LTAStrategyCodeMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.AddFTAStrategyCode(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAStrategyCode(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1073,13 +1100,13 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult ModifyFTAStrategyCode(FTAStrategyCodeMaster opp)
+        public JsonResult ModifyLTAStrategyCode(LTAStrategyCodeMaster opp)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.ModifyFTAStrategyCode(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAStrategyCode(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1089,13 +1116,13 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult DeleteFTAStrategyCode(string FTAStrategyCodeId)
+        public JsonResult DeleteLTAStrategyCode(string LTAStrategyCodeId)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.DeleteFTAStrategyCode(FTAStrategyCodeId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAStrategyCode(LTAStrategyCodeId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1105,53 +1132,53 @@ namespace BRDFountain.Controllers
             }
         }
 
-        #endregion FTAStrategyCode
+        #endregion LTAStrategyCode
 
-        #region FTAStrategyOwner
+        #region LTAStrategyOwner
 
-        public JsonResult GetAllFTAStrategyOwner(string FTAStrategyOwnerId)
+        public JsonResult GetAllLTAStrategyOwner(string LTAStrategyOwnerId)
         {
-            List<FTAStrategyOwnerMaster> lst = _dbOperations.GetFTAStrategyOwnerList(FTAStrategyOwnerId);
+            List<LTAStrategyOwnerMaster> lst = _dbOperations.getFTAStrategyOwnerList(LTAStrategyOwnerId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAStrategyOwner(FTAStrategyOwnerMaster taskInfo)
+        public JsonResult AddLTAStrategyOwner(LTAStrategyOwnerMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.AddFTAStrategyOwner(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAStrategyOwner(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult ModifyFTAStrategyOwner(FTAStrategyOwnerMaster opp)
+        public JsonResult ModifyLTAStrategyOwner(LTAStrategyOwnerMaster opp)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.ModifyFTAStrategyOwner(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAStrategyOwner(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult DeleteFTAStrategyOwner(string FTAStrategyOwnerId)
+        public JsonResult DeleteLTAStrategyOwner(string LTAStrategyOwnerId)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.DeleteFTAStrategyOwner(FTAStrategyOwnerId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAStrategyOwner(LTAStrategyOwnerId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        #endregion FTAStrategyOwner
+        #endregion LTAStrategyOwner
 
         #region DiscretionaryCode
 
@@ -1443,152 +1470,152 @@ namespace BRDFountain.Controllers
 
         #endregion BusinessLine
 
-        #region FTAApplicationName
+        #region LTAApplicationName
 
-        public JsonResult GetAllFTAApplicationName(string FTAApplicationNameId)
+        public JsonResult GetAllLTAApplicationName(string LTAApplicationNameId)
         {
-            List<FTAApplicationNameMaster> lst = _dbOperations.GetFTAApplicationNameList(FTAApplicationNameId);
+            List<LTAApplicationNameMaster> lst = _dbOperations.getFTAApplicationNameList(LTAApplicationNameId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAApplicationName(FTAApplicationNameMaster taskInfo)
+        public JsonResult AddLTAApplicationName(LTAApplicationNameMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.AddFTAApplicationName(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAApplicationName(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult ModifyFTAApplicationName(FTAApplicationNameMaster opp)
+        public JsonResult ModifyLTAApplicationName(LTAApplicationNameMaster opp)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.ModifyFTAApplicationName(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAApplicationName(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult DeleteFTAApplicationName(string FTAApplicationNameId)
+        public JsonResult DeleteLTAApplicationName(string LTAApplicationNameId)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.DeleteFTAApplicationName(FTAApplicationNameId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAApplicationName(LTAApplicationNameId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        #endregion FTAApplicationName
+        #endregion LTAApplicationName
 
-        #region FTAApplicationOwner
+        #region LTAApplicationOwner
 
-        public JsonResult GetAllFTAApplicationOwner(string FTAApplicationOwnerId)
+        public JsonResult GetAllLTAApplicationOwner(string LTAApplicationOwnerId)
         {
-            List<FTAApplicationOwnerMaster> lst = _dbOperations.GetFTAApplicationOwnerList(FTAApplicationOwnerId);
+            List<LTAApplicationOwnerMaster> lst = _dbOperations.getFTAApplicationOwnerList(LTAApplicationOwnerId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAApplicationOwner(FTAApplicationOwnerMaster taskInfo)
+        public JsonResult AddLTAApplicationOwner(LTAApplicationOwnerMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.AddFTAApplicationOwner(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAApplicationOwner(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult ModifyFTAApplicationOwner(FTAApplicationOwnerMaster opp)
+        public JsonResult ModifyLTAApplicationOwner(LTAApplicationOwnerMaster opp)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.ModifyFTAApplicationOwner(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAApplicationOwner(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult DeleteFTAApplicationOwner(string FTAApplicationOwnerId)
+        public JsonResult DeleteLTAApplicationOwner(string LTAApplicationOwnerId)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.DeleteFTAApplicationOwner(FTAApplicationOwnerId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAApplicationOwner(LTAApplicationOwnerId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        #endregion FTAApplicationOwner
+        #endregion LTAApplicationOwner
 
-        #region FTAStrategyName
+        #region LTAStrategyName
 
-        public JsonResult GetAllFTAStrategyName(string FTAStrategyNameId)
+        public JsonResult GetAllLTAStrategyName(string LTAStrategyNameId)
         {
-            List<FTAStrategyNameMaster> lst = _dbOperations.GetFTAStrategyNameList(FTAStrategyNameId);
+            List<LTAStrategyNameMaster> lst = _dbOperations.getFTAStrategyNameList(LTAStrategyNameId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAStrategyName(FTAStrategyNameMaster taskInfo)
+        public JsonResult AddLTAStrategyName(LTAStrategyNameMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.AddFTAStrategyName(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAStrategyName(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult ModifyFTAStrategyName(FTAStrategyNameMaster opp)
+        public JsonResult ModifyLTAStrategyName(LTAStrategyNameMaster opp)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.ModifyFTAStrategyName(opp, out errocode, out errordesc);
+                _dbOperations.ModifyLTAStrategyName(opp, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        public JsonResult DeleteFTAStrategyName(string FTAStrategyNameId)
+        public JsonResult DeleteLTAStrategyName(string LTAStrategyNameId)
         {
             try
             {
                 string errordesc = "";
 
                 int errocode = 0;
-                _dbOperations.DeleteFTAStrategyName(FTAStrategyNameId, out errocode, out errordesc);
+                _dbOperations.DeleteLTAStrategyName(LTAStrategyNameId, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e) { log.Error(e); return null; }
         }
 
-        #endregion FTAStrategyName
+        #endregion LTAStrategyName
 
         #region ApplicationCategory
 
@@ -1797,15 +1824,15 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAllFTAStrategyMappingbyId(string Id)
+        public JsonResult GetAllLTAStrategyMappingbyId(string Id)
         {
-            List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingListbyId(Id);
+            List<LTAStrategyMappingMaster> lst = _dbOperations.getFTAStrategyMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAllFTAApplicationMappingbyId(string Id)
+        public JsonResult GetAllLTAApplicationMappingbyId(string Id)
         {
-            List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingListbyId(Id);
+            List<LTAApplicationMappingMaster> lst = _dbOperations.getFTAApplicationMappingListbyId(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
@@ -1835,52 +1862,52 @@ namespace BRDFountain.Controllers
 
         #endregion BusinessMapping
 
-        #region FTAStrategyMapping
+        #region LTAStrategyMapping
 
         public JsonResult GetStrategyVersionLog(string Id)
         {
             List<StrategyVersionLog> lst = _dbOperations.GetStrategyVersionLog(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetAllFTAStrategyMapping(string FTAStrategyId)
+        public JsonResult GetAllLTAStrategyMapping(string LTAStrategyId)
         {
-            List<FTAStrategyMappingMaster> lst = _dbOperations.GetFTAStrategyMappingList(FTAStrategyId);
+            List<LTAStrategyMappingMaster> lst = _dbOperations.getFTAStrategyMappingList(LTAStrategyId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAStrategyMapping(FTAStrategyMappingMaster taskInfo)
+        public JsonResult AddLTAStrategyMapping(LTAStrategyMappingMaster taskInfo)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.AddFTAStrategyMapping(taskInfo, out errocode, out errordesc);
+            _dbOperations.AddLTAStrategyMapping(taskInfo, out errocode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult DeleteFTAStrategyMapping(string Id)
+        public JsonResult DeleteLTAStrategyMapping(string Id)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.DeleteFTAStrategyMapping(Id, out errocode, out errordesc);
+            _dbOperations.DeleteLTAStrategyMapping(Id, out errocode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion FTAStrategyMapping
+        #endregion LTAStrategyMapping
 
-        #region FTAApplicationMapping
+        #region LTAApplicationMapping
 
-        public JsonResult GetAllFTAApplicationMapping(string BusinessId)
+        public JsonResult GetAllLTAApplicationMapping(string BusinessId)
         {
-            List<FTAApplicationMappingMaster> lst = _dbOperations.GetFTAApplicationMappingList(BusinessId);
+            List<LTAApplicationMappingMaster> lst = _dbOperations.getFTAApplicationMappingList(BusinessId);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFTAApplicationMapping(FTAApplicationMappingMaster taskInfo)
+        public JsonResult AddLTAApplicationMapping(LTAApplicationMappingMaster taskInfo)
         {
             try
             {
                 string errordesc = "";
                 int errocode = 0;
-                _dbOperations.AddFTAApplicationMapping(taskInfo, out errocode, out errordesc);
+                _dbOperations.AddLTAApplicationMapping(taskInfo, out errocode, out errordesc);
                 return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -1889,15 +1916,15 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult DeleteFTAApplicationMapping(string Id)
+        public JsonResult DeleteLTAApplicationMapping(string Id)
         {
             string errordesc = "";
             int errocode = 0;
-            _dbOperations.DeleteFTAApplicationMapping(Id, out errocode, out errordesc);
+            _dbOperations.DeleteLTAApplicationMapping(Id, out errocode, out errordesc);
             return Json(errordesc, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion FTAApplicationMapping
+        #endregion LTAApplicationMapping
 
 
         #region ReportApplicationMapping
@@ -1936,9 +1963,6 @@ namespace BRDFountain.Controllers
             List<ReportAppMapping> lst = _dbOperations.GetReportApplicationfilter(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-
-
-
 
         #endregion ReportApplicationMapping
     }

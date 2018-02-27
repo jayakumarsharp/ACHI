@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -495,11 +494,11 @@ public class DbOperations
                                    {
                                        Id = Convert.ToInt32(row["Id"]),
                                        RefNumber = Convert.ToString(row["RefNumber"]),
-                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
-                                       FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                       LTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
                                        DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
                                        DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
@@ -510,16 +509,16 @@ public class DbOperations
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
                                        BusinessLine = Convert.ToString(row["BusinessLine"]),
-                                       FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                       FTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
                                        ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                       FTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
                                        Strategytype = Convert.ToString(row["StrategyType"]),
                                        VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
@@ -534,7 +533,7 @@ public class DbOperations
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
-                                       SignOff = Convert.ToString(row["SignOff"]),
+                                       Attest = Convert.ToString(row["SignOff"]),
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
@@ -548,11 +547,14 @@ public class DbOperations
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
-                                       FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
-                                       FTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
+                                       LTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
+                                       LTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
                                        BusinessMappingId = Convert.ToString(row["BusinessMappingId"]),
                                        ThirdPartyAppId = Convert.ToInt32(row["ThirdPartyAppId"]),
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
+                                       SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
+                                       LTALongCode = Convert.ToString(row["LTALongCode"]),
+                                       
                                    }).ToList();
                         }
                     }
@@ -605,11 +607,11 @@ public class DbOperations
                                    {
                                        Id = Convert.ToInt32(row["Id"]),
                                        RefNumber = Convert.ToString(row["RefNumber"]),
-                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
-                                       FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                       LTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
                                        DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
                                        DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
@@ -620,16 +622,16 @@ public class DbOperations
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
                                        BusinessLine = Convert.ToString(row["BusinessLine"]),
-                                       FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                       FTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
                                        ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                       FTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
                                        Strategytype = Convert.ToString(row["StrategyType"]),
                                        VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
@@ -644,7 +646,7 @@ public class DbOperations
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
-                                       SignOff = Convert.ToString(row["SignOff"]),
+                                       Attest = Convert.ToString(row["SignOff"]),
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
@@ -658,11 +660,13 @@ public class DbOperations
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
-                                       FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
-                                       FTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
+                                       LTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
+                                       LTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
                                        BusinessMappingId = Convert.ToString(row["BusinessMappingId"]),
                                        ThirdPartyAppId = Convert.ToInt32(row["ThirdPartyAppId"]),
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
+                                       SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
+                                       LTALongCode = Convert.ToString(row["LTALongCode"]),
                                    }).ToList();
                         }
                     }
@@ -698,15 +702,15 @@ public class DbOperations
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", filter.FTAApplicationCode));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", filter.FTAStrategyCode));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", filter.LTAApplicationCode));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", filter.LTAStrategyCode));
                     cmd.Parameters.Add(new SqlParameter("i_BusinessLine", filter.BusinessLine));
                     cmd.Parameters.Add(new SqlParameter("i_Region", filter.Region));
                     cmd.Parameters.Add(new SqlParameter("i_Country", filter.Country));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", filter.FTAApplicationOwner));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", filter.LTAApplicationOwner));
                     cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
                     cmd.Parameters.Add(new SqlParameter("i_VenueType", filter.VenuetypeId));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", filter.FTAApplicationNameId));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", filter.LTAApplicationNameId));
                     cmd.Parameters.Add(new SqlParameter("i_ParentID", filter.ParentID));
                     cmd.Parameters.Add(new SqlParameter("i_ChildID", filter.ChildID));
                     cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", filter.ThirdPartyAppId));
@@ -723,11 +727,11 @@ public class DbOperations
                                    {
                                        Id = Convert.ToInt32(row["Id"]),
                                        RefNumber = Convert.ToString(row["RefNumber"]),
-                                       FTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
-                                       FTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAShortCode = Convert.ToString(row["FTAShortCodeId"]),
+                                       LTAApplicationCodeId = Convert.ToInt32(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAStrategyCodeId = Convert.ToInt32(row["FTAStrategyCodeId"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
                                        DiscretionaryCodeId = Convert.ToInt32(row["DiscretionaryCodeId"]),
                                        DiscretionaryCode = Convert.ToString(row["Discretionarycode"]),
                                        BusinessSuffixId = Convert.ToInt32(row["BusinessSuffixId"]),
@@ -738,16 +742,16 @@ public class DbOperations
                                        ChildIDValue = Convert.ToInt32(row["ChildIdValue"]),
                                        BusinessLineId = Convert.ToInt32(row["BusinessLineId"]),
                                        BusinessLine = Convert.ToString(row["BusinessLine"]),
-                                       FTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
-                                       FTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationNameId = Convert.ToInt32(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationOwnerId = Convert.ToString(row["FTAApplicationOwnerId"]),
+                                       LTAApplicationOwner = Convert.ToString(row["FTAApplicationOwnerId"]),
                                        ApplicationCategoryId = Convert.ToInt32(row["ApplicationCategoryId"]),
                                        ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
-                                       FTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
-                                       FTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyOwnerId = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyOwner = Convert.ToString(row["FTAStrategyOwnerId"]),
+                                       LTAStrategyNameId = Convert.ToInt32(row["FTAStrategyNameId"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        StrategytypeId = Convert.ToInt32(row["StrategyTypeId"]),
                                        Strategytype = Convert.ToString(row["StrategyType"]),
                                        VenueTypeId = Convert.ToInt32(row["VenueTypeId"]),
@@ -761,7 +765,7 @@ public class DbOperations
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
-                                       SignOff = (Convert.ToString(row["SignOff"]) == "" || Convert.ToString(row["SignOff"]) == "False") ? "No" : "Yes",
+                                       Attest = (Convert.ToString(row["SignOff"]) == "" || Convert.ToString(row["SignOff"]) == "False") ? "No" : "Yes",
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
@@ -775,11 +779,13 @@ public class DbOperations
                                        GOLiveDate = Convert.ToString(row["GoLiveDate"]),
                                        BusinessId = Convert.ToInt32(row["BusinessId"]),
                                        Business = Convert.ToString(row["business"]),
-                                       FTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
-                                       FTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
+                                       LTAApplicationMappingId = Convert.ToString(row["FTAApplicationMappingId"]),
+                                       LTAStrategyMappingId = Convert.ToString(row["FTAStrategyMappingId"]),
                                        BusinessMappingId = Convert.ToString(row["BusinessMappingId"]),
                                        ThirdPartyAppId = Convert.ToInt32(row["ThirdPartyAppId"]),
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
+                                       SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
+                                       LTALongCode = Convert.ToString(row["LTALongCode"]),
                                    }).ToList();
                         }
                     }
@@ -826,17 +832,17 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_CountryNameList", _StrategyInfo.CountryNameList));
                 cmd.Parameters.Add(new SqlParameter("i_RegionId", _StrategyInfo.Region));
                 cmd.Parameters.Add(new SqlParameter("i_Description", _StrategyInfo.Description));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", _StrategyInfo.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", _StrategyInfo.LTAApplicationCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessSuffixId", _StrategyInfo.BusinessSuffixId));
                 cmd.Parameters.Add(new SqlParameter("i_ChildID", _StrategyInfo.ChildID));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", _StrategyInfo.FTAStrategyNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", _StrategyInfo.LTAStrategyNameId));
                 cmd.Parameters.Add(new SqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
                 cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", _StrategyInfo.FTAStrategyCodeId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAShortCode", _StrategyInfo.FTAShortCode));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", _StrategyInfo.LTAStrategyCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAShortCode", _StrategyInfo.LTAShortCode));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", _StrategyInfo.FTAApplicationNameId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.FTAStrategyOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", _StrategyInfo.LTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwnerId", _StrategyInfo.LTAStrategyOwnerId));
                 cmd.Parameters.Add(new SqlParameter("i_ApplicationCategoryId", _StrategyInfo.ApplicationCategoryId));
                 if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
                     cmd.Parameters.Add(new SqlParameter("i_DecommissionedDate", DecomissionedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
@@ -844,19 +850,22 @@ public class DbOperations
                     cmd.Parameters.Add(new SqlParameter("i_DecommissionedDate", null));
                 cmd.Parameters.Add(new SqlParameter("i_DiscretionaryCodeId", _StrategyInfo.DiscretionaryCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_ParentID", _StrategyInfo.ParentID));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.FTAApplicationOwnerId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwnerId", _StrategyInfo.LTAApplicationOwnerId));
                 cmd.Parameters.Add(new SqlParameter("i_PriorityScore", _StrategyInfo.PriorityScore));
                 cmd.Parameters.Add(new SqlParameter("i_Priority", _StrategyInfo.Priority));
                 cmd.Parameters.Add(new SqlParameter("i_CapacityId", _StrategyInfo.CapacityId));
                 cmd.Parameters.Add(new SqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
                 cmd.Parameters.Add(new SqlParameter("i_Version", _StrategyInfo.Version));
-                cmd.Parameters.Add(new SqlParameter("i_SignOff", _StrategyInfo.SignOff));
+                cmd.Parameters.Add(new SqlParameter("i_SignOff", _StrategyInfo.Attest));
 
                 cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", _StrategyInfo.ThirdPartyAppId));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessId", _StrategyInfo.BusinessId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationMappingId", _StrategyInfo.FTAApplicationMappingId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyMappingId", _StrategyInfo.FTAStrategyMappingId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationMappingId", _StrategyInfo.LTAApplicationMappingId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyMappingId", _StrategyInfo.LTAStrategyMappingId));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
+
+                cmd.Parameters.Add(new SqlParameter("i_SeniorManagementFunction", _StrategyInfo.SeniorManagementFunction));
+                cmd.Parameters.Add(new SqlParameter("i_LTALongCode", _StrategyInfo.LTALongCode));
                 cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
 
                 cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 500));
@@ -950,7 +959,7 @@ public class DbOperations
                                        Id = Convert.ToInt32(row["Id"]),
                                        RefNumber = Convert.ToString(row["RefNumber"]),
                                        ChangeDesc = Convert.ToString(row["ChangeDesc"]),
-                                       FTAShortCode = Convert.ToString(row["FTAShortCode"]),
+                                       LTAShortCode = Convert.ToString(row["FTAShortCode"]),
                                        Version = Convert.ToString(row["Version"]),
                                        CreatedDateTime = Convert.ToString(row["CreatedDate"]),
                                        Createdby = Convert.ToString(row["Createdby"])
@@ -991,28 +1000,7 @@ public class DbOperations
     #region User    
 
     #endregion User    
-
-    public void AddRightsForRoles(string roleName, string menuRights, out int errorCode, out string errorDesc)
-    {
-
-        errorDesc = "";
-        errorCode = 0;
-        string query = "INSERT INTO tableinfo (name, age) VALUES('John Smith', '33')";
-
-
-        if (this.OpenConnection() == true)
-        {
-
-            SqlCommand cmd = new SqlCommand(query, connection);
-
-
-            cmd.ExecuteNonQuery();
-
-
-            this.CloseConnection();
-        }
-    }
-
+    
     private bool OpenConnection()
     {
         try
@@ -2643,13 +2631,13 @@ public class DbOperations
     #endregion Region
 
 
-    #region FTAApplicationCode
+    #region LTAApplicationCode
 
-    public List<FTAApplicationCodeMaster> GetFTAApplicationCodeList(string TaskTypeId)
+    public List<LTAApplicationCodeMaster> getFTAApplicationCodeList(string TaskTypeId)
     {
         try
         {
-            List<FTAApplicationCodeMaster> lst = new List<FTAApplicationCodeMaster>();
+            List<LTAApplicationCodeMaster> lst = new List<LTAApplicationCodeMaster>();
             string query = "sp_getallFTAApplicationCode";
 
             if (this.OpenConnection() == true)
@@ -2667,9 +2655,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAApplicationCodeMaster
+                                   select new LTAApplicationCodeMaster
                                    {
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -2687,7 +2675,7 @@ public class DbOperations
     }
 
 
-    public void AddFTAApplicationCode(FTAApplicationCodeMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAApplicationCode(LTAApplicationCodeMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2698,7 +2686,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", opp.FTAApplicationCode));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", opp.LTAApplicationCode));
 
                 if (this.OpenConnection() == true)
                 {
@@ -2714,7 +2702,7 @@ public class DbOperations
         }
     }
 
-    public void ModifyFTAApplicationCode(FTAApplicationCodeMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAApplicationCode(LTAApplicationCodeMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2725,7 +2713,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", Opp.FTAApplicationCode));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", Opp.LTAApplicationCode));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();
@@ -2740,7 +2728,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAApplicationCode(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAApplicationCode(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2765,15 +2753,15 @@ public class DbOperations
         }
     }
 
-    #endregion FTAApplicationCode
+    #endregion LTAApplicationCode
 
-    #region FTAStrategyCode
+    #region LTAStrategyCode
 
-    public List<FTAStrategyCodeMaster> GetFTAStrategyCodeList(string TaskTypeId)
+    public List<LTAStrategyCodeMaster> getFTAStrategyCodeList(string TaskTypeId)
     {
         try
         {
-            List<FTAStrategyCodeMaster> lst = new List<FTAStrategyCodeMaster>();
+            List<LTAStrategyCodeMaster> lst = new List<LTAStrategyCodeMaster>();
             string query = "sp_getallFTAStrategyCode";
 
             if (this.OpenConnection() == true)
@@ -2791,9 +2779,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAStrategyCodeMaster
+                                   select new LTAStrategyCodeMaster
                                    {
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -2811,7 +2799,7 @@ public class DbOperations
         }
     }
 
-    public void AddFTAStrategyCode(FTAStrategyCodeMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAStrategyCode(LTAStrategyCodeMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2821,7 +2809,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", opp.FTAStrategyCode));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", opp.LTAStrategyCode));
 
                 if (this.OpenConnection() == true)
                 {
@@ -2841,7 +2829,7 @@ public class DbOperations
         }
     }
 
-    public void ModifyFTAStrategyCode(FTAStrategyCodeMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAStrategyCode(LTAStrategyCodeMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2852,7 +2840,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", Opp.FTAStrategyCode));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", Opp.LTAStrategyCode));
 
                 if (this.OpenConnection() == true)
                 {
@@ -2868,7 +2856,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAStrategyCode(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAStrategyCode(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -2893,7 +2881,7 @@ public class DbOperations
         }
     }
 
-    #endregion FTAStrategyCode
+    #endregion LTAStrategyCode
 
     #region DiscretionaryCode
 
@@ -3702,13 +3690,13 @@ public class DbOperations
 
     #endregion BusinessLine
 
-    #region FTAApplicationName
+    #region LTAApplicationName
 
-    public List<FTAApplicationNameMaster> GetFTAApplicationNameList(string TaskTypeId)
+    public List<LTAApplicationNameMaster> getFTAApplicationNameList(string TaskTypeId)
     {
         try
         {
-            List<FTAApplicationNameMaster> lst = new List<FTAApplicationNameMaster>();
+            List<LTAApplicationNameMaster> lst = new List<LTAApplicationNameMaster>();
             string query = "sp_getallFTAApplicationName";
 
             if (this.OpenConnection() == true)
@@ -3726,9 +3714,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAApplicationNameMaster
+                                   select new LTAApplicationNameMaster
                                    {
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -3747,7 +3735,7 @@ public class DbOperations
         }
     }
 
-    public void AddFTAApplicationName(FTAApplicationNameMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAApplicationName(LTAApplicationNameMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3757,7 +3745,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", opp.FTAApplicationName));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", opp.LTAApplicationName));
 
                 if (this.OpenConnection() == true)
                 {
@@ -3778,7 +3766,7 @@ public class DbOperations
         }
     }
 
-    public void ModifyFTAApplicationName(FTAApplicationNameMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAApplicationName(LTAApplicationNameMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3789,7 +3777,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", Opp.FTAApplicationName));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationName", Opp.LTAApplicationName));
 
                 if (this.OpenConnection() == true)
                 {
@@ -3809,7 +3797,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAApplicationName(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAApplicationName(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3839,15 +3827,15 @@ public class DbOperations
         }
     }
 
-    #endregion FTAApplicationName
+    #endregion LTAApplicationName
 
-    #region FTAApplicationOwner
+    #region LTAApplicationOwner
 
-    public List<FTAApplicationOwnerMaster> GetFTAApplicationOwnerList(string TaskTypeId)
+    public List<LTAApplicationOwnerMaster> getFTAApplicationOwnerList(string TaskTypeId)
     {
         try
         {
-            List<FTAApplicationOwnerMaster> lst = new List<FTAApplicationOwnerMaster>();
+            List<LTAApplicationOwnerMaster> lst = new List<LTAApplicationOwnerMaster>();
             string query = "sp_getallFTAApplicationOwner";
 
             if (this.OpenConnection() == true)
@@ -3865,9 +3853,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAApplicationOwnerMaster
+                                   select new LTAApplicationOwnerMaster
                                    {
-                                       FTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
+                                       LTAApplicationOwner = Convert.ToString(row["FTAApplicationOwner"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -3887,7 +3875,7 @@ public class DbOperations
         }
     }
 
-    public void AddFTAApplicationOwner(FTAApplicationOwnerMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAApplicationOwner(LTAApplicationOwnerMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3897,7 +3885,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", opp.FTAApplicationOwner));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", opp.LTAApplicationOwner));
 
                 if (this.OpenConnection() == true)
                 {
@@ -3918,7 +3906,7 @@ public class DbOperations
 
     }
 
-    public void ModifyFTAApplicationOwner(FTAApplicationOwnerMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAApplicationOwner(LTAApplicationOwnerMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3929,7 +3917,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", Opp.FTAApplicationOwner));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", Opp.LTAApplicationOwner));
 
                 if (this.OpenConnection() == true)
                 {
@@ -3949,7 +3937,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAApplicationOwner(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAApplicationOwner(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -3979,15 +3967,15 @@ public class DbOperations
         }
     }
 
-    #endregion FTAApplicationOwner
+    #endregion LTAApplicationOwner
 
-    #region FTAStrategyName
+    #region LTAStrategyName
 
-    public List<FTAStrategyNameMaster> GetFTAStrategyNameList(string TaskTypeId)
+    public List<LTAStrategyNameMaster> getFTAStrategyNameList(string TaskTypeId)
     {
         try
         {
-            List<FTAStrategyNameMaster> lst = new List<FTAStrategyNameMaster>();
+            List<LTAStrategyNameMaster> lst = new List<LTAStrategyNameMaster>();
             string query = "sp_getallFTAStrategyName";
 
             if (this.OpenConnection() == true)
@@ -4005,9 +3993,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAStrategyNameMaster
+                                   select new LTAStrategyNameMaster
                                    {
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -4027,7 +4015,7 @@ public class DbOperations
         }
     }
 
-    public void AddFTAStrategyName(FTAStrategyNameMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAStrategyName(LTAStrategyNameMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4037,7 +4025,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", opp.FTAStrategyName));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", opp.LTAStrategyName));
 
                 if (this.OpenConnection() == true)
                 {
@@ -4057,7 +4045,7 @@ public class DbOperations
         }
     }
 
-    public void ModifyFTAStrategyName(FTAStrategyNameMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAStrategyName(LTAStrategyNameMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4068,7 +4056,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", Opp.FTAStrategyName));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyName", Opp.LTAStrategyName));
 
                 if (this.OpenConnection() == true)
                 {
@@ -4088,7 +4076,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAStrategyName(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAStrategyName(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4118,15 +4106,15 @@ public class DbOperations
         }
     }
 
-    #endregion FTAStrategyName
+    #endregion LTAStrategyName
 
-    #region FTAStrategyOwner
+    #region LTAStrategyOwner
 
-    public List<FTAStrategyOwnerMaster> GetFTAStrategyOwnerList(string TaskTypeId)
+    public List<LTAStrategyOwnerMaster> getFTAStrategyOwnerList(string TaskTypeId)
     {
         try
         {
-            List<FTAStrategyOwnerMaster> lst = new List<FTAStrategyOwnerMaster>();
+            List<LTAStrategyOwnerMaster> lst = new List<LTAStrategyOwnerMaster>();
             string query = "sp_getallFTAStrategyOwner";
 
             if (this.OpenConnection() == true)
@@ -4144,9 +4132,9 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAStrategyOwnerMaster
+                                   select new LTAStrategyOwnerMaster
                                    {
-                                       FTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
+                                       LTAStrategyOwner = Convert.ToString(row["FTAStrategyOwner"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -4166,7 +4154,7 @@ public class DbOperations
         }
     }
 
-    public void AddFTAStrategyOwner(FTAStrategyOwnerMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAStrategyOwner(LTAStrategyOwnerMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4176,7 +4164,7 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", opp.FTAStrategyOwner));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", opp.LTAStrategyOwner));
 
                 if (this.OpenConnection() == true)
                 {
@@ -4196,7 +4184,7 @@ public class DbOperations
         }
     }
 
-    public void ModifyFTAStrategyOwner(FTAStrategyOwnerMaster Opp, out int errorcode, out string errordesc)
+    public void ModifyLTAStrategyOwner(LTAStrategyOwnerMaster Opp, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4207,7 +4195,7 @@ public class DbOperations
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", Opp.FTAStrategyOwner));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyOwner", Opp.LTAStrategyOwner));
 
                 if (this.OpenConnection() == true)
                 {
@@ -4227,7 +4215,7 @@ public class DbOperations
         }
     }
 
-    public void DeleteFTAStrategyOwner(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAStrategyOwner(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -4257,7 +4245,7 @@ public class DbOperations
         }
     }
 
-    #endregion FTAStrategyOwner
+    #endregion LTAStrategyOwner
 
     #region SystemFlow
 
@@ -4521,10 +4509,8 @@ public class DbOperations
     {
         List<StrategytypeMaster> lst = new List<StrategytypeMaster>();
         string query = "sp_getallStrategytype";
-
         if (this.OpenConnection() == true)
         {
-
             using (SqlCommand cmd = new SqlCommand(query, connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -4540,6 +4526,7 @@ public class DbOperations
                                select new StrategytypeMaster
                                {
                                    Strategytype = Convert.ToString(row["Strategytype"]),
+                                   Strategytypecode = Convert.ToInt32(row["Strategytypecode"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }
@@ -4561,12 +4548,11 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_Strategytype", opp.Strategytype));
-
+            cmd.Parameters.Add(new SqlParameter("i_Strategytypecode", opp.Strategytypecode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -4585,18 +4571,16 @@ public class DbOperations
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
             cmd.Parameters.Add(new SqlParameter("i_Strategytype", Opp.Strategytype));
-
+            cmd.Parameters.Add(new SqlParameter("i_Strategytypecode", Opp.Strategytypecode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
-            //    return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
+            //return Convert.ToInt32(cmd.Parameters["param_auto_id"].Value.ToString());
         }
-
     }
 
     public void DeleteStrategytype(string TaskTypeId, out int errorcode, out string errordesc)
@@ -4649,6 +4633,7 @@ public class DbOperations
                                select new VenuetypeMaster
                                {
                                    Venuetype = Convert.ToString(row["Venuetype"]),
+                                   Venuetypecode = Convert.ToInt32(row["Venuetypecode"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }
@@ -4672,7 +4657,7 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_Venuetype", opp.Venuetype));
-
+            cmd.Parameters.Add(new SqlParameter("i_Venuetypecode", opp.Venuetypecode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
@@ -4696,7 +4681,7 @@ public class DbOperations
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
             cmd.Parameters.Add(new SqlParameter("i_Venuetype", Opp.Venuetype));
-
+            cmd.Parameters.Add(new SqlParameter("i_Venuetypecode", Opp.Venuetypecode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
@@ -4724,7 +4709,6 @@ public class DbOperations
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
                 //   cmd.Parameters["param_auto_id"].Direction = ParameterDirection.Output;
-
                 cmd.ExecuteNonQuery();
                 this.CloseConnection();
             }
@@ -4760,6 +4744,7 @@ public class DbOperations
                                select new CapacityMaster
                                {
                                    Capacity = Convert.ToString(row["Capacity"]),
+                                   Capacitycode = Convert.ToInt32(row["Capacitycode"]),
                                    Id = Convert.ToString(row["Id"]),
                                }).ToList();
                     }
@@ -4783,7 +4768,7 @@ public class DbOperations
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_Capacity", opp.Capacity));
-
+            cmd.Parameters.Add(new SqlParameter("i_Capacitycode", opp.Capacitycode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
@@ -4807,7 +4792,7 @@ public class DbOperations
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("i_id", Opp.Id));
             cmd.Parameters.Add(new SqlParameter("i_Capacity", Opp.Capacity));
-
+            cmd.Parameters.Add(new SqlParameter("i_Capacitycode", Opp.Capacitycode));
             if (this.OpenConnection() == true)
             {
                 // cmd.Parameters.AddWithValue("param_auto_id", SqlDbType.Int);
@@ -5094,13 +5079,13 @@ public class DbOperations
 
     #endregion BusinessMapping
 
-    #region FTAApplicationMapping
+    #region LTAApplicationMapping
 
-    public List<FTAApplicationMappingMaster> GetFTAApplicationMappingList(string TaskTypeId)
+    public List<LTAApplicationMappingMaster> getFTAApplicationMappingList(string TaskTypeId)
     {
         try
         {
-            List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+            List<LTAApplicationMappingMaster> lst = new List<LTAApplicationMappingMaster>();
             string query = "sp_getFTAApplicationMapping";
 
             if (this.OpenConnection() == true)
@@ -5118,16 +5103,16 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAApplicationMappingMaster
+                                   select new LTAApplicationMappingMaster
                                    {
                                        ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
                                        ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
                                        ChildId = Convert.ToString(row["ChildId"]),
                                        ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
                                        ParentID = Convert.ToString(row["ParentID"]),
                                        ParentIDValue = Convert.ToString(row["ParentIDValue"]),
                                        ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
@@ -5153,18 +5138,18 @@ public class DbOperations
         }
     }
 
-    public void AddFTAApplicationMapping(FTAApplicationMappingMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAApplicationMapping(LTAApplicationMappingMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_addFTAApplicationMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_addLTAApplicationMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.LTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.LTAApplicationCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
                 cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
                 cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
@@ -5189,13 +5174,13 @@ public class DbOperations
 
 
 
-    public void DeleteFTAApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_deleteFTAApplicationMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_deleteLTAApplicationMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
@@ -5217,10 +5202,10 @@ public class DbOperations
         }
     }
 
-    #endregion FTAApplicationMapping
+    #endregion LTAApplicationMapping
 
 
-    #region FTAApplicationMapping
+    #region LTAApplicationMapping
 
     public List<ReportAppMapping> GetReportApplicationMappingList(string TaskTypeId)
     {
@@ -5250,10 +5235,10 @@ public class DbOperations
                                        ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
                                        ChildId = Convert.ToString(row["ChildId"]),
                                        ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
                                        ParentID = Convert.ToString(row["ParentID"]),
                                        ParentIDValue = Convert.ToString(row["ParentIDValue"]),
                                        ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
@@ -5313,10 +5298,10 @@ public class DbOperations
                                        ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
                                        ChildId = Convert.ToString(row["ChildId"]),
                                        ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
                                        ParentID = Convert.ToString(row["ParentID"]),
                                        ParentIDValue = Convert.ToString(row["ParentIDValue"]),
                                        ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
@@ -5358,8 +5343,8 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.FTAApplicationNameId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.FTAApplicationCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", opp.LTAApplicationNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCodeId", opp.LTAApplicationCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_ChildId", opp.ChildId));
                 cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", opp.ThirdPartyAppId));
                 cmd.Parameters.Add(new SqlParameter("i_ParentID", opp.ParentID));
@@ -5415,15 +5400,15 @@ public class DbOperations
         }
     }
 
-    #endregion FTAApplicationMapping
+    #endregion LTAApplicationMapping
 
-    #region FTAStrategyMapping
+    #region LTAStrategyMapping
 
-    public List<FTAStrategyMappingMaster> GetFTAStrategyMappingList(string TaskTypeId)
+    public List<LTAStrategyMappingMaster> getFTAStrategyMappingList(string TaskTypeId)
     {
         try
         {
-            List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+            List<LTAStrategyMappingMaster> lst = new List<LTAStrategyMappingMaster>();
             string query = "sp_getFTAStrategyMapping";
 
             if (this.OpenConnection() == true)
@@ -5441,12 +5426,12 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAStrategyMappingMaster
+                                   select new LTAStrategyMappingMaster
                                    {
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                       FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                       FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
@@ -5465,18 +5450,18 @@ public class DbOperations
         }
     }
 
-    public void AddFTAStrategyMapping(FTAStrategyMappingMaster opp, out int errorcode, out string errordesc)
+    public void AddLTAStrategyMapping(LTAStrategyMappingMaster opp, out int errorcode, out string errordesc)
     {
         try
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_addFTAStrategyMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_addLTAStrategyMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", opp.FTAStrategyNameId));
-                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", opp.FTAStrategyCodeId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", opp.LTAStrategyNameId));
+                cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", opp.LTAStrategyCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 50));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
@@ -5496,7 +5481,7 @@ public class DbOperations
 
 
 
-    public void DeleteFTAStrategyMapping(string TaskTypeId, out int errorcode, out string errordesc)
+    public void DeleteLTAStrategyMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
         {
@@ -5524,7 +5509,7 @@ public class DbOperations
         }
     }
 
-    #endregion FTAStrategyMapping
+    #endregion LTAStrategyMapping
 
 
     public List<ThirdPartyApp> GetThirdPartyAppList(string TaskTypeId)
@@ -5616,11 +5601,11 @@ public class DbOperations
         }
     }
 
-    public List<FTAApplicationMappingMaster> GetFTAApplicationMappingListbyId(string Id)
+    public List<LTAApplicationMappingMaster> getFTAApplicationMappingListbyId(string Id)
     {
         try
         {
-            List<FTAApplicationMappingMaster> lst = new List<FTAApplicationMappingMaster>();
+            List<LTAApplicationMappingMaster> lst = new List<LTAApplicationMappingMaster>();
             string query = "sp_getFTAApplicationMappingbyId";
 
             if (this.OpenConnection() == true)
@@ -5638,16 +5623,16 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAApplicationMappingMaster
+                                   select new LTAApplicationMappingMaster
                                    {
                                        ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
                                        ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
                                        ChildId = Convert.ToString(row["ChildId"]),
                                        ChildIdValue = Convert.ToString(row["ChildIdValue"]),
-                                       FTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
-                                       FTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
-                                       FTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
-                                       FTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       LTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
                                        ParentID = Convert.ToString(row["ParentID"]),
                                        ParentIDValue = Convert.ToString(row["ParentIDValue"]),
                                        ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
@@ -5672,11 +5657,11 @@ public class DbOperations
         }
     }
 
-    public List<FTAStrategyMappingMaster> GetFTAStrategyMappingListbyId(string Id)
+    public List<LTAStrategyMappingMaster> getFTAStrategyMappingListbyId(string Id)
     {
         try
         {
-            List<FTAStrategyMappingMaster> lst = new List<FTAStrategyMappingMaster>();
+            List<LTAStrategyMappingMaster> lst = new List<LTAStrategyMappingMaster>();
             string query = "sp_getFTAStrategyMappingbyId";
 
             if (this.OpenConnection() == true)
@@ -5694,12 +5679,12 @@ public class DbOperations
                         if (dt != null && dt.Rows.Count > 0)
                         {
                             lst = (from DataRow row in dt.Rows
-                                   select new FTAStrategyMappingMaster
+                                   select new LTAStrategyMappingMaster
                                    {
-                                       FTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
-                                       FTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
-                                       FTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
-                                       FTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
+                                       LTAStrategyName = Convert.ToString(row["FTAStrategyName"]),
+                                       LTAStrategyNameId = Convert.ToString(row["FTAStrategyNameId"]),
+                                       LTAStrategyCode = Convert.ToString(row["FTAStrategyCode"]),
+                                       LTAStrategyCodeId = Convert.ToString(row["FTAStrategyCodeId"]),
                                        Id = Convert.ToString(row["Id"]),
                                    }).ToList();
                         }
