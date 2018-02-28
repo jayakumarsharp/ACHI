@@ -52,7 +52,8 @@
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
         //DTColumnBuilder.newColumn('ParentID').withTitle('Parent CSI ID'),
          DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
-         DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
+         //DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
+          DTColumnBuilder.newColumn('Status').withTitle('Status'),
         //DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
         //    .renderWith(actionsHtml)
     ];

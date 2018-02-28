@@ -554,7 +554,8 @@ public class DbOperations
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
                                        SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
-                                       
+                                       StatusId = Convert.ToString(row["StatusId"]),
+                                       Status = Convert.ToString(row["StatusName"]),
                                    }).ToList();
                         }
                     }
@@ -667,6 +668,8 @@ public class DbOperations
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
                                        SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
+                                       StatusId = Convert.ToString(row["StatusId"]),
+                                       Status = Convert.ToString(row["StatusName"]),
                                    }).ToList();
                         }
                     }
@@ -786,6 +789,8 @@ public class DbOperations
                                        ThirdPartyValue = Convert.ToString(row["ThirdPartyAppName"]),
                                        SeniorManagementFunction = Convert.ToString(row["SeniorManagementFunction"]),
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
+                                       StatusId = Convert.ToString(row["StatusId"]),
+                                       Status = Convert.ToString(row["StatusName"]),
                                    }).ToList();
                         }
                     }
@@ -821,8 +826,6 @@ public class DbOperations
             DateTime DecomissionedDate = new DateTime();
             if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
                 DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-
             using (SqlCommand cmd = new SqlCommand("sp_insert_Strategy", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -857,17 +860,15 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_VenueTypeId", _StrategyInfo.VenueTypeId));
                 cmd.Parameters.Add(new SqlParameter("i_Version", _StrategyInfo.Version));
                 cmd.Parameters.Add(new SqlParameter("i_SignOff", _StrategyInfo.Attest));
-
                 cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", _StrategyInfo.ThirdPartyAppId));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessId", _StrategyInfo.BusinessId));
                 cmd.Parameters.Add(new SqlParameter("i_FTAApplicationMappingId", _StrategyInfo.LTAApplicationMappingId));
                 cmd.Parameters.Add(new SqlParameter("i_FTAStrategyMappingId", _StrategyInfo.LTAStrategyMappingId));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessMappingId", _StrategyInfo.BusinessMappingId));
-
                 cmd.Parameters.Add(new SqlParameter("i_SeniorManagementFunction", _StrategyInfo.SeniorManagementFunction));
                 cmd.Parameters.Add(new SqlParameter("i_LTALongCode", _StrategyInfo.LTALongCode));
+                cmd.Parameters.Add(new SqlParameter("i_StatusId", _StrategyInfo.StatusId));
                 cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
-
                 cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 500));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
@@ -1000,7 +1001,7 @@ public class DbOperations
     #region User    
 
     #endregion User    
-    
+
     private bool OpenConnection()
     {
         try
@@ -5144,7 +5145,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_addLTAApplicationMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_addFTAApplicationMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
@@ -5371,7 +5372,6 @@ public class DbOperations
     }
 
 
-
     public void DeleteReportApplicationMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
         try
@@ -5399,11 +5399,9 @@ public class DbOperations
             throw e;
         }
     }
-
     #endregion LTAApplicationMapping
 
     #region LTAStrategyMapping
-
     public List<LTAStrategyMappingMaster> getFTAStrategyMappingList(string TaskTypeId)
     {
         try
@@ -5456,7 +5454,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_addLTAStrategyMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_addFTAStrategyMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
@@ -5478,8 +5476,6 @@ public class DbOperations
             throw e;
         }
     }
-
-
 
     public void DeleteLTAStrategyMapping(string TaskTypeId, out int errorcode, out string errordesc)
     {
@@ -5508,9 +5504,7 @@ public class DbOperations
             throw e;
         }
     }
-
     #endregion LTAStrategyMapping
-
 
     public List<ThirdPartyApp> GetThirdPartyAppList(string TaskTypeId)
     {
@@ -5542,10 +5536,8 @@ public class DbOperations
                         }
                     }
                 }
-
                 this.CloseConnection();
             }
-
             return lst;
         }
         catch (Exception e)
@@ -5666,7 +5658,6 @@ public class DbOperations
 
             if (this.OpenConnection() == true)
             {
-
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -5703,12 +5694,39 @@ public class DbOperations
         }
     }
 
+    public List<StatusMaster> GetAllStatusType(string TaskTypeId)
+    {
+        List<StatusMaster> lst = new List<StatusMaster>();
+        string query = "sp_getallStrategyStatus";
+        if (this.OpenConnection() == true)
+        {
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("i_Id", TaskTypeId));
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lst = (from DataRow row in dt.Rows
+                               select new StatusMaster
+                               {
+                                   StatusName = Convert.ToString(row["StatusName"]),
+                                   Id = Convert.ToString(row["Id"]),
+                               }).ToList();
+                    }
+                }
+            }
 
+            this.CloseConnection();
+        }
 
+        return lst;
+    }
     //sp_getReportApplicationMapping
-
-
-
 }
 
 

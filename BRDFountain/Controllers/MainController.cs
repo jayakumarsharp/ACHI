@@ -1836,6 +1836,13 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAllStatusType(string Id)
+        {
+            List<StatusMaster> lst = _dbOperations.GetAllStatusType(Id);
+            return Json(lst, JsonRequestBehavior.AllowGet);
+        }
+        
+
         #region BusinessMapping
 
         public JsonResult GetAllBusinessMapping(string BusinessId)

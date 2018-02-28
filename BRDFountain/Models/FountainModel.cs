@@ -258,6 +258,9 @@ namespace BRDFountain.Models
 
         public string SeniorManagementFunction { get; set; }
         public string LTALongCode { get; set; }
+        public string StatusId { get; set; }
+        public string Status { get; set; }
+
     }
 
 
@@ -473,6 +476,13 @@ namespace BRDFountain.Models
         public string Strategytype { get; set; }
         public int Strategytypecode { get; set; }
     }
+
+    public class StatusMaster
+    {
+        public string Id { get; set; }
+        public string StatusName { get; set; }
+    }
+
     public class VenuetypeMaster
     {
         public string Id { get; set; }

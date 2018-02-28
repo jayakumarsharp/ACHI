@@ -177,4 +177,9 @@ ReportApp.service('apiService', function ($http) {
         var response = $http.get(URl + 'GetAllRegion?RegionId=');
         return response;
     };
+    this.GetAllStatusType = function () {
+        var response = $http.get(URl + 'GetAllStatusType?Id=');
+        return response;
+    };
+    
 });

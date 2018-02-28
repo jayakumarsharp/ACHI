@@ -9,19 +9,15 @@
     $scope.currency = {};
     $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
     $scope.Permissions = { isWrite: false, isRead: false };
-
     $scope.selectModel = {
         Country: {}, Region: {}, LTAApplicationCode: {}, BusinessSuffix: {}, ChildID: {}, LTAStrategyName: {}, Strategytype: {}, GOLiveDate: '', LTAStrategyCode: {}, LTAShortCode: {}, BusinessLine: {}, LTAApplicationName: {}, LTAStrategyOwner: {}, ApplicationCategory: {}, Venuetype: {}, DecomissionedDate: {}, DiscretionaryCode: {}, ParentID: {}, LTAApplicationOwner: {}, PriorityScore: '', Priority: '', Capacity: {},
     };
-
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
-
     $scope.dtOptions = DTOptionsBuilder.fromSource()
     .withPaginationType('full_numbers').withOption('createdRow', createdRow)
     .withOption('rowCallback', rowCallback).withOption('scrollX', true);
-
     $scope.dtColumns = [
-        DTColumnBuilder.newColumn('Id').withTitle('ID'),
+        //DTColumnBuilder.newColumn('Id').withTitle('ID'),
         DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code'),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
@@ -33,12 +29,11 @@
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
         //DTColumnBuilder.newColumn('ParentID').withTitle('Parent CSI ID'),
          DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
-            DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
-
+            //DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
+            DTColumnBuilder.newColumn('Status').withTitle('Status'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
-
     function actionsStatus(data, type, full, meta) {
         if (data == "True")
             return '<a  class="dta-act">Attested</a>';
@@ -47,30 +42,30 @@
         }
     }
 
-    function activeStatus(data, type, full, meta) {
-        var GOLiveDate = moment(full.GOLiveDate, 'MM/DD/YYYY');
-        if (full.DecomissionedDate)
-            var DecomissionedDate = moment(full.DecomissionedDate, 'MM/DD/YYYY');
-        else
-            var DecomissionedDate = full.DecomissionedDate;
-        var currentdate = moment();
-        if (DecomissionedDate != '') {
-            if ((currentdate >= GOLiveDate && currentdate <= DecomissionedDate) || (currentdate >= DecomissionedDate && currentdate <= GOLiveDate)) // false
-                return '<a  class="dta-act">Active</a>';
-            else if (GOLiveDate >= currentdate)//&& DecomissionedDate <= currentdate)
-                return '<a  class="dta-sign">PipeLine</a>';
-            else if (DecomissionedDate < currentdate)
-                return '<a  class="dta-act-not">InActive</a>';
-        }
-        else {
-            if (GOLiveDate < currentdate)
-                return '<a  class="dta-act-not">InActive</a>';
-            else if (GOLiveDate > currentdate)
-                return '<a  class="dta-sign">PipeLine</a>';
-            else
-                return '<a  class="dta-act-not">InActive</a>';
-        }
-    }
+    //function activeStatus(data, type, full, meta) {
+    //    var GOLiveDate = moment(full.GOLiveDate, 'MM/DD/YYYY');
+    //    if (full.DecomissionedDate)
+    //        var DecomissionedDate = moment(full.DecomissionedDate, 'MM/DD/YYYY');
+    //    else
+    //        var DecomissionedDate = full.DecomissionedDate;
+    //    var currentdate = moment();
+    //    if (DecomissionedDate != '') {
+    //        if ((currentdate >= GOLiveDate && currentdate <= DecomissionedDate) || (currentdate >= DecomissionedDate && currentdate <= GOLiveDate)) // false
+    //            return '<a  class="dta-act">Active</a>';
+    //        else if (GOLiveDate >= currentdate)//&& DecomissionedDate <= currentdate)
+    //            return '<a  class="dta-sign">PipeLine</a>';
+    //        else if (DecomissionedDate < currentdate)
+    //            return '<a  class="dta-act-not">InActive</a>';
+    //    }
+    //    else {
+    //        if (GOLiveDate < currentdate)
+    //            return '<a  class="dta-act-not">InActive</a>';
+    //        else if (GOLiveDate > currentdate)
+    //            return '<a  class="dta-sign">PipeLine</a>';
+    //        else
+    //            return '<a  class="dta-act-not">InActive</a>';
+    //    }
+    //}
 
     $scope.Confirmcancel = function () {
         $('#confirmModal').modal('show');
@@ -143,11 +138,12 @@
         let GetAllApplicationCategory = apiService.GetAllApplicationCategory()
         let GetAllLTAApplicationName = apiService.GetAllLTAApplicationName()
         let GetAllLTAStrategyName = apiService.GetAllLTAStrategyName()
-        let GetAllVenuetype = apiService.GetAllVenuetype()
-        let GetAllStrategytype = apiService.GetAllStrategytype()
-        let GetAllCapacity = apiService.GetAllCapacity()
-        let GetAllRegion = apiService.GetAllRegion()
+        let GetAllVenuetype = apiService.GetAllVenuetype();
+        let GetAllStrategytype = apiService.GetAllStrategytype();
+        let GetAllCapacity = apiService.GetAllCapacity();
+        let GetAllRegion = apiService.GetAllRegion();
         let GetUsers = UserFactory.GetUser('NA');
+        let GetAllStatusType = apiService.GetAllStatusType();
         $q.all([
         GetAllCountry,
         GetAllLTAApplicationCode,
@@ -165,9 +161,10 @@
          GetAllVenuetype,
         GetAllStrategytype,
         GetAllCapacity,
-        GetAllRegion, GetUsers
+        GetAllRegion,
+        GetUsers,
+        GetAllStatusType
         ]).then(function (resp) {
-
             $scope.CountryMasterList = resp[0].data;
             $scope.LTAApplicationCodeList = resp[1].data;
             $scope.ThirdPartyList = resp[2].data;
@@ -186,6 +183,7 @@
             $scope.CapacityList = resp[15].data;
             $scope.RegionMasterList = resp[16].data;
             $scope.LTAApplicationOwnerList = resp[17].data;
+            $scope.StrategyStatusType = resp[18].data;
             binddata($scope.CountryMasterList);
             StrategyService.HideLoader();
         });
@@ -241,8 +239,9 @@
         , BusinessMappingId: $scope.selectModel.BusinessMappingId
         , Description: $scope.selectModel.Description
         , Attest: $scope.selectModel.Attest,
-        LTALongCode: $scope.selectModel.LTALongCode,
-        SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
+            LTALongCode: $scope.selectModel.LTALongCode,
+            SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
+            StatusId: $scope.selectModel.Status.Id,
         };
         if (currency != null) {
             if ($scope.selectModel.Systemflowfile) {
@@ -317,6 +316,8 @@
             $scope.selectModel.ChildID = getdynamicobject($scope.selectModel.ChildID, "ChildIDList");
             $scope.selectModel.ThirdPartyApp = getdynamicobject($scope.selectModel.ThirdPartyAppId, "ThirdPartyList");
             $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
+            $scope.selectModel.Status = getdynamicobject($scope.selectModel.StatusId, "StrategyStatusType");
+
             $scope.selectModel.Description = $scope.selectModel.Description;
             $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
             $scope.userfilter(true);
@@ -433,6 +434,7 @@
             LTAApplicationOwner: $scope.selectModel.LTAApplicationOwner.userId,
             SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
             LTALongCode: $scope.selectModel.LTALongCode,
+            StatusId: $scope.selectModel.Status.Id,
         };
         if ($scope.AllowSignOff)
             model.Attest = 'True';
