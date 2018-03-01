@@ -40,7 +40,7 @@
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
         .withOption('rowCallback', rowCallback);
     $scope.dtColumns = [
-        DTColumnBuilder.newColumn('Id').withTitle('ID'),
+        //DTColumnBuilder.newColumn('Id').withTitle('ID'),
         DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code'),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
