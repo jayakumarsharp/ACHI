@@ -118,10 +118,30 @@
         return nRow;
     }
 
-    $scope.getallalgodata = function () {
+    //function Getusermappingdata(userid) {
+    //    ApiCall.MakeApiCall("GetusercountryMapping?userId=" + userid, 'GET', '').success(function (data) {
+    //        $scope.CountryMasterList = data;
+    //        binddata($scope.CountryMasterList);
+    //    }).error(function (error) {
+    //        $scope.Error = error;
+    //    })
+    //    ApiCall.MakeApiCall("GetuserRegionMapping?userId=" + userid, 'GET', '').success(function (data) {
+    //        $scope.RegionMasterList = data;
+    //    }).error(function (error) {
+    //        $scope.Error = error;
+    //    })
+    //    ApiCall.MakeApiCall("GetBusinessMapping?userId=" + userid, 'GET', '').success(function (data) {
+    //        $scope.BusinessLineList = data;
+    //    }).error(function (error) {
+    //        $scope.Error = error;
+    //    });
+    //}
+
+
+    $scope.getallalgodata = function (userid) {
         StrategyService.ShowLoader();
         var URl = 'Main/';
-        let GetAllCountry = apiService.GetAllCountry();
+        //let GetAllCountry = apiService.GetAllCountry();
         let GetAllLTAApplicationCode = apiService.GetAllLTAApplicationCode()
         let GetAllThirdPartyAppList = apiService.GetAllThirdPartyAppList()
         let GetAllBusiness = apiService.GetAllBusiness()
@@ -130,17 +150,21 @@
         let GetAllBusinessSuffix = apiService.GetAllBusinessSuffix()
         let GetAllParentID = apiService.GetAllParentID()
         let GetAllChildID = apiService.GetAllChildID()
-        let GetAllBusinessLine = apiService.GetAllBusinessLine()
+        //let GetAllBusinessLine = apiService.GetAllBusinessLine()
         let GetAllApplicationCategory = apiService.GetAllApplicationCategory()
         let GetAllLTAApplicationName = apiService.GetAllLTAApplicationName()
         let GetAllLTAStrategyName = apiService.GetAllLTAStrategyName()
-        let GetAllVenuetype = apiService.GetAllVenuetype()
-        let GetAllStrategytype = apiService.GetAllStrategytype()
-        let GetAllCapacity = apiService.GetAllCapacity()
-        let GetAllRegion = apiService.GetAllRegion()
-
+        let GetAllVenuetype = apiService.GetAllVenuetype();
+        let GetAllStrategytype = apiService.GetAllStrategytype();
+        let GetAllCapacity = apiService.GetAllCapacity();
+        //let GetAllRegion = apiService.GetAllRegion();
+        let GetUsers = UserFactory.GetUser('NA');
+        let GetAllStatusType = apiService.GetAllStatusType();
+        let GetAllBusinessLine = apiService.GetBusinessMapping(userid)
+        let GetAllRegion = apiService.GetuserRegionMapping(userid);
+        let GetAllCountry = apiService.GetusercountryMapping(userid);
         $q.all([
-        GetAllCountry,
+        //GetAllCountry,
         GetAllLTAApplicationCode,
         GetAllThirdPartyAppList,
         GetAllBusiness,
@@ -149,42 +173,46 @@
         GetAllBusinessSuffix,
         GetAllParentID,
         GetAllChildID,
-        GetAllBusinessLine,
+        //GetAllBusinessLine,
         GetAllApplicationCategory,
         GetAllLTAApplicationName,
         GetAllLTAStrategyName,
          GetAllVenuetype,
         GetAllStrategytype,
         GetAllCapacity,
-        GetAllRegion
+        //GetAllRegion,
+        GetUsers,
+        GetAllStatusType,
+        GetAllBusinessLine,
+        GetAllRegion,
+        GetAllCountry,
         ]).then(function (resp) {
-            console.log(resp)
-            $scope.CountryMasterList = resp[0].data;
-            $scope.LTAApplicationCodeList = resp[1].data;
-            $scope.ThirdPartyList = resp[2].data;
-            $scope.BusinessList = resp[3].data;
-            $scope.LTAStrategyCodeList = resp[4].data;
-            $scope.DiscretionaryCodeList = resp[5].data;
-            $scope.BusinessSuffixList = resp[6].data;
-            $scope.ParentIDList = resp[7].data;
-            $scope.ChildIDList = resp[8].data;
-            $scope.BusinessLineList = resp[9].data;
-            $scope.ApplicationCategoryList = resp[10].data;
-            $scope.LTAApplicationNameList = resp[11].data;
-            $scope.LTAStrategyNameList = resp[12].data;
-            $scope.VenuetypeList = resp[13].data;
-            $scope.StrategytypeList = resp[14].data;
-            $scope.CapacityList = resp[15].data;
-            $scope.RegionMasterList = resp[16].data;
-
+            $scope.LTAApplicationCodeList = resp[0].data;
+            $scope.ThirdPartyList = resp[1].data;
+            $scope.BusinessList = resp[2].data;
+            $scope.LTAStrategyCodeList = resp[3].data;
+            $scope.DiscretionaryCodeList = resp[4].data;
+            $scope.BusinessSuffixList = resp[5].data;
+            $scope.ParentIDList = resp[6].data;
+            $scope.ChildIDList = resp[7].data;
+            $scope.ApplicationCategoryList = resp[8].data;
+            $scope.LTAApplicationNameList = resp[9].data;
+            $scope.LTAStrategyNameList = resp[10].data;
+            $scope.VenuetypeList = resp[11].data;
+            $scope.StrategytypeList = resp[12].data;
+            $scope.CapacityList = resp[13].data;
+            //$scope.RegionMasterList = resp[16].data;
+            $scope.LTAApplicationOwnerList = resp[14].data;
+            $scope.StrategyStatusType = resp[15].data;
+            $scope.BusinessLineList = resp[16].data;
+            $scope.RegionMasterList = resp[17].data;
+            $scope.CountryMasterList = resp[18].data;
             binddata($scope.CountryMasterList);
-        });
-        $timeout(function () {
             StrategyService.HideLoader();
-        }, 1000)
+        });
     };
 
-    $scope.getallalgodata();
+    //$scope.getallalgodata();
     $scope.activateTab = function (tabid) {
         for (var i = 0; i < $scope.pageList.length; i++) {
             $scope.pageList[i].Page = false;
@@ -564,12 +592,13 @@
     $scope.GetRightsList = function () {
         UserFactory.getloggedusername().success(function (data) {
             $scope.userId = data;
+            $scope.getallalgodata(data);
             if (data != '') {
                 reportFactory.GetRightsList($scope.userId).success(function (data) {
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Application Write') {
+                        if (value.RightName == 'Report') {
                             isRead = false;
                         }
                     })
@@ -583,7 +612,7 @@
         });
     };
 
-    // $scope.GetRightsList();
+    $scope.GetRightsList();
 
     $scope.multiselect = {
         selected: [],

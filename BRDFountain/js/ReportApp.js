@@ -24,6 +24,10 @@ ReportApp.controller('MainController', ['$scope', '$rootScope', 'StrategyService
     }
     $scope.updatemenuclick = function (path) {
         sessionStorage.setItem('menuname', path);
+        if (path == "ModelAlgoManagement") {
+            $rootScope.$emit('eventName', { message: path });
+
+        }
     }
     $scope.GetUserRoles = function () {
         UserFactory.getloggedusername().success(function (data) {
