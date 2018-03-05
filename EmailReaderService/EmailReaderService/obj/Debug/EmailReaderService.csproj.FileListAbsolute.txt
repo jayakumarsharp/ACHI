@@ -27,3 +27,10 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.pdb
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\bin\Debug\OpenPop.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csprojResolveAssemblyReference.cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.EmailReader.resources
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\WinServ_VisioConverter.ProjectInstaller.resources
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csproj.GenerateResource.Cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReaderService.csproj.CoreCompileInputs.cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.exe
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\EmailReaderService\EmailReaderService\obj\Debug\EmailReader.pdb

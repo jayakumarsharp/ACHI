@@ -165,6 +165,7 @@ namespace BRDFountain.Models
     public class StrategyReportFilter
     {
         public string Region { get; set; }
+        public string userid { get; set; }
         public string LTAApplicationCode { get; set; }
         public string LTAStrategyCode { get; set; }
         public string BusinessLine { get; set; }

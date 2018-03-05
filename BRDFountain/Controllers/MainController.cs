@@ -290,7 +290,7 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetData()
         {
-            List<Strategy> lst = _dbOperations.GetStrategyData();
+            List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername());
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
@@ -302,6 +302,7 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetStrategyReport(StrategyReportFilter filter)
         {
+            filter.userid = getloggedusername();
             List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
@@ -592,7 +593,7 @@ namespace BRDFountain.Controllers
             var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
             || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
             || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
-            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction"));
+            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction")|| x.Item1.Equals("Status"));
             string Changedata = "";
             if (data.Count() > 0)
             {

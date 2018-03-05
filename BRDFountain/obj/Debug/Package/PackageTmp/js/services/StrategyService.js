@@ -1,5 +1,5 @@
 ﻿'use strict';
-ReportApp.factory('StrategyService', ['$http','$window', function ($http,$window) {
+ReportApp.factory('StrategyService', ['$http', '$window', function ($http, $window) {
     var StrategyServiceURI = BaseURL + 'Main/';
     var StrategyServiceFactory = {};
 
@@ -78,10 +78,10 @@ ReportApp.factory('StrategyService', ['$http','$window', function ($http,$window
         $window.open(url);
     }
     StrategyServiceFactory.DownLoadReportFile = function (file) {
-        url = StrategyServiceURI + 'DownLoadReportFile?FileName=' + file ;
+        url = StrategyServiceURI + 'DownLoadReportFile?FileName=' + file;
         $window.open(url);
     }
-    
+
     StrategyServiceFactory.ShowLoader = function () {
         angular.element(document.querySelector('#loader')).removeClass('hide');
     };
@@ -95,11 +95,25 @@ ReportApp.factory('StrategyService', ['$http','$window', function ($http,$window
 
 ReportApp.service('apiService', function ($http) {
     var URl = 'Main/';
-    this.GetAllApplication =
-         function () {
-             var response = $http.get(URl + 'GetAllApplication?ApplicationId=');
-             return response;
-         };
+    this.GetusercountryMapping = function (userid) {
+        var response = $http.get(URl + 'GetusercountryMapping?userId=' + userid);
+        return response;
+    };
+    this.GetuserRegionMapping = function (userid) {
+        var response = $http.get(URl + 'GetuserRegionMapping?userId=' + userid);
+        return response;
+    };
+    this.GetBusinessMapping = function (userid) {
+        var response = $http.get(URl + 'GetBusinessMapping?userId=' + userid);
+        return response;
+    };
+
+
+
+    this.GetAllApplication = function () {
+        var response = $http.get(URl + 'GetAllApplication?ApplicationId=');
+        return response;
+    };
     this.GetAllBusinessSector = function () {
         var response = $http.get(URl + 'GetAllBusinessSector?BusinessSectorId=');
         return response;
@@ -181,5 +195,5 @@ ReportApp.service('apiService', function ($http) {
         var response = $http.get(URl + 'GetAllStatusType?Id=');
         return response;
     };
-    
+
 });

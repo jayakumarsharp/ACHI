@@ -466,6 +466,7 @@
             SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
             LTALongCode: $scope.selectModel.LTALongCode,
             StatusId: $scope.selectModel.Status.Id,
+            Status: $scope.selectModel.Status.StatusName,
         };
         if ($scope.AllowSignOff)
             model.Attest = 'True';
@@ -704,7 +705,6 @@
     $scope.GetRightsList = function () {
         UserFactory.getloggedusername().success(function (data) {
             $scope.userId = data;
-            $scope.getallalgodata();
             if (data != '') {
                 reportFactory.GetRightsList($scope.userId).success(function (data) {
                     var isRead = true, isWrite = false, isApprove = false;

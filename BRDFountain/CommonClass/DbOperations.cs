@@ -469,7 +469,7 @@ public class DbOperations
         }
     }
 
-    public List<Strategy> GetStrategyData()
+    public List<Strategy> GetStrategyData(string userId)
     {
         List<Strategy> lst = new List<Strategy>();
         //JOIN tbl_country_master C on S.CountryId = C.id 
@@ -481,6 +481,7 @@ public class DbOperations
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_userid", userId));
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -705,6 +706,7 @@ public class DbOperations
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_userid", filter.userid));
                     cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", filter.LTAApplicationCode));
                     cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", filter.LTAStrategyCode));
                     cmd.Parameters.Add(new SqlParameter("i_BusinessLine", filter.BusinessLine));

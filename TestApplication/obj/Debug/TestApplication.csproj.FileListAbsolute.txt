@@ -4,3 +4,10 @@ C:\Users\jayakumar.t\Documents\GitHub\ACHI\TestApplication\bin\TestApplication.p
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.csprojResolveAssemblyReference.cache
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.dll
 C:\Users\jayakumar.t\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.pdb
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\bin\TestApplication.dll.config
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\bin\TestApplication.dll
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\bin\TestApplication.pdb
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.csprojResolveAssemblyReference.cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.csproj.CoreCompileInputs.cache
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.dll
+C:\Users\sthirupathikumar\Documents\GitHub\ACHI\TestApplication\obj\Debug\TestApplication.pdb

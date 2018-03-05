@@ -23,6 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2066,7 +2067,6 @@
     <Content Include="js\controllers\StrategytypeMasterController.js" />
     <Content Include="js\controllers\SystemFlowMasterController.js" />
     <Content Include="js\controllers\VenuetypeMasterController.js" />
-    <Content Include="js\HomeApp.js" />
     <Content Include="js\loginApp.js" />
     <Content Include="js\ReportApp.js" />
     <Content Include="js\RoleApp.js" />
