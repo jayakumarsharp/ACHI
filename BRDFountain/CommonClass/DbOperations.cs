@@ -530,7 +530,7 @@ public class DbOperations
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
-                                       //CountryName = Convert.ToString(row["CountryName"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
@@ -644,7 +644,7 @@ public class DbOperations
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
-                                       //CountryName = Convert.ToString(row["CountryName"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
@@ -1000,9 +1000,9 @@ public class DbOperations
 
     #endregion Role
 
-    #region User    
+    #region User
 
-    #endregion User    
+    #endregion User
 
     private bool OpenConnection()
     {
@@ -5342,6 +5342,9 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
+            if (opp.Id != "" && opp.Id != null)
+                DeleteReportApplicationMapping(opp.Id, out errorcode, out errordesc);
+
             using (SqlCommand cmd = new SqlCommand("sp_addReportApplicationMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
