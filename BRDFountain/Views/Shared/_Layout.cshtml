@@ -5,10 +5,10 @@
 <!doctype html>
 <html style="height: auto; min-height: 100%;">
 <head>
-    <base href="/Trinity/">
-    @*<base href="/">*@
+    @* <base href="/Trinity/">*@
+    <base href="/">
     <meta charset="utf-8" />
-    <title> Trinity</title>
+    <title>Trinity</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <!-- Bootstrap -->
@@ -47,7 +47,7 @@
                     </div>
                     <div class="menu-main">
                         <ul class="sidebar-menu" data-widget="tree">
-                            <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"> <span class="icon"><i class="{{menu.Icon}} "></i></span> {{menu.MenuName}}</a></li>
+                            <li ng-repeat="menu in MenuList" ng-class="{'active': rootname == menu.Path }"><a href="Main/{{menu.Path}}" ng-click="updatemenuclick(menu.Path)"><span class="icon"><i class="{{menu.Icon}} "></i></span>{{menu.MenuName}}</a></li>
                             @*<li ng-class="{'active': rootname == 'MappingMaster' }"><a href="MappingMaster" ng-click="updatemenuclick('MappingMaster')"> <span class="icon"><i class="fa fa-star-o"></i></span> Mapping Page</a></li>*@
                         </ul>
                     </div>
@@ -117,6 +117,10 @@
 
         .disabledinput {
             background: #ced0da!important;
+        }
+
+        table tr {
+            font-size: 14px;
         }
     </style>
     <script>

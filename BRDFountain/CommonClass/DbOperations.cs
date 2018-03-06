@@ -5183,7 +5183,7 @@ public class DbOperations
         {
             errorcode = 0;
             errordesc = "success";
-            using (SqlCommand cmd = new SqlCommand("sp_deleteLTAApplicationMapping", connection))
+            using (SqlCommand cmd = new SqlCommand("sp_deleteFTAApplicationMapping", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
