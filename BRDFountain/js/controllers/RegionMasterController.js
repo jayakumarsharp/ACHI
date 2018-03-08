@@ -41,11 +41,15 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
+                        if (data == "success") {
                         $scope.showAddwindow = false;
                         $scope.RegionMaster = null;
                         $scope.GetAllRegionMaster();
                         $scope.editMode = false;
-                        toaster.pop('success', "Success", 'Region added successfully', null);
+                        toaster.pop('success', "Success", 'Region added successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Region! " + data.ExceptionMessage;
@@ -88,11 +92,14 @@
         if (model != null) {
             if (model.RegionName.trim()) {
                 ApiCall.MakeApiCall("ModifyRegion", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
+                    if (data == "success") {    $scope.editMode = false;
                     $scope.RegionMaster = null;
                     $scope.showAddwindow = false;
                     $scope.GetAllRegionMaster();
-                    toaster.pop('success', "Success", 'Region updated successfully', null);
+                    toaster.pop('success', "Success", 'Region updated successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding RegionMaster! " + data.ExceptionMessage;
                 });

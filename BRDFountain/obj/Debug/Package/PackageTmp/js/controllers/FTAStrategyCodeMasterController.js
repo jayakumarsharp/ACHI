@@ -47,13 +47,16 @@
                 ApiCall.MakeApiCall("AddLTAStrategyCode", 'POST', LTAStrategyCodeMaster).success(function (data) {
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
-                    } else {
+                    } else {if (data == "success") {
                         $scope.LTAStrategyCodeMaster = null;
                         $scope.GetAllLTAStrategyCodeMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
                         toaster.pop('success', "Success", 'LTA Strategy Code added successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Strategy Code! " + data.ExceptionMessage;
@@ -100,12 +103,14 @@
     $scope.UpdateLTAStrategyCodeMaster = function (model) {
         if (model != null) {
             if (model.LTAStrategyCode.trim() != "") {
-                ApiCall.MakeApiCall("ModifyLTAStrategyCode", 'POST', model).success(function (data) {
+                ApiCall.MakeApiCall("ModifyLTAStrategyCode", 'POST', model).success(function (data) {if (data == "success") {
                     $scope.editMode = false;
                     $scope.LTAStrategyCodeMaster = null;
                     $scope.GetAllLTAStrategyCodeMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'LTA Strategy Code updated successfully', null);
+                    toaster.pop('success', "Success", 'LTA Strategy Code updated successfully', null);}
+                else
+                    toaster.pop('warning', "Warning", data, null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTAStrategyCodeMaster! " + data.ExceptionMessage;
                 });

@@ -48,12 +48,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
+                        if (data == 'success') {
                         $scope.CountryMaster = null;
                         $scope.GetAllCountryMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Country added successfully', null);
+                        toaster.pop('success', "Success", 'Country added successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Country ! " + data.ExceptionMessage;
@@ -101,11 +105,15 @@
         if (model != null) {
             if (model.CountryName.trim() != "") {
                 ApiCall.MakeApiCall("ModifyCountry", 'POST', model).success(function (data) {
+                    if (data == 'success') {
                     $scope.editMode = false;
                     $scope.CountryMaster = null;
                     $scope.GetAllCountryMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'CountryMaster updated successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding CountryMaster! " + data.ExceptionMessage;
                 });

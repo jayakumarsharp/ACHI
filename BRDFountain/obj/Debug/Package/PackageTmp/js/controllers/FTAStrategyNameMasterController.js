@@ -48,12 +48,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
+                        if (data == "success") {
                         $scope.LTAStrategyNameMaster = null;
                         $scope.GetAllLTAStrategyNameMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'LTA Strategy Name added successfully', null);
+                        toaster.pop('success', "Success", 'LTA Strategy Name added successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Strategy Name ! " + data.ExceptionMessage;
@@ -100,12 +104,15 @@
     $scope.UpdateLTAStrategyNameMaster = function (model) {
         if (model != null) {
             if (model.LTAStrategyName.trim() != "") {
-                ApiCall.MakeApiCall("ModifyLTAStrategyName", 'POST', model).success(function (data) {
+                ApiCall.MakeApiCall("ModifyLTAStrategyName", 'POST', model).success(function (data) { if (data == "success") {
                     $scope.editMode = false;
                     $scope.LTAStrategyNameMaster = null;
                     $scope.GetAllLTAStrategyNameMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'LTA Strategy Name updated successfully', null);
+                    toaster.pop('success', "Success", 'LTA Strategy Name updated successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTAStrategyNameMaster! " + data.ExceptionMessage;
                 });

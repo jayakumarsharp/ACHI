@@ -46,13 +46,18 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
+                        if(data=='success'){
                         $scope.CapacityMaster = null;
                         $scope.GetAllCapacityMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
                         toaster.pop('success', "Success", 'Capacity added successfully', null);
-                    }
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
+                        }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
                 });
@@ -99,12 +104,18 @@
         if (model != null) {
             if (model.Capacity && model.Capacitycode) {
                 ApiCall.MakeApiCall("ModifyCapacity", 'POST', model).success(function (data) {
+                    if(data=='success'){
+
                     $scope.editMode = false;
                     $scope.CapacityMaster = null;
                     $scope.GetAllCapacityMaster();
                     $scope.showAddwindow = false;
                     toaster.pop('success', "Success", 'CapacityMaster updated successfully', null);
-                }).error(function (data) {
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
+                    }).error(function (data) {
                     $scope.error = "An Error has occured while Adding CapacityMaster! " + data.ExceptionMessage;
                 });
             }

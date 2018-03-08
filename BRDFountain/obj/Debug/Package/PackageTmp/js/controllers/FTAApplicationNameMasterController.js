@@ -44,12 +44,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.LTAApplicationNameMaster = null;
-                        $scope.GetAllLTAApplicationNameMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.LTAApplicationNameMaster = null;
+                            $scope.GetAllLTAApplicationNameMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'LTA Application Name added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'LTA Application Name added successfully', null);}
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA ApplicationName ! " + data.ExceptionMessage;
@@ -97,16 +101,20 @@
         if (model != null) {
             if (model.LTAApplicationName.trim() != "") {
                 ApiCall.MakeApiCall("ModifyLTAApplicationName", 'POST', model).success(function (data) {
+                    if (data == "success") {
                     $scope.editMode = false;
                     $scope.LTAApplicationNameMaster = null;
                     $scope.GetAllLTAApplicationNameMaster();
                     $scope.showAddwindow = false;
                     toaster.pop('success', "Success", 'LTA Application Name updated successfully', null);
+                }
+                else
+                    toaster.pop('warning', "Warning", data, null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Application Name Master! " + data.ExceptionMessage;
                 });
-            }
-            else {
+                }
+                else {
                 toaster.pop('warning', "Warning", 'Please enter LTA Application Name', null);
             }
         }

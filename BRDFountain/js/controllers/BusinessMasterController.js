@@ -10,7 +10,6 @@
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
         $compile(angular.element(row).contents())($scope);
     }
 
@@ -48,12 +47,17 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.BusinessMaster = null;
-                        $scope.GetAllBusinessMaster();
-                        $scope.editMode = false;
+                        if (data == 'success') {
+                            $scope.BusinessMaster = null;
+                            $scope.GetAllBusinessMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Business added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Business added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Business ! " + data.ExceptionMessage;
@@ -101,11 +105,16 @@
         if (model != null) {
             if (model.Business.trim() != "") {
                 ApiCall.MakeApiCall("ModifyBusiness", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.BusinessMaster = null;
-                    $scope.GetAllBusinessMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'BusinessMaster updated successfully', null);
+                    if (data == 'success') {
+                        $scope.editMode = false;
+                        $scope.BusinessMaster = null;
+                        $scope.GetAllBusinessMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Business updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding BusinessMaster! " + data.ExceptionMessage;
                 });

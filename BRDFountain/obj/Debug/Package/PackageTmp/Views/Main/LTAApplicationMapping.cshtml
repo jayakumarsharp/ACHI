@@ -12,25 +12,25 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>LTA Application</label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.LTAApplicationName" ng-options="item.LTAApplicationName for item in LTAApplicationNameList" title="Select LTAApplication" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.LTAApplicationName"  data-ng-disabled="editMode" ng-class="{'disabledinput': editMode  }"  ng-options="item.LTAApplicationName for item in LTAApplicationNameList" title="Select LTAApplication" style="width:100%;font-size: 0.8em" required>
                             <option value="">-Select LTA Application Name-</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>LTA Application Code</label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.LTAApplicationCode" ng-options="item.LTAApplicationCode for item in LTAApplicationCodeList" title="Select LTAApplication Code" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.LTAApplicationCode"  data-ng-disabled="editMode"  ng-class="{'disabledinput': editMode  }"  ng-options="item.LTAApplicationCode for item in LTAApplicationCodeList" title="Select LTAApplication Code" style="width:100%;font-size: 0.8em" required>
                             <option value="">-Select LTA Application Code-</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Child ID </label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ChildID" ng-options="item.ChildID for item in ChildIDList" title="Select LTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ChildID"  data-ng-disabled="editMode"  ng-class="{'disabledinput': editMode  }"  ng-options="item.ChildID for item in ChildIDList" title="Select LTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
                             <option value="">-Select LTA Application Suffix-</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Third Party Application</label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ThirdPartyApp" ng-options="item.Value for item in ThirdPartyList" title="Select LTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ThirdPartyApp"  data-ng-disabled="editMode"   ng-class="{'disabledinput': editMode  }"  ng-options="item.Value for item in ThirdPartyList" title="Select LTAApplicationSuffix" style="width:100%;font-size: 0.8em" required>
                             <option value="">-Select Third Party Application-</option>
                         </select>
                     </div>
@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Parent ID</label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ParentID" ng-options="item.ParentID for item in ParentIDList" title="Select ParentID" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ParentID"  ng-class="{'disabledinput': editMode  }"   data-ng-disabled="editMode"  ng-options="item.ParentID for item in ParentIDList" title="Select ParentID" style="width:100%;font-size: 0.8em" required>
                             <option value="">-Select Parent ID-</option>
                         </select>
                     </div>
@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                         <label>Application Category</label>
-                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
+                        <select class="form-control" name="ddlSBU" ng-model="selectModel.ApplicationCategory"  ng-class="{'disabledinput': editMode  }"  data-ng-disabled="editMode" ng-options="item.ApplicationCategory for item in ApplicationCategoryList" title="Select Application Category" style="width:100%;font-size: 0.8em" required>
                             <option value="">- Select Application Category -</option>
                         </select>
                     </div>
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="row col-md-12">
-                    <button data-ng-show="editMode" data-ng-click="UpdateLTAApplicationMaster(LTAApplicationMaster)" class="col-md-2 col-md-offset-1 btn btn-primary">Update</button>
+                    <button data-ng-show="editMode" data-ng-click="UpdateLTAApplicationMaster(selectModel)" class="col-md-2 col-md-offset-1 btn btn-primary">Update</button>
                     <button data-ng-show="!editMode" data-ng-click="add(selectModel)" class="col-md-2 col-md-offset-1 btn btn-primary">Add </button>
                     <button data-ng-click="Confirmcancel()" class="col-md-2 btn btn-primary cancel">Cancel </button>
 

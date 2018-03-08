@@ -48,13 +48,19 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.ApplicationCategoryMaster = null;
-                        $scope.GetAllApplicationCategoryMaster();
-                        $scope.editMode = false;
+                        if (data == 'success') {
+                            $scope.ApplicationCategoryMaster = null;
+                            $scope.GetAllApplicationCategoryMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'ApplicationCategory added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Application Category added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
+               
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ApplicationCategory ! " + data.ExceptionMessage;
                 });
@@ -101,11 +107,16 @@
         if (model != null) {
             if (model.ApplicationCategory.trim() != "") {
                 ApiCall.MakeApiCall("ModifyApplicationCategory", 'POST', model).success(function (data) {
+                    if (data == 'success') {
+                      
                     $scope.editMode = false;
                     $scope.ApplicationCategoryMaster = null;
                     $scope.GetAllApplicationCategoryMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'ApplicationCategoryMaster updated successfully', null);
+                    toaster.pop('success', "Success", 'Application Category updated successfully', null);
+                }
+                else
+                    toaster.pop('warning', "Warning", data, null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ApplicationCategoryMaster! " + data.ExceptionMessage;
                 });

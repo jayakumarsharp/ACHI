@@ -48,12 +48,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.ParentIDMaster = null;
-                        $scope.GetAllParentIDMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.ParentIDMaster = null;
+                            $scope.GetAllParentIDMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'ParentID added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Parent ID added successfully', null);}
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ParentID ! " + data.ExceptionMessage;
@@ -101,16 +105,21 @@
         if (model != null) {
             if (model.ParentID.trim() != "") {
                 ApiCall.MakeApiCall("ModifyParentID", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.ParentIDMaster = null;
-                    $scope.GetAllParentIDMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'ParentIDMaster updated successfully', null);
+                    if (data == "success") { 
+                        $scope.editMode = false;
+                        $scope.ParentIDMaster = null;
+                        $scope.GetAllParentIDMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Parent ID updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+                    
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ParentIDMaster! " + data.ExceptionMessage;
                 });
-            }
-            else {
+                }
+                else {
                 toaster.pop('warning', "Warning", 'Please enter ParentID', null);
             }
         }

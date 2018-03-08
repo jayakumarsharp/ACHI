@@ -45,12 +45,17 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.VenuetypeMaster = null;
-                        $scope.GetAllVenuetypeMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.VenuetypeMaster = null;
+                            $scope.GetAllVenuetypeMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Venue Type added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Venue Type added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Venue Type ! " + data.ExceptionMessage;
@@ -98,11 +103,16 @@
         if (model != null) {
             if (model.Venuetype && model.Venuetypecode) {
                 ApiCall.MakeApiCall("ModifyVenuetype", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.VenuetypeMaster = null;
-                    $scope.GetAllVenuetypeMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'Venue Type updated successfully', null);
+                    if (data == "success") {
+                        $scope.editMode = false;
+                        $scope.VenuetypeMaster = null;
+                        $scope.GetAllVenuetypeMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Venue Type updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding VenuetypeMaster! " + data.ExceptionMessage;
                 });

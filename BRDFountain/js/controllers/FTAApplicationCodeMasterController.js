@@ -48,12 +48,16 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.LTAApplicationCodeMaster = null;
+                        if (data == "success") {
+                            $scope.LTAApplicationCodeMaster = null;
                         $scope.GetAllLTAApplicationCodeMaster();
                         $scope.editMode = false;
 
                         $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'LTA Application Code added successfully', null);
+                        toaster.pop('success', "Success", 'LTA Application Code added successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Application Code  ! " + data.ExceptionMessage;
@@ -100,12 +104,15 @@
     $scope.UpdateLTAApplicationCodeMaster = function (model) {
         if (model != null) {
             if (model.LTAApplicationCode.trim() != "") {
-                ApiCall.MakeApiCall("ModifyLTAApplicationCode", 'POST', model).success(function (data) {
+                ApiCall.MakeApiCall("ModifyLTAApplicationCode", 'POST', model).success(function (data) {if (data == "success") {
                     $scope.editMode = false;
                     $scope.LTAApplicationCodeMaster = null;
                     $scope.GetAllLTAApplicationCodeMaster();
                     $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'LTA Application Code updated successfully', null);
+                    toaster.pop('success', "Success", 'LTA Application Code updated successfully', null);}
+                else
+                            toaster.pop('warning', "Warning", data, null);
+                    
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Application Code ! " + data.ExceptionMessage;
                 });

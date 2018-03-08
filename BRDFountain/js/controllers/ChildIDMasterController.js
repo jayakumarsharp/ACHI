@@ -41,12 +41,17 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.ChildIDMaster = null;
-                        $scope.GetAllChildIDMaster();
-                        $scope.editMode = false;
+                        if (data == 'success') {
+                            $scope.ChildIDMaster = null;
+                            $scope.GetAllChildIDMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'Child ID added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Child ID added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Child ID ! " + data.ExceptionMessage;
@@ -94,11 +99,17 @@
         if (model != null) {
             if (model.ChildID.trim() != "") {
                 ApiCall.MakeApiCall("ModifyChildID", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.ChildIDMaster = null;
-                    $scope.GetAllChildIDMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'Child ID updated successfully', null);
+                    if (data == 'success') {
+
+                        $scope.editMode = false;
+                        $scope.ChildIDMaster = null;
+                        $scope.GetAllChildIDMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Child ID updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding Child ID ! " + data.ExceptionMessage;
                 });

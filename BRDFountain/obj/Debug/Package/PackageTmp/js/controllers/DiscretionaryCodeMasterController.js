@@ -48,12 +48,17 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.DiscretionaryCodeMaster = null;
-                        $scope.GetAllDiscretionaryCodeMaster();
-                        $scope.editMode = false;
+                        if (data == "success") {
+                            $scope.DiscretionaryCodeMaster = null;
+                            $scope.GetAllDiscretionaryCodeMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'DiscretionaryCode added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'DiscretionaryCode added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding DiscretionaryCode ! " + data.ExceptionMessage;
@@ -101,11 +106,16 @@
         if (model != null) {
             if (model.DiscretionaryCode.trim() != "") {
                 ApiCall.MakeApiCall("ModifyDiscretionaryCode", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.DiscretionaryCodeMaster = null;
-                    $scope.GetAllDiscretionaryCodeMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'DiscretionaryCodeMaster updated successfully', null);
+                    if (data == "success") {
+                        $scope.editMode = false;
+                        $scope.DiscretionaryCodeMaster = null;
+                        $scope.GetAllDiscretionaryCodeMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'DiscretionaryCodeMaster updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding DiscretionaryCodeMaster! " + data.ExceptionMessage;
                 });

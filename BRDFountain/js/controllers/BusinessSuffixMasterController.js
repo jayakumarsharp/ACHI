@@ -48,23 +48,29 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.BusinessSuffixMaster = null;
-                        $scope.GetAllBusinessSuffixMaster();
-                        $scope.editMode = false;
+                        if (data == 'success') {
+                            $scope.BusinessSuffixMaster = null;
+                            $scope.GetAllBusinessSuffixMaster();
+                            $scope.editMode = false
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'BusinessSuffix added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Business Suffix added successfully', null);
+
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding BusinessSuffix ! " + data.ExceptionMessage;
                 });
             }
             else {
-                toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
+                toaster.pop('warning', "Warning", 'Please enter Business Suffix', null);
             }
         }
         else {
-            toaster.pop('warning', "Warning", 'Please enter BusinessSuffix', null);
+            toaster.pop('warning', "Warning", 'Please enter Business Suffix', null);
         }
 
     };
@@ -101,11 +107,16 @@
         if (model != null) {
             if (model.BusinessSuffix.trim() !== "") {
                 ApiCall.MakeApiCall("ModifyBusinessSuffix", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.BusinessSuffixMaster = null;
-                    $scope.GetAllBusinessSuffixMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'BusinessSuffixMaster updated successfully', null);
+                    if (data == 'success') {
+                        $scope.editMode = false;
+                        $scope.BusinessSuffixMaster = null;
+                        $scope.GetAllBusinessSuffixMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Business Suffix updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding BusinessSuffixMaster! " + data.ExceptionMessage;
                 });

@@ -10,7 +10,6 @@
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
         $compile(angular.element(row).contents())($scope);
     }
 
@@ -48,12 +47,17 @@
                     if (data.Error != undefined) {
                         toaster.pop('error', "Error", data.Error, null);
                     } else {
-                        $scope.BusinessLineMaster = null;
-                        $scope.GetAllBusinessLineMaster();
-                        $scope.editMode = false;
+                        
+                        if (data == 'success') {
+                            $scope.BusinessLineMaster = null;
+                            $scope.GetAllBusinessLineMaster();
+                            $scope.editMode = false;
 
-                        $scope.showAddwindow = false;
-                        toaster.pop('success', "Success", 'BusinessLine added successfully', null);
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'Business Line added successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding BusinessLine ! " + data.ExceptionMessage;
@@ -101,11 +105,16 @@
         if (model != null) {
             if (model.BusinessLine.trim() != "") {
                 ApiCall.MakeApiCall("ModifyBusinessLine", 'POST', model).success(function (data) {
-                    $scope.editMode = false;
-                    $scope.BusinessLineMaster = null;
-                    $scope.GetAllBusinessLineMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'BusinessLineMaster updated successfully', null);
+                    if (data == 'success') {
+                        $scope.editMode = false;
+                        $scope.BusinessLineMaster = null;
+                        $scope.GetAllBusinessLineMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Business Line updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding BusinessLineMaster! " + data.ExceptionMessage;
                 });

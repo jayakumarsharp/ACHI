@@ -4,7 +4,8 @@
     $scope.editMode = false;
     $scope.IsReadOnly = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
-        .withPaginationType('full_numbers').withOption('createdRow', createdRow);
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+    .withOption('rowCallback', rowCallback).withOption('scrollX', true);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
@@ -21,11 +22,73 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        return '<a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
+        return '<a    class="test1"><img src="images/edit.png"></a><a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
     }
+    function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+    
+        $('.test1', nRow).unbind('click');
+        $('.test1', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.edit(aData);
+            });
+        });
+    
+
+        return nRow;
+    }
+    $scope.edit=function(input)
+    {
+        $scope.editMode=true;
+        $scope.showAddwindow = true;
+        $scope.Id=  input.Id;
+        $scope.selectModel={};
+       
+        $scope.selectModel.LTAApplicationCode = getdynamicobject(input.LTAApplicationCodeId, "LTAApplicationCodeList")
+        $scope.selectModel.LTAApplicationName = getdynamicobject(input.LTAApplicationNameId, "LTAApplicationNameList")
+        $scope.selectModel.ChildID = getdynamicobject(input.ChildId, "ChildIDList")
+        $scope.selectModel.ThirdPartyApp = getdynamicobject(input.ThirdPartyAppId, "ThirdPartyList");
+        $scope.selectModel.ApplicationCategory = getdynamicobject(input.ApplicationCategoryId, "ApplicationCategoryList");
+        $scope.selectModel.ParentID = getdynamicobject(input.ParentIDValue, "ParentIDList");
+     
+        $scope.selectModel.ThirdPartyApp = getdynamicobject(input.ThirdPartyAppId, "ThirdPartyList");
+        //var Region =input.Region;
+        //var BusinessLine = input.BusinessLineId;
+        //var userid =  input.ApplicationOwner;
+        //if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
+        //    ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
+        //        $scope.LTAApplicationOwnerList = data;
+        $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter(input.ApplicationOwnerId, "LTAApplicationOwnerList")
+        //    }).error(function (error) {
+        //        $scope.Error = error;
+        //    })
+        //}
+        //else {
+        //    $scope.LTAApplicationOwnerList = [];
+        //}
+       
+    }
+
+
     $scope.Showadd = function () {
+        $scope.editMode=false;  $scope.selectModel={};
+       
         $scope.showAddwindow = true;
     }
+    
+    var getdynamicobjectuserfilter = function (userId, type) {
+        for (var i = 0; i < $scope[type].length; i++) {
+            if ($scope[type][i].userId == userId) {
+                return $scope[type][i];
+            }
+        }
+    };
+    var getdynamicobject = function (userId, type) {
+        for (var i = 0; i < $scope[type].length; i++) {
+            if ($scope[type][i].Id == userId) {
+                return $scope[type][i];
+            }
+        }
+    };
     $scope.GetAllLTAApplicationMaster = function () {
         ApiCall.MakeApiCall("GetAllLTAApplicationMapping?LTAApplicationId=", 'GET', '').success(function (data) {
             $scope.data = data;
@@ -89,6 +152,43 @@
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Application ! " + data.ExceptionMessage;
+                });
+            }
+            else {
+                toaster.pop('warning', "Warning", 'Please enter LTA Application', null);
+            }
+        }
+        else {
+            toaster.pop('warning', "Warning", 'Please enter LTA Application', null);
+        }
+    };
+
+
+    $scope.UpdateLTAApplicationMaster    = function (LTAApplicationMaster) {
+        if (LTAApplicationMaster != null) {
+            if (LTAApplicationMaster.LTAApplicationName.LTAApplicationName && LTAApplicationMaster.LTAApplicationCode.LTAApplicationCode && LTAApplicationMaster.ChildID.ChildID && LTAApplicationMaster.ThirdPartyApp.Value) {
+                var input = {
+                    Id: $scope.Id,
+                    LTAApplicationNameId: LTAApplicationMaster.LTAApplicationName.Id, LTAApplicationCodeId: LTAApplicationMaster.LTAApplicationCode.Id, ChildID: LTAApplicationMaster.ChildID.Id, ThirdPartyAppId: LTAApplicationMaster.ThirdPartyApp.Id,
+                    ParentID: LTAApplicationMaster.ParentID.Id, ApplicationOwnerId: LTAApplicationMaster.LTAApplicationOwner.userId, ApplicationCategoryId: LTAApplicationMaster.ApplicationCategory.Id
+                };
+
+                ApiCall.MakeApiCall("UpdateLTAApplicationMapping", 'POST', input).success(function (data) {
+                    if (data.Error != undefined) {
+                        toaster.pop('error', "Error", data.Error, null);
+                    } else {
+                        if (data == "success") {
+                            $scope.LTAApplicationMaster = null;
+                            $scope.GetAllLTAApplicationMaster();
+                            $scope.editMode = false;
+                            $scope.showAddwindow = false;
+                            toaster.pop('success', "Success", 'LTA Application updated successfully', null);
+                        }
+                        else
+                            toaster.pop('warning', "Warning", data, null);
+                    }
+                }).error(function (data) {
+                    $scope.error = "An Error has occured while updating LTA Application ! " + data.ExceptionMessage;
                 });
             }
             else {

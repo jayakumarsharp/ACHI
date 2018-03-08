@@ -593,7 +593,7 @@ namespace BRDFountain.Controllers
             var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
             || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
             || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
-            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction")|| x.Item1.Equals("Status"));
+            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
             string Changedata = "";
             if (data.Count() > 0)
             {
@@ -1135,51 +1135,6 @@ namespace BRDFountain.Controllers
 
         #endregion LTAStrategyCode
 
-        #region LTAStrategyOwner
-
-        public JsonResult GetAllLTAStrategyOwner(string LTAStrategyOwnerId)
-        {
-            List<LTAStrategyOwnerMaster> lst = _dbOperations.getFTAStrategyOwnerList(LTAStrategyOwnerId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AddLTAStrategyOwner(LTAStrategyOwnerMaster taskInfo)
-        {
-            try
-            {
-                string errordesc = "";
-                int errocode = 0;
-                _dbOperations.AddLTAStrategyOwner(taskInfo, out errocode, out errordesc);
-                return Json(errordesc, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e) { log.Error(e); return null; }
-        }
-
-        public JsonResult ModifyLTAStrategyOwner(LTAStrategyOwnerMaster opp)
-        {
-            try
-            {
-                string errordesc = "";
-                int errocode = 0;
-                _dbOperations.ModifyLTAStrategyOwner(opp, out errocode, out errordesc);
-                return Json(errordesc, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e) { log.Error(e); return null; }
-        }
-
-        public JsonResult DeleteLTAStrategyOwner(string LTAStrategyOwnerId)
-        {
-            try
-            {
-                string errordesc = "";
-                int errocode = 0;
-                _dbOperations.DeleteLTAStrategyOwner(LTAStrategyOwnerId, out errocode, out errordesc);
-                return Json(errordesc, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e) { log.Error(e); return null; }
-        }
-
-        #endregion LTAStrategyOwner
 
         #region DiscretionaryCode
 
@@ -1842,7 +1797,7 @@ namespace BRDFountain.Controllers
             List<StatusMaster> lst = _dbOperations.GetAllStatusType(Id);
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
-        
+
 
         #region BusinessMapping
 
@@ -1909,6 +1864,20 @@ namespace BRDFountain.Controllers
             return Json(lst, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdateLTAApplicationMapping(LTAApplicationMappingMaster taskInfo)
+        {
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.UpdateLTAApplicationMapping(taskInfo, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
         public JsonResult AddLTAApplicationMapping(LTAApplicationMappingMaster taskInfo)
         {
             try
