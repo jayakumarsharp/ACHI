@@ -1930,6 +1930,14 @@
     <Content Include="css\toaster.css" />
     <Content Include="dist\css\AdminLTE.css" />
     <Content Include="dist\css\AdminLTE.min.css" />
+    <Content Include="dist\css\alt\AdminLTE-bootstrap-social.css" />
+    <Content Include="dist\css\alt\AdminLTE-bootstrap-social.min.css" />
+    <Content Include="dist\css\alt\AdminLTE-fullcalendar.css" />
+    <Content Include="dist\css\alt\AdminLTE-fullcalendar.min.css" />
+    <Content Include="dist\css\alt\AdminLTE-select2.css" />
+    <Content Include="dist\css\alt\AdminLTE-select2.min.css" />
+    <Content Include="dist\css\alt\AdminLTE-without-plugins.css" />
+    <Content Include="dist\css\alt\AdminLTE-without-plugins.min.css" />
     <Content Include="dist\css\skins\skin-black-light.css" />
     <Content Include="dist\css\skins\skin-black-light.min.css" />
     <Content Include="dist\css\skins\skin-black.css" />
@@ -2459,6 +2467,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="dist\css\adminlte.css.map" />
+    <Content Include="dist\css\adminlte.min.css.map" />
     <None Include="Properties\PublishProfiles\CRMUserManagement.pubxml" />
     <Content Include="plugins\ng-file-upload\demo\.idea\artifacts\ng_file_upload_demo_server_war.xml" />
     <Content Include="plugins\ng-file-upload\demo\.idea\artifacts\ng_file_upload_demo_server_war_exploded.xml" />

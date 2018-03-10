@@ -824,8 +824,11 @@ public class DbOperations
             errorcode = 0;
             errordesc = "success";
 
-            DateTime GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime GOLiveDate = new DateTime();
             DateTime DecomissionedDate = new DateTime();
+            if (_StrategyInfo.GOLiveDate != null && _StrategyInfo.GOLiveDate != "")
+                GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+      
             if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
                 DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             using (SqlCommand cmd = new SqlCommand("sp_insert_Strategy", connection))
@@ -842,7 +845,11 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_ChildID", _StrategyInfo.ChildID));
                 cmd.Parameters.Add(new SqlParameter("i_FTAStrategyNameId", _StrategyInfo.LTAStrategyNameId));
                 cmd.Parameters.Add(new SqlParameter("i_StrategytypeId", _StrategyInfo.StrategytypeId));
-                cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                if (_StrategyInfo.GOLiveDate != null && _StrategyInfo.GOLiveDate != "")
+                    cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
+                else
+                    cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", null));
+               // cmd.Parameters.Add(new SqlParameter("", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", _StrategyInfo.LTAStrategyCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_FTAShortCode", _StrategyInfo.LTAShortCode));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
