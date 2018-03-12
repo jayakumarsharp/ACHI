@@ -221,38 +221,6 @@ public class DbOperations
         }
     }
 
-    public int GetStrategyLatestVersionIDbyId(string RefNumber)
-    {
-        int Version = 0;
-        string query = "Get_StrategyLatestversionById";
-
-        if (this.OpenConnection() == true)
-        {
-
-            using (SqlCommand cmd = new SqlCommand(query, connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("i_RefNumber", RefNumber));
-                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        Version = Convert.ToInt32(dt.Rows[0]["Version"]);
-                    }
-                }
-
-                cmd.ExecuteNonQuery();
-            }
-
-            this.CloseConnection();
-        }
-
-        return Version;
-
-    }
 
     //checking waiting request of approval
     public List<StrategyApprover> GetStrategyDelegatesApprovalByuser(string userid)
@@ -526,7 +494,7 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                       Country = Convert.ToString(row["CountryId"]),
+                                      // Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
@@ -538,7 +506,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                       NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                     //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -557,6 +525,7 @@ public class DbOperations
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
                                        StatusId = Convert.ToString(row["StatusId"]),
                                        Status = Convert.ToString(row["StatusName"]),
+                                       AdditionalShortCode = Convert.ToString(row["AdditionalShortCode"]),
                                    }).ToList();
                         }
                     }
@@ -640,7 +609,7 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                       Country = Convert.ToString(row["CountryId"]),
+                                      // Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
@@ -652,7 +621,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                       NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                     //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -671,6 +640,7 @@ public class DbOperations
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
                                        StatusId = Convert.ToString(row["StatusId"]),
                                        Status = Convert.ToString(row["StatusName"]),
+                                       AdditionalShortCode = Convert.ToString(row["AdditionalShortCode"]),
                                    }).ToList();
                         }
                     }
@@ -763,7 +733,7 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                       Country = Convert.ToString(row["CountryId"]),
+                                     //  Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
                                        CountryName = Convert.ToString(row["CountryName"]),
@@ -774,7 +744,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                       NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                      // NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -793,6 +763,7 @@ public class DbOperations
                                        LTALongCode = Convert.ToString(row["LTALongCode"]),
                                        StatusId = Convert.ToString(row["StatusId"]),
                                        Status = Convert.ToString(row["StatusName"]),
+                                       AdditionalShortCode = Convert.ToString(row["AdditionalShortCode"]),
                                    }).ToList();
                         }
                     }
@@ -835,7 +806,6 @@ public class DbOperations
             {
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("i_RefNumber", _StrategyInfo.RefNumber));
-                cmd.Parameters.Add(new SqlParameter("i_CountryId", _StrategyInfo.Country));
                 cmd.Parameters.Add(new SqlParameter("i_CountryIdList", _StrategyInfo.CountryId));
                 cmd.Parameters.Add(new SqlParameter("i_CountryNameList", _StrategyInfo.CountryNameList));
                 cmd.Parameters.Add(new SqlParameter("i_RegionId", _StrategyInfo.Region));
@@ -878,6 +848,8 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_LTALongCode", _StrategyInfo.LTALongCode));
                 cmd.Parameters.Add(new SqlParameter("i_StatusId", _StrategyInfo.StatusId));
                 cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
+                cmd.Parameters.Add(new SqlParameter("i_AdditionalShortCode", _StrategyInfo.AdditionalShortCode));
+                
                 cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 500));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)

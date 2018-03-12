@@ -259,6 +259,7 @@ namespace BRDFountain.Models
 
         public string SeniorManagementFunction { get; set; }
         public string LTALongCode { get; set; }
+        public string AdditionalShortCode { get; set; }
         public string StatusId { get; set; }
         public string Status { get; set; }
 

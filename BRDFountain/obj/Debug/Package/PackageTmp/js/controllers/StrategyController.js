@@ -252,11 +252,12 @@
             else{
                 idlist += $scope.multiselect.selected[i].id + ',';
                 CountryNames += $scope.multiselect.selected[i].name + ',';
-            }}
+            }
+        }
         var currency = {
             CountryId: idlist,
             CountryNameList: CountryNames,
-            Country: JSON.stringify($scope.multiselect.selected),
+            //Country: JSON.stringify($scope.multiselect.selected),
             Region: $scope.selectModel.Region.Id
         , LTAApplicationCodeId: $scope.selectModel.LTAApplicationCode.Id, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id
         , ChildID: $scope.selectModel.ChildID.Id, LTAStrategyNameId: $scope.selectModel.LTAStrategyName.Id
@@ -279,6 +280,7 @@
             LTALongCode: $scope.selectModel.LTALongCode,
             SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
             StatusId: $scope.selectModel.Status.Id,
+            AdditionalShortCode: $scope.selectModel.AdditionalShortCode,
         };
         if (currency != null) {
             if ($scope.selectModel.Systemflowfile) {
@@ -335,7 +337,7 @@
             //$scope.selectModel.GOLiveDate = moment($scope.selectModel.GOLiveDate.split(' ')[0], 'DD/MM/YYYY').format('MM/DD/YYYY');
             //$scope.selectModel.DecomissionedDate = moment($scope.selectModel.DecomissionedDate.split(' ')[0], 'DD/MM/YYYY').format('MM/DD/YYYY');
             $scope.Prevvalue = angular.copy($scope.selectModel)
-            $scope.multiselect.selected = JSON.parse($scope.selectModel.Country);
+            // $scope.multiselect.selected = JSON.parse($scope.selectModel.Country);
             //$scope.selectModel.Country = getdynamicobject($scope.selectModel.Country, "CountryMasterList")
             $scope.selectModel.Region = getdynamicobject($scope.selectModel.Region, "RegionMasterList")
             $scope.selectModel.LTAApplicationCode = getdynamicobject($scope.selectModel.LTAApplicationCodeId, "LTAApplicationCodeList")
@@ -363,6 +365,8 @@
                 $scope.pageList[i].IsValid = true;
             }
             //assignUsers();
+            debugger
+            assignCountry($scope.selectModel.CountryId.split(','));
             binddata($scope.CountryMasterList);
             if (actiontype) {
                 $scope.showaction = true;
@@ -437,14 +441,21 @@
         var idlist = '';
         var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            idlist += $scope.multiselect.selected[i].id + ',';
-            CountryNames += $scope.multiselect.selected[i].name + ',';
+            if(i==$scope.multiselect.selected.length-1)
+            {
+                idlist += $scope.multiselect.selected[i].id ;
+                CountryNames += $scope.multiselect.selected[i].name ;
+            }
+            else{
+                idlist += $scope.multiselect.selected[i].id + ',';
+                CountryNames += $scope.multiselect.selected[i].name + ',';
+            }
         }
         var model = {
             Page: "S",
             CountryId: idlist,
             CountryNameList: CountryNames,
-            Country: JSON.stringify($scope.multiselect.selected),
+            //Country: JSON.stringify($scope.multiselect.selected),
             Region: $scope.selectModel.Region.Id, LTAApplicationCodeId: $scope.selectModel.LTAApplicationCode.Id,
             LTAApplicationCode: $scope.selectModel.LTAApplicationCode.LTAApplicationCode, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id,
             BusinessSuffix: $scope.selectModel.BusinessSuffix.BusinessSuffix, ChildID: $scope.selectModel.ChildID.Id,
@@ -473,6 +484,7 @@
             LTALongCode: $scope.selectModel.LTALongCode,
             StatusId: $scope.selectModel.Status.Id,
             Status: $scope.selectModel.Status.StatusName,
+            AdditionalShortCode: $scope.selectModel.AdditionalShortCode,
         };
         if ($scope.AllowSignOff)
             model.Attest = 'True';
@@ -758,10 +770,23 @@
             }
         }
     };
-    function assignUsers() {
-        var msUsers = $scope.multiselect.selected;
-        binddata($scope.CountryMasterList);
+
+    function assignCountry(data) {
+        $scope.multiselect.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselect.options.length;k++)
+            {
+                if($scope.multiselect.options[k].id==data[index].trim())
+                {
+                    $scope.multiselect.selected.push($scope.multiselect.options[k]);
+                }
+            }
+        }
+      
     }
+
     function binddata(list) {
         $scope.multiselect.options = list.map(function (item) {
             return {

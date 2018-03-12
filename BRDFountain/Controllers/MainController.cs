@@ -593,15 +593,25 @@ namespace BRDFountain.Controllers
             var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
             || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
             || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
-            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
+            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("AdditionalShortCode") ||
+            x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
             string Changedata = "";
-            if (data.Count() > 0)
+
+
+            var set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
+            bool setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
+
+          
+
+            if (data.Count() > 0 || !setsEqual)
             {
                 //x.Item1.Equals("CountryName") ||
                 foreach (var diff in data)
                 {
                     Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
                 }
+                if (!setsEqual)
+                    Changedata += " Country Name  - " + Strategy[1].CountryNameList + " - Changed to " + Strategy[0].CountryNameList;
 
                 Strategy[0].RefNumber = Strategy[1].RefNumber;
                 Strategy[0].Version = Strategy[1].Version + 1;
