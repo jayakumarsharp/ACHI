@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using log4net;
 
 namespace BRDFountain.Models
 {
@@ -595,31 +596,41 @@ namespace BRDFountain.Models
 
 
 
-
-
-
     public static class SimpleComparer
     {
+
+
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(SimpleComparer));
+
         // Item1: property name, Item2 current, Item3 original
         public static List<Tuple<string, object, object>> Differences<T>(T current, T original)
         {
             var diffs = new List<Tuple<string, object, object>>();
-
-            MethodInfo areEqualMethod = typeof(SimpleComparer).GetMethod("AreEqual", BindingFlags.Static | BindingFlags.NonPublic);
-
-            foreach (PropertyInfo prop in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            try
             {
-                object x = prop.GetValue(current);
-                object y = prop.GetValue(original);
-                bool areEqual = (bool)areEqualMethod.MakeGenericMethod(prop.PropertyType).Invoke(null, new object[] { x, y });
 
-                if (!areEqual)
+                MethodInfo areEqualMethod = typeof(SimpleComparer).GetMethod("AreEqual", BindingFlags.Static | BindingFlags.NonPublic);
+
+                foreach (PropertyInfo prop in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    diffs.Add(Tuple.Create(prop.Name, x, y));
-                }
-            }
+                    object x = prop.GetValue(current);
+                    object y = prop.GetValue(original);
+                    bool areEqual = (bool)areEqualMethod.MakeGenericMethod(prop.PropertyType).Invoke(null, new object[] { x, y });
 
-            return diffs;
+                    if (!areEqual)
+                    {
+                        diffs.Add(Tuple.Create(prop.Name, x, y));
+                    }
+                }
+
+                return diffs;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in comparator {0}", ex);
+                return diffs;
+            }
         }
 
         private static bool AreEqual<T>(T x, T y)

@@ -17,9 +17,11 @@ namespace BRDFountain.Controllers
     {
         private DbOperations _dbOperations = new DbOperations();
         private static readonly ILog log = LogManager.GetLogger(typeof(MainController));
-        //
-        // GET: /Main/
-        //[SessionTimeout]
+
+        /// <summary>
+        /// Partial views rendering code
+        /// </summary>
+        /// <returns></returns>
 
         #region Partial Views
         public ActionResult ShowApplicationDetails()
@@ -43,6 +45,10 @@ namespace BRDFountain.Controllers
 
         #endregion PArtial Views
 
+        /// <summary>
+        /// Main pages views rendering code
+        /// </summary>
+        /// <returns></returns>
         #region View displays
 
         [SessionTimeout]
@@ -276,7 +282,7 @@ namespace BRDFountain.Controllers
             }
         }
 
-        #region TransferSetting
+        #region FileList
         public JsonResult Get_ApprovaltransferByuser()
         {
             List<StrategyApprover> lst = _dbOperations.Get_ApprovaltransferByuser(Convert.ToString(Session["UserName"]));
@@ -290,101 +296,177 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetData()
         {
-            List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername());
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername());
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetAll {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         public JsonResult GetDatabyId(string Strategynumber)
         {
-            List<Strategy> lst = _dbOperations.GetStrategyDatabyId(Strategynumber);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+
+                List<Strategy> lst = _dbOperations.GetStrategyDatabyId(Strategynumber);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetbyID {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult GetStrategyReport(StrategyReportFilter filter)
         {
-            filter.userid = getloggedusername();
-            List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                filter.userid = getloggedusername();
+                List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy Report {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
 
         public string ExportReport(StrategyReportFilter filter)
         {
-            List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
-            if (lst.Count > 0)
+            try
             {
-                string[] columns = { "RegionName", "LTAApplicationCode", "LTAStrategyCode", "LTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "LTAApplicationOwnerId", "ApplicationCategory", "LTAStrategyOwnerId", "LTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
-                byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Strategy Inventory Report", true, columns);
-                //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
-                string mailbox = ConfigurationManager.AppSettings["FilePath"];
-                string filepath = mailbox + "/Report/";
-                bool exists = System.IO.Directory.Exists(@filepath);
-                if (!exists)
-                    System.IO.Directory.CreateDirectory(@filepath);
-                string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
-                if (!System.IO.File.Exists(filepath))
-                {
-                    FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
-                    fileStream.Write(filecontent, 0, filecontent.Length);
-                    fileStream.Close();
 
+                List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
+                if (lst.Count > 0)
+                {
+                    string[] columns = { "RegionName", "LTAApplicationCode", "LTAStrategyCode", "LTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "LTAApplicationOwnerId", "ApplicationCategory", "LTAStrategyOwnerId", "LTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
+                    byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Strategy Inventory Report", true, columns);
+                    //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
+                    string mailbox = ConfigurationManager.AppSettings["FilePath"];
+                    string filepath = mailbox + "/Report/";
+                    bool exists = System.IO.Directory.Exists(@filepath);
+                    if (!exists)
+                        System.IO.Directory.CreateDirectory(@filepath);
+                    string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
+                    if (!System.IO.File.Exists(filepath))
+                    {
+                        FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
+                        fileStream.Write(filecontent, 0, filecontent.Length);
+                        fileStream.Close();
+
+                    }
+                    return filename;
                 }
-                return filename;
+                else
+                    return "No Records";
             }
-            else
-                return "No Records";
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy Export Report {0}", e);
+                return "error";
+            }
         }
 
 
         public string ExportReportFilter(StrategyReportFilter filter)
         {
-            List<ReportAppMapping> lst = _dbOperations.GetReportApplicationMappingList("");
-            if (lst.Count > 0)
+            try
             {
-                string[] columns = { "LTAApplicationName", "LTAApplicationCode", "ChildId", "ThirdPartyAppName", "ParentID", "ApplicationOwner", "ApplicationCategory", "BusinessLine", "CountryName", "RegionName", "Attest" };
-                byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Application Inventory", true, columns);
-                //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
-                string mailbox = ConfigurationManager.AppSettings["FilePath"];
-                string filepath = mailbox + "/Report/";
-                bool exists = System.IO.Directory.Exists(@filepath);
-                if (!exists)
-                    System.IO.Directory.CreateDirectory(@filepath);
-                string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
-                if (!System.IO.File.Exists(filepath))
+
+                List<ReportAppMapping> lst = _dbOperations.GetReportApplicationMappingList("");
+                if (lst.Count > 0)
                 {
-                    FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
-                    fileStream.Write(filecontent, 0, filecontent.Length);
-                    fileStream.Close();
+                    string[] columns = { "LTAApplicationName", "LTAApplicationCode", "ChildId", "ThirdPartyAppName", "ParentID", "ApplicationOwner", "ApplicationCategory", "BusinessLine", "CountryName", "RegionName", "Attest" };
+                    byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Application Inventory", true, columns);
+                    //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
+                    string mailbox = ConfigurationManager.AppSettings["FilePath"];
+                    string filepath = mailbox + "/Report/";
+                    bool exists = System.IO.Directory.Exists(@filepath);
+                    if (!exists)
+                        System.IO.Directory.CreateDirectory(@filepath);
+                    string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
+                    if (!System.IO.File.Exists(filepath))
+                    {
+                        FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
+                        fileStream.Write(filecontent, 0, filecontent.Length);
+                        fileStream.Close();
+                    }
+                    return filename;
                 }
-                return filename;
+                else
+                    return "No Records";
             }
-            else
-                return "No Records";
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy ExportReportFilter {0}", e);
+                return "error";
+            }
+
         }
 
         public JsonResult GetStrategyApprovalByuser()
         {
-            List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalByuser(Convert.ToString(Session["UserName"]));
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetStrategyApprovalByuser {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
-
 
         public JsonResult GetStrategyDelegatesApprovalByuser()
         {
-            List<StrategyApprover> lst = _dbOperations.GetStrategyDelegatesApprovalByuser(Convert.ToString(Session["UserName"]));
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<StrategyApprover> lst = _dbOperations.GetStrategyDelegatesApprovalByuser(Convert.ToString(Session["UserName"]));
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetStrategyDelegatesApprovalByuser {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult GetDelegatedApprovalByuser()
         {
-            List<StrategyApprover> lst = _dbOperations.Get_DelegatedApprovalByuser(Convert.ToString(Session["UserName"]));
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<StrategyApprover> lst = _dbOperations.Get_DelegatedApprovalByuser(Convert.ToString(Session["UserName"]));
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetDelegatedApprovalByuser {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult GetStrategyApprovalById(string Strategynumber, string Version)
         {
-            List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalById(Strategynumber, Version);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<StrategyApprover> lst = _dbOperations.Get_StrategyApprovalById(Strategynumber, Version);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy GetStrategyApprovalById {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult InsertStrategy(Strategy strategy)
@@ -522,105 +604,132 @@ namespace BRDFountain.Controllers
 
         public JsonResult InsertStrategyApprover(List<StrategyApprover> strategy)
         {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-            string errordesc = "";
-            int errorcode = 0;
-            if (strategy.Count > 0)
-                _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errorcode = 0;
+                if (strategy.Count > 0)
+                    _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in InsertStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult ModifyStrategyApprover(List<StrategyApprover> strategy)
         {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-            string errordesc = "";
-            int errorcode = 0;
-            if (strategy.Count > 0)
-                _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errorcode = 0;
+                if (strategy.Count > 0)
+                    _dbOperations.InsertStrategyApprover(strategy, strategy[0].RefNumber, strategy[0].Version, out errorcode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in ModifyStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult DeleteStrategyApprover(List<StrategyApprover> strategy)
         {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-            string errordesc = "";
-            int errorcode = 0;
-            if (strategy != null && strategy.Count > 0)
-                _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errorcode = 0;
+                if (strategy != null && strategy.Count > 0)
+                    _dbOperations.DeleteStrategyApprover(strategy, strategy[0].RefNumber, out errorcode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult UpdateStrategyApprover(StrategyApprover strategy)
         {
-            //if (Strategy.FirstInterestPaymentDate != "" && Strategy.FirstInterestPaymentDate != null)
-            //{
-            //    DateTime FirstInterestPaymentDate = DateTime.ParseExact(Strategy.FirstInterestPaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            //    Strategy.FirstInterestPaymentDate = FirstInterestPaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            //}
-            string errordesc = "";
-            int errorcode = 0;
-            _dbOperations.UpdateStrategyApprover(strategy, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errorcode = 0;
+                _dbOperations.UpdateStrategyApprover(strategy, out errorcode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult updatedelegateAcceptance(StrategyApprover strategy)
         {
-            string errordesc = "";
-            int errorcode = 0;
-            _dbOperations.updatedelegateAcceptance(strategy, out errorcode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errorcode = 0;
+                _dbOperations.updatedelegateAcceptance(strategy, out errorcode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult UpdateStrategy(List<Strategy> Strategy)
         {
-            string errordesc = "";
-            int errorcode = 0;
-
-            var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
-
-            var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
-            || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
-            || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
-            || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("AdditionalShortCode") ||
-            x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
-            string Changedata = "";
-
-
-            var set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
-            bool setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
-
-          
-
-            if (data.Count() > 0 || !setsEqual)
+            try
             {
-                //x.Item1.Equals("CountryName") ||
-                foreach (var diff in data)
+                string errordesc = "";
+                int errorcode = 0;
+
+                var diffs = SimpleComparer.Differences(Strategy[0], Strategy[1]);
+
+                var data = diffs.FindAll(x => x.Item1.Equals("Region") || x.Item1.Equals("BusinessSuffix") || x.Item1.Equals("LTAApplicationCode") || x.Item1.Equals("ChildIDValue")
+                || x.Item1.Equals("LTAStrategyName") || x.Item1.Equals("Strategytype") || x.Item1.Equals("GOLiveDate") || x.Item1.Equals("LTAStrategyCode") || x.Item1.Equals("LTAShortCode") || x.Item1.Equals("BusinessLine") || x.Item1.Equals("LTAApplicationName") || x.Item1.Equals("LTAStrategyOwner") || x.Item1.Equals("ApplicationCategory") || x.Item1.Equals("Venuetype") || x.Item1.Equals("DecomissionedDate") || x.Item1.Equals("DiscretionaryCode")
+                || x.Item1.Equals("ParentIDValue") || x.Item1.Equals("LTAApplicationOwner") || x.Item1.Equals("PriorityScore") || x.Item1.Equals("Priority") || x.Item1.Equals("Capacity")
+                || x.Item1.Equals("Description") || x.Item1.Equals("Attest") || x.Item1.Equals("LTALongCode") || x.Item1.Equals("AdditionalShortCode") ||
+                x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
+                string Changedata = "";
+
+
+                var set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
+                bool setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
+
+
+                if (data.Count() > 0 || !setsEqual)
                 {
-                    Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
+                    //x.Item1.Equals("CountryName") ||
+                    foreach (var diff in data)
+                    {
+                        Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
+                    }
+                    if (!setsEqual)
+                        Changedata += " Country Name  - " + Strategy[1].CountryNameList + " - Changed to " + Strategy[0].CountryNameList;
+
+                    Strategy[0].RefNumber = Strategy[1].RefNumber;
+                    Strategy[0].Version = Strategy[1].Version + 1;
+                    Strategy[0].CreatedBy = Convert.ToString(Session["UserName"]);
+                    _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
+                    _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata, Convert.ToString(Session["UserName"]));
                 }
-                if (!setsEqual)
-                    Changedata += " Country Name  - " + Strategy[1].CountryNameList + " - Changed to " + Strategy[0].CountryNameList;
 
-                Strategy[0].RefNumber = Strategy[1].RefNumber;
-                Strategy[0].Version = Strategy[1].Version + 1;
-                Strategy[0].CreatedBy = Convert.ToString(Session["UserName"]);
-                _dbOperations.InsertStrategydata(Strategy[0], out errorcode, out errordesc);
-                _dbOperations.insertStrategyVersionChange(Strategy[0].RefNumber, Strategy[0].Version, Changedata, Convert.ToString(Session["UserName"]));
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
             }
-
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in UpdateStrategy {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult UpdateStrategyFile(Strategy strategy)
@@ -696,57 +805,115 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetUserRoles(string userId)
         {
-            if (userId != "")
+            try
             {
-                if (Session["MenuList"] != null)
+
+                if (userId != "")
                 {
-                    List<RightMaster> ls = Session["MenuList"] as List<RightMaster>;
-                    return Json(ls, JsonRequestBehavior.AllowGet);
+                    if (Session["MenuList"] != null)
+                    {
+                        List<RightMaster> ls = Session["MenuList"] as List<RightMaster>;
+                        return Json(ls, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        List<RightMaster> lst = _dbOperations.GetMenuList(userId);
+                        Session["MenuList"] = lst;
+                        return Json(lst, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
-                {
-                    List<RightMaster> lst = _dbOperations.GetMenuList(userId);
-                    Session["MenuList"] = lst;
-                    return Json(lst, JsonRequestBehavior.AllowGet);
-                }
+                    return null;
             }
-            else
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
                 return null;
+            }
         }
         public JsonResult GetUsersByRoles(string Roleid)
         {
-            List<UserMaster> lst = _dbOperations.GetUsersByRoles(Roleid);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<UserMaster> lst = _dbOperations.GetUsersByRoles(Roleid);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult GetUserRights(string userId)
         {
-            List<RightMaster> lst = _dbOperations.GetRightsList(userId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+
+                List<RightMaster> lst = _dbOperations.GetRightsList(userId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult GetRoleRightMapping(string roleId)
         {
-            List<RoleRightMapping> lst = _dbOperations.GetRoleRightMapping(roleId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<RoleRightMapping> lst = _dbOperations.GetRoleRightMapping(roleId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
         public JsonResult roles(string roleId)
         {
-            List<Roles> lst = _dbOperations.GetRoles(roleId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<Roles> lst = _dbOperations.GetRoles(roleId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
         public JsonResult GetRights(string right)
         {
-            List<RightMaster> lst = _dbOperations.GetRights(right);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<RightMaster> lst = _dbOperations.GetRights(right);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult AddRole(RoleRightMapping obj)
         {
-            string errordesc = "";
-            int errocode = 0;
-            int id = _dbOperations.AddRole(obj.selectedRole, out errocode, out errordesc);
-            return Json(id, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                int id = _dbOperations.AddRole(obj.selectedRole, out errocode, out errordesc);
+                return Json(id, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult AddRoleRightMapping([FromBody]RoleRightMapping obj)
@@ -789,8 +956,16 @@ namespace BRDFountain.Controllers
 
         public JsonResult getusers(string userid)
         {
-            List<UserMaster> lst = _dbOperations.GetUser(userid);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<UserMaster> lst = _dbOperations.GetUser(userid);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult profile(string userId)
@@ -819,8 +994,16 @@ namespace BRDFountain.Controllers
 
         public JsonResult GetUserbyFilter(string RegionId, string BusinessLineId)
         {
-            List<UserMaster> lst = _dbOperations.GetUserbyFilter(RegionId, BusinessLineId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<UserMaster> lst = _dbOperations.GetUserbyFilter(RegionId, BusinessLineId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
 
@@ -839,28 +1022,60 @@ namespace BRDFountain.Controllers
 
         public JsonResult CreateTempUser(UserMaster user)
         {
-            string errordesc = "";
-            int errocode = 0;
-            _dbOperations.CreateTempUser(user, out errocode, out errordesc);
-            return Json(errordesc, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string errordesc = "";
+                int errocode = 0;
+                _dbOperations.CreateTempUser(user, out errocode, out errordesc);
+                return Json(errordesc, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult GetusercountryMapping(string userId)
         {
-            List<CountryMaster> lst = _dbOperations.GetusercountryMapping(userId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<CountryMaster> lst = _dbOperations.GetusercountryMapping(userId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult GetuserRegionMapping(string userId)
         {
-            List<RegionMaster> lst = _dbOperations.GetuserregionMapping(userId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<RegionMaster> lst = _dbOperations.GetuserregionMapping(userId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult GetBusinessMapping(string userId)
         {
-            List<BusinessLineMaster> lst = _dbOperations.GetuserbusinessMapping(userId);
-            return Json(lst, JsonRequestBehavior.AllowGet);
+            try
+            {
+                List<BusinessLineMaster> lst = _dbOperations.GetuserbusinessMapping(userId);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+                return null;
+            }
         }
 
         public JsonResult ModifyUser(UserMaster user)

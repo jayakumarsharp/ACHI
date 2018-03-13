@@ -57,7 +57,7 @@
         //if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
         //    ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
         //        $scope.LTAApplicationOwnerList = data;
-        $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter(input.ApplicationOwnerId, "LTAApplicationOwnerList")
+        $scope.selectModel.LTAApplicationOwner =  input.ApplicationOwner;//getdynamicobjectuserfilter(input.ApplicationOwnerId, "LTAApplicationOwnerList")
         //    }).error(function (error) {
         //        $scope.Error = error;
         //    })
@@ -132,7 +132,7 @@
             if (LTAApplicationMaster.LTAApplicationName.LTAApplicationName && LTAApplicationMaster.LTAApplicationCode.LTAApplicationCode && LTAApplicationMaster.ChildID.ChildID && LTAApplicationMaster.ThirdPartyApp.Value) {
                 var input = {
                     LTAApplicationNameId: LTAApplicationMaster.LTAApplicationName.Id, LTAApplicationCodeId: LTAApplicationMaster.LTAApplicationCode.Id, ChildID: LTAApplicationMaster.ChildID.Id, ThirdPartyAppId: LTAApplicationMaster.ThirdPartyApp.Id,
-                    ParentID: LTAApplicationMaster.ParentID.Id, ApplicationOwnerId: LTAApplicationMaster.LTAApplicationOwner.userId, ApplicationCategoryId: LTAApplicationMaster.ApplicationCategory.Id
+                    ParentID: LTAApplicationMaster.ParentID.Id, ApplicationOwnerId: LTAApplicationMaster.LTAApplicationOwner, ApplicationCategoryId: LTAApplicationMaster.ApplicationCategory.Id
                 };
 
                 ApiCall.MakeApiCall("AddLTAApplicationMapping", 'POST', input).success(function (data) {
@@ -170,7 +170,7 @@
                 var input = {
                     Id: $scope.Id,
                     LTAApplicationNameId: LTAApplicationMaster.LTAApplicationName.Id, LTAApplicationCodeId: LTAApplicationMaster.LTAApplicationCode.Id, ChildID: LTAApplicationMaster.ChildID.Id, ThirdPartyAppId: LTAApplicationMaster.ThirdPartyApp.Id,
-                    ParentID: LTAApplicationMaster.ParentID.Id, ApplicationOwnerId: LTAApplicationMaster.LTAApplicationOwner.userId, ApplicationCategoryId: LTAApplicationMaster.ApplicationCategory.Id
+                    ParentID: LTAApplicationMaster.ParentID.Id, ApplicationOwnerId: LTAApplicationMaster.LTAApplicationOwner, ApplicationCategoryId: LTAApplicationMaster.ApplicationCategory.Id
                 };
 
                 ApiCall.MakeApiCall("UpdateLTAApplicationMapping", 'POST', input).success(function (data) {

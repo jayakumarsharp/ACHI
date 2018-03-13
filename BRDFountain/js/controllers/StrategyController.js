@@ -266,7 +266,7 @@
         , BusinessLineId: $scope.selectModel.BusinessLine.Id, LTAApplicationNameId: $scope.selectModel.LTAApplicationName.Id
         , LTAStrategyOwnerId: $scope.selectModel.LTAStrategyOwner.userId, ApplicationCategoryId: $scope.selectModel.ApplicationCategory.Id, VenuetypeId: $scope.selectModel.Venuetype.Id
         , DecomissionedDate: $scope.selectModel.DecomissionedDate, DiscretionaryCodeId: $scope.selectModel.DiscretionaryCode.Id
-        , ParentID: $scope.selectModel.ParentID.Id, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner.userId
+        , ParentID: $scope.selectModel.ParentID.Id, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner//.userId
         , PriorityScore: $scope.selectModel.PriorityScore
         , Priority: $scope.selectModel.Priority
         , CapacityId: $scope.selectModel.Capacity.Id
@@ -358,7 +358,7 @@
             $scope.selectModel.Status = getdynamicobject($scope.selectModel.StatusId, "StrategyStatusType");
 
             $scope.selectModel.Description = $scope.selectModel.Description;
-            $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
+            $scope.selectModel.LTAApplicationOwner =$scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
             $scope.userfilter(true);
             $scope.activateTab(0);
             for (var i = 0; i < $scope.pageList.length; i++) {
@@ -470,7 +470,7 @@
             VenuetypeId: $scope.selectModel.Venuetype.Id, Venuetype: $scope.selectModel.Venuetype.Venuetype,
             DecomissionedDate: $scope.selectModel.DecomissionedDate, DiscretionaryCodeId: $scope.selectModel.DiscretionaryCode.Id,
             DiscretionaryCode: $scope.selectModel.DiscretionaryCode.DiscretionaryCode, ParentID: $scope.selectModel.ParentID.Id,
-            ParentIDValue: $scope.selectModel.ParentID.ParentID, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner.userId,
+            ParentIDValue: $scope.selectModel.ParentID.ParentID, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner,
             PriorityScore: $scope.selectModel.PriorityScore, Priority: $scope.selectModel.Priority,
             CapacityId: $scope.selectModel.Capacity.Id, Capacity: $scope.selectModel.Capacity.Capacity,
             BusinessId: $scope.selectModel.Business.Id, Business: $scope.selectModel.Business.Business,
@@ -479,7 +479,7 @@
             BusinessMappingId: $scope.selectModel.BusinessMappingId, Description: $scope.selectModel.Description,
             Attest: $scope.selectModel.Attest,
             LTAStrategyOwner: $scope.selectModel.LTAStrategyOwner.userId,
-            LTAApplicationOwner: $scope.selectModel.LTAApplicationOwner.userId,
+            LTAApplicationOwner: $scope.selectModel.LTAApplicationOwner,
             SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
             LTALongCode: $scope.selectModel.LTALongCode,
             StatusId: $scope.selectModel.Status.Id,
@@ -569,15 +569,11 @@
             var BusinessLine = $scope.selectModel.BusinessLine.Id;
             if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
                 ApiCall.MakeApiCall("GetUserbyFilter?RegionId=" + Region + "&BusinessLineId=" + BusinessLine, 'GET', '').success(function (data) {
-                    //$scope.LTAApplicationOwnerList = data;
                     $scope.LTAStrategyOwnerList = data;
                     if (state) {
                         $scope.selectModel.LTAStrategyOwner = getdynamicobjectuserfilter($scope.selectModel.LTAStrategyOwnerId, "LTAStrategyOwnerList")
-                        //$scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwnerId, "LTAApplicationOwnerList")
                     }
-                    //if ($scope.AppOwnername != '')
-                    //    $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter($scope.AppOwnername, "LTAApplicationOwnerList");
-                }).error(function (error) {
+                  }).error(function (error) {
                     $scope.Error = error;
                 })
             }
@@ -629,7 +625,7 @@
                         $scope.selectModel.ThirdPartyApp = getdynamicobject(data[0].ThirdPartyAppId, "ThirdPartyList");
                         $scope.selectModel.ApplicationCategory = getdynamicobject(data[0].ApplicationCategoryId, "ApplicationCategoryList");
                         $scope.selectModel.ParentID = getdynamicobject(data[0].ParentIDValue, "ParentIDList");
-                        $scope.selectModel.LTAApplicationOwner = getdynamicobjectuserfilter(data[0].ApplicationOwnerId, "LTAApplicationOwnerList");
+                        $scope.selectModel.LTAApplicationOwner =data[0].ApplicationOwnerId;// getdynamicobjectuserfilter(data[0].ApplicationOwnerId, "LTAApplicationOwnerList");
                         $scope.userfilter1();
                     }
                     else {

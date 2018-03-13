@@ -819,7 +819,6 @@ public class DbOperations
                     cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 else
                     cmd.Parameters.Add(new SqlParameter("i_GOLiveDate", null));
-               // cmd.Parameters.Add(new SqlParameter("", GOLiveDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)));
                 cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCodeId", _StrategyInfo.LTAStrategyCodeId));
                 cmd.Parameters.Add(new SqlParameter("i_FTAShortCode", _StrategyInfo.LTAShortCode));
                 cmd.Parameters.Add(new SqlParameter("i_BusinessLineId", _StrategyInfo.BusinessLineId));
@@ -849,7 +848,6 @@ public class DbOperations
                 cmd.Parameters.Add(new SqlParameter("i_StatusId", _StrategyInfo.StatusId));
                 cmd.Parameters.Add(new SqlParameter("i_CreatedBy", _StrategyInfo.CreatedBy));
                 cmd.Parameters.Add(new SqlParameter("i_AdditionalShortCode", _StrategyInfo.AdditionalShortCode));
-                
                 cmd.Parameters.Add(new SqlParameter("i_OutParam", SqlDbType.VarChar, 500));
                 cmd.Parameters["i_OutParam"].Direction = ParameterDirection.Output;
                 if (this.OpenConnection() == true)
@@ -858,7 +856,6 @@ public class DbOperations
                     errordesc = Convert.ToString(cmd.Parameters["i_OutParam"].Value);
                     this.CloseConnection();
                 }
-                //if (errordesc == "success")
                 //    errordesc = "success-" + _StrategyInfo.RefNumber + "|" + _StrategyInfo.Version;
             }
         }
@@ -1106,11 +1103,6 @@ public class DbOperations
 
                 this.CloseConnection();
             }
-
-            //return lst;
-            //models.User.findAll({ where: { RoleId: roleId } })
-            //   .then(function(userroles) { deferred.resolve(userroles); })
-            //   .catch (function (err) { deferred.reject(err) });
         }
         catch (Exception e)
         {
@@ -1183,7 +1175,7 @@ public class DbOperations
 
     }
 
-    //done
+   
     public void ModifyRoleRight(RoleRightMapping roleright)
     {
         try
@@ -1225,7 +1217,7 @@ public class DbOperations
         }
     }
 
-    //done
+   
     public void AddRoleRightMapping(RoleRightMapping roleright, out int errorcode, out string errordesc)
     {
         try
