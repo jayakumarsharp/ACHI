@@ -51,10 +51,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/27/2015 12:43:56</publishTime>
     </File>
     <File Include="bin/BRDFountain.dll">
-      <publishTime>03/13/2018 18:14:18</publishTime>
+      <publishTime>03/13/2018 20:42:17</publishTime>
     </File>
     <File Include="bin/BRDFountain.pdb">
-      <publishTime>03/13/2018 18:14:18</publishTime>
+      <publishTime>03/13/2018 20:42:17</publishTime>
     </File>
     <File Include="bin/CDRReports.dll">
       <publishTime>12/19/2015 13:36:23</publishTime>
@@ -6870,7 +6870,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/13/2018 18:05:26</publishTime>
     </File>
     <File Include="js/controllers/ReportsController.js">
-      <publishTime>03/07/2018 03:12:42</publishTime>
+      <publishTime>03/13/2018 20:39:22</publishTime>
     </File>
     <File Include="js/controllers/StrategyController.js">
       <publishTime>03/13/2018 14:44:59</publishTime>

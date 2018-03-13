@@ -59,10 +59,11 @@
     ];
 
     function actionsStatus(data, type, full, meta) {
-        if (data == "Yes")
-            return '<a  class="dta-act">Attested</a>';
-        else
+        if (data == "Pending")
             return '<a  class="dta-act-not">Pending</a>';
+            
+        else
+            return '<a  class="dta-act">Attested</a>';
     }
 
     function activeStatus(data, type, full, meta) {
@@ -504,7 +505,6 @@
             if (Business != "" && Business != undefined) {
                 ApiCall.MakeApiCall("GetAllReportApplicationAutofill?Id=" + Business.Id, 'GET', '').success(function (data) {
                     if (data.length > 0) {
-                        debugger
                         $scope.selectModel.LTAApplicationMappingId = data[0].Id;
                         $scope.selectModel.LTAApplicationCode = getdynamicobject(data[0].LTAApplicationCodeId, "LTAApplicationCodeList")
                         $scope.selectModel.LTAApplicationName = getdynamicobject(data[0].LTAApplicationNameId, "LTAApplicationNameList")
