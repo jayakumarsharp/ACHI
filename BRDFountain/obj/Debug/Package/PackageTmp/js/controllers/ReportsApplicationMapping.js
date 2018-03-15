@@ -194,7 +194,7 @@
                     CountryNames += $scope.multiselect.selected[i].name + ',';
                 }
             }
-            if (LTAApplicationMaster.LTAApplicationName.LTAApplicationName && LTAApplicationMaster.LTAApplicationCode.LTAApplicationCode && LTAApplicationMaster.ChildID.ChildID && LTAApplicationMaster.ThirdPartyApp.Value && LTAApplicationMaster.BusinessLine && $scope.multiselect.selected.length >0 && LTAApplicationMaster.Region) {
+            if (LTAApplicationMaster.LTAApplicationName.LTAApplicationName && LTAApplicationMaster.LTAApplicationCode.LTAApplicationCode && LTAApplicationMaster.ChildID.ChildID && LTAApplicationMaster.ThirdPartyApp.Value && LTAApplicationMaster.BusinessLine && LTAApplicationMaster.Region) {
                 var input = {
                     Id:  $scope.Id,
                     LTAApplicationNameId: LTAApplicationMaster.LTAApplicationName.Id, LTAApplicationCodeId: LTAApplicationMaster.LTAApplicationCode.Id, ChildID: LTAApplicationMaster.ChildID.Id, ThirdPartyAppId: LTAApplicationMaster.ThirdPartyApp.Id,

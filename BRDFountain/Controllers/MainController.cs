@@ -701,10 +701,18 @@ namespace BRDFountain.Controllers
                 x.Item1.Equals("SeniorManagementFunction") || x.Item1.Equals("Status"));
                 string Changedata = "";
 
+                var set1 = new HashSet<string>();
+                if(Strategy[0].CountryId !=null)
+                 set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
 
-                var set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
-                bool setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
-
+                bool setsEqual=true;
+                if (Strategy[1].CountryId != null)
+                    setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
+                else
+                {
+                    if (Strategy[0].CountryId != null)
+                        setsEqual = false;
+                }
 
                 if (data.Count() > 0 || !setsEqual)
                 {

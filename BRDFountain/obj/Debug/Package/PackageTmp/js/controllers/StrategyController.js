@@ -5,6 +5,7 @@
     $scope.Strategydata = [];
     $scope.editMode = false;
     $scope.showaction = false;
+    $scope.viewmode = false;
     $scope.IsReadOnly = true;
     $scope.currency = {};
     $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
@@ -17,19 +18,15 @@
     .withPaginationType('full_numbers').withOption('createdRow', createdRow)
     .withOption('rowCallback', rowCallback).withOption('scrollX', true);
     $scope.dtColumns = [
-        //DTColumnBuilder.newColumn('Id').withTitle('ID'),
         DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code'),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
-        DTColumnBuilder.newColumn('LTAStrategyCode').withTitle('LTA Strategy Name'),
+        DTColumnBuilder.newColumn('LTAStrategyName').withTitle('LTA Strategy Name'),
         DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
-        DTColumnBuilder.newColumn('LTAApplicationOwner').withTitle('LTA Owner'),
-        //DTColumnBuilder.newColumn('StrategyStatus').withTitle('Strategy Status'),
+        DTColumnBuilder.newColumn('LTAApplicationOwner').withTitle('LTA Application Owner'),
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Category'),
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
-        //DTColumnBuilder.newColumn('ParentID').withTitle('Parent CSI ID'),
          DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
-            //DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
             DTColumnBuilder.newColumn('Status').withTitle('Status'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
@@ -42,33 +39,17 @@
         }
     }
 
-    //function activeStatus(data, type, full, meta) {
-    //    var GOLiveDate = moment(full.GOLiveDate, 'MM/DD/YYYY');
-    //    if (full.DecomissionedDate)
-    //        var DecomissionedDate = moment(full.DecomissionedDate, 'MM/DD/YYYY');
-    //    else
-    //        var DecomissionedDate = full.DecomissionedDate;
-    //    var currentdate = moment();
-    //    if (DecomissionedDate != '') {
-    //        if ((currentdate >= GOLiveDate && currentdate <= DecomissionedDate) || (currentdate >= DecomissionedDate && currentdate <= GOLiveDate)) // false
-    //            return '<a  class="dta-act">Active</a>';
-    //        else if (GOLiveDate >= currentdate)//&& DecomissionedDate <= currentdate)
-    //            return '<a  class="dta-sign">PipeLine</a>';
-    //        else if (DecomissionedDate < currentdate)
-    //            return '<a  class="dta-act-not">InActive</a>';
-    //    }
-    //    else {
-    //        if (GOLiveDate < currentdate)
-    //            return '<a  class="dta-act-not">InActive</a>';
-    //        else if (GOLiveDate > currentdate)
-    //            return '<a  class="dta-sign">PipeLine</a>';
-    //        else
-    //            return '<a  class="dta-act-not">InActive</a>';
-    //    }
-    //}
 
     $scope.Confirmcancel = function () {
-        $('#confirmModal').modal('show');
+        
+        if($scope.viewmode)
+        {$scope.viewmode = false;
+        $scope.showaction = false;
+
+        }
+
+        else
+            $('#confirmModal').modal('show');
     }
 
 
@@ -78,7 +59,7 @@
 
     function actionsHtml(data, type, full, meta) {
         if ($scope.Permissions.IsWrite || $scope.ApprovalCheck.IsApprove)
-            return '<a class="test"><img src="images/edit.png"></a> &nbsp;<a class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+            return '<a class="test"><img style="height:20px;width:20px" src="images/edit.png"></a> &nbsp;<a class="test1"><img style="width:20px;height:20px;" src="images/eyeicon.png"></a> &nbsp;<a class="test3"><img style="width:20px;height:20px;" src="images/viewicon.png"></a>';
         else
             return '<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
@@ -100,6 +81,13 @@
         $('.test2', nRow).bind('click', function () {
             $scope.$apply(function () {
                 $scope.GetCurrencyConversionForId(aData.Id, aData.Version, aData.RefNumber, false);
+            });
+        });
+
+        $('.test3', nRow).unbind('click');
+        $('.test3', nRow).bind('click', function () {
+            $scope.$apply(function () {
+                $scope.GetViewdata(aData.Id, aData.Version, aData.RefNumber, false);
             });
         });
 
@@ -326,6 +314,7 @@
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber, actiontype) {
         $scope.showaction = true;
         $scope.editMode = true;
+        $scope.viewmode = false;
         $scope.activateTab(0);
         $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
@@ -365,7 +354,7 @@
                 $scope.pageList[i].IsValid = true;
             }
             //assignUsers();
-            debugger
+           
             assignCountry($scope.selectModel.CountryId.split(','));
             binddata($scope.CountryMasterList);
             if (actiontype) {
@@ -379,6 +368,62 @@
                     $('#confirm').modal('show');
                 }
             }
+        }).error(function (data) {
+            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
+        });
+
+        StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
+            $scope.UploadedSList = [];
+            $scope.UploadedDList = [];
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].Status == "S")
+                        $scope.UploadedSList.push(data[i]);
+                    else
+                        $scope.UploadedDList.push(data[i]);
+                }
+            }
+        });
+
+        $timeout(function () {
+            StrategyService.HideLoader();
+        }, 500)
+    };
+
+
+    $scope.GetViewdata= function (id, Version, RefNumber, actiontype) {
+        $scope.showaction = true;
+        $scope.viewmode = true;
+        $scope.ApprovalCheck.ShowSignOff = false;
+        StrategyService.ShowLoader();
+        binddata($scope.CountryMasterList);
+        StrategyService.GetDatabyId(id).success(function (data) {
+            $scope.selectModel = data[0];
+            $scope.selectModel.GOLiveDate = $scope.selectModel.GOLiveDate;
+            $scope.selectModel.DecomissionedDate = $scope.selectModel.DecomissionedDate;
+            $scope.selectModel.Region = getdynamicobject($scope.selectModel.Region, "RegionMasterList")
+            $scope.selectModel.LTAApplicationCode = getdynamicobject($scope.selectModel.LTAApplicationCodeId, "LTAApplicationCodeList")
+            $scope.selectModel.LTAStrategyCode = getdynamicobject($scope.selectModel.LTAStrategyCodeId, "LTAStrategyCodeList")
+            $scope.selectModel.DiscretionaryCode = getdynamicobject($scope.selectModel.DiscretionaryCodeId, "DiscretionaryCodeList")
+            $scope.selectModel.ParentID = getdynamicobject($scope.selectModel.ParentID, "ParentIDList")
+            $scope.selectModel.BusinessSuffix = getdynamicobject($scope.selectModel.BusinessSuffixId, "BusinessSuffixList");
+            $scope.selectModel.BusinessLine = getdynamicobject($scope.selectModel.BusinessLineId, "BusinessLineList");
+            $scope.selectModel.LTAApplicationName = getdynamicobject($scope.selectModel.LTAApplicationNameId, "LTAApplicationNameList")
+            $scope.selectModel.LTAStrategyName = getdynamicobject($scope.selectModel.LTAStrategyNameId, "LTAStrategyNameList")
+            $scope.selectModel.ApplicationCategory = getdynamicobject($scope.selectModel.ApplicationCategoryId, "ApplicationCategoryList")
+            $scope.selectModel.Strategytype = getdynamicobject($scope.selectModel.StrategytypeId, "StrategytypeList")
+            $scope.selectModel.Venuetype = getdynamicobject($scope.selectModel.VenueTypeId, "VenuetypeList")
+            $scope.selectModel.Capacity = getdynamicobject($scope.selectModel.CapacityId, "CapacityList")
+            $scope.selectModel.ChildID = getdynamicobject($scope.selectModel.ChildID, "ChildIDList");
+            $scope.selectModel.ThirdPartyApp = getdynamicobject($scope.selectModel.ThirdPartyAppId, "ThirdPartyList");
+            $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
+            $scope.selectModel.Status = getdynamicobject($scope.selectModel.StatusId, "StrategyStatusType");
+            $scope.selectModel.Description = $scope.selectModel.Description;
+            $scope.selectModel.LTAApplicationOwner =$scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
+            $scope.userfilter(true);
+            assignCountry($scope.selectModel.CountryId.split(','));
+            binddata($scope.CountryMasterList);
+            
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
@@ -541,10 +586,13 @@
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;
-        $('#confirmModal').modal('show');
+     
+            $('#confirmModal').modal('show');
     };
+    
     $scope.cancel = function () {
         cleardata();
+       
         binddata($scope.CountryMasterList);
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
@@ -573,7 +621,7 @@
                     if (state) {
                         $scope.selectModel.LTAStrategyOwner = getdynamicobjectuserfilter($scope.selectModel.LTAStrategyOwnerId, "LTAStrategyOwnerList")
                     }
-                  }).error(function (error) {
+                }).error(function (error) {
                     $scope.Error = error;
                 })
             }
@@ -809,6 +857,7 @@
 
     $rootScope.$on('eventName', function (event, args) {
         $scope.showaction = false;
+        $scope.viewmode = false;
     });
 }]);
 

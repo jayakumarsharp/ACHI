@@ -2044,6 +2044,7 @@
     <Content Include="images\sort_desc.png" />
     <Content Include="images\tasks.png" />
     <Content Include="images\user.jpg" />
+    <Content Include="images\viewicon.png" />
     <Content Include="js\animate.js" />
     <Content Include="js\Config.js" />
     <Content Include="js\controllers\ApplicationCategoryMasterController.js" />

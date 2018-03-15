@@ -1,8 +1,8 @@
 ﻿<!-- BEGIN PAGE BREADCRUMBS -->
-<div ng-controller="StrategyController">
+<div ng-controller="StrategyController" ng-cloak>
     <div ng-include="'Main/ConfirmModal'"></div>
-    <div class="col-lg-12 col-md-12  main-content basic-page sidebar" style="width:80%;padding:1px!important;" ng-show="!showaction">
-        <h4> LTA Strategy Inventory Management   </h4>
+    <div class="col-lg-12 col-md-12  main-content basic-page sidebar" style="width: 80%; padding: 1px!important;" ng-show="!showaction">
+        <h4>LTA Strategy Inventory Management   </h4>
 
         <div class="row pull-right" ng-if="Permissions.IsWrite || ApprovalCheck.IsApprove">
             <button data-ng-click="showadd()" class="btn btn-primary">Add LTA Strategy Inventory &nbsp;    <i class="fa fa-plus"></i></button>
@@ -11,10 +11,10 @@
             <table datatable="" dt-options="dtOptions" dt-columns="dtColumns" class="table table-responsive"></table>
         </div>
     </div>
-    <div ng-show="showaction">
+    <div ng-show="showaction && !viewmode">
         <div class="col-lg-8 col-md-6 main-content basic-page sidebar">
-            <h4 style="margin-bottom:1px !important;" ng-hide="editMode">Add Strategy </h4>
-            <h4 style="margin-bottom:1px !important;" ng-show="editMode">Edit Strategy</h4>
+            <h4 style="margin-bottom: 1px !important;" ng-hide="editMode">Add Strategy </h4>
+            <h4 style="margin-bottom: 1px !important;" ng-show="editMode">Edit Strategy</h4>
             <div class="row">
                 <div class="box-body">
                     <div class="row">
@@ -36,11 +36,176 @@
             </ol>
         </div>
     </div>
+
+    <div class="col-lg-12 col-md-12  main-content basic-page sidebar" style="width: 80%; padding: 1px!important;" ng-show="viewmode">
+        <div class="col-md-4">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>LTA Application Name </label>
+                    <span class="form-control" ng-bind="selectModel.LTAApplicationName.LTAApplicationName"></span>
+                </div>
+                <div class="form-group">
+                    <label>Third Party Application </label>
+                    <span class="form-control" ng-bind="selectModel.ThirdPartyApp.Value"></span>
+                </div>
+                <div class="form-group">
+                    <label>LTA Application Owner </label>
+                    <span class="form-control" ng-bind="selectModel.LTAApplicationOwner"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>LTA Strategy Name </label>
+                    <span class="form-control" ng-bind="selectModel.LTAStrategyName.LTAStrategyName"></span>
+                </div>
+                <div class="form-group">
+                    <label>LTA Short Code </label>
+                    <span class="form-control" ng-bind="selectModel.LTAShortCode"></span>
+                </div>
+                <div class="form-group">
+                    <label>Business Line </label>
+                    <span class="form-control" ng-bind="selectModel.BusinessLine.BusinessLine"></span>
+                </div>
+                <div class="form-group">
+                    <label>Senior Management Function</label>
+                    <span class="form-control" ng-bind="selectModel.SeniorManagementFunction"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Strategy type </label>
+                    <span class="form-control" ng-bind="selectModel.Strategytype.Strategytype"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Go-Live date </label>
+                    <span class="form-control" ng-bind="selectModel.GOLiveDate"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Country </label>
+                    <span>{{selectModel.CountryNameList}}</span>
+                </div>
+            </div>
+        </div>
+        @*First Box end*@
+        @*Second Box start*@
+        <div class="col-md-4">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>LTA Application Code </label>
+                    <span class="form-control" ng-bind="selectModel.LTAApplicationCode.LTAApplicationCode"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Parent ID </label>
+
+                    <span class="form-control" ng-bind="selectModel.ParentID.ParentID"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Asset Class </label>
+                    <span class="form-control" ng-bind="selectModel.Business.Business"></span>
+                </div>
+                <div class="form-group">
+                    <label>LTA Strategy Code </label>
+                    <span class="form-control" ng-bind="selectModel.LTAStrategyCode.LTAStrategyCode"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Short code</label>
+                    <span class="form-control" ng-bind="selectModel.AdditionalShortCode"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Region </label>
+                    <span class="form-control" ng-bind="selectModel.Region.RegionName"></span>
+                </div>
+                <div class="form-group">
+                    <label>Venue type </label>
+                    <span class="form-control" ng-bind="selectModel.Venuetype.Venuetype"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority </label>
+                    <span class="form-control" ng-bind="selectModel.Priority"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Decommissioned Date</label>
+                    <div class="col-lg-12">
+                        <span class="form-control" ng-bind="selectModel.DecomissionedDate"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <span class="form-control" rows="5" id="comment" ng-bind="selectModel.Description"></span>
+                </div>
+
+            </div>
+        </div>
+        @*Second Box end*@
+
+        @*3rd Box start*@
+        <div class="col-md-4">
+            <div class="box-body">
+                <div class="form-group">
+                    <label>Child ID </label>
+                    <span class="form-control" ng-bind="selectModel.ChildID.ChildID"></span>
+                </div>
+                <div class="form-group">
+                    <label>Application Category </label>
+                    <span class="form-control" ng-bind="selectModel.ApplicationCategory.ApplicationCategory"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Asset Class Suffix </label>
+                    <span class="form-control" ng-bind="selectModel.BusinessSuffix.BusinessSuffix"></span>
+                </div>
+                <div class="form-group">
+                    <label>Discretionary Code </label>
+                    <span class="form-control" ng-bind="selectModel.DiscretionaryCode.DiscretionaryCode"></span>
+                </div>
+                <div class="form-group">
+                    <label>LTA Long Code</label>
+                   <span class="form-control" ng-bind="selectModel.LTALongCode"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>LTA Strategy Owner </label>
+                    <span class="form-control" ng-bind="selectModel.LTAStrategyOwner.userId"></span>
+                </div>
+                <div class="form-group">
+                    <label>Capacity </label>
+                    <span class="form-control" ng-bind="selectModel.Capacity.Capacity"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority Score </label>
+                    <span class="form-control" ng-bind="selectModel.PriorityScore"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Status </label>
+                    <span class="form-control" ng-bind="selectModel.Status.StatusName"></span>
+                </div>
+                <div class="form-group">
+                    <label>Attest Status</label>
+
+                    <span class="form-control" ng-show="selectModel.Attest== 'True'">Attested  </span>
+                    <span class="form-control" ng-show="selectModel.Attest!= 'True'">Not Attested  </span>
+                </div>
+
+            </div>
+        </div>
+
+        <input type="button" value="Cancel" ng-click="Confirmcancel()" class="btn btn-primary" />
+    </div>
+
     <div ng-include="'Main/ViewApprovals'"></div>
     <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                <div class="modal-header" style="background-color: #3c8dbc; color: white">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                     <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
                 </div>
@@ -65,8 +230,6 @@
         height: 34px;
         padding: 0px 9px;
     }
-
-    
 </style>
 
 
