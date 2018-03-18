@@ -203,12 +203,21 @@
             $scope.StrategytypeList = resp[12].data;
             $scope.CapacityList = resp[13].data;
             //$scope.RegionMasterList = resp[16].data;
-            $scope.LTAApplicationOwnerList = resp[14].data;
+            $scope.LTAStrategyOwnerList = resp[14].data;
             $scope.StrategyStatusType = resp[15].data;
             $scope.BusinessLineList = resp[16].data;
             $scope.RegionMasterList = resp[17].data;
             $scope.CountryMasterList = resp[18].data;
-            binddata($scope.CountryMasterList);
+         
+            debugger;
+            binddatabusiness($scope.BusinessList);
+            binddatabusinessline($scope.BusinessLineList);
+            binddataltaapplication($scope.LTAApplicationNameList)
+            binddataltastrategyname($scope.LTAStrategyNameList);
+            binddataltastrategyowner($scope.LTAStrategyOwnerList);
+            binddataregion($scope.RegionMasterList);
+
+                    
             StrategyService.HideLoader();
         });
     };
@@ -230,46 +239,111 @@
         $scope.showfilter = true;
     };
     $scope.Export = function () {
+      
         var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
-        //if (!$scope.selectModel || $scope.multiselect.selected.length<=0) {
-            StrategyService.ShowLoader();
-            //if ($scope.selectModel.Country)
-            //    currency.Country = $scope.selectModel.Country.Id
+        if ($scope.selectModel || $scope.multiselectBusiness.selected.length>0  || $scope.multiselectBusinessLine.selected.length>0  || $scope.multiselectLTAApplication.selected.length>0  || $scope.multiselectLTAStrategy.selected.length>0  || $scope.multiselectLTAStrategyOwner.selected.length>0  || $scope.multiselectRegion.selected.length>0) {
             var idlist = '';
+            StrategyService.ShowLoader();
             var CountryNames = '';
-            for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-                if(i==$scope.multiselect.selected.length-1)
+            for (var i = 0; i < $scope.multiselectBusiness.selected.length; i++) {
+                if(i==$scope.multiselectBusiness.selected.length-1)
                 {
-                    idlist += $scope.multiselect.selected[i].id ;
-                    CountryNames += $scope.multiselect.selected[i].name;
+                    idlist += $scope.multiselectBusiness.selected[i].id ;
+                    // CountryNames += $scope.multiselectBusiness.selected[i].name;
                 }
                 else{
-                    idlist += $scope.multiselect.selected[i].id + ',';
-                    CountryNames += $scope.multiselect.selected[i].name + ',';
+                    idlist += $scope.multiselectBusiness.selected[i].id + ',';
+                    // CountryNames += $scope.multiselectBusiness.selected[i].name + ',';
                 }
             }
-            currency.Country = idlist;
-            if ($scope.selectModel.Region)
-                currency.Region = $scope.selectModel.Region.Id;
-            if ($scope.selectModel.LTAApplicationCode)
-                currency.LTAApplicationCode = $scope.selectModel.LTAApplicationCode.Id;
-            if ($scope.selectModel.LTAStrategyCode)
-                currency.LTAStrategyCode = $scope.selectModel.LTAStrategyCode.Id;
-            if ($scope.selectModel.BusinessLine)
-                currency.BusinessLine = $scope.selectModel.BusinessLine.Id;
-            if ($scope.selectModel.LTAStrategyOwner)
-                currency.LTAStrategyOwner = $scope.selectModel.LTAStrategyOwner.userId;
-            if ($scope.selectModel.ApplicationCategory)
-                currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
-            if ($scope.selectModel.Venuetype)
-                currency.VenuetypeId = $scope.selectModel.Venuetype.Id;
-            if ($scope.selectModel.LTAApplicationName)
-                currency.LTAApplicationNameId = $scope.selectModel.LTAApplicationName.Id;
-            if ($scope.selectModel.ChildID)
-                currency.ChildID = $scope.selectModel.ChildID.Id;
-            if ($scope.selectModel.ParentID)
-                currency.ParentID = $scope.selectModel.ParentID.Id;
+            currency.Business = idlist;
 
+            
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
+                if(i==$scope.multiselectBusinessLine.selected.length-1)
+                {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id ;
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
+                }
+            }
+            currency.BusinessLine = idlist;
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAApplication.selected.length; i++) {
+                if(i==$scope.multiselectLTAApplication.selected.length-1)
+                {
+                    idlist += $scope.multiselectLTAApplication.selected[i].id ;
+                    // CountryNames += $scope.multiselectLTAApplication.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectLTAApplication.selected[i].id + ',';
+                    // CountryNames += $scope.multiselectLTAApplication.selected[i].name + ',';
+                }
+            }
+            currency.LTAApplicationName = idlist;
+
+
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAStrategy.selected.length; i++) {
+                if(i==$scope.multiselectLTAStrategy.selected.length-1)
+                {
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id ;
+                    // CountryNames += $scope.multiselectLTAStrategy.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id + ',';
+                    //   CountryNames += $scope.multiselectLTAStrategy.selected[i].name + ',';
+                }
+            }
+            currency.LTAStrategyName = idlist;
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAStrategyOwner.selected.length; i++) {
+                if(i==$scope.multiselectLTAStrategyOwner.selected.length-1)
+                {
+                    idlist += "'"+$scope.multiselectLTAStrategyOwner.selected[i].id +"'";
+                }
+                else{
+                    idlist += "'"+ $scope.multiselectLTAStrategyOwner.selected[i].id +"'"+ ',';
+                }
+            }
+            currency.LTAStrategyOwnerId = idlist;
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
+                if(i==$scope.multiselectRegion.selected.length-1)
+                {
+                    idlist += $scope.multiselectRegion.selected[i].id ;
+                    //   CountryNames += $scope.multiselectRegion.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectRegion.selected[i].id + ',';
+                    //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
+                }
+            }
+            currency.Region =idlist;
+            if ($scope.selectModel)
+            {
+                if($scope.selectModel.Status)
+                    currency.StatusId=  $scope.selectModel.Status.Id;
+                currency.Priority=   $scope.selectModel.Priority;
+            }
+        
 
             ApiCall.MakeApiCall("ExportReport", 'POST', currency).success(function (data) {
                 if (data.Error != undefined) {
@@ -289,59 +363,141 @@
             }).error(function (data) {
                 $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
             });
-       // }
-        //else
-          //  toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
+        }
+        else
+            toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
+
+        
     };
     $scope.showreport = function () {
         $scope.showfilter = false;
-        debugger;
-        //var idlist = '';
-        //for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-        //    idlist = $scope.multiselect.selected[i].id + ',';
-        //}
+       
         var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
-        if ($scope.selectModel) {
+        if ($scope.selectModel || $scope.multiselectBusiness.selected.length>0  || $scope.multiselectBusinessLine.selected.length>0  || $scope.multiselectLTAApplication.selected.length>0  || $scope.multiselectLTAStrategy.selected.length>0  || $scope.multiselectLTAStrategyOwner.selected.length>0  || $scope.multiselectRegion.selected.length>0) {
             StrategyService.ShowLoader();
             //if ($scope.selectModel.Country)
             //    currency.Country = $scope.selectModel.Country.Id
 
             var idlist = '';
             var CountryNames = '';
-            for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-                if(i==$scope.multiselect.selected.length-1)
+            for (var i = 0; i < $scope.multiselectBusiness.selected.length; i++) {
+                if(i==$scope.multiselectBusiness.selected.length-1)
                 {
-                    idlist += $scope.multiselect.selected[i].id ;
-                    CountryNames += $scope.multiselect.selected[i].name;
+                    idlist += $scope.multiselectBusiness.selected[i].id ;
+                    // CountryNames += $scope.multiselectBusiness.selected[i].name;
                 }
                 else{
-                    idlist += $scope.multiselect.selected[i].id + ',';
-                    CountryNames += $scope.multiselect.selected[i].name + ',';
+                    idlist += $scope.multiselectBusiness.selected[i].id + ',';
+                    // CountryNames += $scope.multiselectBusiness.selected[i].name + ',';
                 }
             }
-            currency.Country = idlist;
-            if ($scope.selectModel.Region)
-                currency.Region = $scope.selectModel.Region.Id;
-            if ($scope.selectModel.LTAApplicationCode)
-                currency.LTAApplicationCode = $scope.selectModel.LTAApplicationCode.Id;
-            if ($scope.selectModel.LTAStrategyCode)
-                currency.LTAStrategyCode = $scope.selectModel.LTAStrategyCode.Id;
-            if ($scope.selectModel.BusinessLine)
-                currency.BusinessLine = $scope.selectModel.BusinessLine.Id;
-            if ($scope.selectModel.LTAApplicationOwner)
-                currency.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner.userId;
-            if ($scope.selectModel.ApplicationCategory)
-                currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
-            if ($scope.selectModel.Venuetype)
-                currency.VenuetypeId = $scope.selectModel.Venuetype.Id;
-            if ($scope.selectModel.LTAApplicationName)
-                currency.LTAApplicationNameId = $scope.selectModel.LTAApplicationName.Id;
-            if ($scope.selectModel.ChildID)
-                currency.ChildID = $scope.selectModel.ChildID.Id;
-            if ($scope.selectModel.ParentID)
-                currency.ParentID = $scope.selectModel.ParentID.Id;
-            if ($scope.selectModel.ThirdPartyApp)
-                currency.ThirdPartyAppId = $scope.selectModel.ThirdPartyApp.Id;
+            currency.Business = idlist;
+
+            
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
+                if(i==$scope.multiselectBusinessLine.selected.length-1)
+                {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id ;
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
+                }
+            }
+            currency.BusinessLine = idlist;
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAApplication.selected.length; i++) {
+                if(i==$scope.multiselectLTAApplication.selected.length-1)
+                {
+                    idlist += $scope.multiselectLTAApplication.selected[i].id ;
+                    // CountryNames += $scope.multiselectLTAApplication.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectLTAApplication.selected[i].id + ',';
+                    // CountryNames += $scope.multiselectLTAApplication.selected[i].name + ',';
+                }
+            }
+            currency.LTAApplicationName = idlist;
+
+
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAStrategy.selected.length; i++) {
+                if(i==$scope.multiselectLTAStrategy.selected.length-1)
+                {
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id ;
+                    // CountryNames += $scope.multiselectLTAStrategy.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id + ',';
+                    //   CountryNames += $scope.multiselectLTAStrategy.selected[i].name + ',';
+                }
+            }
+            currency.LTAStrategyName = idlist;
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectLTAStrategyOwner.selected.length; i++) {
+                if(i==$scope.multiselectLTAStrategyOwner.selected.length-1)
+                {
+                    idlist += "'"+$scope.multiselectLTAStrategyOwner.selected[i].id +"'";
+                }
+                else{
+                    idlist += "'"+ $scope.multiselectLTAStrategyOwner.selected[i].id +"'"+ ',';
+                }
+            }
+            currency.LTAStrategyOwnerId = idlist;
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
+                if(i==$scope.multiselectRegion.selected.length-1)
+                {
+                    idlist += $scope.multiselectRegion.selected[i].id ;
+                    //   CountryNames += $scope.multiselectRegion.selected[i].name;
+                }
+                else{
+                    idlist += $scope.multiselectRegion.selected[i].id + ',';
+                    //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
+                }
+            }
+            currency.Region =idlist;
+            if ($scope.selectModel)
+            {
+                if($scope.selectModel.Status)
+                    currency.StatusId=  $scope.selectModel.Status.Id;
+                currency.Priority=   $scope.selectModel.Priority;
+            }
+            //if ($scope.selectModel.LTAApplicationCode)
+            //    currency.LTAApplicationCode = $scope.selectModel.LTAApplicationCode.Id;
+            //if ($scope.selectModel.LTAStrategyCode)
+            //    currency.LTAStrategyCode = $scope.selectModel.LTAStrategyCode.Id;
+            //if ($scope.selectModel.BusinessLine)
+            //    currency.BusinessLine = $scope.selectModel.BusinessLine.Id;
+            //if ($scope.selectModel.LTAApplicationOwner)
+            //    currency.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner.userId;
+            //if ($scope.selectModel.ApplicationCategory)
+            //    currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
+            //if ($scope.selectModel.Venuetype)
+            //    currency.VenuetypeId = $scope.selectModel.Venuetype.Id;
+            //if ($scope.selectModel.LTAApplicationName)
+            //    currency.LTAApplicationNameId = $scope.selectModel.LTAApplicationName.Id;
+            //if ($scope.selectModel.ChildID)
+            //    currency.ChildID = $scope.selectModel.ChildID.Id;
+            //if ($scope.selectModel.ParentID)
+            //    currency.ParentID = $scope.selectModel.ParentID.Id;
+            //if ($scope.selectModel.ThirdPartyApp)
+            //    currency.ThirdPartyAppId = $scope.selectModel.ThirdPartyApp.Id;
 
             ApiCall.MakeApiCall("GetStrategyReport", 'POST', currency).success(function (data) {
                 if (data.Error != undefined) {
@@ -361,67 +517,6 @@
 
     };
 
-
-    $scope.GetCurrencyConversionForId = function (id, Version, RefNumber) {
-        $scope.showaction = true;
-        $scope.ShowSignOff = false;
-        StrategyService.ShowLoader();
-        binddata($scope.CountryMasterList);
-        StrategyService.GetDatabyId(id).success(function (data) {
-            $scope.editMode = true;
-            $scope.selectModel = data[0];
-            $scope.selectModel.GOLiveDate = $scope.selectModel.GOLiveDate;
-            $scope.selectModel.DecomissionedDate = $scope.selectModel.DecomissionedDate;
-            //$scope.selectModel.GOLiveDate = moment($scope.selectModel.GOLiveDate.split(' ')[0], 'DD/MM/YYYY').format('MM/DD/YYYY');
-            //$scope.selectModel.DecomissionedDate = moment($scope.selectModel.DecomissionedDate.split(' ')[0], 'DD/MM/YYYY').format('MM/DD/YYYY');
-            $scope.Prevvalue = angular.copy($scope.selectModel)
-            $scope.multiselect.selected = JSON.parse($scope.selectModel.Country);
-            //$scope.selectModel.Country = getdynamicobject($scope.selectModel.Country, "CountryMasterList")
-            $scope.selectModel.Region = getdynamicobject($scope.selectModel.Region, "RegionMasterList")
-            $scope.selectModel.LTAApplicationCode = getdynamicobject($scope.selectModel.LTAApplicationCodeId, "LTAApplicationCodeList")
-            $scope.selectModel.LTAStrategyCode = getdynamicobject($scope.selectModel.LTAStrategyCodeId, "LTAStrategyCodeList")
-            $scope.selectModel.DiscretionaryCode = getdynamicobject($scope.selectModel.DiscretionaryCodeId, "DiscretionaryCodeList")
-            $scope.selectModel.ParentID = getdynamicobject($scope.selectModel.ParentID, "ParentIDList")
-            $scope.selectModel.BusinessSuffix = getdynamicobject($scope.selectModel.BusinessSuffixId, "BusinessSuffixList");
-            $scope.selectModel.BusinessLine = getdynamicobject($scope.selectModel.BusinessLineId, "BusinessLineList");
-            $scope.selectModel.LTAApplicationName = getdynamicobject($scope.selectModel.LTAApplicationNameId, "LTAApplicationNameList")
-            $scope.selectModel.LTAStrategyName = getdynamicobject($scope.selectModel.LTAStrategyNameId, "LTAStrategyNameList")
-            $scope.selectModel.ApplicationCategory = getdynamicobject($scope.selectModel.ApplicationCategoryId, "ApplicationCategoryList")
-            $scope.selectModel.Strategytype = getdynamicobject($scope.selectModel.StrategytypeId, "StrategytypeList")
-            $scope.selectModel.Venuetype = getdynamicobject($scope.selectModel.VenueTypeId, "VenuetypeList")
-            $scope.selectModel.Capacity = getdynamicobject($scope.selectModel.CapacityId, "CapacityList")
-            $scope.selectModel.ChildID = getdynamicobject($scope.selectModel.ChildID, "ChildIDList");
-            $scope.selectModel.ThirdPartyApp = getdynamicobject($scope.selectModel.ThirdPartyAppId, "ThirdPartyList");
-            $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
-            $scope.selectModel.Description = $scope.selectModel.Description;
-            $scope.userfilter(true);
-            $scope.activateTab(0);
-            for (var i = 0; i < $scope.pageList.length; i++) {
-                $scope.pageList[i].IsValid = true;
-            }
-            assignUsers();
-        }).error(function (data) {
-            $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
-        });
-
-        StrategyService.GetStrategyApprovalById(RefNumber, Version).success(function (data) {
-            $scope.UploadedSList = [];
-            $scope.UploadedDList = [];
-            if (data.length > 0) {
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].Status == "S")
-                        $scope.UploadedSList.push(data[i]);
-                    else
-                        $scope.UploadedDList.push(data[i]);
-                }
-            }
-        });
-
-        $timeout(function () {
-            StrategyService.HideLoader();
-        }, 500)
-    };
-
     var getdynamicobject = function (userId, type) {
         for (var i = 0; i < $scope[type].length; i++) {
             if ($scope[type][i].Id == userId) {
@@ -436,23 +531,7 @@
             }
         }
     };
-    $scope.GetCurrencyConversionForIdView = function (id, Version) {
-        $scope.ViewData = [];
-        $scope.ViewListdata = false;
-        $('#viewApprovals').modal('show');
-        ApiCall.MakeApiCall("GetStrategyVersionLog?Id=" + id, 'GET', '').success(function (data) {
-            $scope.Listdata = data;
-            $scope.ViewListdata = true;
-        }).error(function (error) {
-            $scope.Error = error;
-        })
-    };
-
-
-    $scope.showconfirm = function (data) {
-        $scope.Id = data;
-        $('#confirmModal').modal('show');
-    };
+   
 
     $scope.cancel = function () {
         $scope.currency = {};
@@ -512,15 +591,10 @@
                         $scope.selectModel.ThirdPartyApp = getdynamicobject(data[0].ThirdPartyAppId, "ThirdPartyList");
                         $scope.selectModel.ApplicationCategory = getdynamicobject(data[0].ApplicationCategoryId, "ApplicationCategoryList");
                         $scope.selectModel.ParentID = getdynamicobject(data[0].ParentIDValue, "ParentIDList");
-                        $scope.selectModel.BusinessLine = getdynamicobject(data[0].BusinessLineId, "BusinessLineList");
+                        $scope.selectModel.BusinessLine = getdynamicobject(data[0].BusinessLineId, "");
                         $scope.selectModel.Region = getdynamicobject(data[0].Region, "RegionMasterList");
                         $scope.selectModel.Country = getdynamicobject(data[0].Country, "CountryMasterList");
                         $scope.selectModel.ThirdPartyApp = getdynamicobject(data[0].ThirdPartyAppId, "ThirdPartyList");
-                        var Region = data[0].Region;
-                        var BusinessLine = data[0].BusinessLineId;
-                        var userid = data[0].ApplicationOwner;
-                        binddata($scope.CountryMasterList);
-
                         assignUsers(data[0].Country.split(','));
 
                         if (Region != "" && BusinessLine != "" && BusinessLine != undefined && Region != undefined) {
@@ -647,7 +721,84 @@
 
     $scope.GetRightsList();
 
-    $scope.multiselect = {
+    $scope.multiselectBusinessLine = {
+        selected: [],
+        options: [],
+        config: {
+            hideOnBlur: false,
+            showSelected: false,
+            itemTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            },
+            labelTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            }
+        }
+    };
+
+
+    $scope.multiselectRegion = {
+        selected: [],
+        options: [],
+        config: {
+            hideOnBlur: false,
+            showSelected: false,
+            itemTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            },
+            labelTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            }
+        }
+    };
+
+    $scope.multiselectBusiness = {
+        selected: [],
+        options: [],
+        config: {
+            hideOnBlur: false,
+            showSelected: false,
+            itemTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            },
+            labelTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            }
+        }
+    };
+
+    $scope.multiselectLTAApplication = {
+        selected: [],
+        options: [],
+        config: {
+            hideOnBlur: false,
+            showSelected: false,
+            itemTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            },
+            labelTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            }
+        }
+    };
+
+
+    $scope.multiselectLTAStrategy = {
+        selected: [],
+        options: [],
+        config: {
+            hideOnBlur: false,
+            showSelected: false,
+            itemTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            },
+            labelTemplate: function (item) {
+                return $sce.trustAsHtml(item.name);
+            }
+        }
+    };
+
+    $scope.multiselectLTAStrategyOwner = {
         selected: [],
         options: [],
         config: {
@@ -668,30 +819,170 @@
         }).join(', ');
     };
 
-    function assignUsers(data) {
-        $scope.multiselect.selected=[];
+    function assignbusiness(data) {
+        $scope.multiselectBusiness.selected=[];
         
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselect.options.length;k++)
+            for(k=0;k<$scope.multiselectBusiness.options.length;k++)
             {
-                if($scope.multiselect.options[k].id==data[index].trim())
+                if($scope.multiselectBusiness.options[k].id==data[index].trim())
                 {
-                    $scope.multiselect.selected.push($scope.multiselect.options[k]);
+                    $scope.multiselectBusiness.selected.push($scope.multiselectBusiness.options[k]);
                 }
             }
         }
-        // binddata($scope.CountryMasterList); 
+      
     }
-    function binddata(list) {
-        $scope.multiselect.selected=[];
-        $scope.multiselect.options = list.map(function (item) {
+
+    function binddatabusiness(list) {
+        $scope.multiselectBusiness.options = list.map(function (item) {
             return {
-                name: item.CountryName,
+                name: item.Business,
                 id: item.Id
             };
         });
     }
+
+
+
+
+    //test
+
+    function assignbusinessline(data) {
+        $scope.multiselectBusinessLine.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselectBusinessLine.options.length;k++)
+            {
+                if($scope.multiselectBusinessLine.options[k].id==data[index].trim())
+                {
+                    $scope.multiselectBusinessLine.selected.push($scope.multiselectBusinessLine.options[k]);
+                }
+            }
+        }
+      
+    }
+
+    function binddatabusinessline(list) {
+        $scope.multiselectBusinessLine.options = list.map(function (item) {
+            return {
+                name: item.BusinessLine,
+                id: item.Id
+            };
+        });
+    }
+
+
+
+
+
+    function assignltastrategyname(data) {
+        $scope.multiselectLTAStrategy.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselectLTAStrategy.options.length;k++)
+            {
+                if($scope.multiselectLTAStrategy.options[k].id==data[index].trim())
+                {
+                    $scope.multiselectLTAStrategy.selected.push($scope.multiselectLTAStrategy.options[k]);
+                }
+            }
+        }
+      
+    }
+
+    function binddataltastrategyname(list) {
+        $scope.multiselectLTAStrategy.options = list.map(function (item) {
+            return {
+                name: item.LTAStrategyName,
+                id: item.Id
+            };
+        });
+    }
+
+
+    function assignltastrategyowner(data) {
+        $scope.multiselectLTAStrategyOwner.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselectLTAStrategyOwner.options.length;k++)
+            {
+                if($scope.multiselectLTAStrategyOwner.options[k].id==data[index].trim())
+                {
+                    $scope.multiselectLTAStrategyOwner.selected.push($scope.multiselectLTAStrategyOwner.options[k]);
+                }
+            }
+        }
+      
+    }
+
+    function binddataltastrategyowner(list) {
+        $scope.multiselectLTAStrategyOwner.options = list.map(function (item) {
+            return {
+                name: item.userId,
+                id: item.userId
+            };
+        });
+    }
+
+
+
+    function assignregion(data) {
+        $scope.multiselectRegion.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselectRegion.options.length;k++)
+            {
+                if($scope.multiselectRegion.options[k].id==data[index].trim())
+                {
+                    $scope.multiselectRegion.selected.push($scope.multiselectRegion.options[k]);
+                }
+            }
+        }
+      
+    }
+
+    function binddataregion(list) {
+        $scope.multiselectRegion.options = list.map(function (item) {
+            return {
+                name: item.RegionName,
+                id: item.Id
+            };
+        });
+    }
+
+
+    function assignltaapplication(data) {
+        $scope.multiselectLTAApplication.selected=[];
+        
+        for (index = 0; index < data.length; index++) {
+
+            for(k=0;k<$scope.multiselectLTAApplication.options.length;k++)
+            {
+                if($scope.multiselectLTAApplication.options[k].id==data[index].trim())
+                {
+                    $scope.multiselectLTAApplication.selected.push($scope.multiselectLTAApplication.options[k]);
+                }
+            }
+        }
+      
+    }
+
+    function binddataltaapplication(list) {
+        $scope.multiselectLTAApplication.options = list.map(function (item) {
+            return {
+                name: item.LTAApplicationName,
+                id: item.Id
+            };
+        });
+    }
+
+
 
 }]);
 

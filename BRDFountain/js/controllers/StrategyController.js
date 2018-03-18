@@ -5,7 +5,7 @@
     $scope.Strategydata = [];
     $scope.editMode = false;
     $scope.showaction = false;
-    $scope.viewmode = false;
+    
     $scope.IsReadOnly = true;
     $scope.currency = {};
     $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
@@ -17,13 +17,15 @@
     $scope.dtOptions = DTOptionsBuilder.fromSource()
     .withPaginationType('full_numbers').withOption('createdRow', createdRow)
     .withOption('rowCallback', rowCallback).withOption('scrollX', true);
+    //.withButtons( ['excel', 'pdf']);
     $scope.dtColumns = [
-        DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code'),
+       //DTColumnBuilder.newColumn(null).withTitle('S.No.').renderWith(renderRetreadNo),
+        DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code').renderWith(shortcodelink),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
         DTColumnBuilder.newColumn('LTAStrategyName').withTitle('LTA Strategy Name'),
         DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
-        DTColumnBuilder.newColumn('LTAApplicationOwner').withTitle('LTA Application Owner'),
+        DTColumnBuilder.newColumn('LTAStrategyOwner').withTitle('LTA Strategy Owner'),
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Category'),
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
          DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
@@ -31,6 +33,9 @@
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
+    function renderRetreadNo(data, type, full, meta) {
+        return meta.row+1;
+    }
     function actionsStatus(data, type, full, meta) {
         if (data == "True")
             return '<a  class="dta-act">Attested</a>';
@@ -39,16 +44,12 @@
         }
     }
 
+    function shortcodelink(data, type, full, meta) {
+        return '<a class="test3" style="    text-decoration: underline;">'+data+'</a>';
+    }
 
-    $scope.Confirmcancel = function () {
+    $scope.Confirmcancel = function () {        
         
-        if($scope.viewmode)
-        {$scope.viewmode = false;
-        $scope.showaction = false;
-
-        }
-
-        else
             $('#confirmModal').modal('show');
     }
 
@@ -56,10 +57,10 @@
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
     }
-
+    //<a class="test3"><img style="width:20px;height:20px;" src="images/viewicon.png"></a>
     function actionsHtml(data, type, full, meta) {
         if ($scope.Permissions.IsWrite || $scope.ApprovalCheck.IsApprove)
-            return '<a class="test"><img style="height:20px;width:20px" src="images/edit.png"></a> &nbsp;<a class="test1"><img style="width:20px;height:20px;" src="images/eyeicon.png"></a> &nbsp;<a class="test3"><img style="width:20px;height:20px;" src="images/viewicon.png"></a>';
+            return '<a class="test"><img style="height:20px;width:20px" src="images/edit.png"></a> &nbsp;<a class="test1"><img style="width:20px;height:20px;" src="images/eyeicon.png"></a> &nbsp;';
         else
             return '<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
     }
@@ -108,25 +109,6 @@
             $scope.dtOptions.data = $scope.data;
         });
     }
-
-    //function Getusermappingdata(userid) {
-    //    ApiCall.MakeApiCall("GetusercountryMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.CountryMasterList = data;
-    //        binddata($scope.CountryMasterList);
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    })
-    //    ApiCall.MakeApiCall("GetuserRegionMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.RegionMasterList = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    })
-    //    ApiCall.MakeApiCall("GetBusinessMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.BusinessLineList = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    });
-    //}
 
 
     $scope.getallalgodata = function () {
@@ -225,7 +207,31 @@
             StrategyService.HideLoader();
         }, 500)
     };
+     $scope.Export = function () {
+      
+        
 
+            ApiCall.MakeApiCall("ExportStrategyReport", 'GET',null).success(function (data) {
+                if (data.Error != undefined) {
+                    toaster.pop('error', "Error", data.Error, null);
+                } else {
+                    if (data != 'No Records') {
+                        var url = BaseURL + 'Main/DownLoadReportFile?FileName=' + data + '&Page=StrategyReport';
+                        $scope.downloadurl = url;
+                        setTimeout(function () {
+                            $('#downloadpdf')[0].click();
+                        }, 1000);
+                        //StrategyService.DownLoadReportFile(data);
+                    }
+                    //$scope.dtOptions.data = $scope.data;
+                    StrategyService.HideLoader();
+                }
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
+            });
+       
+        
+    };
     $scope.InsertStrategy = function () {
 
         StrategyService.ShowLoader();
@@ -314,7 +320,7 @@
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber, actiontype) {
         $scope.showaction = true;
         $scope.editMode = true;
-        $scope.viewmode = false;
+       
         $scope.activateTab(0);
         $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
@@ -392,8 +398,8 @@
 
 
     $scope.GetViewdata= function (id, Version, RefNumber, actiontype) {
-        $scope.showaction = true;
-        $scope.viewmode = true;
+        $scope.showaction = false;
+        $('#showreadonly').modal('show')
         $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
         binddata($scope.CountryMasterList);
@@ -587,7 +593,7 @@
     $scope.showconfirm = function (data) {
         $scope.Id = data;
      
-            $('#confirmModal').modal('show');
+        $('#confirmModal').modal('show');
     };
     
     $scope.cancel = function () {
@@ -857,7 +863,7 @@
 
     $rootScope.$on('eventName', function (event, args) {
         $scope.showaction = false;
-        $scope.viewmode = false;
+       
     });
 }]);
 

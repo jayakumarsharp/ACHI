@@ -167,18 +167,13 @@ namespace BRDFountain.Models
     {
         public string Region { get; set; }
         public string userid { get; set; }
-        public string LTAApplicationCode { get; set; }
-        public string LTAStrategyCode { get; set; }
+        public string LTAApplicationName { get; set; }
+        public string LTAStrategyName { get; set; }
         public string BusinessLine { get; set; }
-        public string Country { get; set; }
-        public string LTAApplicationOwner { get; set; }
-        public string SystemFlow { get; set; }
-        public string ApplicationCategory { get; set; }
-        public string VenuetypeId { get; set; }
-        public string ChildID { get; set; }
-        public string ParentID { get; set; }
-        public string LTAApplicationNameId { get; set; }
-        public string ThirdPartyAppId { get; set; }
+        public string Business { get; set; }
+        public string Priority { get; set; }
+        public string LTAStrategyOwnerId { get; set; }
+        public string StatusId { get; set; }
 
     }
 

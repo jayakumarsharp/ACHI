@@ -344,6 +344,8 @@ namespace BRDFountain.Controllers
         {
             try
             {
+                filter.userid = getloggedusername();
+              
 
                 List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
                 if (lst.Count > 0)
@@ -377,6 +379,42 @@ namespace BRDFountain.Controllers
         }
 
 
+
+        public string ExportStrategyReport()
+        {
+            try
+            {
+                List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername()); 
+                if (lst.Count > 0)
+                {
+                    string[] columns = { "RegionName", "LTAApplicationCode", "LTAStrategyCode", "LTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "LTAApplicationOwnerId", "ApplicationCategory", "LTAStrategyOwnerId", "LTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
+                    byte[] filecontent = ExcelExportHelper.ExportExcel(lst, "LTA Strategy Inventory Report", true, columns);
+                    //return File(, System.Net.Mime.MediaTypeNames.Application.Octet, "Report.xlsx");
+                    string mailbox = ConfigurationManager.AppSettings["FilePath"];
+                    string filepath = mailbox + "/Report/";
+                    bool exists = System.IO.Directory.Exists(@filepath);
+                    if (!exists)
+                        System.IO.Directory.CreateDirectory(@filepath);
+                    string filename = Convert.ToString(Guid.NewGuid()) + ".xlsx";
+                    if (!System.IO.File.Exists(filepath))
+                    {
+                        FileStream fileStream = System.IO.File.Create(filepath + filename, filecontent.Length);
+                        fileStream.Write(filecontent, 0, filecontent.Length);
+                        fileStream.Close();
+
+                    }
+                    return filename;
+                }
+                else
+                    return "No Records";
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy Export Report {0}", e);
+                return "error";
+            }
+        }
+        
         public string ExportReportFilter(StrategyReportFilter filter)
         {
             try
@@ -588,11 +626,13 @@ namespace BRDFountain.Controllers
 
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath1);
 
-                string name = "Report.xlsx";
+                string name = "LTAStrategyReport.xlsx";
                 if (Page == "Mapping")
                     name = "LTAStrategyInventoryReport.xlsx";
+                else if (Page=="StrategyReport")
+                    name = "LTAStrategyinventory-" + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";           
                 else
-                    name = "Report.xlsx";
+                    name = "LTAStrategyReport-" + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";
                 return File(fileBytes, ExcelExportHelper.ExcelContentType, name);
             }
             catch (Exception ex)

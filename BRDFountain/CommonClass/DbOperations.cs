@@ -494,7 +494,7 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                      // Country = Convert.ToString(row["CountryId"]),
+                                       // Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
@@ -506,7 +506,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                     //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                       //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -609,7 +609,7 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                      // Country = Convert.ToString(row["CountryId"]),
+                                       // Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
 
@@ -621,7 +621,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                     //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                       //  NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -677,18 +677,15 @@ public class DbOperations
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("i_userid", filter.userid));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationCode", filter.LTAApplicationCode));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAStrategyCode", filter.LTAStrategyCode));
-                    cmd.Parameters.Add(new SqlParameter("i_BusinessLine", filter.BusinessLine));
-                    cmd.Parameters.Add(new SqlParameter("i_Region", filter.Region));
-                    cmd.Parameters.Add(new SqlParameter("i_Country", filter.Country));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", filter.LTAApplicationOwner));
-                    cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
-                    cmd.Parameters.Add(new SqlParameter("i_VenueType", filter.VenuetypeId));
-                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationNameId", filter.LTAApplicationNameId));
-                    cmd.Parameters.Add(new SqlParameter("i_ParentID", filter.ParentID));
-                    cmd.Parameters.Add(new SqlParameter("i_ChildID", filter.ChildID));
-                    cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", filter.ThirdPartyAppId));
+                    cmd.Parameters.Add(new SqlParameter("i_business", filter.Business));
+                    cmd.Parameters.Add(new SqlParameter("i_businessline", filter.BusinessLine));
+                    cmd.Parameters.Add(new SqlParameter("i_strategyname", filter.LTAStrategyName));
+                    cmd.Parameters.Add(new SqlParameter("i_ltastrategyowner", filter.LTAStrategyOwnerId));
+                    cmd.Parameters.Add(new SqlParameter("i_region", filter.Region));
+                    cmd.Parameters.Add(new SqlParameter("i_ltaapplication", filter.LTAApplicationName));
+                    cmd.Parameters.Add(new SqlParameter("i_priority", filter.Priority));
+                    cmd.Parameters.Add(new SqlParameter("i_status", filter.StatusId));
+
                     using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
@@ -733,10 +730,10 @@ public class DbOperations
                                        VenueType = Convert.ToString(row["VenueType"]),
                                        Capacity = Convert.ToString(row["Capacity"]),
                                        CapacityId = Convert.ToInt32(row["CapacityId"]),
-                                     //  Country = Convert.ToString(row["CountryId"]),
+                                       //  Country = Convert.ToString(row["CountryId"]),
                                        CountryId = Convert.ToString(row["CountryIdList"]),
                                        CountryNameList = Convert.ToString(row["CountryNameList"]),
-                                      // CountryName = Convert.ToString(row["CountryName"]),
+                                       // CountryName = Convert.ToString(row["CountryName"]),
                                        CreatedBy = Convert.ToString(row["CreatedBy"]),
                                        CreatedDate = Convert.ToString(row["CreatedDate"]),
                                        Description = Convert.ToString(row["Description"]),
@@ -744,7 +741,7 @@ public class DbOperations
                                        IsActive = Convert.ToString(row["IsActive"]),
                                        LastModifiedBy = Convert.ToString(row["LastModifiedBy"]),
                                        LastModifiedDate = Convert.ToString(row["LastModifiedDate"]),
-                                      // NoOfApprover = Convert.ToString(row["NoOfApprover"]),
+                                       // NoOfApprover = Convert.ToString(row["NoOfApprover"]),
                                        Region = Convert.ToString(row["RegionId"]),
                                        RegionName = Convert.ToString(row["RegionName"]),
                                        Version = Convert.ToInt32(row["Version"]),
@@ -799,7 +796,7 @@ public class DbOperations
             DateTime DecomissionedDate = new DateTime();
             if (_StrategyInfo.GOLiveDate != null && _StrategyInfo.GOLiveDate != "")
                 GOLiveDate = DateTime.ParseExact(_StrategyInfo.GOLiveDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-      
+
             if (_StrategyInfo.DecomissionedDate != null && _StrategyInfo.DecomissionedDate != "")
                 DecomissionedDate = DateTime.ParseExact(_StrategyInfo.DecomissionedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             using (SqlCommand cmd = new SqlCommand("sp_insert_Strategy", connection))
@@ -1175,7 +1172,7 @@ public class DbOperations
 
     }
 
-   
+
     public void ModifyRoleRight(RoleRightMapping roleright)
     {
         try
@@ -1217,7 +1214,7 @@ public class DbOperations
         }
     }
 
-   
+
     public void AddRoleRightMapping(RoleRightMapping roleright, out int errorcode, out string errordesc)
     {
         try

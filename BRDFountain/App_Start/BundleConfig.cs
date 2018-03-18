@@ -24,6 +24,8 @@ namespace BRDFountain.App_Start
                          "~/plugins/ng-file-upload/dist/ng-file-upload.min.js",
                          "~/plugins/ng-file-upload/dist/ng-file-upload-shim.min.js"
 
+
+
                     ));
 
             const string ANGULAR_APP_ROOT = "~/js/";

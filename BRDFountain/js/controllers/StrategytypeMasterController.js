@@ -5,6 +5,7 @@
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+      //    DTColumnBuilder.newColumn(null).withTitle('S.No.').renderWith(renderRetreadNo),
         DTColumnBuilder.newColumn('Strategytype').withTitle('Strategy Type'),
         DTColumnBuilder.newColumn('Strategytypecode').withTitle('Code'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
@@ -13,7 +14,9 @@
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
     }
-
+    function renderRetreadNo(data, type, full, meta) {
+        return meta.row + 1;
+    }
     function actionsHtml(data, type, full, meta) {
         $scope.data = data;
         return '<a  ng-click="GetStrategytypeMasterById(' + data + ')"><img src="images/edit.png"></a> ';
