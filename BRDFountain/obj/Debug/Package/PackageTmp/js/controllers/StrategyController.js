@@ -36,6 +36,7 @@
     function renderRetreadNo(data, type, full, meta) {
         return meta.row+1;
     }
+    
     function actionsStatus(data, type, full, meta) {
         if (data == "True")
             return '<a  class="dta-act">Attested</a>';
@@ -45,7 +46,7 @@
     }
 
     function shortcodelink(data, type, full, meta) {
-        return '<a class="test3" style="    text-decoration: underline;">'+data+'</a>';
+        return '<a class="test3" style="  cursor:pointer;text-decoration: underline;">'+data+'</a>';
     }
 
     $scope.Confirmcancel = function () {        
@@ -207,6 +208,7 @@
             StrategyService.HideLoader();
         }, 500)
     };
+
      $scope.Export = function () {
       
         
@@ -232,7 +234,8 @@
        
         
     };
-    $scope.InsertStrategy = function () {
+    
+     $scope.InsertStrategy = function () {
 
         StrategyService.ShowLoader();
         var idlist = '';
@@ -638,9 +641,10 @@
         catch (e) {
         }
     }
+    
     $scope.userfilter1 = function () {
         if ($scope.selectModel.LTAStrategyCode.LTAStrategyCode && $scope.selectModel.LTAApplicationCode.LTAApplicationCode && $scope.selectModel.DiscretionaryCode.DiscretionaryCode && $scope.selectModel.BusinessSuffix.BusinessSuffix) {
-            $scope.selectModel.LTAShortCode = $scope.selectModel.LTAStrategyCode.LTAStrategyCode + $scope.selectModel.LTAApplicationCode.LTAApplicationCode + $scope.selectModel.DiscretionaryCode.DiscretionaryCode + $scope.selectModel.BusinessSuffix.BusinessSuffix;
+            $scope.selectModel.LTAShortCode =  $scope.selectModel.LTAApplicationCode.LTAApplicationCode +$scope.selectModel.LTAStrategyCode.LTAStrategyCode + $scope.selectModel.DiscretionaryCode.DiscretionaryCode + $scope.selectModel.BusinessSuffix.BusinessSuffix;
         }
         else
             $scope.selectModel.LTAShortCode = '';
