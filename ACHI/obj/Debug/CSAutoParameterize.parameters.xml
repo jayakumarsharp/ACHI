@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="CRMConn-Web.config Connection String" description="CRMConn Connection String used in web.config by the application to access the database." defaultValue="SERVER=localhost;DATABASE=achi;UID=root;PASSWORD=Welcome@17;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\jayakumar\.t\\Documents\\GitHub\\ACHI\\ACHI\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CRMConn']/@connectionString" />
-  </parameter>
-</parameters>

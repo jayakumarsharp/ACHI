@@ -1,6 +1,6 @@
-﻿ReportApp.controller('RegionMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('RegionMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder','StrategyService', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder, StrategyService) {
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
     $scope.showAddwindow = false;
 
     $scope.data = [];
@@ -21,14 +21,20 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="images/edit.png"></a>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            $scope.data = data;
+            return '<a  ng-click="GetRegionMasterById(' + data + ')"><img src="images/edit.png"></a>';
+        }
     }
     
     $scope.GetAllRegionMaster = function () {
         ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
             $scope.data = data;
-            $scope.dtOptions.data = $scope.data
+            $scope.dtOptions.data = $scope.data;
+            StrategyService.HideLoader();
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -133,7 +139,7 @@
 
 
     $scope.GetRightsList = function () {
-
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -141,7 +147,8 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Region Write') {
+                       // if (value.RightName == 'Region Write') {
+                        if (value.RightName == 'Master Data Write') {
                             isRead = false;
                         }
                     })

@@ -10,7 +10,7 @@
                     <button data-ng-click="removefilter()" class="btn btn-primary pull-right">Reset Filter</button>
                     <button data-ng-click="showreport()" class="btn btn-primary pull-right">Generate Report</button>*@
                 <button ng-show="!showAddwindow" data-ng-click="Export()" class="btn btn-primary pull-right">Export</button>
-                <button ng-show="!showAddwindow" data-ng-click="Showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
+                <button ng-show="!showAddwindow && !IsReadOnly" data-ng-click="Showadd()" class="btn btn-primary">Add <i class="fa fa-plus"></i></button>
             </div>
             <div ng-show="showAddwindow" class="sec-one">
                 <div class="col-md-6">

@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ApplicationCategoryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('ApplicationCategoryMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder','StrategyService', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder, StrategyService ) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
@@ -10,22 +10,21 @@
             .renderWith(actionsHtml)
     ];
     function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
         $compile(angular.element(row).contents())($scope);
     }
 
-
-
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="GetApplicationCategoryMasterById(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            $scope.data = data;
+            return '<a  ng-click="GetApplicationCategoryMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+        }
     }
 
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
     $scope.Showadd = function () {
         $scope.showAddwindow = true;
     }
@@ -33,8 +32,10 @@
 
     $scope.GetAllApplicationCategoryMaster = function () {
         ApiCall.MakeApiCall("GetAllApplicationCategory?ApplicationCategoryId=", 'GET', '').success(function (data) {
+            
             $scope.data = data;
             $scope.dtOptions.data = $scope.data
+            StrategyService.HideLoader();
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -60,7 +61,7 @@
                             toaster.pop('warning', "Warning", data, null);
 
                     }
-               
+
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ApplicationCategory ! " + data.ExceptionMessage;
                 });
@@ -108,15 +109,15 @@
             if (model.ApplicationCategory.trim() != "") {
                 ApiCall.MakeApiCall("ModifyApplicationCategory", 'POST', model).success(function (data) {
                     if (data == 'success') {
-                      
-                    $scope.editMode = false;
-                    $scope.ApplicationCategoryMaster = null;
-                    $scope.GetAllApplicationCategoryMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'Application Category updated successfully', null);
-                }
-                else
-                    toaster.pop('warning', "Warning", data, null);
+
+                        $scope.editMode = false;
+                        $scope.ApplicationCategoryMaster = null;
+                        $scope.GetAllApplicationCategoryMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'Application Category updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding ApplicationCategoryMaster! " + data.ExceptionMessage;
                 });
@@ -129,9 +130,7 @@
             toaster.pop('warning', "Warning", 'Please enter ApplicationCategory', null);
         }
     };
-
-
-
+    
     $scope.showconfirm = function (data) {
         $scope.ApplicationCategoryMasterId = data;
         $('#confirmModal').modal('show');
@@ -145,6 +144,7 @@
     };
 
     $scope.GetRightsList = function () {
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -152,7 +152,8 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'ApplicationCategory Write') {
+                        if (value.RightName == 'Master Data Write') {
+                            //if (value.RightName == 'ApplicationCategory Write') {
                             isRead = false;
                         }
                     })

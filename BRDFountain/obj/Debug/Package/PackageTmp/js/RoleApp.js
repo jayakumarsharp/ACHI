@@ -13,11 +13,13 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="EditRole(' + data + ')"><img src="images/edit.png"></a>';
-        //'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            $scope.data = data;
+            return '<a  ng-click="EditRole(' + data + ')"><img src="images/edit.png"></a>';
+        }
     }
     $scope.Error = {};
     $scope.role = {};
@@ -32,40 +34,16 @@
     $scope.rightnames = [];
     $scope.IsReadOnly = false;
     //$scope.DisplayMessage = '';
-
-    $scope.IsPageReadOnly = function () {
-        UserFactory.getloggedusername().success(function (data) {
-            var userId = data;
-            if (data != '') {
-                reportFactory.GetRightsList(userId).success(function (data) {
-                    var isRead = true;
-                    $scope.IsReadOnly = true;
-                    angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'Role Management Write') {
-                            isRead = false;
-                        }
-                    })
-                    if (!isRead) {
-                        $scope.IsReadOnly = false;
-                    }
-                }).error(function (error) {
-                    console.log('Error when getting rights list: ' + error);
-                });
-            }
-
+    $scope.GetAllRights = function () {
+        $scope.Rights = [];
+        RoleFactory.GetRights().success(function (data) {
+            $scope.Rights = data;
+            console.log('Rights length: ' + $scope.Rights.length);
+        }).error(function (error) {
+            //alert('Get all rights error');
+            $scope.Error = error;
         });
-
-    },
-        $scope.GetAllRights = function () {
-            $scope.Rights = [];
-            RoleFactory.GetRights().success(function (data) {
-                $scope.Rights = data;
-                console.log('Rights length: ' + $scope.Rights.length);
-            }).error(function (error) {
-                //alert('Get all rights error');
-                $scope.Error = error;
-            });
-        };
+    };
 
     $scope.GetAllRoles = function () {
         UserFactory.getloggedusername().success(function (username) {
@@ -404,9 +382,31 @@
         }
     };
 
-    //--- End of Dual List---//
+    $scope.IsPageReadOnly = function () {
+        //StrategyService.ShowLoader();
+        UserFactory.getloggedusername().success(function (data) {
+            var userId = data;
+            if (data != '') {
+                reportFactory.GetRightsList(userId).success(function (data) {
+                    var isRead = true;
+                    $scope.IsReadOnly = true;
+                    angular.forEach(data, function (value, key) {
+                        if (value.RightName == 'Role Management Write') {
+                            isRead = false;
+                        }
+                    })
+                    if (!isRead) {
+                        $scope.IsReadOnly = false;
+                    }
+                    $scope.GetAllRoles();
+                }).error(function (error) {
+                    console.log('Error when getting rights list: ' + error);
+                });
+            }
 
-    $scope.GetAllRoles();
+        });
+    }
+
     $scope.GetAllRights();
     $scope.IsPageReadOnly();
 }]);

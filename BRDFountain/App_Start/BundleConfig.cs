@@ -17,6 +17,7 @@ namespace BRDFountain.App_Start
                         "~/Lib/bootstrap-datetimepicker.js",
                         "~/Lib/jquery.dataTables.min.js",
                         "~/Lib/angular.min.js",
+                       // "~/Lib/sanitize.js",
                         "~/Lib/underscore-min.js",
                         "~/Lib/angulardatatabes.js",
                         "~/Assert/angular-animate.min.js",

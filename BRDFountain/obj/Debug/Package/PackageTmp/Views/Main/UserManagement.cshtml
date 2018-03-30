@@ -132,21 +132,25 @@
                                             {{ViewData.businessmapping}}
                                         </div>
                                     </div>
-
-
                                     <div class="form-group">
-                                        <label class="col-sm-5 control-label">Country</label>
                                         <div class="col-sm-7" style="margin-top:6px">
-                                            {{ViewData.country}}
+
+                                            <button type="button" class="btn btn-primary" name="closeUserView" ng-click="ResetPasswordReq()">Reset Password</button>
                                         </div>
                                     </div>
-                                </div>
+                                        @*<div class="form-group">
+            <label class="col-sm-5 control-label">Country</label>
+            <div class="col-sm-7" style="margin-top:6px">
+                {{ViewData.country}}
+            </div>
+        </div>*@
+                                    </div>
 
                             </form>
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" name="closeUserView" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary cancel" name="closeUserView" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -207,14 +211,14 @@
                                 </div>
 
 
-                                <div class="form-group">
-                                    <label for="TypeID" class="col-sm-4 control-label">Country</label>
-                                    <div class="col-sm-6" style="margin-top:6px">
-                                        <multiselect placeholder="Select country..." ms-config="multiselectCountry.config"
-                                                     ms-options="multiselectCountry.options" ms-model="multiselectCountry.selected">
-                                        </multiselect>
-                                    </div>
-                                </div>
+                                @*<div class="form-group">
+                                        <label for="TypeID" class="col-sm-4 control-label">Country</label>
+                                        <div class="col-sm-6" style="margin-top:6px">
+                                            <multiselect placeholder="Select country..." ms-config="multiselectCountry.config"
+                                                         ms-options="multiselectCountry.options" ms-model="multiselectCountry.selected">
+                                            </multiselect>
+                                        </div>
+                                    </div>*@
 
 
                                 <div class="form-group">
@@ -267,7 +271,8 @@
                                 <div class="form-group">
                                     <label for="Password" class="col-sm-4 control-label">Password</label>
                                     <div class="col-sm-6" style="margin-top:6px">
-                                        <input type="password" class="form-control" ng-model="user.password" maxlength="25" placeholder="Enter password" required />
+                                        <input type="password" class="form-control" ng-model="user.password" maxlength="25" placeholder="Enter password" style="display:none" />
+                                        <span>Default password is <strong>welcome@123 </strong> </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -301,16 +306,16 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="TypeID" class="col-sm-4 control-label">Country</label>
-                                    <div class="col-sm-8" style="margin-top:6px">
+                                @*<div class="form-group">
+                                        <label for="TypeID" class="col-sm-4 control-label">Country</label>
+                                        <div class="col-sm-8" style="margin-top:6px">
 
-                                        <multiselect placeholder="Select country..." ms-model="multiselectCountry.selected" ms-config="multiselectCountry.config"
-                                                     ms-options="multiselectCountry.options">
-                                        </multiselect>
+                                            <multiselect placeholder="Select country..." ms-model="multiselectCountry.selected" ms-config="multiselectCountry.config"
+                                                         ms-options="multiselectCountry.options">
+                                            </multiselect>
 
-                                    </div>
-                                </div>
+                                        </div>
+                                    </div>*@
                             </form>
                         </div>
                     </div>

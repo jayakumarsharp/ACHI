@@ -2,13 +2,14 @@
     ViewBag.Title = "LoginDisplay";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
+
+@Html.Hidden("RedirectToResetPWD", Url.Action("ChangePasswordDisplay", "Home", new { Page = @Request.QueryString["Page"] }))
 @Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }))
 <div ng-app="LoginApp" ng-controller="LoginController" class="container">
     <div class="login-logo">
         <h1>Trinity</h1>
     </div>
     <div id="signin-form">
-      
         <h3>SIGN-IN</h3>
         @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "login-form", data_async = "", data_target = "#rating-modal" }))
         {
@@ -20,15 +21,33 @@
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 <input class="form-control" type="password" autocomplete="off" placeholder="Password" name="password" />
             </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
             <div class="row">
                 <div class="col-lg-6"></div>
                 <div class="col-lg-6">
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">Forgot Password?</button>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#Resetmodal">Reset Password</button>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            
             <div style="color :red;text-align:center;background :bisque;margin :15px;padding :3px;" ng-if="errorMessage"><span ng-bind="errorMessage"></span> </div>
         }
+    </div>
+    <div class="modal fade" id="Resetmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Reset Password</h4>
+                </div>
+                <div class="modal-body">
+                    Please email to <strong>{{resetemailid}}</strong> reset your password
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script src="~/bower_components/jquery/dist/jquery.min.js"></script>

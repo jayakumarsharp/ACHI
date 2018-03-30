@@ -2,7 +2,7 @@
     $scope.data = [];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
-    .withOption('rowCallback', rowCallback1);
+        .withOption('rowCallback', rowCallback1);
     $scope.dtColumns = [
         DTColumnBuilder.newColumn('userId').withTitle('UserId'),
         DTColumnBuilder.newColumn('UserName').withTitle('User Name'),
@@ -13,18 +13,18 @@
 
     $scope.dtOptions1 = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
-    .withOption('rowCallback', rowCallback);
+        .withOption('rowCallback', rowCallback);
 
     $scope.dtColumns1 = [
-       DTColumnBuilder.newColumn('userId').withTitle('UserId'),
-       DTColumnBuilder.newColumn('UserName').withTitle('UserName'),
-       DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
-          DTColumnBuilder.newColumn('RoleName').withTitle('Role'),
+        DTColumnBuilder.newColumn('userId').withTitle('UserId'),
+        DTColumnBuilder.newColumn('UserName').withTitle('UserName'),
+        DTColumnBuilder.newColumn('EmailId').withTitle('EmailId'),
+        DTColumnBuilder.newColumn('RoleName').withTitle('Role'),
         //DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
         //DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
         //DTColumnBuilder.newColumn('BusinessSector').withTitle('BusinessSector'),
-       DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
-           .renderWith(actionsHtml1)
+        DTColumnBuilder.newColumn('userId').withTitle('Actions').notSortable()
+            .renderWith(actionsHtml1)
     ];
     function createdRow(row, data, dataIndex) {
         $compile(angular.element(row).contents())($scope);
@@ -113,13 +113,13 @@
         }
     },
 
-    $scope.ConvertToUserTypes = function (data) {
-        $scope.UserTypes = [];
-        angular.forEach(data, function (value, key) {
-            $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
-        });
-        $scope.dtOptions.data = $scope.UserTypes;
-    };
+        $scope.ConvertToUserTypes = function (data) {
+            $scope.UserTypes = [];
+            angular.forEach(data, function (value, key) {
+                $scope.UserTypes.push({ 'userId': value.userId, 'UserName': value.UserName, 'EmailId': value.EmailId, 'checked': false });
+            });
+            $scope.dtOptions.data = $scope.UserTypes;
+        };
     $scope.GetAllRoles = function () {
         RoleFactory.GetRoles().success(function (data) {
             $scope.Roles = data;
@@ -132,13 +132,13 @@
         }).error(function (error) {
             $scope.Error = error;
         });
-        ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
-            console.log(data);
-            $scope.CountryMasterList = data;
-            bindCountrydata($scope.CountryMasterList);
-        }).error(function (error) {
-            $scope.Error = error;
-        })
+        //ApiCall.MakeApiCall("GetAllCountry?CountryId=", 'GET', '').success(function (data) {
+        //    console.log(data);
+        //    $scope.CountryMasterList = data;
+        //    bindCountrydata($scope.CountryMasterList);
+        //}).error(function (error) {
+        //    $scope.Error = error;
+        //})
         ApiCall.MakeApiCall("GetAllRegion?RegionId=", 'GET', '').success(function (data) {
             console.log(data);
             $scope.RegionMasterList = data;
@@ -214,6 +214,19 @@
         })
     };
 
+    $scope.ResetPasswordReq = function () {
+        var input = { userId: $scope.User.userId }
+        UserFactory.ResetPasswordReq(input).success(function (data) {
+            toaster.pop('success', "Success", "Password reset request updated successfully", null);
+
+        }).error(function (error) {
+            $scope.Error = error;
+        })
+
+
+
+    }
+
     $scope.CreateTempUser = function (user) {
         $scope.InvalidMessage = '';
         UserFactory.GetUser(user.userId).success(function (data) {
@@ -222,7 +235,7 @@
                 $scope.InvalidMessage = 'The UserID already exists!'
             }
             else {
-                user.CountryList = $scope.multiselectCountry.selected;
+                // user.CountryList = $scope.multiselectCountry.selected;
                 user.RegionList = $scope.multiselectRegion.selected;
                 user.BusinessSectorList = $scope.multiselectBusinessSector.selected;
                 UserFactory.CreateTempUser(user).success(function (data) {
@@ -251,7 +264,7 @@
 
     function cleardata() {
         $scope.multiselectBusinessSector.selected = [];
-        $scope.multiselectCountry.selected = [];
+        //  $scope.multiselectCountry.selected = [];
         $scope.multiselectRegion.selected = [];
 
     }
@@ -259,7 +272,7 @@
     $scope.showtempadd = function () {
         cleardata();
         bindBusinessSectordata($scope.BusinessLineList);
-        bindCountrydata($scope.CountryMasterList);
+        //  bindCountrydata($scope.CountryMasterList);
         bindRegiondata($scope.RegionMasterList);
         // angular.element(document.querySelector('#loader')).removeClass('hide');
         $scope.InvalidMessage = '';
@@ -273,12 +286,13 @@
         $scope.UpdatedUserTypes = [];
         $scope.user.showSelected = false;
         $scope.user.selectedType = {};
-        $scope.user.selectedCountry = {};
+        // $scope.user.selectedCountry = {};
         $scope.user.selectedRegion = {};
         $scope.user.selectedRole = {};
         $scope.user.selectedStatus = {};
         $scope.user.selectedBusinessSector = {};
         $scope.user = {};
+        $scope.user.password = "welcome@123";
         $scope.GetADUsers();
         $scope.editMode = false;
         $('#userModel').modal('show');
@@ -373,7 +387,7 @@
                         $scope.user = ar[i];
                         $scope.user.RoleId = selectedRole.id;
                         $scope.user.BusinessSectorId = selectedBS.Id;
-                        $scope.user.CountryId = selectedcoutry.Id;
+                        //$scope.user.CountryId = selectedcoutry.Id;
                         $scope.user.RegionId = selectedregion.Id;
 
                         UserFactory.AddUser($scope.user).success(function (data) {
@@ -406,7 +420,7 @@
     };
 
     $scope.ModifyUser = function (data) {
-        data.CountryList = $scope.multiselectCountry.selected;
+        // data.CountryList = $scope.multiselectCountry.selected;
         data.RegionList = $scope.multiselectRegion.selected;
         data.BusinessSectorList = $scope.multiselectBusinessSector.selected;
         UserFactory.ModifyUser(data).success(function (data) {
@@ -496,26 +510,26 @@
             }
         }
     };
-    $scope.multiselectCountry = {
-        selected: [],
-        options: [],
-        config: {
-            hideOnBlur: false,
-            showSelected: false,
-            itemTemplate: function (item) {
-                return $sce.trustAsHtml(item.name);
-            },
-            labelTemplate: function (item) {
-                return $sce.trustAsHtml(item.name);
-            }
-        }
-    };
-    function assignCountry(data) {
-        for (var i = 0; i < data.length > 0; i++) {
-            $scope.multiselectCountry.selected.push({ id: data[i].Id, name: data[i].CountryName })
-        }
-        bindCountrydata($scope.CountryMasterList);
-    }
+    //$scope.multiselectCountry = {
+    //    selected: [],
+    //    options: [],
+    //    config: {
+    //        hideOnBlur: false,
+    //        showSelected: false,
+    //        itemTemplate: function (item) {
+    //            return $sce.trustAsHtml(item.name);
+    //        },
+    //        labelTemplate: function (item) {
+    //            return $sce.trustAsHtml(item.name);
+    //        }
+    //    }
+    //};
+    //function assignCountry(data) {
+    //    for (var i = 0; i < data.length > 0; i++) {
+    //        $scope.multiselectCountry.selected.push({ id: data[i].Id, name: data[i].CountryName })
+    //    }
+    //    bindCountrydata($scope.CountryMasterList);
+    //}
     function assignRegion(data) {
         for (var i = 0; i < data.length > 0; i++) {
             $scope.multiselectRegion.selected.push({ id: data[i].Id, name: data[i].RegionName })
@@ -530,14 +544,14 @@
         bindBusinessSectordata($scope.BusinessLineList);
     }
 
-    function bindCountrydata(list) {
-        $scope.multiselectCountry.options = list.map(function (item) {
-            return {
-                name: item.CountryName,
-                id: item.Id
-            };
-        });
-    }
+    //function bindCountrydata(list) {
+    //    $scope.multiselectCountry.options = list.map(function (item) {
+    //        return {
+    //            name: item.CountryName,
+    //            id: item.Id
+    //        };
+    //    });
+    //}
 
     function bindRegiondata(list) {
         $scope.multiselectRegion.options = list.map(function (item) {
@@ -558,6 +572,7 @@
     }
 
     $scope.IsPageReadOnly = function () {
+        //StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -572,14 +587,15 @@
                     if (!isRead) {
                         $scope.IsReadOnly = false;
                     }
+                    $scope.GetAllRoles();
+                    $scope.GetAllUsers();
+
                 }).error(function (error) {
                     console.log('Error when getting rights list: ' + error);
                 });
             }
         });
     }
-    $scope.GetAllRoles();
-    $scope.GetAllUsers();
     $scope.IsPageReadOnly();
 }]);
 
@@ -609,6 +625,9 @@ ReportApp.factory('UserFactory', ['$http', function ($http) {
         },
         DeleteUser: function (user) {
             return $http.post(Url + 'DeleteUser', user);
+        },
+        ResetPasswordReq: function (user) {
+            return $http.post(Url + 'ResetPasswordReq', user);
         },
 
         getloggedusername: function () {

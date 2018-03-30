@@ -15,17 +15,17 @@
                         <option value="">- Select Third Party Application-</option>
                     </select>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>LTA Application Owner </label>
-                     <input type="text" class="form-control disabledinput" maxlength="1500" placeholder="LTA Application Owner " ng-model="selectModel.LTAApplicationOwner" readonly>
-             
+                    <input type="text" class="form-control disabledinput" maxlength="1500" placeholder="LTA Application Owner " ng-model="selectModel.LTAApplicationOwner" readonly>
+
                 </div>
-               @* <div class="form-group">
-                    <label>LTA Application Owner </label>
-                    <select class="form-control disabledinput" ng-model="selectModel.LTAApplicationOwner" ng-options="item.userId for item in LTAApplicationOwnerList" title="Select LTAApplicationOwner" disabled style="width: 100%; font-size: 0.8em" required>
-                        <option value="">- Select LTA Application Owner -</option>
-                    </select>
-                </div>*@
+                @* <div class="form-group">
+                        <label>LTA Application Owner </label>
+                        <select class="form-control disabledinput" ng-model="selectModel.LTAApplicationOwner" ng-options="item.userId for item in LTAApplicationOwnerList" title="Select LTAApplicationOwner" disabled style="width: 100%; font-size: 0.8em" required>
+                            <option value="">- Select LTA Application Owner -</option>
+                        </select>
+                    </div>*@
                 <div class="form-group">
                     <label>LTA Strategy Name </label>
                     <select class="form-control" name="ddlProduct" ng-model="selectModel.LTAStrategyName" ng-options="item.LTAStrategyName for item in LTAStrategyNameList" ng-change="userfilter4()" title="Select LTAStrategyName" style="width: 100%; font-size: 0.8em" required>
@@ -42,19 +42,19 @@
                         <option value="">- Select Business Line-</option>
                     </select>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Senior Management Function</label>
                     <input type="text" class="form-control" maxlength="1500" placeholder="Enter Senior Management Function" ng-model="selectModel.SeniorManagementFunction">
                 </div>
-                
+
                 <div class="form-group">
                     <label>Strategy type </label>
                     <select class="form-control" ng-model="selectModel.Strategytype" ng-options="item.Strategytype for item in StrategytypeList" ng-change="userfilter2()" title="Select Strategy Type" style="width: 100%; font-size: 0.8em" required>
                         <option value="">- Select Strategy Type -</option>
                     </select>
                 </div>
-               
-                
+
+
                 <div class="form-group">
                     <label>Go-Live date </label>
                     <div class="col-lg-12">
@@ -122,18 +122,18 @@
                         <option value="">- Select Region -</option>
                     </select>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Venue type </label>
                     <select class="form-control" ng-model="selectModel.Venuetype" ng-options="item.Venuetype for item in VenuetypeList" ng-change="userfilter2()" title="Select VenueType" style="width: 100%; font-size: 0.8em" required>
                         <option value="">- Select Venue Type-</option>
                     </select>
                 </div>
-              
+
                 <div class="form-group">
                     <label>Priority </label>
                     <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.Priority">
                 </div>
-                
+
                 <div class="form-group">
                     <label>Decommissioned Date</label>
                     <div class="col-lg-12">
@@ -199,14 +199,14 @@
                         <option value="">- Select LTA Strategy Owner -</option>
                     </select>
                 </div>
-                  <div class="form-group">
+                <div class="form-group">
                     <label>Capacity </label>
                     <select class="form-control" name="ddlCapacity" ng-model="selectModel.Capacity" ng-options="item.Capacity for item in CapacityList" ng-change="userfilter2()" title="Select Capacity" style="width: 100%; font-size: 0.8em" required>
                         <option value="">- Select Capacity -</option>
                     </select>
                 </div>
 
-               <div class="form-group">
+                <div class="form-group">
                     <label>Priority Score </label>
                     <input type="text" class="form-control" maxlength="100" readonly ng-model="selectModel.PriorityScore">
                 </div>
@@ -221,7 +221,7 @@
                 <div class="form-group">
                     <label>Country </label>
                     <multiselect placeholder="Select country..." ms-model="multiselect.selected" ms-config="multiselect.config" ms-change="assignUsers()"
-                        ms-options="multiselect.options">
+                                 ms-options="multiselect.options">
                     </multiselect>
                 </div>
                 @*LTA Owner Attestation*@
@@ -266,7 +266,7 @@
                 <label class="mt-checkbox mt-checkbox-outline col-sm-2"></label>
                 <div class="btn-group">
                     <span>
-                        <button type="button" ng-click="setsignoff()" class="btn" ng-class="{'btn-success': selectModel.Attest== 'True' }">Attest</button>
+                        <button type="button" ng-click="setsignoff()" class="btn" ng-class="{'btn-success': selectModel.Attest== 'True' }"><span ng-If="selectModel.Attest== 'True'">Attested</span><span ng-If="selectModel.Attest!= 'True'">Attest</span> </button>
                     </span>&nbsp;
                 </div>
             </div>
@@ -279,7 +279,7 @@
             </span>&nbsp;
 
             <span ng-show="!editMode">
-                <input type="button" value="Save" ng-disabled="adduserform.$invalid" ng-click="InsertStrategy(currency)" class="btn btn-primary" />
+                <input type="button" value="Save" ng-disabled="addform.$invalid" ng-click="InsertStrategy(currency)" class="btn btn-primary" />
             </span>&nbsp;
             <span ng-show="editMode">
                 <input type="button" value="Update" ng-click="UpdateStrategy(currency)" class="btn btn-primary" />
@@ -317,9 +317,11 @@
                             <tbody>
                                 <tr ng-repeat="data in UploadedSList">
                                     <td>{{data.Version}}</td>
-                                    <td>{{data.Approver}}
+                                    <td>
+                                        {{data.Approver}}
                                     </td>
-                                    <td>{{data.Uploadedby}}
+                                    <td>
+                                        {{data.Uploadedby}}
                                     </td>
                                     <td><a ng-click="DownlaodFile(data.Comments,data.RefNumber)">download</a></td>
                                 </tr>
@@ -343,9 +345,11 @@
                             <tbody>
                                 <tr ng-repeat="data in UploadedDList">
                                     <td>{{data.Version}}</td>
-                                    <td>{{data.Approver}}
+                                    <td>
+                                        {{data.Approver}}
                                     </td>
-                                    <td>{{data.Uploadedby}}
+                                    <td>
+                                        {{data.Uploadedby}}
                                     </td>
                                     <td><a ng-click="DownlaodFile(data.Comments,data.RefNumber)">download</a></td>
                                 </tr>

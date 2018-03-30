@@ -1,4 +1,4 @@
-﻿ReportApp.controller('ParentIDMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('ParentIDMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder','StrategyService', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder, StrategyService) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
@@ -17,15 +17,20 @@
 
 
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="GetParentIDMasterById(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            $scope.data = data;
+            return '<a  ng-click="GetParentIDMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+            //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+            //'   <i class="fa fa-trash-o"></i>' +
+            //'</button>';
+        }
     }
 
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
     $scope.Showadd = function () {
         $scope.showAddwindow = true;
     }
@@ -34,7 +39,8 @@
     $scope.GetAllParentIDMaster = function () {
         ApiCall.MakeApiCall("GetAllParentID?ParentIDId=", 'GET', '').success(function (data) {
             $scope.data = data;
-            $scope.dtOptions.data = $scope.data
+            $scope.dtOptions.data = $scope.data;
+            StrategyService.HideLoader();
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -143,6 +149,7 @@
     };
 
     $scope.GetRightsList = function () {
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -150,7 +157,8 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'ParentID Write') {
+                       // if (value.RightName == 'ParentID Write') {
+                        if (value.RightName == 'Master Data Write') {
                             isRead = false;
                         }
                     })

@@ -49,6 +49,7 @@ namespace BRDFountain.Controllers
         /// Main pages views rendering code
         /// </summary>
         /// <returns></returns>
+
         #region View displays
 
         [SessionTimeout]
@@ -74,11 +75,13 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult ProductType()
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult RoleManagement()
         {
@@ -96,6 +99,7 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult Reports()
         {
@@ -114,12 +118,7 @@ namespace BRDFountain.Controllers
             return View();
         }
 
-        [SessionTimeout]
-        public ActionResult Approvals()
-        {
-            return View();
-        }
-
+      
 
         [SessionTimeout]
         public ActionResult LTAApplicationCode()
@@ -192,16 +191,19 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult BusinessLine()
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult LTAApplicationName()
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult LTAApplicationOwner()
         {
@@ -219,6 +221,7 @@ namespace BRDFountain.Controllers
         {
             return View();
         }
+
         [SessionTimeout]
         public ActionResult SystemFlow()
         {
@@ -340,12 +343,29 @@ namespace BRDFountain.Controllers
         }
 
 
+
+        public JsonResult GetApplicationReport(StrategyReportFilter filter)
+        {
+            try
+            {
+                filter.userid = getloggedusername();
+                List<ReportAppMapping> lst = _dbOperations.GetApplicationReport(filter);
+                return Json(lst, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy Report {0}", e);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         public string ExportReport(StrategyReportFilter filter)
         {
             try
             {
                 filter.userid = getloggedusername();
-              
+
 
                 List<Strategy> lst = _dbOperations.GetStrategyReport(filter);
                 if (lst.Count > 0)
@@ -378,13 +398,11 @@ namespace BRDFountain.Controllers
             }
         }
 
-
-
         public string ExportStrategyReport()
         {
             try
             {
-                List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername()); 
+                List<Strategy> lst = _dbOperations.GetStrategyData(getloggedusername());
                 if (lst.Count > 0)
                 {
                     string[] columns = { "RegionName", "LTAApplicationCode", "LTAStrategyCode", "LTAApplicationName", "Discretionarycode", "BusinessSuffix", "ParentIdValue", "ChildIdValue", "BusinessLine", "CountryNameList", "LTAApplicationOwnerId", "ApplicationCategory", "LTAStrategyOwnerId", "LTAStrategyName", "StrategyType", "VenueType", "Capacity", "SignOff", "Priority", "PriorityScore", "business", "ThirdPartyAppName", "DecomissionedDate", "GoLiveDate" };
@@ -414,13 +432,16 @@ namespace BRDFountain.Controllers
                 return "error";
             }
         }
-        
+
         public string ExportReportFilter(StrategyReportFilter filter)
         {
             try
             {
-
-                List<ReportAppMapping> lst = _dbOperations.GetReportApplicationMappingList("");
+                List<ReportAppMapping> lst = new List<ReportAppMapping>();
+                if (filter.ISREPORTPAGE == "Y")
+                    lst = _dbOperations.GetApplicationReport(filter);
+                else
+                    lst = _dbOperations.GetReportApplicationMappingList("");
                 if (lst.Count > 0)
                 {
                     string[] columns = { "LTAApplicationName", "LTAApplicationCode", "ChildId", "ThirdPartyAppName", "ParentID", "ApplicationOwner", "ApplicationCategory", "BusinessLine", "CountryName", "RegionName", "Attest" };
@@ -629,8 +650,8 @@ namespace BRDFountain.Controllers
                 string name = "LTAStrategyReport.xlsx";
                 if (Page == "Mapping")
                     name = "LTAStrategyInventoryReport.xlsx";
-                else if (Page=="StrategyReport")
-                    name = "LTAStrategyinventory-" + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";           
+                else if (Page == "StrategyReport")
+                    name = "LTAStrategyinventory-" + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";
                 else
                     name = "LTAStrategyReport-" + DateTime.Now.ToString("yyyyMMddHHmm") + ".xlsx";
                 return File(fileBytes, ExcelExportHelper.ExcelContentType, name);
@@ -742,10 +763,10 @@ namespace BRDFountain.Controllers
                 string Changedata = "";
 
                 var set1 = new HashSet<string>();
-                if(Strategy[0].CountryId !=null)
-                 set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
+                if (Strategy[0].CountryId != null)
+                    set1 = new HashSet<string>(Strategy[0].CountryId.Split(',').Select(t => t.Trim()));
 
-                bool setsEqual=true;
+                bool setsEqual = true;
                 if (Strategy[1].CountryId != null)
                     setsEqual = set1.SetEquals(Strategy[1].CountryId.Split(',').Select(t => t.Trim()));
                 else
@@ -759,10 +780,10 @@ namespace BRDFountain.Controllers
                     //x.Item1.Equals("CountryName") ||
                     foreach (var diff in data)
                     {
-                        Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2;
+                        Changedata += " " + diff.Item1 + " - " + diff.Item3 + " - Changed to " + diff.Item2 + " \n";
                     }
                     if (!setsEqual)
-                        Changedata += " Country Name  - " + Strategy[1].CountryNameList + " - Changed to " + Strategy[0].CountryNameList;
+                        Changedata += " Country Name  - " + Strategy[1].CountryNameList + " - Changed to " + Strategy[0].CountryNameList + " \n";
 
                     Strategy[0].RefNumber = Strategy[1].RefNumber;
                     Strategy[0].Version = Strategy[1].Version + 1;
@@ -879,6 +900,7 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
+
         public JsonResult GetUsersByRoles(string Roleid)
         {
             try
@@ -921,6 +943,7 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
+
         public JsonResult roles(string roleId)
         {
             try
@@ -934,6 +957,7 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
+
         public JsonResult GetRights(string right)
         {
             try
@@ -1026,6 +1050,7 @@ namespace BRDFountain.Controllers
             }
             catch (Exception e) { log.Error(e); return null; }
         }
+
         public JsonResult GetUserSessionInfo(string createdOn)
         {
             try
@@ -1037,8 +1062,6 @@ namespace BRDFountain.Controllers
             }
             catch (Exception e) { log.Error(e); return null; }
         }
-
-
 
         public JsonResult GetUserbyFilter(string RegionId, string BusinessLineId)
         {
@@ -1053,8 +1076,6 @@ namespace BRDFountain.Controllers
                 return null;
             }
         }
-
-
 
         public JsonResult CreateUser(UserMaster user)
         {
@@ -1072,6 +1093,8 @@ namespace BRDFountain.Controllers
         {
             try
             {
+                string username = ConfigurationManager.AppSettings["DefaultPassword"];
+                user.Password = username;
                 string errordesc = "";
                 int errocode = 0;
                 _dbOperations.CreateTempUser(user, out errocode, out errordesc);
@@ -1084,19 +1107,32 @@ namespace BRDFountain.Controllers
             }
         }
 
-        public JsonResult GetusercountryMapping(string userId)
+        public string ResetPasswordReq(UserMaster user)
         {
-            try
-            {
-                List<CountryMaster> lst = _dbOperations.GetusercountryMapping(userId);
-                return Json(lst, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
-                return null;
-            }
+            string errordesc = "";
+            int errocode = 0;
+
+            user.Password = ConfigurationManager.AppSettings["DefaultPassword"];
+            user.IsPasswordReset = true;
+            _dbOperations.resetuser(user, out errocode, out errordesc);
+            return "success";
+
         }
+
+
+        //public JsonResult GetusercountryMapping(string userId)
+        //{
+        //    try
+        //    {
+        //        List<CountryMaster> lst = _dbOperations.GetusercountryMapping(userId);
+        //        return Json(lst, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.ErrorFormat("Error in DeleteStrategyApprover {0}", ex);
+        //        return null;
+        //    }
+        //}
 
         public JsonResult GetuserRegionMapping(string userId)
         {

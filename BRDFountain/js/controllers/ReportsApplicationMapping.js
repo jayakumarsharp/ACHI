@@ -2,7 +2,7 @@
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow)
    .withOption('rowCallback', rowCallback).withOption('scrollX', true);
@@ -25,7 +25,12 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        return '<a    class="test1"><img src="images/edit.png"></a> <a  ng-click="delete(' + data + ')"></a> <a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            return '<a    class="test1"><img src="images/edit.png"></a> <a  ng-click="delete(' + data + ')"></a> <a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
+        }
     }
     $scope.Showadd = function () {
         $scope.Id=  '';
@@ -37,8 +42,8 @@
         var userid = $scope.userId;
         ApiCall.MakeApiCall("GetAllReportApplicationMapping?Id=", 'GET', '').success(function (data) {
             $scope.data = data;
-            $scope.dtOptions.data = $scope.data
-
+            $scope.dtOptions.data = $scope.data;
+            StrategyService.HideLoader();
         }).error(function (error) {
             $scope.Error = error;
         });
@@ -51,10 +56,8 @@
         let GetAllApplicationCategory = apiService.GetAllApplicationCategory()
         let GetAllLTAApplicationName = apiService.GetAllLTAApplicationName()
         let GetAllRegion = apiService.GetuserRegionMapping(userid);
-        let GetAllCountry = apiService.GetusercountryMapping(userid);
-        let GetAllBusinessLine = apiService.GetBusinessMapping(userid)
-
-       
+        let GetAllCountry = apiService.GetAllCountry();//GetusercountryMapping(userid);
+        let GetAllBusinessLine = apiService.GetBusinessMapping(userid);
 
         $q.all([
                 GetAllLTAApplicationCode,
@@ -280,6 +283,7 @@
     };
 
     $scope.GetRightsList = function () {
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             $scope.userId = data;
@@ -288,7 +292,7 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'LTAApplication Write') {
+                        if (value.RightName == 'LTA Application Inventory Write') {
                             isRead = false;
                         }
                     })

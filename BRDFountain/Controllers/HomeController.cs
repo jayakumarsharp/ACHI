@@ -5,6 +5,8 @@ using System.Web.Security;
 using log4net;
 using System.Data.SqlClient;
 using BRDFountain.Models;
+using System.Linq;
+using System.Configuration;
 
 namespace BRDFountain.Controllers
 {
@@ -95,14 +97,18 @@ namespace BRDFountain.Controllers
                             FormsAuthentication.SetAuthCookie(userName, false);
                             Session["UserName"] = userName;
                             Session["DisplayName"] = lst[0].UserName;
-                            return "Logged in successfully";
-                        }
-                        else if ((userName == lst[0].userId) && passWord == "welcome@17")
-                        {
-                            FormsAuthentication.SetAuthCookie(userName, false);
-                            Session["UserName"] = userName;
-                            Session["DisplayName"] = userName;
-                            return "Logged in successfully";
+                            if (lst[0].IsPasswordReset)
+                                return "Reset Password";
+                            else
+                                return "Logged in successfully";
+
+                            //}
+                            //else if ((userName == lst[0].userId) && passWord == "welcome@17")
+                            //{
+                            //    FormsAuthentication.SetAuthCookie(userName, false);
+                            //    Session["UserName"] = userName;
+                            //    Session["DisplayName"] = userName;
+                            //    return "Logged in successfully";
                         }
                         else
                         {
@@ -126,6 +132,64 @@ namespace BRDFountain.Controllers
             }
         }
 
+        public string getloggedusername()
+        {
+            try
+            {
+                return Convert.ToString(Session["UserName"]);
+            }
+            catch (Exception e)
+            {
+                log.ErrorFormat("Error in strategy insert {0}", e);
+                return "";
+            }
+        }
+
+
+        public string ChangePassword(string newpwd, string confirmpwd)
+        {
+            log.Info("Login method");
+            try
+            {
+                errorCode = 0;
+                errorDesc = string.Empty;
+
+                if (string.IsNullOrEmpty(newpwd))
+                {
+                    return "Please enter the Password";
+                }
+                else if (string.IsNullOrEmpty(confirmpwd))
+                {
+                    return "Please enter the Confirm Password";
+                }
+                else if (confirmpwd.Trim() == newpwd.Trim())
+
+                {
+                    if (confirmpwd.Length >= 8 && confirmpwd.Any(char.IsUpper) && confirmpwd.Any(char.IsNumber))
+                    {
+                        UserMaster user = new UserMaster();
+                        user.Password = confirmpwd;
+                        user.userId = getloggedusername();
+                        user.IsPasswordReset = false;
+                        _dbOperations.resetuser(user, out errorCode, out errorDesc);
+                        return "success";
+                    }
+                    else
+                        return "Password strength is weak";
+
+                }
+                else
+                {
+                    return "Password and confirm password are not matching";
+                }
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+                log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+                return "Invalid login detail";
+            }
+        }
         /// <summary>
         /// getting logged in user name
         /// </summary>
@@ -143,6 +207,13 @@ namespace BRDFountain.Controllers
             }
         }
 
+        public string GetResetMailid()
+        {
+
+            return Convert.ToString(ConfigurationManager.AppSettings["ResetEmailid"]);
+
+        }
+
         /// <summary>
         /// for changing password view display
         /// </summary>
@@ -151,7 +222,6 @@ namespace BRDFountain.Controllers
         {
             if (Request.IsAuthenticated)
             {
-
                 return View();
             }
             else
@@ -176,4 +246,3 @@ namespace BRDFountain.Controllers
 
     }
 }
-

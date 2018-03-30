@@ -1,4 +1,4 @@
-﻿ReportApp.controller('LTAApplicationNameMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('LTAApplicationNameMasterController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'StrategyService', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder, StrategyService) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.dtOptions = DTOptionsBuilder.fromSource()
@@ -13,15 +13,20 @@
         $compile(angular.element(row).contents())($scope);
     }
     function actionsHtml(data, type, full, meta) {
-        $scope.data = data;
-        return '<a  ng-click="GetLTAApplicationNameMasterById(' + data + ')"><img src="images/edit.png"></a> ';
-        //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
-        //'   <i class="fa fa-trash-o"></i>' +
-        //'</button>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            $scope.data = data;
+            return '<a  ng-click="GetLTAApplicationNameMasterById(' + data + ')"><img src="images/edit.png"></a> ';
+            //+'<button class="btn btn-danger" ng-click="delete(' + data + ')" )"="">' +
+            //'   <i class="fa fa-trash-o"></i>' +
+            //'</button>';
+        }
     }
 
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
     $scope.Showadd = function () {
         $scope.showAddwindow = true;
     }
@@ -30,7 +35,8 @@
     $scope.GetAllLTAApplicationNameMaster = function () {
         ApiCall.MakeApiCall("GetAllLTAApplicationName?LTAApplicationNameId=", 'GET', '').success(function (data) {
             $scope.data = data;
-            $scope.dtOptions.data = $scope.data
+            $scope.dtOptions.data = $scope.data;
+            StrategyService.HideLoader();
         }).error(function (error) {
             $scope.Error = error;
         })
@@ -50,10 +56,11 @@
                             $scope.editMode = false;
 
                             $scope.showAddwindow = false;
-                            toaster.pop('success', "Success", 'LTA Application Name added successfully', null);}
+                            toaster.pop('success', "Success", 'LTA Application Name added successfully', null);
+                        }
                         else
                             toaster.pop('warning', "Warning", data, null);
-                    
+
                     }
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA ApplicationName ! " + data.ExceptionMessage;
@@ -102,19 +109,19 @@
             if (model.LTAApplicationName.trim() != "") {
                 ApiCall.MakeApiCall("ModifyLTAApplicationName", 'POST', model).success(function (data) {
                     if (data == "success") {
-                    $scope.editMode = false;
-                    $scope.LTAApplicationNameMaster = null;
-                    $scope.GetAllLTAApplicationNameMaster();
-                    $scope.showAddwindow = false;
-                    toaster.pop('success', "Success", 'LTA Application Name updated successfully', null);
-                }
-                else
-                    toaster.pop('warning', "Warning", data, null);
+                        $scope.editMode = false;
+                        $scope.LTAApplicationNameMaster = null;
+                        $scope.GetAllLTAApplicationNameMaster();
+                        $scope.showAddwindow = false;
+                        toaster.pop('success', "Success", 'LTA Application Name updated successfully', null);
+                    }
+                    else
+                        toaster.pop('warning', "Warning", data, null);
                 }).error(function (data) {
                     $scope.error = "An Error has occured while Adding LTA Application Name Master! " + data.ExceptionMessage;
                 });
-                }
-                else {
+            }
+            else {
                 toaster.pop('warning', "Warning", 'Please enter LTA Application Name', null);
             }
         }
@@ -138,6 +145,7 @@
     };
 
     $scope.GetRightsList = function () {
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -145,7 +153,8 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'LTAApplicationName Write') {
+                        //if (value.RightName == 'LTAApplicationName Write') {
+                        if (value.RightName == 'Master Data Write') {
                             isRead = false;
                         }
                     })

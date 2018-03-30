@@ -174,6 +174,12 @@ namespace BRDFountain.Models
         public string Priority { get; set; }
         public string LTAStrategyOwnerId { get; set; }
         public string StatusId { get; set; }
+        public string ISREPORTPAGE { get; set; }
+
+
+        public string ApplicationCategory { get; set; }
+        public string ThirdPartyAppId { get; set; }
+        public string LTAApplicationOwner { get; set; }
 
     }
 
@@ -295,8 +301,9 @@ namespace BRDFountain.Models
         public string Approvedby { get; set; }
         public int AttemptedTries { get; set; }
         public string BusinessSectorId { get; set; }
-        public string BusinessSector { get; set; }
         public string RegionId { get; set; }
+        public string BusinessSector { get; set; }
+        public bool IsPasswordReset { get; set; }
         public string RegionName { get; set; }
         public string CountryId { get; set; }
         public string CountryName { get; set; }

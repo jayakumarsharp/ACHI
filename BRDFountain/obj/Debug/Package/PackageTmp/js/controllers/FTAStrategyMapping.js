@@ -1,8 +1,8 @@
-﻿ReportApp.controller('LTAStrategyMappingController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder) {
+﻿ReportApp.controller('LTAStrategyMappingController', ['$scope', '$rootScope', '$timeout', 'ApiCall', 'UserFactory', 'reportFactory', 'toaster', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder','StrategyService', function ($scope, $rootScope, $timeout, ApiCall, UserFactory, reportFactory, toaster, $compile, DTOptionsBuilder, DTColumnBuilder, StrategyService) {
     $scope.data = [];
     $scope.showAddwindow = false;
     $scope.editMode = false;
-    $scope.IsReadOnly = false;
+    $scope.IsReadOnly = true;
 
     $scope.dtOptions = DTOptionsBuilder.fromSource()
         .withPaginationType('full_numbers').withOption('createdRow', createdRow);
@@ -20,7 +20,12 @@
 
 
     function actionsHtml(data, type, full, meta) {
-        return '<a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            return '<a  ng-click="delete(' + data + ')"><img src="images/delete.png"></a> ';
+        }
     }
 
 
@@ -32,7 +37,8 @@
     $scope.GetAllLTAStrategyMaster = function () {
         ApiCall.MakeApiCall("GetAllLTAStrategyMapping?LTAStrategyId=", 'GET', '').success(function (data) {
             $scope.data = data;
-            $scope.dtOptions.data = $scope.data
+            $scope.dtOptions.data = $scope.data;
+            StrategyService.HideLoader();
 
         }).error(function (error) {
             $scope.Error = error;
@@ -153,6 +159,7 @@
     };
 
     $scope.GetRightsList = function () {
+        StrategyService.ShowLoader();
         UserFactory.getloggedusername().success(function (data) {
             var userId = data;
             if (data != '') {
@@ -160,7 +167,7 @@
                     var isRead = true;
                     $scope.IsReadOnly = true;
                     angular.forEach(data, function (value, key) {
-                        if (value.RightName == 'LTAStrategy Write') {
+                        if (value.RightName == 'Mapping Data Write') {
                             isRead = false;
                         }
                     })

@@ -1,0 +1,171 @@
+﻿<!-- BEGIN PAGE BREADCRUMBS -->
+
+
+<section class="content" ng-app="reportApp" ng-controller="MapTaskController">
+
+    <div class="modal fade" id="currencyModel" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:75%;margin-top:10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel" ng-hide="editMode">Add Map Task</h4>
+                    <h4 class="modal-title" id="myModalLabel" ng-show="editMode">Edit Map Task</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form novalidate class="form-horizontal" role="form" name="addcurrencyform">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Client Number</label>
+                            <div class="col-sm-8">
+                                <input data-ng-show="editMode" readonly class="form-control" style="height:33px" numberdotonly type="text" maxlength="150" ng-model="ecurrency.ClientNumber" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding-top:10px">
+                            <label class="col-sm-3 control-label">Task</label>
+                            <div class="col-sm-8">
+                                <select ng-model="ecurrency.TaskId" class="form-control" style="height:33px" required name="TaskId">
+                                    <option value="">- Select Task-</option>
+                                    <option ng-repeat="x in EstimationProduct" value="{{x.Id}}">{{x.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-5" style="margin-left:15px;">
+                                        <div class="list-group box-comments" id="list1Estimation" style="height:250px;overflow-x:auto">
+                                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                                Available Tasks
+
+                                            </a>
+                                            <span ng-repeat="right in listA_Estimation | orderBy:'right.productname'">
+                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                                    {{right.Name}}
+                                                    <input id="{{right.Name}}" ng-model="isCheckedA_Estimation" ng-click="stateAChanged_Estimation(isCheckedA_Estimation, right.Name)" name="selectedA_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 v-center text-center">
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <div class="btn-group-vertical">
+                                            <button class="btn btn-outline-info" ng-click="AlltoA_Estimation()" id="btnAllA_Estimation"><i class="fa fa-angle-double-left"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="bToA_Estimation()" id="btnA_Estimation"><i class="fa fa-angle-left"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="aToB_Estimation()" id="btnB_Estimation"><i class="fa fa-angle-right"></i></button>
+                                            <button class="btn btn-outline-info" ng-click="AlltoB_Estimation()" id="btnAllB_Estimation"><i class="fa fa-angle-double-right"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="list-group box-comments" id="list2Estimation" style="height:250px;overflow-x:auto">
+                                            <a href="javascript:;" class="list-group-item active grouppadding">
+                                                Selected Task(s)
+
+                                            </a>
+                                            <span ng-repeat="right in listB_Estimation | orderBy:'right.productname'">
+                                                <a href="javascript:;" data-id="{{right.Id}}" class="list-group-item grouppadding">
+                                                    {{right.Name}}
+                                                    <input id="{{right.Name}}" ng-model="isCheckedB_Estimation" ng-click="stateBChanged_Estimation(isCheckedB_Estimation, right.Name)" name="selectedB_Estimation[]" value="{{right.Name}}" class="pull-right" type="checkbox" ng-true-value="true" ng-false-value="false">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-10">
+                                <span data-ng-hide="editMode">
+                                    <input type="button" value="Add" ng-click="add(currency)" class="btn btn-primary" />
+                                </span>
+                                <span data-ng-show="editMode">
+                                    <input type="button" value="Update" data-ng-click="UpdatecurrencyConversion(ecurrency)" class="btn btn-primary" />
+                                </span>
+                                <input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-primary cancel" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-6 col-sm-offset-2 control-label label-danger" ng-show="errorinfo.length > 0">{{errorinfo}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+                </div>
+                <br />
+                <div class="modal-body">
+                    Are you sure you want to delete?
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-ng-click="delete()">Yes</button>
+                    <button type="button" class="btn btn-primary cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page_status">
+        <a ng-click="getallcurrencyconversions()" style="margin: 0 -5px;">
+            <div class="status_completed" ng-class="{'active': selectedarea ==  'AllTask' }">
+                <div class="number">
+                    {{totaltask}}
+                </div>
+                <div class="status_txt">
+                    All Task
+                </div>
+            </div>
+        </a>
+        <a ng-click="GetMappingTask(true)" >
+            <div class="status_completed" ng-class="{'active': selectedarea ==  'MapTask' }">
+                <div class="number">
+                    {{Mappedtask}}
+                </div>
+                <div class="status_txt">
+                    Mapped Task
+                </div>
+            </div>
+        </a>
+        <a ng-click="GetUnMappingTask(true)">
+            <div class="status_completed"  ng-class="{'active': selectedarea ==  'UnMapTask' }">
+                <div class="number">
+                    {{UnMappedtask}}
+                </div>
+                <div class="status_txt">
+                    UnMapped Task
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-12 data-table">
+        <div class="row">
+            <table class="table table-responsive" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
+        </div>
+    </div>
+</section>
+
+
+<style type="text/css">
+    .grouppadding {
+        padding: 5px 5px !important;
+        font-size: 11px !important;
+    }
+
+    .info-box-icon {
+        height: 68px;
+        width: 68px;
+    }
+
+    .info-box {
+        min-height: 68px;
+    }
+</style>

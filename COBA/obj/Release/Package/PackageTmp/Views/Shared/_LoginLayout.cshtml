@@ -1,15 +1,22 @@
 ﻿@using System.Web.Optimization;
-@Styles.Render("~/Content/css")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/customscripts")
+@Scripts.Render("~/bundles/defaultscripts")
 @RenderSection("scripts", required: false)
-
-
-<body class="container" style="background-image: url('../CDR/img/bg.jpg'); background-attachment: fixed !important; background-position: 50% 50% !important; background-size: cover !important; margin: 0; padding: 0;">
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    @*<base href="/COBA/">*@
+    <title>Case Management System</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page">
     @RenderBody()
 </body>
-@*<footer class="navbarbottom">
-    <p style="text-align: center;">Copyright&copy;2015 Servion Global Solutions. All rights reserved.</p>
-</footer>*@
+@RenderSection("scripts", required: false)
+@RenderSection("styles", required: false)
+</html>
 @Html.Hidden("RedirectToHome", Url.Action("Index", "Home", new { Page = @Request.QueryString["Page"] }))

@@ -1732,7 +1732,7 @@ public class DbOperations
             using (MySqlCommand cmd = new MySqlCommand("sp_update_client_taskstatus", connection))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("i_clientnumber", objMaptask.Id));
+                cmd.Parameters.Add(new MySqlParameter("i_clientnumber", objMaptask.ClientNumber));
                 if (this.OpenConnection() == true)
                 {
                     cmd.ExecuteNonQuery();

@@ -5,7 +5,7 @@
     $scope.Strategydata = [];
     $scope.editMode = false;
     $scope.showaction = false;
-    
+
     $scope.IsReadOnly = true;
     $scope.currency = {};
     $scope.ApprovalCheck = { ShowSignOff: false, IsApprove: false };
@@ -15,11 +15,11 @@
     };
     $scope.pageList = [{ Page: true, IsValid: false }, { Page: false, IsValid: false }, { Page: false, IsValid: false }];
     $scope.dtOptions = DTOptionsBuilder.fromSource()
-    .withPaginationType('full_numbers').withOption('createdRow', createdRow)
-    .withOption('rowCallback', rowCallback).withOption('scrollX', true);
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+        .withOption('rowCallback', rowCallback).withOption('scrollX', true);
     //.withButtons( ['excel', 'pdf']);
     $scope.dtColumns = [
-       //DTColumnBuilder.newColumn(null).withTitle('S.No.').renderWith(renderRetreadNo),
+        //DTColumnBuilder.newColumn(null).withTitle('S.No.').renderWith(renderRetreadNo),
         DTColumnBuilder.newColumn('LTAShortCode').withTitle('LTA Short Code').renderWith(shortcodelink),
         DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
         DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
@@ -28,13 +28,13 @@
         DTColumnBuilder.newColumn('LTAStrategyOwner').withTitle('LTA Strategy Owner'),
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Category'),
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
-         DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
-            DTColumnBuilder.newColumn('Status').withTitle('Status'),
+        DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
+        DTColumnBuilder.newColumn('Status').withTitle('Status'),
         DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
     function renderRetreadNo(data, type, full, meta) {
-        return meta.row+1;
+        return meta.row + 1;
     }
     function actionsStatus(data, type, full, meta) {
         if (data == "True")
@@ -45,12 +45,12 @@
     }
 
     function shortcodelink(data, type, full, meta) {
-        return '<a class="test3" style="    text-decoration: underline;">'+data+'</a>';
+        return '<a class="test3" style="    text-decoration: underline;">' + data + '</a>';
     }
 
-    $scope.Confirmcancel = function () {        
-        
-            $('#confirmModal').modal('show');
+    $scope.Confirmcancel = function () {
+
+        $('#confirmModal').modal('show');
     }
 
 
@@ -137,30 +137,30 @@
         let GetAllStatusType = apiService.GetAllStatusType();
         let GetAllBusinessLine = apiService.GetBusinessMapping(userid)
         let GetAllRegion = apiService.GetuserRegionMapping(userid);
-        let GetAllCountry = apiService.GetusercountryMapping(userid);
+        let GetAllCountry = apiService.GetAllCountry(); //apiService.GetusercountryMapping(userid);
         $q.all([
-        //GetAllCountry,
-        GetAllLTAApplicationCode,
-        GetAllThirdPartyAppList,
-        GetAllBusiness,
-        GetAllLTAStrategyCode,
-        GetAllDiscretionaryCode,
-        GetAllBusinessSuffix,
-        GetAllParentID,
-        GetAllChildID,
-        //GetAllBusinessLine,
-        GetAllApplicationCategory,
-        GetAllLTAApplicationName,
-        GetAllLTAStrategyName,
-         GetAllVenuetype,
-        GetAllStrategytype,
-        GetAllCapacity,
-        //GetAllRegion,
-        GetUsers,
-        GetAllStatusType,
-        GetAllBusinessLine,
-        GetAllRegion,
-        GetAllCountry,
+            //GetAllCountry,
+            GetAllLTAApplicationCode,
+            GetAllThirdPartyAppList,
+            GetAllBusiness,
+            GetAllLTAStrategyCode,
+            GetAllDiscretionaryCode,
+            GetAllBusinessSuffix,
+            GetAllParentID,
+            GetAllChildID,
+            //GetAllBusinessLine,
+            GetAllApplicationCategory,
+            GetAllLTAApplicationName,
+            GetAllLTAStrategyName,
+            GetAllVenuetype,
+            GetAllStrategytype,
+            GetAllCapacity,
+            //GetAllRegion,
+            GetUsers,
+            GetAllStatusType,
+            GetAllBusinessLine,
+            GetAllRegion,
+            GetAllCountry,
         ]).then(function (resp) {
             //$scope.CountryMasterList = resp[0].data;
             $scope.LTAApplicationCodeList = resp[0].data;
@@ -207,30 +207,30 @@
             StrategyService.HideLoader();
         }, 500)
     };
-     $scope.Export = function () {
-      
-        
+    $scope.Export = function () {
 
-            ApiCall.MakeApiCall("ExportStrategyReport", 'GET',null).success(function (data) {
-                if (data.Error != undefined) {
-                    toaster.pop('error', "Error", data.Error, null);
-                } else {
-                    if (data != 'No Records') {
-                        var url = BaseURL + 'Main/DownLoadReportFile?FileName=' + data + '&Page=StrategyReport';
-                        $scope.downloadurl = url;
-                        setTimeout(function () {
-                            $('#downloadpdf')[0].click();
-                        }, 1000);
-                        //StrategyService.DownLoadReportFile(data);
-                    }
-                    //$scope.dtOptions.data = $scope.data;
-                    StrategyService.HideLoader();
+
+
+        ApiCall.MakeApiCall("ExportStrategyReport", 'GET', null).success(function (data) {
+            if (data.Error != undefined) {
+                toaster.pop('error', "Error", data.Error, null);
+            } else {
+                if (data != 'No Records') {
+                    var url = BaseURL + 'Main/DownLoadReportFile?FileName=' + data + '&Page=StrategyReport';
+                    $scope.downloadurl = url;
+                    setTimeout(function () {
+                        $('#downloadpdf')[0].click();
+                    }, 1000);
+                    //StrategyService.DownLoadReportFile(data);
                 }
-            }).error(function (data) {
-                $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
-            });
-       
-        
+                //$scope.dtOptions.data = $scope.data;
+                StrategyService.HideLoader();
+            }
+        }).error(function (data) {
+            $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
+        });
+
+
     };
     $scope.InsertStrategy = function () {
 
@@ -238,12 +238,11 @@
         var idlist = '';
         var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            if(i==$scope.multiselect.selected.length-1)
-            {
-                idlist += $scope.multiselect.selected[i].id ;
-                CountryNames += $scope.multiselect.selected[i].name ;
+            if (i == $scope.multiselect.selected.length - 1) {
+                idlist += $scope.multiselect.selected[i].id;
+                CountryNames += $scope.multiselect.selected[i].name;
             }
-            else{
+            else {
                 idlist += $scope.multiselect.selected[i].id + ',';
                 CountryNames += $scope.multiselect.selected[i].name + ',';
             }
@@ -253,24 +252,24 @@
             CountryNameList: CountryNames,
             //Country: JSON.stringify($scope.multiselect.selected),
             Region: $scope.selectModel.Region.Id
-        , LTAApplicationCodeId: $scope.selectModel.LTAApplicationCode.Id, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id
-        , ChildID: $scope.selectModel.ChildID.Id, LTAStrategyNameId: $scope.selectModel.LTAStrategyName.Id
-        , StrategytypeId: $scope.selectModel.Strategytype.Id, GOLiveDate: $scope.selectModel.GOLiveDate
-        , LTAStrategyCodeId: $scope.selectModel.LTAStrategyCode.Id, LTAShortCode: $scope.selectModel.LTAShortCode
-        , BusinessLineId: $scope.selectModel.BusinessLine.Id, LTAApplicationNameId: $scope.selectModel.LTAApplicationName.Id
-        , LTAStrategyOwnerId: $scope.selectModel.LTAStrategyOwner.userId, ApplicationCategoryId: $scope.selectModel.ApplicationCategory.Id, VenuetypeId: $scope.selectModel.Venuetype.Id
-        , DecomissionedDate: $scope.selectModel.DecomissionedDate, DiscretionaryCodeId: $scope.selectModel.DiscretionaryCode.Id
-        , ParentID: $scope.selectModel.ParentID.Id, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner//.userId
-        , PriorityScore: $scope.selectModel.PriorityScore
-        , Priority: $scope.selectModel.Priority
-        , CapacityId: $scope.selectModel.Capacity.Id
-        , BusinessId: $scope.selectModel.Business.Id
-        , ThirdPartyAppId: $scope.selectModel.ThirdPartyApp.Id
-        , LTAApplicationMappingId: $scope.selectModel.LTAApplicationMappingId
-        , LTAStrategyMappingId: $scope.selectModel.LTAStrategyMappingId
-        , BusinessMappingId: $scope.selectModel.BusinessMappingId
-        , Description: $scope.selectModel.Description
-        , Attest: $scope.selectModel.Attest,
+            , LTAApplicationCodeId: $scope.selectModel.LTAApplicationCode.Id, BusinessSuffixId: $scope.selectModel.BusinessSuffix.Id
+            , ChildID: $scope.selectModel.ChildID.Id, LTAStrategyNameId: $scope.selectModel.LTAStrategyName.Id
+            , StrategytypeId: $scope.selectModel.Strategytype.Id, GOLiveDate: $scope.selectModel.GOLiveDate
+            , LTAStrategyCodeId: $scope.selectModel.LTAStrategyCode.Id, LTAShortCode: $scope.selectModel.LTAShortCode
+            , BusinessLineId: $scope.selectModel.BusinessLine.Id, LTAApplicationNameId: $scope.selectModel.LTAApplicationName.Id
+            , LTAStrategyOwnerId: $scope.selectModel.LTAStrategyOwner.userId, ApplicationCategoryId: $scope.selectModel.ApplicationCategory.Id, VenuetypeId: $scope.selectModel.Venuetype.Id
+            , DecomissionedDate: $scope.selectModel.DecomissionedDate, DiscretionaryCodeId: $scope.selectModel.DiscretionaryCode.Id
+            , ParentID: $scope.selectModel.ParentID.Id, LTAApplicationOwnerId: $scope.selectModel.LTAApplicationOwner//.userId
+            , PriorityScore: $scope.selectModel.PriorityScore
+            , Priority: $scope.selectModel.Priority
+            , CapacityId: $scope.selectModel.Capacity.Id
+            , BusinessId: $scope.selectModel.Business.Id
+            , ThirdPartyAppId: $scope.selectModel.ThirdPartyApp.Id
+            , LTAApplicationMappingId: $scope.selectModel.LTAApplicationMappingId
+            , LTAStrategyMappingId: $scope.selectModel.LTAStrategyMappingId
+            , BusinessMappingId: $scope.selectModel.BusinessMappingId
+            , Description: $scope.selectModel.Description
+            , Attest: $scope.selectModel.Attest,
             LTALongCode: $scope.selectModel.LTALongCode,
             SeniorManagementFunction: $scope.selectModel.SeniorManagementFunction,
             StatusId: $scope.selectModel.Status.Id,
@@ -291,7 +290,7 @@
             }).then(function (data) {
                 StrategyService.HideLoader();
                 if (data.data == 'success') {
-                    toaster.pop('success', "Success", "Model/Algo added successfully", null);
+                    toaster.pop('success', "Success", "LTA Strategy Inventory added successfully", null);
                     $scope.showaction = false;
                 }
                 else
@@ -311,6 +310,11 @@
 
     $scope.Availableusers = [];
     $scope.setsignoff = function () {
+        $('#insideconfirm').modal('show');
+
+    }
+    $scope.setconfirminner = function () {
+        $('#insideconfirm').modal('hide');
         if ($scope.selectModel.Attest == 'True')
             $scope.selectModel.Attest = 'False'
         else
@@ -318,9 +322,8 @@
     }
 
     $scope.GetCurrencyConversionForId = function (id, Version, RefNumber, actiontype) {
-        $scope.showaction = true;
+        //$scope.showaction = true;
         $scope.editMode = true;
-       
         $scope.activateTab(0);
         $scope.ApprovalCheck.ShowSignOff = false;
         StrategyService.ShowLoader();
@@ -353,14 +356,14 @@
             $scope.selectModel.Status = getdynamicobject($scope.selectModel.StatusId, "StrategyStatusType");
 
             $scope.selectModel.Description = $scope.selectModel.Description;
-            $scope.selectModel.LTAApplicationOwner =$scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
+            $scope.selectModel.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
             $scope.userfilter(true);
             $scope.activateTab(0);
             for (var i = 0; i < $scope.pageList.length; i++) {
                 $scope.pageList[i].IsValid = true;
             }
             //assignUsers();
-           
+
             assignCountry($scope.selectModel.CountryId.split(','));
             binddata($scope.CountryMasterList);
             if (actiontype) {
@@ -368,12 +371,17 @@
                 $scope.AllowSignOff = false;
             }
             else {
-                $scope.showaction = false;
-                $scope.AllowSignOff = true;
                 if ($scope.ApprovalCheck.IsApprove || $scope.userId.toLowerCase() == $scope.selectModel.LTAStrategyOwnerId.toLowerCase()) {
                     $('#confirm').modal('show');
                 }
+                $scope.showaction = false;
+                $scope.AllowSignOff = true;
             }
+
+
+            $timeout(function () {
+                StrategyService.HideLoader();
+            }, 500);
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
@@ -391,13 +399,11 @@
             }
         });
 
-        $timeout(function () {
-            StrategyService.HideLoader();
-        }, 500)
+
     };
 
 
-    $scope.GetViewdata= function (id, Version, RefNumber, actiontype) {
+    $scope.GetViewdata = function (id, Version, RefNumber, actiontype) {
         $scope.showaction = false;
         $('#showreadonly').modal('show')
         $scope.ApprovalCheck.ShowSignOff = false;
@@ -425,11 +431,11 @@
             $scope.selectModel.Business = getdynamicobject($scope.selectModel.BusinessId, "BusinessList");
             $scope.selectModel.Status = getdynamicobject($scope.selectModel.StatusId, "StrategyStatusType");
             $scope.selectModel.Description = $scope.selectModel.Description;
-            $scope.selectModel.LTAApplicationOwner =$scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
+            $scope.selectModel.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner; //getdynamicobjectuserfilter($scope.selectModel.LTAApplicationOwner, "LTAApplicationOwnerList");
             $scope.userfilter(true);
             assignCountry($scope.selectModel.CountryId.split(','));
             binddata($scope.CountryMasterList);
-            
+
         }).error(function (data) {
             $scope.error = "An Error has occured while Adding user! " + data.ExceptionMessage;
         });
@@ -492,12 +498,11 @@
         var idlist = '';
         var CountryNames = '';
         for (var i = 0; i < $scope.multiselect.selected.length; i++) {
-            if(i==$scope.multiselect.selected.length-1)
-            {
-                idlist += $scope.multiselect.selected[i].id ;
-                CountryNames += $scope.multiselect.selected[i].name ;
+            if (i == $scope.multiselect.selected.length - 1) {
+                idlist += $scope.multiselect.selected[i].id;
+                CountryNames += $scope.multiselect.selected[i].name;
             }
-            else{
+            else {
                 idlist += $scope.multiselect.selected[i].id + ',';
                 CountryNames += $scope.multiselect.selected[i].name + ',';
             }
@@ -546,7 +551,7 @@
         StrategyService.UpdateStrategy(array).success(function (data) {
             $scope.showaction = false;
             $scope.editMode = false;
-            toaster.pop('success', "Success", "Model/Algo updated successfully", null);
+            toaster.pop('success', "Success", "LTA Strategy Inventory updated successfully", null);
             $('#confirm').modal('hide');
             model.RefNumber = $scope.Prevvalue.RefNumber;
             if (data == "") {
@@ -592,13 +597,13 @@
 
     $scope.showconfirm = function (data) {
         $scope.Id = data;
-     
+
         $('#confirmModal').modal('show');
     };
-    
+
     $scope.cancel = function () {
         cleardata();
-       
+
         binddata($scope.CountryMasterList);
         $scope.showaction = false;
         $('#confirmModal').modal('hide');
@@ -679,7 +684,7 @@
                         $scope.selectModel.ThirdPartyApp = getdynamicobject(data[0].ThirdPartyAppId, "ThirdPartyList");
                         $scope.selectModel.ApplicationCategory = getdynamicobject(data[0].ApplicationCategoryId, "ApplicationCategoryList");
                         $scope.selectModel.ParentID = getdynamicobject(data[0].ParentIDValue, "ParentIDList");
-                        $scope.selectModel.LTAApplicationOwner =data[0].ApplicationOwnerId;// getdynamicobjectuserfilter(data[0].ApplicationOwnerId, "LTAApplicationOwnerList");
+                        $scope.selectModel.LTAApplicationOwner = data[0].ApplicationOwnerId;// getdynamicobjectuserfilter(data[0].ApplicationOwnerId, "LTAApplicationOwnerList");
                         $scope.userfilter1();
                     }
                     else {
@@ -786,7 +791,7 @@
                         if (value.RightName == 'LTA Write Access') {
                             isWrite = true;
                         }
-                        if (value.RightName == 'LTA Strategy Owner') {
+                        if (value.RightName == 'LTA Attestation') {
                             isApprove = true;
                         }
                     })
@@ -822,19 +827,17 @@
     };
 
     function assignCountry(data) {
-        $scope.multiselect.selected=[];
-        
+        $scope.multiselect.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselect.options.length;k++)
-            {
-                if($scope.multiselect.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselect.options.length; k++) {
+                if ($scope.multiselect.options[k].id == data[index].trim()) {
                     $scope.multiselect.selected.push($scope.multiselect.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddata(list) {
@@ -863,7 +866,7 @@
 
     $rootScope.$on('eventName', function (event, args) {
         $scope.showaction = false;
-       
+
     });
 }]);
 

@@ -52,20 +52,20 @@
                     <div ng-if="ViewListdata">
                         <table class="table table-responsive">
                             <thead>
-                                    <tr>
-                                        <th>Version</th>
-                                        <th>Log</th>
-                                        <th>DateTime</th>
-                                        <th>Created User</th>
-                                    </tr>
-                                </thead>
+                                <tr>
+                                    <th>Version</th>
+                                    <th style="width:40%;">Log</th>
+                                    <th>DateTime</th>
+                                    <th>Created User</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr ng-repeat="data in Listdata">
-
                                     <td>{{data.Version}}</td>
-
                                     <td>
-                                        {{data.ChangeDesc}}
+                                        <p style="color:black;" ng-bind-html="data.ChangeDesc | unsafe">
+                                          
+                                        </p>
                                     </td>
                                     <td>
                                         {{data.CreatedDateTime}}
@@ -73,6 +73,7 @@
                                     <td>
                                         {{data.Createdby}}
                                     </td>
+
 
                                 </tr>
                             </tbody>

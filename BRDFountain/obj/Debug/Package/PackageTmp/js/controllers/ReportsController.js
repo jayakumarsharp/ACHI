@@ -51,9 +51,9 @@
         DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Category'),
         DTColumnBuilder.newColumn('Priority').withTitle('Priority'),
         //DTColumnBuilder.newColumn('ParentID').withTitle('Parent CSI ID'),
-         DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
-         //DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
-          DTColumnBuilder.newColumn('Status').withTitle('Status'),
+        DTColumnBuilder.newColumn('Attest').withTitle('Attest').renderWith(actionsStatus),
+        //DTColumnBuilder.newColumn('DecomissionedDate').withTitle('Status').renderWith(activeStatus),
+        DTColumnBuilder.newColumn('Status').withTitle('Status'),
         //DTColumnBuilder.newColumn('Id').withTitle('Actions').notSortable()
         //    .renderWith(actionsHtml)
     ];
@@ -61,7 +61,7 @@
     function actionsStatus(data, type, full, meta) {
         if (data == "Pending")
             return '<a  class="dta-act-not">Pending</a>';
-            
+
         else
             return '<a  class="dta-act">Attested</a>';
     }
@@ -100,7 +100,12 @@
     }
 
     function actionsHtml(data, type, full, meta) {
-        return '<a  class="test"><img src="images/edit.png"></a> &nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+        if ($scope.IsReadOnly) {
+            return "-";
+        }
+        else {
+            return '<a  class="test"><img src="images/edit.png"></a> &nbsp;<a  class="test1"><img style="width:24px;height:24px;" src="images/eyeicon.png"></a>';
+        }
     }
 
     function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
@@ -118,25 +123,6 @@
         });
         return nRow;
     }
-
-    //function Getusermappingdata(userid) {
-    //    ApiCall.MakeApiCall("GetusercountryMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.CountryMasterList = data;
-    //        binddata($scope.CountryMasterList);
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    })
-    //    ApiCall.MakeApiCall("GetuserRegionMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.RegionMasterList = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    })
-    //    ApiCall.MakeApiCall("GetBusinessMapping?userId=" + userid, 'GET', '').success(function (data) {
-    //        $scope.BusinessLineList = data;
-    //    }).error(function (error) {
-    //        $scope.Error = error;
-    //    });
-    //}
 
 
     $scope.getallalgodata = function (userid) {
@@ -163,30 +149,30 @@
         let GetAllStatusType = apiService.GetAllStatusType();
         let GetAllBusinessLine = apiService.GetBusinessMapping(userid)
         let GetAllRegion = apiService.GetuserRegionMapping(userid);
-        let GetAllCountry = apiService.GetusercountryMapping(userid);
+        let GetAllCountry = apiService.GetAllCountry();
         $q.all([
-        //GetAllCountry,
-        GetAllLTAApplicationCode,
-        GetAllThirdPartyAppList,
-        GetAllBusiness,
-        GetAllLTAStrategyCode,
-        GetAllDiscretionaryCode,
-        GetAllBusinessSuffix,
-        GetAllParentID,
-        GetAllChildID,
-        //GetAllBusinessLine,
-        GetAllApplicationCategory,
-        GetAllLTAApplicationName,
-        GetAllLTAStrategyName,
-         GetAllVenuetype,
-        GetAllStrategytype,
-        GetAllCapacity,
-        //GetAllRegion,
-        GetUsers,
-        GetAllStatusType,
-        GetAllBusinessLine,
-        GetAllRegion,
-        GetAllCountry,
+            //GetAllCountry,
+            GetAllLTAApplicationCode,
+            GetAllThirdPartyAppList,
+            GetAllBusiness,
+            GetAllLTAStrategyCode,
+            GetAllDiscretionaryCode,
+            GetAllBusinessSuffix,
+            GetAllParentID,
+            GetAllChildID,
+            //GetAllBusinessLine,
+            GetAllApplicationCategory,
+            GetAllLTAApplicationName,
+            GetAllLTAStrategyName,
+            GetAllVenuetype,
+            GetAllStrategytype,
+            GetAllCapacity,
+            //GetAllRegion,
+            GetUsers,
+            GetAllStatusType,
+            GetAllBusinessLine,
+            GetAllRegion,
+            GetAllCountry,
         ]).then(function (resp) {
             $scope.LTAApplicationCodeList = resp[0].data;
             $scope.ThirdPartyList = resp[1].data;
@@ -208,8 +194,7 @@
             $scope.BusinessLineList = resp[16].data;
             $scope.RegionMasterList = resp[17].data;
             $scope.CountryMasterList = resp[18].data;
-         
-            debugger;
+
             binddatabusiness($scope.BusinessList);
             binddatabusinessline($scope.BusinessLineList);
             binddataltaapplication($scope.LTAApplicationNameList)
@@ -217,58 +202,48 @@
             binddataltastrategyowner($scope.LTAStrategyOwnerList);
             binddataregion($scope.RegionMasterList);
 
-                    
+
             StrategyService.HideLoader();
         });
     };
 
-    //$scope.getallalgodata();
-    $scope.activateTab = function (tabid) {
-        for (var i = 0; i < $scope.pageList.length; i++) {
-            $scope.pageList[i].Page = false;
-        }
-        $scope.pageList[tabid].Page = true;
-        $scope.pageList[tabid].IsValid = true;
-    }
+
 
     $scope.removefilter = function () {
         reset();
     };
-
     $scope.showfiltercondition = function () {
         $scope.showfilter = true;
     };
     $scope.Export = function () {
-      
+
         var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
-        if ($scope.selectModel || $scope.multiselectBusiness.selected.length>0  || $scope.multiselectBusinessLine.selected.length>0  || $scope.multiselectLTAApplication.selected.length>0  || $scope.multiselectLTAStrategy.selected.length>0  || $scope.multiselectLTAStrategyOwner.selected.length>0  || $scope.multiselectRegion.selected.length>0) {
+        if ($scope.selectModel || $scope.multiselectBusiness.selected.length > 0 || $scope.multiselectBusinessLine.selected.length > 0 || $scope.multiselectLTAApplication.selected.length > 0 || $scope.multiselectLTAStrategy.selected.length > 0 || $scope.multiselectLTAStrategyOwner.selected.length > 0 || $scope.multiselectRegion.selected.length > 0) {
             var idlist = '';
             StrategyService.ShowLoader();
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectBusiness.selected.length; i++) {
-                if(i==$scope.multiselectBusiness.selected.length-1)
-                {
-                    idlist += $scope.multiselectBusiness.selected[i].id ;
+                if (i == $scope.multiselectBusiness.selected.length - 1) {
+                    idlist += $scope.multiselectBusiness.selected[i].id;
                     // CountryNames += $scope.multiselectBusiness.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectBusiness.selected[i].id + ',';
                     // CountryNames += $scope.multiselectBusiness.selected[i].name + ',';
                 }
             }
             currency.Business = idlist;
 
-            
+
 
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
-                if(i==$scope.multiselectBusinessLine.selected.length-1)
-                {
-                    idlist += $scope.multiselectBusinessLine.selected[i].id ;
+                if (i == $scope.multiselectBusinessLine.selected.length - 1) {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id;
                     //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
                     //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
                 }
@@ -279,12 +254,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAApplication.selected.length; i++) {
-                if(i==$scope.multiselectLTAApplication.selected.length-1)
-                {
-                    idlist += $scope.multiselectLTAApplication.selected[i].id ;
+                if (i == $scope.multiselectLTAApplication.selected.length - 1) {
+                    idlist += $scope.multiselectLTAApplication.selected[i].id;
                     // CountryNames += $scope.multiselectLTAApplication.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectLTAApplication.selected[i].id + ',';
                     // CountryNames += $scope.multiselectLTAApplication.selected[i].name + ',';
                 }
@@ -297,12 +271,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAStrategy.selected.length; i++) {
-                if(i==$scope.multiselectLTAStrategy.selected.length-1)
-                {
-                    idlist += $scope.multiselectLTAStrategy.selected[i].id ;
+                if (i == $scope.multiselectLTAStrategy.selected.length - 1) {
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id;
                     // CountryNames += $scope.multiselectLTAStrategy.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectLTAStrategy.selected[i].id + ',';
                     //   CountryNames += $scope.multiselectLTAStrategy.selected[i].name + ',';
                 }
@@ -312,12 +285,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAStrategyOwner.selected.length; i++) {
-                if(i==$scope.multiselectLTAStrategyOwner.selected.length-1)
-                {
-                    idlist += "'"+$scope.multiselectLTAStrategyOwner.selected[i].id +"'";
+                if (i == $scope.multiselectLTAStrategyOwner.selected.length - 1) {
+                    idlist += "'" + $scope.multiselectLTAStrategyOwner.selected[i].id + "'";
                 }
-                else{
-                    idlist += "'"+ $scope.multiselectLTAStrategyOwner.selected[i].id +"'"+ ',';
+                else {
+                    idlist += "'" + $scope.multiselectLTAStrategyOwner.selected[i].id + "'" + ',';
                 }
             }
             currency.LTAStrategyOwnerId = idlist;
@@ -326,24 +298,22 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
-                if(i==$scope.multiselectRegion.selected.length-1)
-                {
-                    idlist += $scope.multiselectRegion.selected[i].id ;
+                if (i == $scope.multiselectRegion.selected.length - 1) {
+                    idlist += $scope.multiselectRegion.selected[i].id;
                     //   CountryNames += $scope.multiselectRegion.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectRegion.selected[i].id + ',';
                     //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
                 }
             }
-            currency.Region =idlist;
-            if ($scope.selectModel)
-            {
-                if($scope.selectModel.Status)
-                    currency.StatusId=  $scope.selectModel.Status.Id;
-                currency.Priority=   $scope.selectModel.Priority;
+            currency.Region = idlist;
+            if ($scope.selectModel) {
+                if ($scope.selectModel.Status)
+                    currency.StatusId = $scope.selectModel.Status.Id;
+                currency.Priority = $scope.selectModel.Priority;
             }
-        
+
 
             ApiCall.MakeApiCall("ExportReport", 'POST', currency).success(function (data) {
                 if (data.Error != undefined) {
@@ -367,13 +337,13 @@
         else
             toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
 
-        
+
     };
     $scope.showreport = function () {
         $scope.showfilter = false;
-       
+
         var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
-        if ($scope.selectModel || $scope.multiselectBusiness.selected.length>0  || $scope.multiselectBusinessLine.selected.length>0  || $scope.multiselectLTAApplication.selected.length>0  || $scope.multiselectLTAStrategy.selected.length>0  || $scope.multiselectLTAStrategyOwner.selected.length>0  || $scope.multiselectRegion.selected.length>0) {
+        if ($scope.selectModel || $scope.multiselectBusiness.selected.length > 0 || $scope.multiselectBusinessLine.selected.length > 0 || $scope.multiselectLTAApplication.selected.length > 0 || $scope.multiselectLTAStrategy.selected.length > 0 || $scope.multiselectLTAStrategyOwner.selected.length > 0 || $scope.multiselectRegion.selected.length > 0) {
             StrategyService.ShowLoader();
             //if ($scope.selectModel.Country)
             //    currency.Country = $scope.selectModel.Country.Id
@@ -381,29 +351,27 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectBusiness.selected.length; i++) {
-                if(i==$scope.multiselectBusiness.selected.length-1)
-                {
-                    idlist += $scope.multiselectBusiness.selected[i].id ;
+                if (i == $scope.multiselectBusiness.selected.length - 1) {
+                    idlist += $scope.multiselectBusiness.selected[i].id;
                     // CountryNames += $scope.multiselectBusiness.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectBusiness.selected[i].id + ',';
                     // CountryNames += $scope.multiselectBusiness.selected[i].name + ',';
                 }
             }
             currency.Business = idlist;
 
-            
+
 
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
-                if(i==$scope.multiselectBusinessLine.selected.length-1)
-                {
-                    idlist += $scope.multiselectBusinessLine.selected[i].id ;
+                if (i == $scope.multiselectBusinessLine.selected.length - 1) {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id;
                     //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
                     //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
                 }
@@ -414,12 +382,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAApplication.selected.length; i++) {
-                if(i==$scope.multiselectLTAApplication.selected.length-1)
-                {
-                    idlist += $scope.multiselectLTAApplication.selected[i].id ;
+                if (i == $scope.multiselectLTAApplication.selected.length - 1) {
+                    idlist += $scope.multiselectLTAApplication.selected[i].id;
                     // CountryNames += $scope.multiselectLTAApplication.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectLTAApplication.selected[i].id + ',';
                     // CountryNames += $scope.multiselectLTAApplication.selected[i].name + ',';
                 }
@@ -432,12 +399,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAStrategy.selected.length; i++) {
-                if(i==$scope.multiselectLTAStrategy.selected.length-1)
-                {
-                    idlist += $scope.multiselectLTAStrategy.selected[i].id ;
+                if (i == $scope.multiselectLTAStrategy.selected.length - 1) {
+                    idlist += $scope.multiselectLTAStrategy.selected[i].id;
                     // CountryNames += $scope.multiselectLTAStrategy.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectLTAStrategy.selected[i].id + ',';
                     //   CountryNames += $scope.multiselectLTAStrategy.selected[i].name + ',';
                 }
@@ -447,12 +413,11 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectLTAStrategyOwner.selected.length; i++) {
-                if(i==$scope.multiselectLTAStrategyOwner.selected.length-1)
-                {
-                    idlist += "'"+$scope.multiselectLTAStrategyOwner.selected[i].id +"'";
+                if (i == $scope.multiselectLTAStrategyOwner.selected.length - 1) {
+                    idlist += "'" + $scope.multiselectLTAStrategyOwner.selected[i].id + "'";
                 }
-                else{
-                    idlist += "'"+ $scope.multiselectLTAStrategyOwner.selected[i].id +"'"+ ',';
+                else {
+                    idlist += "'" + $scope.multiselectLTAStrategyOwner.selected[i].id + "'" + ',';
                 }
             }
             currency.LTAStrategyOwnerId = idlist;
@@ -461,22 +426,20 @@
             var idlist = '';
             var CountryNames = '';
             for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
-                if(i==$scope.multiselectRegion.selected.length-1)
-                {
-                    idlist += $scope.multiselectRegion.selected[i].id ;
+                if (i == $scope.multiselectRegion.selected.length - 1) {
+                    idlist += $scope.multiselectRegion.selected[i].id;
                     //   CountryNames += $scope.multiselectRegion.selected[i].name;
                 }
-                else{
+                else {
                     idlist += $scope.multiselectRegion.selected[i].id + ',';
                     //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
                 }
             }
-            currency.Region =idlist;
-            if ($scope.selectModel)
-            {
-                if($scope.selectModel.Status)
-                    currency.StatusId=  $scope.selectModel.Status.Id;
-                currency.Priority=   $scope.selectModel.Priority;
+            currency.Region = idlist;
+            if ($scope.selectModel) {
+                if ($scope.selectModel.Status)
+                    currency.StatusId = $scope.selectModel.Status.Id;
+                currency.Priority = $scope.selectModel.Priority;
             }
             //if ($scope.selectModel.LTAApplicationCode)
             //    currency.LTAApplicationCode = $scope.selectModel.LTAApplicationCode.Id;
@@ -531,7 +494,7 @@
             }
         }
     };
-   
+
 
     $scope.cancel = function () {
         $scope.currency = {};
@@ -820,22 +783,22 @@
     };
 
     function assignbusiness(data) {
-        $scope.multiselectBusiness.selected=[];
-        
+        $scope.multiselectBusiness.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectBusiness.options.length;k++)
-            {
-                if($scope.multiselectBusiness.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectBusiness.options.length; k++) {
+                if ($scope.multiselectBusiness.options[k].id == data[index].trim()) {
                     $scope.multiselectBusiness.selected.push($scope.multiselectBusiness.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddatabusiness(list) {
+        $scope.multiselectBusiness.selected = [];
+
         $scope.multiselectBusiness.options = list.map(function (item) {
             return {
                 name: item.Business,
@@ -850,22 +813,22 @@
     //test
 
     function assignbusinessline(data) {
-        $scope.multiselectBusinessLine.selected=[];
-        
+        $scope.multiselectBusinessLine.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectBusinessLine.options.length;k++)
-            {
-                if($scope.multiselectBusinessLine.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectBusinessLine.options.length; k++) {
+                if ($scope.multiselectBusinessLine.options[k].id == data[index].trim()) {
                     $scope.multiselectBusinessLine.selected.push($scope.multiselectBusinessLine.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddatabusinessline(list) {
+
+        $scope.multiselectBusinessLine.selected = [];
         $scope.multiselectBusinessLine.options = list.map(function (item) {
             return {
                 name: item.BusinessLine,
@@ -879,22 +842,22 @@
 
 
     function assignltastrategyname(data) {
-        $scope.multiselectLTAStrategy.selected=[];
-        
+        $scope.multiselectLTAStrategy.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectLTAStrategy.options.length;k++)
-            {
-                if($scope.multiselectLTAStrategy.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectLTAStrategy.options.length; k++) {
+                if ($scope.multiselectLTAStrategy.options[k].id == data[index].trim()) {
                     $scope.multiselectLTAStrategy.selected.push($scope.multiselectLTAStrategy.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddataltastrategyname(list) {
+        $scope.multiselectLTAStrategy.selected = [];
+
         $scope.multiselectLTAStrategy.options = list.map(function (item) {
             return {
                 name: item.LTAStrategyName,
@@ -905,22 +868,22 @@
 
 
     function assignltastrategyowner(data) {
-        $scope.multiselectLTAStrategyOwner.selected=[];
-        
+        $scope.multiselectLTAStrategyOwner.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectLTAStrategyOwner.options.length;k++)
-            {
-                if($scope.multiselectLTAStrategyOwner.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectLTAStrategyOwner.options.length; k++) {
+                if ($scope.multiselectLTAStrategyOwner.options[k].id == data[index].trim()) {
                     $scope.multiselectLTAStrategyOwner.selected.push($scope.multiselectLTAStrategyOwner.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddataltastrategyowner(list) {
+        $scope.multiselectLTAStrategyOwner.selected = [];
+
         $scope.multiselectLTAStrategyOwner.options = list.map(function (item) {
             return {
                 name: item.userId,
@@ -932,22 +895,22 @@
 
 
     function assignregion(data) {
-        $scope.multiselectRegion.selected=[];
-        
+        $scope.multiselectRegion.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectRegion.options.length;k++)
-            {
-                if($scope.multiselectRegion.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectRegion.options.length; k++) {
+                if ($scope.multiselectRegion.options[k].id == data[index].trim()) {
                     $scope.multiselectRegion.selected.push($scope.multiselectRegion.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddataregion(list) {
+        $scope.multiselectRegion.selected = [];
+
         $scope.multiselectRegion.options = list.map(function (item) {
             return {
                 name: item.RegionName,
@@ -958,22 +921,22 @@
 
 
     function assignltaapplication(data) {
-        $scope.multiselectLTAApplication.selected=[];
-        
+        $scope.multiselectLTAApplication.selected = [];
+
         for (index = 0; index < data.length; index++) {
 
-            for(k=0;k<$scope.multiselectLTAApplication.options.length;k++)
-            {
-                if($scope.multiselectLTAApplication.options[k].id==data[index].trim())
-                {
+            for (k = 0; k < $scope.multiselectLTAApplication.options.length; k++) {
+                if ($scope.multiselectLTAApplication.options[k].id == data[index].trim()) {
                     $scope.multiselectLTAApplication.selected.push($scope.multiselectLTAApplication.options[k]);
                 }
             }
         }
-      
+
     }
 
     function binddataltaapplication(list) {
+        $scope.multiselectLTAApplication.selected = [];
+
         $scope.multiselectLTAApplication.options = list.map(function (item) {
             return {
                 name: item.LTAApplicationName,
@@ -982,7 +945,179 @@
         });
     }
 
+    $scope.reset = function () {
+        binddatabusiness($scope.BusinessList);
+        binddatabusinessline($scope.BusinessLineList);
+        binddataltaapplication($scope.LTAApplicationNameList)
+        binddataltastrategyname($scope.LTAStrategyNameList);
+        binddataltastrategyowner($scope.LTAStrategyOwnerList);
+        binddataregion($scope.RegionMasterList);
 
+    }
+
+    /*....*/
+
+    $scope.dtOptions1 = DTOptionsBuilder.fromSource()
+        .withPaginationType('full_numbers').withOption('createdRow', createdRow)
+        .withOption('rowCallback', rowCallback).withOption('scrollX', true);
+    $scope.dtColumns1 = [
+        DTColumnBuilder.newColumn('Id').withTitle('ID').notVisible(),
+        DTColumnBuilder.newColumn('LTAApplicationName').withTitle('LTA Application Name'),
+        DTColumnBuilder.newColumn('LTAApplicationCode').withTitle('LTA AApplication Code'),
+        DTColumnBuilder.newColumn('ChildIdValue').withTitle('Child ID'),
+        DTColumnBuilder.newColumn('ThirdPartyAppName').withTitle('Third Party Application'),
+        DTColumnBuilder.newColumn('ParentID').withTitle('Parent ID'),
+        DTColumnBuilder.newColumn('ApplicationCategory').withTitle('Application Category'),
+        DTColumnBuilder.newColumn('ApplicationOwnerId').withTitle('Application Owner'),
+        DTColumnBuilder.newColumn('BusinessLine').withTitle('Business Line'),
+        DTColumnBuilder.newColumn('RegionName').withTitle('Region'),
+        DTColumnBuilder.newColumn('CountryName').withTitle('Country'),
+    ];
+
+
+    $scope.Export1 = function () {
+        var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
+        if ($scope.selectModel || $scope.multiselectBusinessLine.selected.length > 0 || $scope.multiselectRegion.selected.length > 0) {
+            StrategyService.ShowLoader();
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
+                if (i == $scope.multiselectBusinessLine.selected.length - 1) {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id;
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
+                }
+                else {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
+                }
+            }
+            currency.BusinessLine = idlist;
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
+                if (i == $scope.multiselectRegion.selected.length - 1) {
+                    idlist += $scope.multiselectRegion.selected[i].id;
+                    //   CountryNames += $scope.multiselectRegion.selected[i].name;
+                }
+                else {
+                    idlist += $scope.multiselectRegion.selected[i].id + ',';
+                    //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
+                }
+            }
+            currency.Region = idlist;
+            if ($scope.selectModel) {
+                if ($scope.selectModel.Status)
+                    currency.StatusId = $scope.selectModel.Status.Id;
+                currency.Priority = $scope.selectModel.Priority;
+
+                if ($scope.selectModel.LTAApplicationOwner)
+                    currency.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner;
+            }
+            if ($scope.selectModel.ApplicationCategory)
+                currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
+            if ($scope.selectModel.ThirdPartyApp)
+                currency.ThirdPartyAppId = $scope.selectModel.ThirdPartyApp.Id;
+            currency.ISREPORTPAGE = "Y";
+            ApiCall.MakeApiCall("ExportReportFilter", 'POST', currency).success(function (data) {
+                if (data.Error != undefined) {
+                    toaster.pop('error', "Error", data.Error, null);
+                } else {
+                    if (data != 'No Records') {
+                        var url = BaseURL + 'Main/DownLoadReportFile?FileName=' + data + '&Page=Mapping';
+                        $scope.downloadurl = url;
+                        setTimeout(function () {
+                            $('#downloadpdf')[0].click();
+                        }, 1000);
+                        //StrategyService.DownLoadReportFile(data);
+                    }
+                    else {
+                        toaster.pop('warning', "Warning", "No records available.", null);
+                    }
+                    //$scope.dtOptions.data = $scope.data;
+                    StrategyService.HideLoader();
+                }
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
+            });
+        }
+        else
+            toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
+    };
+
+
+
+
+    $scope.removefilter1 = function () {
+        reset();
+    };
+    $scope.showfiltercondition1 = function () {
+        $scope.showfilter1 = true;
+    };
+    $scope.showfilter1 = true;
+    $scope.showreport1 = function () {
+        $scope.showfilter1 = false;
+
+        var currency = { Country: '', Region: '', LTAApplicationCode: '', LTAStrategyCode: '', BusinessLine: '', LTAStrategyOwner: '', ApplicationCategory: '', Venuetype: '' };
+        if ($scope.selectModel || $scope.multiselectBusinessLine.selected.length > 0 || $scope.multiselectRegion.selected.length > 0) {
+            StrategyService.ShowLoader();
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectBusinessLine.selected.length; i++) {
+                if (i == $scope.multiselectBusinessLine.selected.length - 1) {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id;
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name;
+                }
+                else {
+                    idlist += $scope.multiselectBusinessLine.selected[i].id + ',';
+                    //CountryNames += $scope.multiselectBusinessLine.selected[i].name + ',';
+                }
+            }
+            currency.BusinessLine = idlist;
+
+
+            var idlist = '';
+            var CountryNames = '';
+            for (var i = 0; i < $scope.multiselectRegion.selected.length; i++) {
+                if (i == $scope.multiselectRegion.selected.length - 1) {
+                    idlist += $scope.multiselectRegion.selected[i].id;
+                    //   CountryNames += $scope.multiselectRegion.selected[i].name;
+                }
+                else {
+                    idlist += $scope.multiselectRegion.selected[i].id + ',';
+                    //  CountryNames += $scope.multiselectRegion.selected[i].name + ',';
+                }
+            }
+            currency.Region = idlist;
+            if ($scope.selectModel) {
+                if ($scope.selectModel.Status)
+                    currency.StatusId = $scope.selectModel.Status.Id;
+                currency.Priority = $scope.selectModel.Priority;
+            }
+            if ($scope.selectModel) {
+                if ($scope.selectModel.LTAApplicationOwner)
+                    currency.LTAApplicationOwner = $scope.selectModel.LTAApplicationOwner;
+                if ($scope.selectModel.ApplicationCategory)
+                    currency.ApplicationCategory = $scope.selectModel.ApplicationCategory.Id;
+                if ($scope.selectModel.ThirdPartyApp)
+                    currency.ThirdPartyAppId = $scope.selectModel.ThirdPartyApp.Id;
+            }
+            ApiCall.MakeApiCall("GetApplicationReport", 'POST', currency).success(function (data) {
+                if (data.Error != undefined) {
+                    toaster.pop('error', "Error", data.Error, null);
+                } else {
+                    $scope.dtOptions1.data = data;
+                    StrategyService.HideLoader();
+                }
+            }).error(function (data) {
+                $scope.error = "An Error has occured while Adding Capacity ! " + data.ExceptionMessage;
+            });
+        }
+        else
+            toaster.pop('warning', "Warning", 'Please apply report filter condition', null);
+
+
+    };
 
 }]);
 

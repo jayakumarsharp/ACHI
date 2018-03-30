@@ -3,6 +3,14 @@ var ServionImages = '';
 var HostPath = '';
 var urltype = '';
 var ReportApp = angular.module('reportApp', ['ngFileUpload', 'toaster', 'datatables']);
+ReportApp.filter('unsafe', function ($sce) {
+  
+    return function (val) {
+        return $sce.trustAsHtml(val);
+    };
+  
+});
+
 ReportApp.controller('MainController', ['$scope', '$rootScope', 'StrategyService', 'UserFactory', 'ApiCall', function ($scope, $rootScope, StrategyService, UserFactory, ApiCall) {
     $scope.rootname = 'Index';
     if (sessionStorage.getItem('menuname') != null) {

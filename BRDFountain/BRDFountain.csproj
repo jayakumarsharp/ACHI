@@ -2585,7 +2585,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Main\ModelAlgoManagement.cshtml" />
-    <Content Include="Views\Main\ChangeManagement.cshtml" />
     <Content Include="Views\Main\Reports.cshtml" />
     <Content Include="Views\Main\Licensing.cshtml" />
     <Content Include="Views\Main\Country.cshtml" />
@@ -2593,7 +2592,6 @@
     <Content Include="Views\Main\ProductType.cshtml" />
     <Content Include="Views\Main\ShowApplicationDetails.cshtml" />
     <Content Include="Views\Main\ShowApprovalDetails.cshtml" />
-    <Content Include="Views\Main\Approvals.cshtml" />
     <Content Include="Views\Main\ViewApprovals.cshtml" />
     <Content Include="Views\Main\UserManagement.cshtml" />
     <Content Include="Views\Main\RoleManagement.cshtml" />
@@ -2607,9 +2605,7 @@
     <Content Include="Views\Main\ChildID.cshtml" />
     <Content Include="Views\Main\BusinessLine.cshtml" />
     <Content Include="Views\Main\LTAApplicationName.cshtml" />
-    <Content Include="Views\Main\LTAApplicationOwner.cshtml" />
     <Content Include="Views\Main\LTAStrategyName.cshtml" />
-    <Content Include="Views\Main\LTAStrategyOwner.cshtml" />
     <Content Include="Views\Main\ApplicationCategory.cshtml" />
     <Content Include="Views\Main\Strategytype.cshtml" />
     <Content Include="Views\Main\Venuetype.cshtml" />

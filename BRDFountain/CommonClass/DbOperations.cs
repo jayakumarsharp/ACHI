@@ -665,6 +665,83 @@ public class DbOperations
         }
     }
 
+
+
+    public List<ReportAppMapping> GetApplicationReport(StrategyReportFilter filter)
+    {
+        List<ReportAppMapping> lst = new List<ReportAppMapping>();
+        try
+        {
+            string query = "SP_ApplicationReport";
+            if (this.OpenConnection() == true)
+            {
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("i_userid", filter.userid));
+                    cmd.Parameters.Add(new SqlParameter("i_businessline", filter.BusinessLine));
+                    cmd.Parameters.Add(new SqlParameter("i_ApplicationCategory", filter.ApplicationCategory));
+                    cmd.Parameters.Add(new SqlParameter("i_FTAApplicationOwner", filter.LTAApplicationOwner));
+                    cmd.Parameters.Add(new SqlParameter("i_region", filter.Region));
+                    cmd.Parameters.Add(new SqlParameter("i_ThirdPartyAppId", filter.ThirdPartyAppId));
+
+
+                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
+                        if (dt != null && dt.Rows.Count > 0)
+                        {
+                            lst = (from DataRow row in dt.Rows
+                                   select new ReportAppMapping
+                                   {
+                                       ThirdPartyAppId = Convert.ToString(row["ThirdPartyAppId"]),
+                                       ThirdPartyAppName = Convert.ToString(row["ThirdPartyAppName"]),
+                                       ChildId = Convert.ToString(row["ChildId"]),
+                                       ChildIdValue = Convert.ToString(row["ChildIdValue"]),
+                                       LTAApplicationCodeId = Convert.ToString(row["FTAApplicationCodeId"]),
+                                       LTAApplicationCode = Convert.ToString(row["FTAApplicationCode"]),
+                                       LTAApplicationNameId = Convert.ToString(row["FTAApplicationNameId"]),
+                                       LTAApplicationName = Convert.ToString(row["FTAApplicationName"]),
+                                       ParentID = Convert.ToString(row["ParentID"]),
+                                       ParentIDValue = Convert.ToString(row["ParentIDValue"]),
+                                       ApplicationCategoryId = Convert.ToString(row["ApplicationCategoryId"]),
+                                       ApplicationCategory = Convert.ToString(row["ApplicationCategory"]),
+                                       ApplicationOwnerId = Convert.ToString(row["ApplicationOwnerId"]),
+                                       ApplicationOwner = Convert.ToString(row["ApplicationOwnerId"]),
+                                       BusinessLine = Convert.ToString(row["BusinessLine"]),
+                                       BusinessLineId = Convert.ToString(row["BusinessLineId"]),
+                                       Region = Convert.ToString(row["RegionId"]),
+                                       RegionName = Convert.ToString(row["RegionName"]),
+                                       Country = Convert.ToString(row["CountryId"]),
+                                       CountryName = Convert.ToString(row["CountryName"]),
+                                       Id = Convert.ToString(row["Id"]),
+                                   }).ToList();
+
+                        }
+                    }
+                }
+                this.CloseConnection();
+            }
+            return lst;
+        }
+        catch (SqlException ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
+        }
+        catch (Exception ex)
+        {
+            log.ErrorFormat("Exception Occured :{0}", ex.ToString());
+            log.ErrorFormat("Exception Trace Message :{0}", ex.StackTrace);
+            this.CloseConnection();
+            return null;
+        }
+    }
+
     public List<Strategy> GetStrategyReport(StrategyReportFilter filter)
     {
         List<Strategy> lst = new List<Strategy>();
@@ -1384,6 +1461,7 @@ public class DbOperations
             throw e;
         }
     }
+
     public List<UserMaster> GetUserbyFilter(string RegionId, string BusinessSectorId)
     {
 
@@ -1436,7 +1514,6 @@ public class DbOperations
         }
     }
 
-
     public List<UserMaster> GetUser(string userId)
     {
         List<UserMaster> lst = new List<UserMaster>();
@@ -1471,7 +1548,7 @@ public class DbOperations
                                        //BusinessSector = Convert.ToString(row["BusinessLine"]),
                                        //BusinessSectorId = Convert.ToString(row["BusinessSectorId"]),
                                        //CountryId = Convert.ToString(row["CountryId"]),
-                                       //RegionId = Convert.ToString(row["RegionId"]),
+                                       IsPasswordReset = Convert.ToBoolean(row["IsPasswordReset"]),
                                        Status = Convert.ToString(row["Status"]),
                                        Password = Convert.ToString(row["Password"]),
                                        IsADUser = Convert.ToString(row["IsADUser"]),
@@ -1489,6 +1566,7 @@ public class DbOperations
             return null;
         }
     }
+
     public List<UserMaster> GetUsersByRoles(string Roleid)
     {
         try
@@ -1542,6 +1620,7 @@ public class DbOperations
             return null;
         }
     }
+
     public void CreateTempUser(UserMaster user, out int errorcode, out string errordesc)
     {
         try
@@ -1595,35 +1674,35 @@ public class DbOperations
             }
 
 
-            using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+            //using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
+            //{
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    cmd.Parameters.Clear();
+            //    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
-                if (this.OpenConnection() == true)
-                {
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-            }
+            //    if (this.OpenConnection() == true)
+            //    {
+            //        cmd.ExecuteNonQuery();
+            //        this.CloseConnection();
+            //    }
+            //}
 
-            using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
-            {
-                foreach (CountryMaster s in user.CountryList)
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
-                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
-                    if (this.OpenConnection() == true)
-                    {
+            //using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
+            //{
+            //    foreach (CountryMaster s in user.CountryList)
+            //    {
+            //        cmd.CommandType = CommandType.StoredProcedure;
+            //        cmd.Parameters.Clear();
+            //        cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
+            //        cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+            //        if (this.OpenConnection() == true)
+            //        {
 
-                        cmd.ExecuteNonQuery();
-                        this.CloseConnection();
-                    }
-                }
-            }
+            //            cmd.ExecuteNonQuery();
+            //            this.CloseConnection();
+            //        }
+            //    }
+            //}
 
 
             using (SqlCommand cmd = new SqlCommand("delete_userregion", connection))
@@ -1674,6 +1753,43 @@ public class DbOperations
 
         }
     }
+
+    public void resetuser(UserMaster user, out int errorcode, out string errordesc)
+    {
+        try
+        {
+            errorcode = 0;
+            errordesc = "success";
+            using (SqlCommand cmd = new SqlCommand("sp_resetuser", connection))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("userid", user.userId));
+                cmd.Parameters.Add(new SqlParameter("emailid", user.EmailId));
+                cmd.Parameters.Add(new SqlParameter("password", EncryptLib.EncodePasswordToBase64(user.Password)));
+                cmd.Parameters.Add(new SqlParameter("IsPasswordReset", user.IsPasswordReset));
+                if (this.OpenConnection() == true)
+                {
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
+            }
+        }
+        catch (SqlException e)
+        {
+            log.Error(e);
+            errorcode = e.ErrorCode;
+            errordesc = e.Message;
+            this.CloseConnection();
+        }
+        catch (Exception e)
+        {
+            log.Error(e);
+            errorcode = -1;
+            errordesc = e.Message;
+            this.CloseConnection();
+        }
+    }
     public void CreateUser(UserMaster user, out int errorcode, out string errordesc)
     {
         try
@@ -1720,6 +1836,7 @@ public class DbOperations
 
         }
     }
+
     public void ModifyUser(UserMaster user, out int errorcode, out string errordesc)
     {
 
@@ -1776,35 +1893,35 @@ public class DbOperations
             }
 
 
-            using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+            //using (SqlCommand cmd = new SqlCommand("delete_usercountry", connection))
+            //{
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    cmd.Parameters.Clear();
+            //    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
 
-                if (this.OpenConnection() == true)
-                {
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
-                }
-            }
+            //    if (this.OpenConnection() == true)
+            //    {
+            //        cmd.ExecuteNonQuery();
+            //        this.CloseConnection();
+            //    }
+            //}
 
-            using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
-            {
-                foreach (CountryMaster s in user.CountryList)
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
-                    cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
-                    if (this.OpenConnection() == true)
-                    {
+            //using (SqlCommand cmd = new SqlCommand("sp_insert_usercountry", connection))
+            //{
+            //    foreach (CountryMaster s in user.CountryList)
+            //    {
+            //        cmd.CommandType = CommandType.StoredProcedure;
+            //        cmd.Parameters.Clear();
+            //        cmd.Parameters.Add(new SqlParameter("i_CountryId", s.Id));
+            //        cmd.Parameters.Add(new SqlParameter("i_userid", user.userId));
+            //        if (this.OpenConnection() == true)
+            //        {
 
-                        cmd.ExecuteNonQuery();
-                        this.CloseConnection();
-                    }
-                }
-            }
+            //            cmd.ExecuteNonQuery();
+            //            this.CloseConnection();
+            //        }
+            //    }
+            //}
 
 
             using (SqlCommand cmd = new SqlCommand("delete_userregion", connection))
@@ -1854,6 +1971,7 @@ public class DbOperations
         }
 
     }
+
     public void DeleteUser(string user)
     {
         try
@@ -1886,6 +2004,7 @@ public class DbOperations
         {
         }
     }
+
     public void ChangePassword(string user)
     {
         try
@@ -1940,6 +2059,7 @@ public class DbOperations
         {
         }
     }
+
     public void UserLogin(string user)
     {
         try
@@ -1996,6 +2116,7 @@ public class DbOperations
         {
         }
     }
+
     public void UserLogout(string user)
     {
         try
@@ -2202,45 +2323,45 @@ public class DbOperations
         }
     }
 
-    public List<CountryMaster> GetusercountryMapping(string roleId)
-    {
-        List<CountryMaster> lst = new List<CountryMaster>();
-        try
-        {
-            string query = "SP_Getusercountry";
-            if (this.OpenConnection() == true)
-            {
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("i_userid", roleId));
-                    using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        sda.Fill(dt);
-                        IEnumerable<DataRow> sequence = dt.AsEnumerable();
-                        if (dt != null && dt.Rows.Count > 0)
-                        {
-                            lst = (from DataRow row in dt.Rows
-                                   select new CountryMaster
-                                   {
-                                       Id = Convert.ToString(row["Id"]),
-                                       CountryName = Convert.ToString(row["CountryName"]),
-                                   }).ToList();
-                        }
-                    }
-                }
-                this.CloseConnection();
-            }
+    //public List<CountryMaster> GetusercountryMapping(string roleId)
+    //{
+    //    List<CountryMaster> lst = new List<CountryMaster>();
+    //    try
+    //    {
+    //        string query = "SP_Getusercountry";
+    //        if (this.OpenConnection() == true)
+    //        {
+    //            using (SqlCommand cmd = new SqlCommand(query, connection))
+    //            {
+    //                cmd.CommandType = CommandType.StoredProcedure;
+    //                cmd.Parameters.Add(new SqlParameter("i_userid", roleId));
+    //                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+    //                {
+    //                    DataTable dt = new DataTable();
+    //                    sda.Fill(dt);
+    //                    IEnumerable<DataRow> sequence = dt.AsEnumerable();
+    //                    if (dt != null && dt.Rows.Count > 0)
+    //                    {
+    //                        lst = (from DataRow row in dt.Rows
+    //                               select new CountryMaster
+    //                               {
+    //                                   Id = Convert.ToString(row["Id"]),
+    //                                   CountryName = Convert.ToString(row["CountryName"]),
+    //                               }).ToList();
+    //                    }
+    //                }
+    //            }
+    //            this.CloseConnection();
+    //        }
 
-            return lst;
-        }
-        catch (Exception e)
-        {
-            return null;
-            log.Error(e);
-        }
-    }
+    //        return lst;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return null;
+    //        log.Error(e);
+    //    }
+    //}
 
     public List<RegionMaster> GetuserregionMapping(string roleId)
     {
