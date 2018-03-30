@@ -6883,7 +6883,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/27/2018 23:41:36</publishTime>
     </File>
     <File Include="js/controllers/StrategyController.js">
+<<<<<<< HEAD
       <publishTime>03/29/2018 01:03:03</publishTime>
+=======
+      <publishTime>03/19/2018 01:00:16</publishTime>
+>>>>>>> d25cf885f81a2c09e55695b57fdec90d97e835ac
     </File>
     <File Include="js/controllers/StrategytypeMasterController.js">
       <publishTime>03/28/2018 06:55:12</publishTime>
@@ -7843,7 +7847,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/19/2018 05:08:05</publishTime>
     </File>
     <File Include="Views/Main/ModelAlgoManagement.cshtml">
+<<<<<<< HEAD
       <publishTime>03/29/2018 00:53:16</publishTime>
+=======
+      <publishTime>03/19/2018 00:58:26</publishTime>
+>>>>>>> d25cf885f81a2c09e55695b57fdec90d97e835ac
     </File>
     <File Include="Views/Main/ParentID.cshtml">
       <publishTime>03/27/2018 23:12:58</publishTime>
